@@ -1,9 +1,6 @@
 # Custos
 
-
-
-
-Member Roles:   *Members can also contribute in any areas where the group needs assistance
+A mobile application that uses user locations to make sure they are where they need to be when they need to be.
 
 Rahul Datta: Front/Back End Developer
 
