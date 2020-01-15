@@ -1,7 +1,6 @@
 # Custos
 
 
-![alt text](https://www.custostech.com/wp-content/uploads/2019/04/custos-logo-large.png)
 
 
 Member Roles:   *Members can also contribute in any areas where the group needs assistance
