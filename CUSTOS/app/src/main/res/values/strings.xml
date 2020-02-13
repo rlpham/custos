@@ -2,4 +2,11 @@
     <string name="app_name">CUSTOS</string>
     <string name="title_activity_maps">Map</string>
     <string name="search_placeholder">Search</string>
+    <string name="login_button_label">Log In</string>
+    <string name="signup_button_label">Sign Up</string>
+    <string name="username_input_placeholder">Username</string>
+    <string name="email_input_placeholder">E-Mail</string>
+    <string name="password_input_placeholder">Password</string>
+    <string name="confirm_password_input_placeholder">Confirm Password</string>
+    <string name="signup_form_label">Create your account</string>
 </resources>
