@@ -15,11 +15,10 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <fragment
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <Button
             android:id="@+id/add_caution_zone_button"
@@ -39,12 +38,12 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="104dp"
-        android:layout_marginTop="93dp"
+        android:layout_marginTop="95dp"
         android:background="#FFFFFF"
         android:ems="10"
+        android:hint="@string/search_placeholder"
         android:inputType="textPersonName"
-        android:singleLine="true"
-        android:text="@string/search_placeholder" />
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/button3"
