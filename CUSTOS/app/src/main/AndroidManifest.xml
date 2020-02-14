@@ -15,10 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".LoginActivity"
-            android:parentActivityName=".SplashActivity"></activity>
-        <activity android:name=".SplashActivity"
-            android:exported="true"></activity>
+        <activity android:name=".SignupActivity"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:parentActivityName=".SplashActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,6 +39,7 @@
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

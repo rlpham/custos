@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signupIntent = new Intent(view.getContext(), MapsActivity.class);
+                Intent signupIntent = new Intent(view.getContext(), SignupActivity.class);
                 startActivity(signupIntent);
             }
         });
