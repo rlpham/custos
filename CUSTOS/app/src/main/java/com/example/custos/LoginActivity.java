@@ -11,12 +11,16 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //Instance Variables for LoginActivity
+    /**
+     * Necessary instance variables for email validation
+     */
     String inputtedEmail = "";
     Button button = findViewById(R.id.login_button);
     EditText emailText = findViewById(R.id.username_input); //TODO: Should we change the name to email?
 
-    //Regular Expression being used to check if inputted Email is valid
+    /**Regular Expression being used to check if inputted Email is valid
+     * Regular expression can be changed as needed
+      */
     String regex = "^(.+)@(.+)$";
 
 
@@ -42,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else{
             //Display an error message saying invalidEmail
+
         }
 
     }
