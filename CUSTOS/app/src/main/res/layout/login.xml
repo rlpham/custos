@@ -56,4 +56,5 @@
         android:layout_marginStart="120dp"
         android:layout_marginTop="145dp"
         android:text="@string/placeHolderForImage" />
+
 </RelativeLayout>

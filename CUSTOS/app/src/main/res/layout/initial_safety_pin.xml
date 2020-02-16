@@ -153,4 +153,17 @@
         android:layout_marginTop="165dp"
         android:text="@string/pinMessage" />
 
+    <Button
+        android:id="@+id/confirmSafetyButton"
+        android:layout_width="102dp"
+        android:layout_height="41dp"
+        android:layout_below="@+id/safety_pin_msg"
+        android:layout_marginTop="552dp"
+        android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/btn0"
+        android:onClick="changePage"
+        android:text="@string/confirm_password_input_placeholder"
+        android:visibility="invisible"
+        tools:visibility="invisible" />
+
 </RelativeLayout>

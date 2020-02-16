@@ -2,6 +2,7 @@ package com.example.custos;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +28,7 @@ public class SafetyPinActivity extends AppCompatActivity {
         Button btpindelete;
         TextView pinView;
         TextView initialSafetyMessage;
-
+        Button confirmButton;
 
     /**
      * Question From Dale: Are all these buttons coordinates??
@@ -44,7 +45,7 @@ public class SafetyPinActivity extends AppCompatActivity {
         bt4 = findViewById(R.id.btn4);
         bt5 = findViewById(R.id.btn5);
         bt6 = findViewById(R.id.btn6);
-
+        confirmButton = findViewById(R.id.confirmSafetyButton);
         bt7 = findViewById(R.id.btn7);
         bt8 = findViewById(R.id.btn8);
         bt9 = findViewById(R.id.btn9);
@@ -57,6 +58,7 @@ public class SafetyPinActivity extends AppCompatActivity {
     }
 
     public void deleteNumber(View button) {
+        confirmButton.setVisibility(View.INVISIBLE);
             if(pinmsg.length() != 0)
             {
                 pinmsg = pinmsg.substring(0, pinmsg.length() - 1);
@@ -65,8 +67,20 @@ public class SafetyPinActivity extends AppCompatActivity {
             }
     }
 
-    //TODO: See if its possible to open up model via a click
+
+    public void changePage(View view) {
+        Intent signupIntent = new Intent(view.getContext(), MapsActivity.class);
+        startActivity(signupIntent);
+    }
+
+
+
     public void buttonClick(View button) {
+        if(pinmsg.length() == 3)
+        {
+            confirmButton.setVisibility(View.VISIBLE);
+        }
+
       switch(button.getId())
       {
           case R.id.btn1:
