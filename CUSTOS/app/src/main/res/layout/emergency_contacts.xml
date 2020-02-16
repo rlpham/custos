@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/contact_group4"
+        android:layout_width="337dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact_group3"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/label_no_3"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/name_input4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_name_placeholder"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/phone_input4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_phone_placeholder"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/username_input4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_username_placeholder"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contact_group2"
+        android:layout_width="337dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_group"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/label_no_2"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/name_input2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_name_placeholder"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/phone_input2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_phone_placeholder"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/username_input2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_username_placeholder"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contact_group"
+        android:layout_width="337dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@id/label_no_1"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/name_input"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_name_placeholder"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/phone_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_phone_placeholder"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/username_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_username_placeholder"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="174dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="132dp"
+        android:layout_marginTop="22dp"
+        android:text="@string/emergency_contacts_label" />
+
+    <LinearLayout
+        android:id="@+id/contact_group3"
+        android:layout_width="337dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_group2"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/label_no_3"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/name_input3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_name_placeholder"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/phone_input3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_phone_placeholder"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/username_input3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/emergency_contacts_username_placeholder"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/label_no_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/_1"
+        android:textSize="64sp" />
+
+    <TextView
+        android:id="@+id/label_no_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_no_1"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="55dp"
+        android:text="@string/_2"
+        android:textSize="64sp" />
+
+    <TextView
+        android:id="@+id/label_no_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_no_2"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="55dp"
+        android:text="@string/_3"
+        android:textSize="64sp" />
+
+    <TextView
+        android:id="@+id/label_no_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/label_no_3"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="55dp"
+        android:text="@string/_4"
+        android:textSize="64sp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="157dp"
+        android:layout_marginBottom="4dp"
+        android:onClick="addContact"
+        android:text="+" />
+
+</RelativeLayout>

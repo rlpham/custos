@@ -24,5 +24,8 @@
     <string name="pinMessage" />
     <string name="placeHolderForImage">Placeholder for image</string>
     <string name="confirm">Confirm</string>
-
+    <string name="emergency_contacts_label">Set Emergency Contacts</string>
+    <string name="emergency_contacts_name_placeholder">Name</string>
+    <string name="emergency_contacts_username_placeholder">Username (optional)</string>
+    <string name="emergency_contacts_phone_placeholder">Phone #</string>
 </resources>

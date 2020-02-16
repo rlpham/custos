@@ -17,10 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".SafetyPinActivity"
-            android:exported = "true" />
-
-
+        <activity android:name=".EmergencyContactsActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".SafetyPinActivity"
+            android:exported="true" />
         <activity android:name=".SignupActivity" />
         <activity
             android:name=".LoginActivity"
