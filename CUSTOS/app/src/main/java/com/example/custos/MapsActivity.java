@@ -38,7 +38,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     //Testcode below
 
-
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
     //tillhere
 
     @Override
@@ -66,7 +71,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(new Intent(MapsActivity.this, SplashActivity.class));
                         return true;
                     case R.id.navigation_notifications:
-                        startActivity(new Intent(MapsActivity.this, SafetyPinActivity.class));
+                        openFragment(NotificationActivity.newInstance("", ""));
                         return true;
 
 
