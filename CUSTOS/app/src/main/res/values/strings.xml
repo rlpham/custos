@@ -22,5 +22,6 @@
     <string name="_0">0</string>
     <string name="enter_new_safety_pin">Enter new safety pin</string>
     <string name="pinMessage" />
+    <string name="placeHolderForImage">Placeholder for image</string>
 
 </resources>

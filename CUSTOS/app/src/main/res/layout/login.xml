@@ -55,5 +55,5 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="120dp"
         android:layout_marginTop="145dp"
-        android:text="Placeholder for image" />
+        android:text="@string/placeHolderForImage" />
 </RelativeLayout>
