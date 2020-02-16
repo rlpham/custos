@@ -60,7 +60,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             googleMap.setMyLocationEnabled(true);
 
         mMap = googleMap;
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
