@@ -151,6 +151,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="167dp"
         android:layout_marginTop="165dp"
-        android:text="                 " />
+        android:text="@string/pinMessage" />
 
 </RelativeLayout>

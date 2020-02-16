@@ -29,13 +29,16 @@ public class SafetyPinActivity extends AppCompatActivity {
         TextView initialSafetyMessage;
 
 
-
+    /**
+     * Question From Dale: Are all these buttons coordinates??
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_safety_pin);
-         bt1 = findViewById(R.id.btn1);
+        bt1 = findViewById(R.id.btn1);
         bt2 = findViewById(R.id.btn2);
         bt3 = findViewById(R.id.btn3);
         bt4 = findViewById(R.id.btn4);
@@ -60,10 +63,9 @@ public class SafetyPinActivity extends AppCompatActivity {
                 pinView.setText(pinmsg);
 
             }
-
-
     }
 
+    //TODO: See if its possible to open up model via a click
     public void buttonClick(View button) {
       switch(button.getId())
       {
