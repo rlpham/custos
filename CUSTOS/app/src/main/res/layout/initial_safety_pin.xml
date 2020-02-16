@@ -153,16 +153,29 @@
         android:layout_marginTop="165dp"
         android:text="@string/pinMessage" />
 
+    <TextView
+        android:id="@+id/pinmessage2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="167dp"
+        android:layout_marginTop="165dp"
+        android:text="@string/pinMessage" />
+
     <Button
         android:id="@+id/confirmSafetyButton"
-        android:layout_width="102dp"
-        android:layout_height="41dp"
-        android:layout_below="@+id/safety_pin_msg"
-        android:layout_marginTop="552dp"
+        android:layout_width="115dp"
+        android:layout_height="44dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="45dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginBottom="35dp"
         android:layout_toStartOf="@+id/btn0"
-        android:onClick="changePage"
-        android:text="@string/confirm_password_input_placeholder"
+        android:onClick="confirm"
+        android:text="@string/confirm"
         android:visibility="invisible"
         tools:visibility="invisible" />
 
