@@ -30,9 +30,10 @@ public class SafetyPinActivity extends AppCompatActivity {
         TextView initialSafetyMessage;
         Button confirmButton;
         boolean same = false;
-
+        int counter = 0;
         String pinmsg2 = "";
         TextView pinView2;
+        Button redo;
 
     /**
      * Question From Dale: Are all these buttons coordinates??
@@ -56,7 +57,7 @@ public class SafetyPinActivity extends AppCompatActivity {
         bt0 = findViewById(R.id.btn0);
         btpindelete = findViewById(R.id.deletesafetypin);
         pinView = findViewById(R.id.pinmessage);
-
+        redo = findViewById(R.id.redoPin);
 
         initialSafetyMessage = findViewById(R.id.safety_pin_msg);
         pinView2 = findViewById(R.id.pinmessage2);
@@ -98,6 +99,11 @@ public class SafetyPinActivity extends AppCompatActivity {
        }
        if(!pinmsg.equals(pinmsg2) && pinmsg2.length() >= 1)
        {
+            counter++;
+            if(counter >= 3)
+            {
+                redo.setVisibility(View.VISIBLE);
+            }
 
            pinmsg2 = "";
            pinView2.setText(pinmsg2);
@@ -105,6 +111,19 @@ public class SafetyPinActivity extends AppCompatActivity {
        }
 
 
+    }
+
+    public void doRedo(View view)
+    {
+        counter = 0;
+        same = false;
+        pinmsg = "";
+        pinmsg2 = "";
+        redo.setVisibility(View.INVISIBLE);
+        pinView.setText(pinmsg);
+        pinView2.setText(pinmsg2);
+        pinView.setVisibility(View.VISIBLE);
+        pinView2.setVisibility(View.VISIBLE);
     }
 
 

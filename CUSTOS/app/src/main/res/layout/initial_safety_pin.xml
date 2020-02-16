@@ -179,4 +179,19 @@
         android:visibility="invisible"
         tools:visibility="invisible" />
 
+    <Button
+        android:id="@+id/redoPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="269dp"
+        android:layout_marginEnd="165dp"
+        android:layout_marginBottom="12dp"
+        android:onClick="doRedo"
+        android:text="@string/redo"
+        android:visibility="invisible"
+        tools:visibility="invisible" />
+
 </RelativeLayout>

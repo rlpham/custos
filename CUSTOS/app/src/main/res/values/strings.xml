@@ -28,4 +28,5 @@
     <string name="emergency_contacts_name_placeholder">Name</string>
     <string name="emergency_contacts_username_placeholder">Username (optional)</string>
     <string name="emergency_contacts_phone_placeholder">Phone #</string>
+    <string name="redo">Redo</string>
 </resources>
