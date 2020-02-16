@@ -102,7 +102,7 @@ public class SafetyPinActivity extends AppCompatActivity {
             counter++;
             if(counter >= 3)
             {
-                redo.setVisibility(View.VISIBLE);
+          //      redo.setVisibility(View.VISIBLE);
             }
 
            pinmsg2 = "";
