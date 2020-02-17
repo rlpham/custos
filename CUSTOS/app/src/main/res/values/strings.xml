@@ -29,4 +29,6 @@
     <string name="emergency_contacts_username_placeholder">Username (optional)</string>
     <string name="emergency_contacts_phone_placeholder">Phone #</string>
     <string name="redo">Redo</string>
+    <string name="dangerZoneHeader" />
+    <string name="dangerzoneheader">Add A Danger Zone</string>
 </resources>
