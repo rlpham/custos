@@ -20,8 +20,6 @@
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
         </com.google.android.gms.common.SignInButton>
     </LinearLayout>
 
@@ -34,7 +32,4 @@
         android:layout_marginTop="311dp"
         android:layout_marginEnd="97dp"
         android:text="Welcome to Custos" />
-
-
-
 </RelativeLayout>
