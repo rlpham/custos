@@ -30,4 +30,5 @@
     <string name="emergency_contacts_phone_placeholder">Phone #</string>
     <string name="redo">Redo</string>
     <string name="server_client_id">906240176306-k51e2cmfna5e3fmfuqs2neua7pfcb47t.apps.googleusercontent.com</string>
+    <string name="dangerzoneheader">Add Danger Zone</string>
 </resources>
