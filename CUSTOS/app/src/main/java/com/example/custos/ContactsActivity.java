@@ -91,6 +91,16 @@ public class ContactsActivity extends AppCompatActivity {
                 String name = cursor.getString(cursor.getColumnIndex( DISPLAY_NAME ));
 
                 int hasPhoneNumber = Integer.parseInt(cursor.getString(cursor.getColumnIndex( HAS_PHONE_NUMBER )));
+                boolean extraspace = false;
+                boolean isFound = name.contains("scam") || name.contains("Scam") || name.contains("Spam") || name.contains("spam") || name.contains("Text");
+                if(isFound == true)
+                {
+                    cursor.moveToNext();
+                }
+
+
+                else
+                {
 
                 if (hasPhoneNumber > 0)
                 {
@@ -99,11 +109,28 @@ public class ContactsActivity extends AppCompatActivity {
 
                     // Query and loop for every phone number of the contact
                     Cursor phoneCursor = contentResolver.query(PhoneCONTENT_URI, null, Phone_CONTACT_ID + " = ?", new String[] { contact_id }, null);
+                        int count = 1;
 
+                    String samephoneNumber = "";
                     while (phoneCursor.moveToNext())
                     {
-                        phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
-                        output.append("\n Phone number:" + phoneNumber);
+
+                        if(count >= 1)
+                        {
+                            phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                            if(samephoneNumber.equals(phoneNumber))
+                            {
+                             break;
+                            }
+                        }
+
+                        phoneNumber = samephoneNumber =  phoneCursor.getString(phoneCursor.getColumnIndex(NUMBER));
+                        output.append("\n Phone number " + count +": " + phoneNumber);
+                        count -=- 1;
+                        if(count >= 2)
+                        {
+                            extraspace = true;
+                        }
 
                     }
 
@@ -131,7 +158,14 @@ public class ContactsActivity extends AppCompatActivity {
                     emailCursor.close();
                 }
 
-                output.append("\n");
+                if(extraspace) {
+                    output.append("\n");
+                }
+                else
+                {
+                    extraspace = false;
+                }
+                }
             }
 
             outputText.setText(output);
