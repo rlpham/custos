@@ -60,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
         try{
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Intent intent = new Intent(SplashActivity.this,SecondSplashActivity.class);
+            Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
             startActivity(intent);
         }catch (ApiException e){
             //the ApiException status code indicates the detailed failure reason
