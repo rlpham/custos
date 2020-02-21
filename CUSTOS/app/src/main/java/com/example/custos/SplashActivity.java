@@ -51,18 +51,18 @@ public class SplashActivity extends AppCompatActivity {
         //Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if(requestCode == RC_SIGN_IN){
             //The task returned from this call is always completed no need to attach a listener
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+          //  Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult();
         }
 
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
+    private void handleSignInResult(){
         try{
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
-            startActivity(intent);
-        }catch (ApiException e){
+          //  GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            Intent openApp = getPackageManager().getLaunchIntentForPackage("com.example.custos");
+           startActivity(openApp);
+        }catch (Exception e){
             //the ApiException status code indicates the detailed failure reason
             //Please refer to the googlesigninstatuscodes class reference for more info
         }
