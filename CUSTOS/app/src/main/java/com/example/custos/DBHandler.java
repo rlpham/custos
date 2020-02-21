@@ -4,12 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 
 public class DBHandler {
 
     public JSONObject getUser() throws JSONException {
         JSONObject user;
+
         try {
             user = new JSONObject();
             JSONObject coordinates = new JSONObject();
