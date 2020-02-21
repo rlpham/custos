@@ -3,15 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="true"
+    android:background="@drawable/background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="150dp"
-        android:layout_height="55dp"
+        android:layout_width="145dp"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="119dp"
-        android:layout_marginBottom="297dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="291dp"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -19,17 +22,7 @@
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </com.google.android.gms.common.SignInButton>
+            android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="166dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="311dp"
-        android:layout_marginEnd="97dp"
-        android:text="Welcome to Custos" />
 </RelativeLayout>
