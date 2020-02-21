@@ -73,6 +73,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_notifications:
                         openFragment(NotificationActivity.newInstance("", ""));
                         return true;
+                    case R.id.navigation_settings:
+                        startActivity(new Intent(MapsActivity.this, ContactsActivity.class));
+                        return true;
 
 
                 }return true;}

@@ -3,9 +3,13 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="Log In" />
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/notifications"
         android:title="Notification" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/notifications"
+        android:title="Contacts" />
 </menu>
