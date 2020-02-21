@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/theme">
 
@@ -8,8 +9,8 @@
         android:layout_height="wrap_content"
         >
 
-    <TextView
-        android:id="@+id/textView"
+        <TextView
+        android:id="@+id/ContactInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -17,30 +18,51 @@
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
         android:textSize="20dp"
-        android:gravity="center"
+        android:gravity="left"
         android:text="Contacts Information" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignRight="@+id/textView"
-        android:layout_below="@+id/textView"
-        android:gravity="center"
-        android:autoLink="phone"
-        android:text="TextView" />
+        <TextView
+            android:id="@+id/contactView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ContactInfoText"
+            android:layout_alignLeft="@+id/ContactInfoText"
+            android:layout_alignRight="@+id/ContactInfoText"
+            android:autoLink="phone"
+            android:textIsSelectable="true"
+            android:gravity="center"
+            android:text="@string/space"
+            />
+
+
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/progressBarContact"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView1"
+        android:layout_above="@+id/contactView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true" />
 
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/sendMsgFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="4dp" />
+
+
+
     </RelativeLayout>
+
+
+
 
 
 

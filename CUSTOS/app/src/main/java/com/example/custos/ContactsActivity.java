@@ -9,6 +9,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -16,10 +17,16 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.view.View;
 import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 public class ContactsActivity extends AppCompatActivity {
+
+
 
     public TextView outputText;
 
@@ -42,8 +49,23 @@ public class ContactsActivity extends AppCompatActivity {
 
         if (CheckPermission(ContactsActivity.this, permissons[0]))
         {
-            outputText = (TextView) findViewById(R.id.textView1);
+            outputText = (TextView) findViewById(R.id.contactView);
             fetchContacts();
+
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.sendMsgFab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                    sendIntent.setData(Uri.parse("sms:"));
+                    startActivityForResult(sendIntent , 0);
+
+                }
+            });
+
+
+
 
         } else
             {
@@ -159,7 +181,10 @@ public class ContactsActivity extends AppCompatActivity {
                     emailCursor.close();
                 }
 
-                if(extraspace) {
+
+
+                if(extraspace)
+                {
                     output.append("\n");
                 }
                 else
@@ -195,7 +220,7 @@ public class ContactsActivity extends AppCompatActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
                     // you have permission go ahead
-                    outputText = (TextView) findViewById(R.id.textView1);
+                    outputText = (TextView) findViewById(R.id.contactView);
                     fetchContacts();
 
                 } else
