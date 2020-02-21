@@ -31,4 +31,6 @@
     <string name="redo">Redo</string>
     <string name="server_client_id">906240176306-k51e2cmfna5e3fmfuqs2neua7pfcb47t.apps.googleusercontent.com</string>
     <string name="dangerzoneheader">Add Danger Zone</string>
+    <string name="plus">+</string>
+    <string name="Next"><![CDATA[>]]></string>
 </resources>
