@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CUSTOS</string>
     <string name="title_activity_maps">Map</string>
+    <string name="notification">Notifications</string>
     <string name="search_placeholder">Search</string>
     <string name="login_button_label">Log In</string>
     <string name="signup_button_label">Sign Up</string>

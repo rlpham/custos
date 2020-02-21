@@ -32,18 +32,24 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
-
+    private FragmentTransaction transaction;
     private FusedLocationProviderClient fusedLocationClient;
     private final int ok=0;
 
     //Testcode below
 
     public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction=getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
+    public  void closeFragment(){
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0){
+        getSupportFragmentManager().popBackStackImmediate();}
+
+    }
+
     //tillhere
 
     @Override
@@ -71,7 +77,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(new Intent(MapsActivity.this, SplashActivity.class));
                         return true;
                     case R.id.navigation_notifications:
-                        openFragment(NotificationActivity.newInstance("", ""));
+
+                        openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         startActivity(new Intent(MapsActivity.this, ContactsActivity.class));

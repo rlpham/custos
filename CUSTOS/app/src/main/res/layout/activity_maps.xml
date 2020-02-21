@@ -38,40 +38,40 @@
 <!--        android:background="?attr/colorPrimary"-->
 <!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
 <!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
-    <Button
-        android:id="@+id/add_caution_zone_button"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="560dp"
-        android:layout_marginEnd="32dp"
-        android:background="@android:drawable/stat_sys_warning" />
+<!--    <Button-->
+<!--        android:id="@+id/add_caution_zone_button"-->
+<!--        android:layout_width="75dp"-->
+<!--        android:layout_height="75dp"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginTop="560dp"-->
+<!--        android:layout_marginEnd="32dp"-->
+<!--        android:background="@android:drawable/stat_sys_warning" />-->
 
-    <EditText
-        android:id="@+id/search_bar"
-        android:layout_width="262dp"
-        android:layout_height="40dp"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="95dp"
-        android:background="#FFFFFF"
-        android:ems="10"
-        android:hint="@string/search_placeholder"
-        android:inputType="textPersonName"
-        android:singleLine="true" />
+<!--    <EditText-->
+<!--        android:id="@+id/search_bar"-->
+<!--        android:layout_width="262dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_alignParentStart="false"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginStart="104dp"-->
+<!--        android:layout_marginTop="95dp"-->
+<!--        android:background="#FFFFFF"-->
+<!--        android:ems="10"-->
+<!--        android:hint="@string/search_placeholder"-->
+<!--        android:inputType="textPersonName"-->
+<!--        android:singleLine="true" />-->
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="95dp"
-        android:layout_marginEnd="74dp"
-        android:background="@android:drawable/ic_menu_search" />
+<!--    <Button-->
+<!--        android:id="@+id/button3"-->
+<!--        android:layout_width="40dp"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_marginTop="95dp"-->
+<!--        android:layout_marginEnd="74dp"-->
+<!--        android:background="@android:drawable/ic_menu_search" />-->
 
 
 
