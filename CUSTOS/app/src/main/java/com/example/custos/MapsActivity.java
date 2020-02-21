@@ -40,11 +40,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void openFragment(Fragment fragment) {
         transaction=getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
+
         transaction.addToBackStack(null);
+        transaction.replace(R.id.container, fragment);
         transaction.commit();
     }
-    public  void closeFragment(){
+    public void closeFragment(){
         if (getSupportFragmentManager().getBackStackEntryCount() > 0){
         getSupportFragmentManager().popBackStackImmediate();}
 

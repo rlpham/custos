@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -64,13 +65,26 @@ public class NotificationActivity extends Fragment {
     }
 
     public void generateButton(String title,String eventID,LinearLayout layout){
+        ImageView imageView = new ImageView(layout.getContext());
+
+//setting image resource
+        imageView.setImageResource(R.drawable.line);
+
+//setting image position
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+
+//adding view to layout
+        layout.addView(imageView);
+
+
         //set the properties for button
         Button btnTag = new Button(layout.getContext());
-        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(800, 150));
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
-        btnTag.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+        btnTag.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
         btnTag.setText(title);
         btnTag.setTextColor(Color.WHITE);
 
@@ -83,14 +97,26 @@ public class NotificationActivity extends Fragment {
     }
 
     public void defaultHome(Button button){
+
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                
+                Intent intent = new Intent(v.getContext(), MapsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
     }
     public void eventInvite(String eventID){
 
+
+    }
+    public void eventNotification(String eventID){
+
+
+    }
+    public void userNotification(String eventID){
 
     }
 
