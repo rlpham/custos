@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -59,12 +60,14 @@ public class SplashActivity extends AppCompatActivity {
 
     private void handleSignInResult(){
         try{
-          //  GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Intent openApp = getPackageManager().getLaunchIntentForPackage("com.example.custos");
-           startActivity(openApp);
+          // GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+           startActivity(intent);
         }catch (Exception e){
             //the ApiException status code indicates the detailed failure reason
             //Please refer to the googlesigninstatuscodes class reference for more info
+            //Log.w("Error", "signInResult:failed code =" + e.getStatusCode());
+            Log.getStackTraceString(e);
         }
     }
 
