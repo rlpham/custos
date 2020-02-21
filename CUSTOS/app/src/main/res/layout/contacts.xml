@@ -28,6 +28,7 @@
         android:layout_alignRight="@+id/textView"
         android:layout_below="@+id/textView"
         android:gravity="center"
+        android:autoLink="phone"
         android:text="TextView" />
 
     <ProgressBar
