@@ -3,6 +3,7 @@ package com.example.custos;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import com.google.android.libraries.places.api.Places;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +23,14 @@ public class DangerZoneActivity extends AppCompatActivity {
         riskLevelSpinner.setAdapter(adapter);
 
         //TODO: Add in item listener
+
+        /**
+         * TODO: Use in autofill address to set address page
+         * Sample link: https://developers.google.com/maps/documentation/android-sdk/map
+         */
+
+
+
 
 
 
