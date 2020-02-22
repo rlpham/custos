@@ -99,10 +99,6 @@ public class NotificationActivity extends Fragment {
 //adding view to layout
         layout.addView(imageView);
 
-        int addHeight=0;
-        int titlelength=(int) Math.floor(title.length()/50);
-        addHeight = titlelength * 50;
-
         //set the properties for button
         Button btnTag = new Button(layout.getContext());
         btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -194,10 +190,10 @@ public class NotificationActivity extends Fragment {
 
        //ACCEPT
         Button btnTag = new Button(layout.getContext());
-        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(250, ViewGroup.LayoutParams.MATCH_PARENT));
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
-        btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
+        btnTag.setBackgroundColor(Color.parseColor("#036303"));
         btnTag.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         btnTag.setText("Accept");
         btnTag.setTextColor(Color.WHITE);
@@ -211,10 +207,10 @@ public class NotificationActivity extends Fragment {
 
         //ACCEPT
         Button btnTag2 = new Button(layout.getContext());
-        btnTag2.setLayoutParams(new RelativeLayout.LayoutParams(250, ViewGroup.LayoutParams.MATCH_PARENT));
+        btnTag2.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
-        btnTag2.setBackgroundColor(Color.parseColor("#1B1B1B"));
+        btnTag2.setBackgroundColor(Color.parseColor("#990000"));
         btnTag2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         btnTag2.setText("Reject");
         btnTag2.setTextColor(Color.WHITE);
