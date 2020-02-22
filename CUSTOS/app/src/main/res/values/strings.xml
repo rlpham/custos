@@ -39,6 +39,7 @@
     <string name="locationheader">Location</string>
     <string name="locationPlaceHolder" />
     <string name="risklevelheader">Risk Level</string>
+    <string name="descriptionHeader">Description</string>
     <string-array name="criticallevelarray">
         <item>Low</item>
         <item>Medium</item>
