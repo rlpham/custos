@@ -8,7 +8,7 @@
     android:background="#1D1D1D">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/notificationHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -30,7 +30,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView6"
+        android:layout_below="@+id/notificationHeader"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="28dp"
         android:layout_marginBottom="-141dp">
@@ -41,5 +41,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/specificNotification"
+        android:layout_width="312dp"
+        android:layout_height="388dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="60dp"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notificationAcceptReject"
+        android:layout_width="277dp"
+        android:layout_height="79dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="446dp"
+        android:layout_marginEnd="65dp"
+        android:orientation="horizontal"></LinearLayout>
 </RelativeLayout>
 

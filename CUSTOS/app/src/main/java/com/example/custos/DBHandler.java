@@ -42,6 +42,7 @@ public class DBHandler {
             location.put("longitude", "40.4406");
             location.put("latitude", "79.9959");
 
+            event.put("id","E1234");
             event.put("name", "Kennys Stunna 22nd Birthday Party");
             event.put("location", location);
             event.put("description", "kennys 22nd birthday, bring cake please, and friends.");
@@ -63,15 +64,17 @@ public class DBHandler {
             JSONObject n2 = new JSONObject();
             JSONObject n3 = new JSONObject();
 
-
+            n1.put("id","E1234");
             n1.put("sender", "user23324");
             n1.put("type", "invite");
             n1.put("message", "kennytran123 has invited you an event");
 
+            n2.put("id","D1234");
             n2.put("sender", "xxDragonSlayer_3.14");
             n2.put("type", "alert");
             n2.put("message", "xxDragonSlayer_3.14 might be in danger");
 
+            n3.put("id","L1234");
             n3.put("sender", "DFA987");
             n3.put("type", "alert");
             n3.put("message", "DFA987 is now sharing their location with you for event: Kennys Stunna 22nd Birthday Party");
