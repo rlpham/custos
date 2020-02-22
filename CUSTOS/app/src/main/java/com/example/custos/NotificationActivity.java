@@ -105,7 +105,7 @@ public class NotificationActivity extends Fragment {
 
         //set the properties for button
         Button btnTag = new Button(layout.getContext());
-        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150+addHeight));
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
@@ -172,7 +172,7 @@ public class NotificationActivity extends Fragment {
 
         //For senders name
         TextView name=new TextView(layout.getContext());
-        name.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+        name.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         name.setBackgroundColor(Color.parseColor("#363636"));
         name.setTextColor(Color.WHITE);
         name.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
@@ -181,7 +181,7 @@ public class NotificationActivity extends Fragment {
 
         //for now its getting message lets see later
         TextView messageView=new TextView(layout.getContext());
-        messageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200));
+        messageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         messageView.setBackgroundColor(Color.parseColor("#363636"));
         messageView.setTextColor(Color.WHITE);
         messageView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
