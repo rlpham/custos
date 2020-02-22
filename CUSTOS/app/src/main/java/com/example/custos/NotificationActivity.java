@@ -105,7 +105,7 @@ public class NotificationActivity extends Fragment {
 
         //set the properties for button
         Button btnTag = new Button(layout.getContext());
-        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 75+addHeight));
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 150+addHeight));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
