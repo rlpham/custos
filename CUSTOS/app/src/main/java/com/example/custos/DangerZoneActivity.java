@@ -10,5 +10,6 @@ public class DangerZoneActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.danger_zone);
+
     }
 }

@@ -36,4 +36,6 @@
     <string name="Next"><![CDATA[>]]></string>
     <string name="space"> </string>
     <string name="send_message">Send Message</string>
+    <string name="locationheader">Location</string>
+    <string name="locationPlaceHolder" />
 </resources>

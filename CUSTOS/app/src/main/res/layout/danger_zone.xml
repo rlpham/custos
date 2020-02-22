@@ -22,4 +22,28 @@
         android:layout_marginTop="78dp"
         android:text="@string/dangerzoneheader" />
 
+    <TextView
+        android:id="@+id/locaationheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="123dp"
+        android:text="@string/locationheader" />
+
+    <EditText
+        android:id="@+id/locationplaceholder"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="153dp"
+        android:autofillHints="Add in location"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/locationPlaceHolder" />
+
+
 </RelativeLayout>
