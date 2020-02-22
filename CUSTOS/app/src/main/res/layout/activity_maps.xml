@@ -28,6 +28,17 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_view_mapActivity"
+            android:queryHint="Search..."
+            android:iconifiedByDefault="false"
+            android:layout_margin="10dp"
+            android:elevation="5dp"
+            android:background="@drawable/sv_round"/>
+
     </FrameLayout>
 
 
