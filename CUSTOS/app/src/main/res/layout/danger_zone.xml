@@ -38,12 +38,31 @@
         android:layout_height="30dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="153dp"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="152dp"
         android:autofillHints="Add in location"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/locationPlaceHolder" />
+
+    <TextView
+        android:id="@+id/risklevelheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="203dp"
+        android:text="@string/risklevelheader" />
+
+    <Spinner
+        android:id="@+id/risklevelspinner"
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="53dp"
+        android:layout_marginTop="238dp" />
 
 
 </RelativeLayout>

@@ -38,4 +38,10 @@
     <string name="send_message">Send Message</string>
     <string name="locationheader">Location</string>
     <string name="locationPlaceHolder" />
+    <string name="risklevelheader">Risk Level</string>
+    <string-array name="criticallevelarray">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 </resources>
