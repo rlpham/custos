@@ -12,6 +12,19 @@
         android:id="@+id/container"
         >
     <!-- Main content -->
+        <SearchView
+            android:id="@+id/search_view_mapActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/sv_round"
+            android:elevation="5dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search..." />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
@@ -28,16 +41,6 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/search_view_mapActivity"
-            android:queryHint="Search..."
-            android:iconifiedByDefault="false"
-            android:layout_margin="10dp"
-            android:elevation="5dp"
-            android:background="@drawable/sv_round"/>
 
     </FrameLayout>
 
