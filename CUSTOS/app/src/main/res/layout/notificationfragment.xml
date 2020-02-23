@@ -45,8 +45,8 @@
 
     <LinearLayout
         android:id="@+id/specificNotification"
-        android:layout_width="312dp"
-        android:layout_height="388dp"
+        android:layout_width="wrap_content"
+        android:layout_height="337dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -56,13 +56,29 @@
         android:orientation="vertical"></LinearLayout>
 
     <LinearLayout
-        android:id="@+id/notificationAcceptReject"
-        android:layout_width="277dp"
-        android:layout_height="79dp"
+        android:id="@+id/notificationReject"
+        android:layout_width="144dp"
+        android:layout_height="86dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="446dp"
-        android:layout_marginEnd="65dp"
+        android:layout_marginStart="205dp"
+        android:layout_marginTop="450dp"
+        android:layout_marginEnd="60dp"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notificationAccept"
+        android:layout_width="120dp"
+        android:layout_height="86dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="450dp"
+        android:layout_marginEnd="205dp"
         android:orientation="horizontal"></LinearLayout>
 </RelativeLayout>
 

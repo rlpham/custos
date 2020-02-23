@@ -168,29 +168,29 @@ public class NotificationActivity extends Fragment {
 
         //For senders name
         TextView name=new TextView(layout.getContext());
-        name.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        name.setBackgroundColor(Color.parseColor("#363636"));
+        name.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT+100));
+        name.setBackgroundColor(Color.parseColor("#232323"));
         name.setTextColor(Color.WHITE);
-        name.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        name.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         name.setText(sender);
         layout.addView(name);
 
         //for now its getting message lets see later
         TextView messageView=new TextView(layout.getContext());
-        messageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        messageView.setBackgroundColor(Color.parseColor("#363636"));
+        messageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT+400));
+        messageView.setBackgroundColor(Color.parseColor("#232323"));
         messageView.setTextColor(Color.WHITE);
-        messageView.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-        messageView.setText(message);
+        messageView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        messageView.setText("Description :- "+message);
         layout.addView(messageView);
 
         //ACCEPT REJECT
-        LinearLayout arLayout = (LinearLayout) buttonview.findViewById(R.id.notificationAcceptReject);
+        LinearLayout arLayout = (LinearLayout) buttonview.findViewById(R.id.notificationAccept);
         arLayout.setBackgroundColor(Color.parseColor("#232323"));
 
        //ACCEPT
         Button btnTag = new Button(layout.getContext());
-        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#036303"));
@@ -203,11 +203,12 @@ public class NotificationActivity extends Fragment {
         //add button to the layout
         arLayout.addView(btnTag);
 
-
+        LinearLayout rLayout = (LinearLayout) buttonview.findViewById(R.id.notificationReject);
+        rLayout.setBackgroundColor(Color.parseColor("#232323"));
 
         //ACCEPT
         Button btnTag2 = new Button(layout.getContext());
-        btnTag2.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        btnTag2.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag2.setBackgroundColor(Color.parseColor("#990000"));
@@ -218,7 +219,7 @@ public class NotificationActivity extends Fragment {
         buttonAction(btnTag2,"X");
 
         //add button to the layout
-        arLayout.addView(btnTag2);
+        rLayout.addView(btnTag2);
 
 
     }
