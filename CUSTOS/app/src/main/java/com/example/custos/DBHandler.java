@@ -39,13 +39,15 @@ public class DBHandler {
             guests.put("Rahul Datta");
 
             JSONObject location = new JSONObject();
-            location.put("longitude", "40.4406");
-            location.put("latitude", "79.9959");
+            location.put("longitude", "25.7617");
+            location.put("latitude", "80.1918");
 
             event.put("id","E1234");
+            event.put("owner", "kennytran123");
             event.put("name", "Kennys Stunna 22nd Birthday Party");
             event.put("location", location);
             event.put("description", "kennys 22nd birthday, bring cake please, and friends.");
+            event.put("date/time", "01/06/2021 08:00PM EST");
             event.put("guests", guests);
 
             return event;
@@ -84,6 +86,30 @@ public class DBHandler {
             notifications.put(n3);
 
             return notifications;
+
+        } catch(JSONException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public JSONArray getEventsList() throws JSONException {
+        JSONArray events;
+        try {
+            events = new JSONArray();
+            JSONObject e1 = new JSONObject();
+            JSONObject e2 = new JSONObject();
+            JSONObject e3 = new JSONObject();
+
+            e1.put("id", "E1234");
+            e1.put("name", "Kennys Stunna 22nd Birthday Party");
+            e2.put("id", "E5815");
+            e2.put("name", "Dinner");
+            e3.put("id", "E8951");
+            e3.put("name", "Study Session");
+
+            events.put(e1);
+            return events;
 
         } catch(JSONException e) {
             System.out.println(e);

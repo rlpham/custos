@@ -46,4 +46,6 @@
         <item>Medium</item>
         <item>High</item>
     </string-array>
+    <string name="event_name_placeholder">Name</string>
+    <string name="event_description_placeholder">Description</string>
 </resources>
