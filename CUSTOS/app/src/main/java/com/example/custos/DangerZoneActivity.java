@@ -1,7 +1,9 @@
 package com.example.custos;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import com.google.android.libraries.places.api.Places;
 
@@ -29,10 +31,15 @@ public class DangerZoneActivity extends AppCompatActivity {
          * Sample link: https://developers.google.com/maps/documentation/android-sdk/map
          */
 
-
-
-
-
-
+        /**
+         * Adding in action listener to submit button
+         */
+        Button submitdangerzonebutton = findViewById(R.id.submitdangerzonebutton);
+        submitdangerzonebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Add in handler code here
+            }
+        });
     }
 }

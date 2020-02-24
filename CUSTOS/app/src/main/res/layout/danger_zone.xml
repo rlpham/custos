@@ -86,7 +86,7 @@
         android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/submitdangerzonebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
