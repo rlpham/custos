@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".InviteGuestsActivity"></activity>
+        <activity android:name=".InviteGuestsActivity"
+            android:exported="true"></activity>
         <activity
             android:name=".CreateEventActivity"
             android:exported="true" />
