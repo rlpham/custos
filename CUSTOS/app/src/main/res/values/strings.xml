@@ -40,6 +40,7 @@
     <string name="locationPlaceHolder" />
     <string name="risklevelheader">Risk Level</string>
     <string name="descriptionHeader">Description</string>
+    <string name="dangerzonebutton">Submit Danger Zone</string>
     <string-array name="criticallevelarray">
         <item>Low</item>
         <item>Medium</item>
