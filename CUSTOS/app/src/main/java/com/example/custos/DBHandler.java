@@ -116,4 +116,27 @@ public class DBHandler {
         }
         return null;
     }
+
+    public JSONArray getContacts() throws JSONException {
+        JSONArray contacts;
+        try {
+            contacts = new JSONArray();
+
+            contacts.put("HIV69");
+            contacts.put("syphilis123");
+            contacts.put("chutiya123");
+            contacts.put("AIDS4");
+            contacts.put("DixieNormous");
+            contacts.put("Joey Burrow");
+            contacts.put("HughJanus");
+
+            return contacts;
+
+        }catch(JSONException e) {
+            System.out.println(e);
+        }
+        return null;
+
+    }
+
 }
