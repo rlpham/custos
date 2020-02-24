@@ -66,6 +66,7 @@
         android:layout_marginStart="75dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="75dp"
+        android:onClick="inviteGuests"
         android:text="@string/event_invite_users_button_placeholder" />
 
     <TextView
@@ -93,6 +94,7 @@
         android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/invited_guests"
         android:layout_width="wrap_content"
         android:layout_height="202dp"
         android:layout_below="@+id/textView"

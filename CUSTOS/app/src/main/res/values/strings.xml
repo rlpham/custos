@@ -51,4 +51,6 @@
     <string name="event_date_time_placeholder">Date/Time</string>
     <string name="event_invite_users_button_placeholder">Invite Guests +</string>
     <string name="event_create_event_placeholder">Create Event</string>
+    <string name="invite_guests_label_placeholder">Invite Guests</string>
+
 </resources>
