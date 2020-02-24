@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -39,6 +40,9 @@ public class DangerZoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Add in handler code here
+                Intent intent = new Intent();
+                intent.putExtra("MESSAGE","");
+                onActivityResult(2,2,intent);
             }
         });
     }

@@ -266,5 +266,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    /**
+     * THIS IS HOW WE INTERACT WITH THE MAP
+     * LINK: https://www.javatpoint.com/android-startactivityforresult-example?fbclid=IwAR0jMGAHYTVHMJVogObT-lkYwkyRWjMbTlVOLjJYL1B1i-TSfgFRxuyy7S4
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2)
+        {
+
+        }
+    }
+
 
 }
