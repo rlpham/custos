@@ -117,7 +117,7 @@ public class DBHandler {
         return null;
     }
 
-    public JSONArray getContacts() throws JSONException {
+    public JSONArray getContacts() throws Exception {
         JSONArray contacts;
         try {
             contacts = new JSONArray();
@@ -132,7 +132,7 @@ public class DBHandler {
 
             return contacts;
 
-        }catch(JSONException e) {
+        }catch(Exception e) {
             System.out.println(e);
         }
         return null;
