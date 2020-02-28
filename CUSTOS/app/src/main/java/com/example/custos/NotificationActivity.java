@@ -194,6 +194,7 @@ public class NotificationActivity extends Fragment {
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#036303"));
+
         btnTag.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         btnTag.setText("Accept");
         btnTag.setTextColor(Color.WHITE);
