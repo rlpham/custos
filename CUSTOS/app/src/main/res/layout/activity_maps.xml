@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
+            android:background="@color/quantum_black_100"
             android:visibility="visible"
             app:itemIconTint="@android:color/white"
             app:itemTextColor="@android:color/white"

@@ -137,6 +137,9 @@ public class NotificationActivity extends Fragment {
                      default:
                          //Right now they are just going to main page
                          //going to redirect to eventInvite,eventNotification and userNotifications when the fragments are set up
+
+
+
                          Intent intent = new Intent(v.getContext(), MapsActivity.class);
                          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                          startActivity(intent);

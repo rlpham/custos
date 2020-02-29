@@ -46,6 +46,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
@@ -125,15 +126,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.navigation_home:
-                        startActivity(new Intent(MapsActivity.this, SplashActivity.class));
+                    case R.id.navigation_events:
+
+                        startActivity(new Intent(MapsActivity.this, CreateEventActivity.class));
                         return true;
                     case R.id.navigation_notifications:
-
                         openFragment(NotificationActivity.newInstance());
                         return true;
-                    case R.id.navigation_settings:
+                    case R.id.navigation_friends:
                         startActivity(new Intent(MapsActivity.this, ContactsActivity.class));
+                        return true;
+                    case R.id.navigation_settings:
+                        startActivity(new Intent(MapsActivity.this, EmergencyContactsActivity.class));
+                        return true;
+                    case R.id.navigation_maps:
+                      closeFragment();
                         return true;
 
 

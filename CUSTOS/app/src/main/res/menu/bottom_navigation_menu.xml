@@ -2,15 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <item
-        android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home"
-        android:title="Log In" />
+        android:id="@+id/navigation_events"
+        android:icon="@drawable/baseline_calendar_today_black_48"
+        android:title="Events" />
     <item
         android:id="@+id/navigation_notifications"
-        android:icon="@drawable/notifications"
+        android:icon="@drawable/baseline_notifications_black_48"
         android:title="Notification" />
     <item
+        android:id="@+id/navigation_maps"
+        android:icon="@drawable/ic_home"
+        android:title="Maps" />
+    <item
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/baseline_contacts_black_48"
+        android:title="Friends" />
+    <item
         android:id="@+id/navigation_settings"
-        android:icon="@drawable/notifications"
-        android:title="Contacts" />
+        android:icon="@drawable/baseline_settings_black_48"
+        android:title="Settings" />
 </menu>
