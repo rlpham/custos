@@ -138,8 +138,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(new Intent(MapsActivity.this, ContactsActivity.class));
                         return true;
                     case R.id.navigation_settings:
-                        Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
-                        startActivityForResult(intent,2);
+                        startActivity(new Intent(MapsActivity.this, EmergencyContactsActivity.class));
                         return true;
                     case R.id.navigation_maps:
                       closeFragment();
@@ -151,8 +150,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
         //rahul end
-
-        //Dale Code
 
 
 
@@ -266,9 +263,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } else {
                     //Intent openApp = getPackageManager().getLaunchIntentForPackage("com.example.custos");
 
-                    //startActivity(openApp);
-                    System.exit(0);
+
+                  //  startActivity(openApp);
                     System.out.println("Not GRANTED");
+                   System.exit(0);
+
                 }
                 return;
             }
@@ -279,24 +278,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Dale Reyes Code
-     * TODO: Add in code for map activity
      * THIS IS HOW WE INTERACT WITH THE MAP
      * LINK: https://www.javatpoint.com/android-startactivityforresult-example?fbclid=IwAR0jMGAHYTVHMJVogObT-lkYwkyRWjMbTlVOLjJYL1B1i-TSfgFRxuyy7S4
      * @param requestCode
      * @param resultCode
-     * @param sampleIntent
+     * @param data
      */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent sampleIntent)
-    {
-        super.onActivityResult(requestCode, resultCode, sampleIntent);
-        // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2)
-        {
-            System.out.println("Map Activity Worked!!");
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data)
+//    {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        // check if the request code is same as what is passed  here it is 2
+//        if(requestCode==2)
+//        {
+//
+//        }
+//    }
 
 
 }
