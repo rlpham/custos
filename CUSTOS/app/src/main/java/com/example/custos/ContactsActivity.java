@@ -29,6 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import android.content.Intent;
@@ -54,6 +55,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 public class ContactsActivity extends Fragment {
+    DBHandler db = new DBHandler();
+
+
 
 
 
@@ -92,14 +96,33 @@ public class ContactsActivity extends Fragment {
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
 
 
+        try {
+            JSONArray name = db.getContacts();
+
+            ArrayList<String> listShow = new ArrayList<String>();
+          for(int i= 0;i < db.getContacts().length(); i -=- 1) {
+              listShow.add(name.get(i).toString());
+
+          }
+            Collections.sort(listShow);
+
+            for(int i= 0;i < db.getContacts().length(); i -=- 1) {
 
 
-        for(int i=5;i>=0;i--) {
 
-                generateButton("KWNNY", layout);
 
+
+
+                generateButton(listShow.get(i), layout);
+
+
+            }
 
         }
+        catch (JSONException e){
+
+        }
+
         // Inflate the layout for this fragment
         return view;
     }

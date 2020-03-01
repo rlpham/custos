@@ -117,18 +117,29 @@ public class DBHandler {
         return null;
     }
 
-    public JSONArray getContacts() throws Exception {
+    public JSONArray getContacts() throws JSONException {
         JSONArray contacts;
         try {
             contacts = new JSONArray();
 
-            contacts.put("HIV69");
-            contacts.put("syphilis123");
-            contacts.put("chutiya123");
-            contacts.put("AIDS4");
-            contacts.put("DixieNormous");
-            contacts.put("Joey Burrow");
-            contacts.put("HughJanus");
+            contacts.put("Fred");
+            contacts.put("Bob");
+            contacts.put("Chris");
+            contacts.put("Angel");
+            contacts.put("Dixie");
+            contacts.put("Joey");
+            contacts.put("Hugh");
+            contacts.put("Henry");
+            contacts.put("Sally");
+            contacts.put("Chad");
+            contacts.put("Archie");
+            contacts.put("Dennis");
+            contacts.put("Jospeh");
+            contacts.put("Hope");
+            contacts.put("Hilary");
+            contacts.put("Sam");
+
+
 
             return contacts;
 
