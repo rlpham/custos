@@ -135,7 +135,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
-                        startActivity(new Intent(MapsActivity.this, ContactsActivity.class));
+                      openFragment(ContactsActivity.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);

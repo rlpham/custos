@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,96 +31,118 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-public class ContactsActivity extends AppCompatActivity {
+import androidx.annotation.IntDef;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.gms.maps.SupportMapFragment;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+public class ContactsActivity extends Fragment {
 
 
 
-    public TextView outputText;
-
-    Context context;
-    private static final int REQUEST_RUNTIME_PERMISSION = 123;
-    String[] permissons = {Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_CALL_LOG,
-            Manifest.permission.CALL_PHONE};
-
-
+    public ContactsActivity() {
+        // Required empty public constructor
+    }
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.@return A new instance of fragment NotificationFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ContactsActivity newInstance() {
+        ContactsActivity fragment = new ContactsActivity();
+        //    Bundle args = new Bundle();
+        //     args.putString(ARG_PARAM1, param1);
+        //      args.putString(ARG_PARAM2, param2);
+        //  fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contacts);
-        context = this;
+
+        //   if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+        // }
+
+    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view=inflater.inflate(R.layout.contactpage, container, false);
+
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
 
 
-        //get names from db eventually
-        final ListView listview = (ListView) findViewById(R.id.listview);
-        String[] names = new String[] { "Fred Miller", "Diana D. Parker", "Yolanda R. Forbes",
-                "Leon B. Dailey", "Samuel E. Sherman"};
-
-        String[] phoneNum = new String[] {"(727)-424-3252", "(727)-424-3252", "(727)-424-3252", "(727)-424-3252", "(727)-424-3252"};
 
 
-        final ArrayList<String> list = new ArrayList<String>();
-        for (int i = 0; i < names.length; ++i) {
-            list.add("Name: " + names[i] + " Phone Number: "+phoneNum[i]);
+        for(int i=5;i>=0;i--) {
+
+                generateButton("KWNNY", layout);
+
+
         }
-        final StableArrayAdapter adapter = new StableArrayAdapter(this,
-                android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-
-            //use this to edit info
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
-            }
-
-        });
+        // Inflate the layout for this fragment
+        return view;
     }
 
-    private class StableArrayAdapter extends ArrayAdapter<String> {
+    public void generateButton(String title,LinearLayout layout){
+        ImageView imageView = new ImageView(layout.getContext());
 
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+//setting image resource
+        imageView.setImageResource(R.drawable.line);
 
-        public StableArrayAdapter(Context context, int textViewResourceId,
-                                  List<String> objects) {
-            super(context, textViewResourceId, objects);
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-            }
-        }
+//setting image position
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        @Override
-        public long getItemId(int position) {
-            String item = getItem(position);
-            return mIdMap.get(item);
-        }
+//adding view to layout
+        layout.addView(imageView);
 
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
+        //set the properties for button
+        Button btnTag = new Button(layout.getContext());
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        // btnTag.setPaddingRelative(0,100,200,500);
+        // btnTag.setLeftTopRightBottom(100, 100, 100);
+        btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
+        btnTag.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+        btnTag.setText(title);
+        btnTag.setTextColor(Color.WHITE);
+
+       // buttonAction(btnTag,eventID);
+
+        //add button to the layout
+        layout.addView(btnTag);
+
 
     }
 
 
 
 
+
+
+
+
+}
 
 
 
@@ -336,8 +359,6 @@ public class ContactsActivity extends AppCompatActivity {
             return false;
         }
     }*/
-}
-
 
 
 
