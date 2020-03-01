@@ -67,6 +67,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void closeFragment() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+
             getSupportFragmentManager().popBackStackImmediate();
         }
 

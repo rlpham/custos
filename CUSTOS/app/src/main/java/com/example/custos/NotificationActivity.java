@@ -140,10 +140,10 @@ public class NotificationActivity extends Fragment {
 
 
 
-                         Intent intent = new Intent(v.getContext(), MapsActivity.class);
-                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                         startActivity(intent);
-                         getActivity().finish();
+                         //Intent intent = new Intent(v.getContext(), MapsActivity.class);
+                         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                         //startActivity(intent);
+                         getActivity().getSupportFragmentManager().popBackStackImmediate();
                          break;
                 }
 
