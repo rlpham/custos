@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -299,6 +300,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             dangerzonelocation.setLongitude(77.86);
 
             LatLng stateCollege = new LatLng(40.7934,-77.86);
+            MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.notifications));
             mMap.addMarker(new MarkerOptions().position(stateCollege).title("Danger Zone Marker"));
             moveToCurrentLocation(stateCollege);
             
