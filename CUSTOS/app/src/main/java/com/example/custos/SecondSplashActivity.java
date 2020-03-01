@@ -70,7 +70,7 @@ public class SecondSplashActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(SecondSplashActivity.this,SecondSplashActivity.class);
+                        Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
                         startActivity(intent);
                         Toast.makeText(SecondSplashActivity.this,"Sign out successfully",Toast.LENGTH_LONG).show();
                         finish();
