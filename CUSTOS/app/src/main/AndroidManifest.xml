@@ -22,8 +22,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".InviteGuestsActivity"
+        <activity android:name=".MainEventListActivity"
             android:exported="true"></activity>
+        <activity
+            android:name=".InviteGuestsActivity"
+            android:exported="true" />
         <activity
             android:name=".CreateEventActivity"
             android:exported="true" />
@@ -49,9 +52,9 @@
         <activity
             android:name=".DangerZoneActivity"
             android:exported="true" />
-        <activity android:name=".SecondSplashActivity"
-            android:exported="true"/>
-
+        <activity
+            android:name=".SecondSplashActivity"
+            android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

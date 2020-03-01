@@ -129,8 +129,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_events:
-
-                        startActivity(new Intent(MapsActivity.this, CreateEventActivity.class));
+                        openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
                         openFragment(NotificationActivity.newInstance());
@@ -263,13 +262,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     startActivity(openApp);
                     System.out.println("GRANTED");
                 } else {
-                    //Intent openApp = getPackageManager().getLaunchIntentForPackage("com.example.custos");
-
-
-                  //  startActivity(openApp);
                     System.out.println("Not GRANTED");
-                   System.exit(0);
-
+                    System.exit(0);
                 }
                 return;
             }
