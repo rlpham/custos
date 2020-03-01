@@ -280,6 +280,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // check if the request code is same as what is passed  here it is 2
         if(requestCode==2)
         {
+            //TODO: Adding in code for the marker should look something like this
+            //LatLng latLng = new LatLng(addres.getLatitude(),address.getLongitude());
+            //mMap.addMarker(new MarkerOptions().position(15.2).title("Yuh"));
+
 
         }
     }
