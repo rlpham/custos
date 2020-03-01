@@ -18,11 +18,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity {
 
@@ -41,12 +48,82 @@ public class ContactsActivity extends AppCompatActivity {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts);
         context = this;
 
+
+        //get names from db eventually
+        final ListView listview = (ListView) findViewById(R.id.listview);
+        String[] names = new String[] { "Fred Miller", "Diana D. Parker", "Yolanda R. Forbes",
+                "Leon B. Dailey", "Samuel E. Sherman"};
+
+        String[] phoneNum = new String[] {"(727)-424-3252", "(727)-424-3252", "(727)-424-3252", "(727)-424-3252", "(727)-424-3252"};
+
+
+        final ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < names.length; ++i) {
+            list.add("Name: " + names[i] + " Phone Number: "+phoneNum[i]);
+        }
+        final StableArrayAdapter adapter = new StableArrayAdapter(this,
+                android.R.layout.simple_list_item_1, list);
+        listview.setAdapter(adapter);
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            //use this to edit info
+            @Override
+            public void onItemClick(AdapterView<?> parent, final View view,
+                                    int position, long id) {
+                final String item = (String) parent.getItemAtPosition(position);
+                view.animate().setDuration(2000).alpha(0)
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.remove(item);
+                                adapter.notifyDataSetChanged();
+                                view.setAlpha(1);
+                            }
+                        });
+            }
+
+        });
+    }
+
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            String item = getItem(position);
+            return mIdMap.get(item);
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+    }
+
+
+
+
+
+
+
+/*
         if (CheckPermission(ContactsActivity.this, permissons[0]))
         {
             outputText = (TextView) findViewById(R.id.contactView);
@@ -72,8 +149,8 @@ public class ContactsActivity extends AppCompatActivity {
             // you do not have permission go request runtime permissions
             RequestPermission(ContactsActivity.this, permissons, REQUEST_RUNTIME_PERMISSION);
         }
-    }
-
+    }*/
+/*
 
 
 
@@ -258,7 +335,7 @@ public class ContactsActivity extends AppCompatActivity {
             {
             return false;
         }
-    }
+    }*/
 }
 
 

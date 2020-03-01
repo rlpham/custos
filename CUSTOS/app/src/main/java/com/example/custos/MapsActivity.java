@@ -261,10 +261,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     startActivity(openApp);
                     System.out.println("GRANTED");
                 } else {
-                    Intent openApp = getPackageManager().getLaunchIntentForPackage("com.example.custos");
+                    //Intent openApp = getPackageManager().getLaunchIntentForPackage("com.example.custos");
 
-                    startActivity(openApp);
+
+                  //  startActivity(openApp);
                     System.out.println("Not GRANTED");
+                   System.exit(0);
+
                 }
                 return;
             }
