@@ -138,7 +138,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(new Intent(MapsActivity.this, ContactsActivity.class));
                         return true;
                     case R.id.navigation_settings:
-                        startActivity(new Intent(MapsActivity.this, DangerZoneActivity.class));
                         Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
                         startActivityForResult(intent,2);
                         return true;
