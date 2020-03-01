@@ -42,7 +42,9 @@ public class DangerZoneActivity extends AppCompatActivity {
                 //Add in handler code here
                 Intent intent = new Intent();
                 intent.putExtra("MESSAGE","");
+                System.out.println("It worked");
                 onActivityResult(2,2,intent);
+                finish();
             }
         });
     }
