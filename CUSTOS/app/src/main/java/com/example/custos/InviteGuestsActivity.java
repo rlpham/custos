@@ -7,17 +7,26 @@ import android.os.Bundle;
 
 public class InviteGuestsActivity extends AppCompatActivity {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
-        //TODO: Set up checkatble text views in list, then pass them into intent and test
-
+        // TODO: Set up checkable text views in list, then pass them into intent and test
+        // https://abhiandroid.com/ui/checkedtextview
 
 //        Intent invGuestIntent = new Intent();
 //        invGuestIntent.putExtra("Guests", "guests");
 //        setResult(1, invGuestIntent);
 //        finish();
+    }
+
+    public void doneAddingGuests() {
+        Intent invGuestIntent = new Intent();
+        invGuestIntent.putExtra("Guests", "");
+        setResult(1, invGuestIntent);
+        finish();
     }
 
 }

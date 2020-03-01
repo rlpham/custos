@@ -30,11 +30,11 @@ public class CreateEventActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
 
-// Specify the types of place data to return.
+        // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         //autocompleteFragment.setLocationRestriction(RectangularBounds.newInstance(new LatLng(40.263680,-76.890739), new LatLng(40.285519,-76.650589)));
 
-// Set up a PlaceSelectionListener to handle the response.
+        // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
@@ -50,6 +50,10 @@ public class CreateEventActivity extends AppCompatActivity {
     public void inviteGuests(View view) {
         Intent invGuestIntent = new Intent(this, InviteGuestsActivity.class);
         startActivityForResult(invGuestIntent, 1);
+    }
+
+    public void createEvent() {
+        System.out.println("Trigger when even is created");
     }
 
     @Override
