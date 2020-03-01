@@ -298,7 +298,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             dangerzonelocation.setLatitude(40.7934);
             dangerzonelocation.setLongitude(77.86);
 
-            LatLng stateCollege = new LatLng(40.7934,77.86);
+            LatLng stateCollege = new LatLng(40.7934,-77.86);
             mMap.addMarker(new MarkerOptions().position(stateCollege).title("Danger Zone Marker"));
             moveToCurrentLocation(stateCollege);
             
