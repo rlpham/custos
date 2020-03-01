@@ -290,8 +290,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
+
         if(requestCode==2)
         {
+            //TODO: Add marker at current location
+            Location dangerzonelocation = new Location("danger");
+            dangerzonelocation.setLatitude(40.7934);
+            dangerzonelocation.setLongitude(77.86);
+
+            LatLng stateCollege = new LatLng(40.7934,77.86);
+            mMap.addMarker(new MarkerOptions().position(stateCollege).title("Danger Zone Marker"));
+            moveToCurrentLocation(stateCollege);
+            
             System.out.println("This MAP ish workin");
         }
     }
