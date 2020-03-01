@@ -303,7 +303,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(stateCollege);
-            
+
+            //TODO: Modify the marker imagery and implement current location
+            // https://stackoverflow.com/questions/17549372/how-to-get-click-event-of-the-marker-text
             System.out.println("This MAP ish workin");
         }
     }
