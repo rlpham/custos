@@ -137,10 +137,13 @@ public class NotificationActivity extends Fragment {
                      default:
                          //Right now they are just going to main page
                          //going to redirect to eventInvite,eventNotification and userNotifications when the fragments are set up
-                         Intent intent = new Intent(v.getContext(), MapsActivity.class);
-                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                         startActivity(intent);
-                         getActivity().finish();
+
+
+
+                         //Intent intent = new Intent(v.getContext(), MapsActivity.class);
+                         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                         //startActivity(intent);
+                         getActivity().getSupportFragmentManager().popBackStackImmediate();
                          break;
                 }
 
@@ -194,6 +197,7 @@ public class NotificationActivity extends Fragment {
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#036303"));
+
         btnTag.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         btnTag.setText("Accept");
         btnTag.setTextColor(Color.WHITE);

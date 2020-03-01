@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">CUSTOS</string>
+    <string name="event_add">+</string>
     <string name="title_activity_maps">Map</string>
     <string name="notification">Notifications</string>
     <string name="search_placeholder">Search</string>
@@ -51,4 +52,6 @@
     <string name="event_date_time_placeholder">Date/Time</string>
     <string name="event_invite_users_button_placeholder">Invite Guests +</string>
     <string name="event_create_event_placeholder">Create Event</string>
+    <string name="invite_guests_label_placeholder">Invite Guests</string>
+
 </resources>
