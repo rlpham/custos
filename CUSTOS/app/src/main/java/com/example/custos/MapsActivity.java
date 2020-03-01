@@ -138,7 +138,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         startActivity(new Intent(MapsActivity.this, ContactsActivity.class));
                         return true;
                     case R.id.navigation_settings:
-                        startActivity(new Intent(MapsActivity.this, EmergencyContactsActivity.class));
+                        startActivity(new Intent(MapsActivity.this, DangerZoneActivity.class));
+                        Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
+                        startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
                       closeFragment();
@@ -284,16 +286,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * @param resultCode
      * @param data
      */
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data)
-//    {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // check if the request code is same as what is passed  here it is 2
-//        if(requestCode==2)
-//        {
-//
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2)
+        {
+            System.out.println("This MAP ish workin");
+        }
+    }
 
 
 }
