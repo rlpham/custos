@@ -109,6 +109,8 @@ public class DBHandler {
             e3.put("name", "Study Session");
 
             events.put(e1);
+            events.put(e2);
+            events.put(e3);
             return events;
 
         } catch(JSONException e) {

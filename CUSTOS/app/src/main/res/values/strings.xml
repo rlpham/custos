@@ -56,5 +56,5 @@
     <string name="invite_guests_label_placeholder">Invite Guests</string>
     <string name="submitdangerzone">Submit Danger Zone</string>
     <string name="addContact">Add</string>
-
+    <string name="event_list_label">Events</string>
 </resources>
