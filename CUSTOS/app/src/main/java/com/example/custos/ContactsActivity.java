@@ -87,6 +87,8 @@ public class ContactsActivity extends Fragment {
         // }
 
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,6 +96,11 @@ public class ContactsActivity extends Fragment {
         View view=inflater.inflate(R.layout.contactpage, container, false);
 
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
+
+
+
+
+
 
 
         try {
@@ -127,6 +134,13 @@ public class ContactsActivity extends Fragment {
         return view;
     }
 
+
+    public void removeName(View view)
+    {
+       view.setVisibility(View.GONE);
+    }
+
+
     public void generateButton(String title,LinearLayout layout){
         ImageView imageView = new ImageView(layout.getContext());
 
@@ -141,7 +155,7 @@ public class ContactsActivity extends Fragment {
         layout.addView(imageView);
 
         //set the properties for button
-        Button btnTag = new Button(layout.getContext());
+        final Button btnTag = new Button(layout.getContext());
         btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         // btnTag.setPaddingRelative(0,100,200,500);
         // btnTag.setLeftTopRightBottom(100, 100, 100);
@@ -149,6 +163,10 @@ public class ContactsActivity extends Fragment {
         btnTag.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
         btnTag.setText(title);
         btnTag.setTextColor(Color.WHITE);
+
+       buttonAction(btnTag);
+
+
 
        // buttonAction(btnTag,eventID);
 
@@ -159,9 +177,16 @@ public class ContactsActivity extends Fragment {
     }
 
 
+    public void buttonAction(Button button)
+    {
 
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-
+              v.setVisibility(View.GONE);
+            }
+        });
+    }
 
 
 
