@@ -140,11 +140,6 @@ public class ContactsActivity extends DialogFragment  {
     }
 
 
-    public void removeName(View view)
-    {
-       view.setVisibility(View.GONE);
-    }
-
 
     public void generateButton(String title,LinearLayout layout){
         ImageView imageView = new ImageView(layout.getContext());
@@ -153,17 +148,12 @@ public class ContactsActivity extends DialogFragment  {
         imageView.setImageResource(R.drawable.line);
 
 
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
 
-       // layout.addView(imageView);
-
-        //set the properties for button
         final Button btnTag = new Button(layout.getContext());
+
         btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        // btnTag.setPaddingRelative(0,100,200,500);
-        // btnTag.setLeftTopRightBottom(100, 100, 100);
         btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
         btnTag.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
         btnTag.setText(title);
@@ -171,12 +161,7 @@ public class ContactsActivity extends DialogFragment  {
 
        buttonAction(btnTag);
 
-
-
-       // buttonAction(btnTag,eventID);
-
-        //add button to the layout
-        layout.addView(btnTag);
+       layout.addView(btnTag);
 
 
     }
@@ -185,34 +170,30 @@ public class ContactsActivity extends DialogFragment  {
     public void buttonAction(final Button button)
     {
 
-
-
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+
                 final String personName = button.getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(false);
 
                 builder.setTitle((button.getText().toString()))
                         .setPositiveButton("Done", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
 
-                            ///
+
                         }})
                         .setNeutralButton("Delete", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
 
                             deleteButton(button);
-
-                            ///
                         }})
                         .setNegativeButton("Edit", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
 
                             editButton(button, personName);
-                            ///
+
                         }});
                  builder.create();
                  builder.show();
-
-
 
             }
         });
@@ -243,13 +224,7 @@ public class ContactsActivity extends DialogFragment  {
                 dialog.cancel();
             }
         });
-
-
         builder.show();
-
-
-
-
     }
 
 
@@ -264,7 +239,6 @@ public class ContactsActivity extends DialogFragment  {
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
 
         final EditText input = (EditText) viewInflated.findViewById(R.id.input);
-       // input.setVisibility(View.VISIBLE);
         builder.setView(viewInflated);
 
 
@@ -280,10 +254,6 @@ public class ContactsActivity extends DialogFragment  {
                 }
 
 
-
-                //input.setVisibility(View.INVISIBLE);
-
-
                 if(input.getText().toString().length() > 1)
                 {
                     dialog.dismiss();
@@ -293,21 +263,9 @@ public class ContactsActivity extends DialogFragment  {
 
             }
         });
-    /*    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                input.setVisibility(View.INVISIBLE);
-                dialog.cancel();
-            }
-        });*/
-
 
         builder.show();
-
-
     }
-
-
 }
 
 
