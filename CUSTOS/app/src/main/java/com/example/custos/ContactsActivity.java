@@ -76,7 +76,6 @@ public class ContactsActivity extends DialogFragment  {
     private String m_Text = "";
     boolean checkEdit = false;
 
-
     public ContactsActivity() {
 
     }
@@ -102,10 +101,18 @@ public class ContactsActivity extends DialogFragment  {
 
         View view=inflater.inflate(R.layout.contactpage, container, false);
 
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
+        final LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
+            //LinearLayout
+        final Button contactAdder = (Button) view.findViewById(R.id.button33);
+            contactAdder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    addContactToLayout(contactAdder,layout);
+                }
 
 
-
+            });
 
 
         try {
@@ -121,12 +128,7 @@ public class ContactsActivity extends DialogFragment  {
             for(int i= 0;i < db.getContacts().length(); i -=- 1) {
 
 
-
-
-
-
                 generateButton(listShow.get(i), layout);
-
 
             }
 
@@ -138,6 +140,91 @@ public class ContactsActivity extends DialogFragment  {
         // Inflate the layout for this fragment
         return view;
     }
+
+        public void addContactToLayout(final Button button, final LinearLayout layout)
+        {
+
+
+
+
+
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Enter Contact Name");
+            builder.setCancelable(false);
+
+            View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
+
+            final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+            builder.setView(viewInflated);
+
+
+            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+                    if(TextUtils.isEmpty(input.getText().toString())) {
+                        Toast.makeText(getActivity(), "Invalid Name", Toast.LENGTH_SHORT).show();
+
+                        editButton(button,"Enter Contact Name");
+
+                    }
+                    else {
+
+                        dialog.dismiss();
+
+                        if(input.getText().toString().length() >= 1)
+                        {
+
+                            m_Text = input.getText().toString();
+                            System.out.println("test");
+                            ImageView imageView = new ImageView(layout.getContext());
+
+
+                            imageView.setImageResource(R.drawable.line);
+
+
+                            imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+
+                            final Button btnTag = new Button(layout.getContext());
+
+                            btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                            btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
+                            btnTag.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+                            btnTag.setText(m_Text);
+                            btnTag.setTextColor(Color.WHITE);
+
+                            buttonAction(btnTag);
+
+                            layout.addView(btnTag);
+
+
+                        }
+
+
+                    }
+
+
+
+
+                }
+            });
+
+            builder.show();
+
+
+
+
+
+
+
+        }
+
+
+
 
 
 
@@ -165,6 +252,12 @@ public class ContactsActivity extends DialogFragment  {
 
 
     }
+
+
+
+
+
+
 
 
     public void buttonAction(final Button button)
@@ -254,7 +347,7 @@ public class ContactsActivity extends DialogFragment  {
                 }
 
 
-                if(input.getText().toString().length() > 1)
+                if(input.getText().toString().length() >= 1)
                 {
                     dialog.dismiss();
                     m_Text = input.getText().toString();

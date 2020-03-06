@@ -32,16 +32,32 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/contacttext"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="0dp">
 
         <LinearLayout
             android:id="@+id/contactscroller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical">
+
+
+            <Button
+                android:id="@+id/button33"
+                android:layout_width="401dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/contacttext"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="1dp"
+                android:layout_marginEnd="152dp"
+                android:gravity="center"
+                android:text="@string/addContact" />
+
+
+        </LinearLayout>
     </ScrollView>
-    >
+
     <AutoCompleteTextView
         android:id="@+id/input"
         android:textColor="#FFFFFF"
@@ -51,7 +67,6 @@
         android:hint="@string/space"
         android:imeOptions="actionDone"
         android:inputType="textPersonName" />
-
 
 
 </RelativeLayout>
