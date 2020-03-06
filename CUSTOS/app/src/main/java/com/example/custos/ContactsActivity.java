@@ -167,8 +167,9 @@ public class ContactsActivity extends DialogFragment  {
 
                     if(TextUtils.isEmpty(input.getText().toString())) {
                         Toast.makeText(getActivity(), "Invalid Name", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
 
-                        editButton(button,"Enter Contact Name");
+                        addContactToLayout(button,layout);
 
                     }
                     else {
