@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
@@ -53,6 +55,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.IntDef;
 import androidx.appcompat.widget.Toolbar;
@@ -70,7 +73,8 @@ import afu.org.checkerframework.checker.oigj.qual.O;
 
 public class ContactsActivity extends DialogFragment  {
     DBHandler db = new DBHandler();
-
+    private String m_Text = "";
+    boolean checkEdit = false;
 
 
     public ContactsActivity() {
@@ -99,8 +103,6 @@ public class ContactsActivity extends DialogFragment  {
         View view=inflater.inflate(R.layout.contactpage, container, false);
 
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
-
-
 
 
 
@@ -147,15 +149,15 @@ public class ContactsActivity extends DialogFragment  {
     public void generateButton(String title,LinearLayout layout){
         ImageView imageView = new ImageView(layout.getContext());
 
-//setting image resource
+
         imageView.setImageResource(R.drawable.line);
 
-//setting image position
+
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-//adding view to layout
-        layout.addView(imageView);
+
+       // layout.addView(imageView);
 
         //set the properties for button
         final Button btnTag = new Button(layout.getContext());
@@ -187,22 +189,27 @@ public class ContactsActivity extends DialogFragment  {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                System.out.println(button.getText().toString());
 
-
+                final String personName = button.getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 builder.setTitle((button.getText().toString()))
-                        .setPositiveButton("DONE", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
+                        .setPositiveButton("Done", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
 
                             ///
                         }})
-                        .setNegativeButton("SETUP", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
+                        .setNeutralButton("Delete", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
 
+                            deleteButton(button);
 
                             ///
+                        }})
+                        .setNegativeButton("Edit", new DialogInterface.OnClickListener() { public void onClick(DialogInterface dialog, int id) {
+
+                            editButton(button, personName);
+                            ///
                         }});
-                 builder.create()   ;
+                 builder.create();
                  builder.show();
 
 
@@ -213,7 +220,92 @@ public class ContactsActivity extends DialogFragment  {
     }
 
 
+    public void deleteButton(final Button button)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Are you sure?");
+        builder.setCancelable(false);
 
+
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                button.setVisibility(View.GONE);
+
+
+            }
+        });
+        builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.cancel();
+            }
+        });
+
+
+        builder.show();
+
+
+
+
+    }
+
+
+
+
+    public void editButton(final Button button, final String name)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(name);
+        builder.setCancelable(false);
+
+        View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
+
+        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+       // input.setVisibility(View.VISIBLE);
+        builder.setView(viewInflated);
+
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                if(TextUtils.isEmpty(input.getText().toString())) {
+                    Toast.makeText(getActivity(), "Invalid Name", Toast.LENGTH_SHORT).show();
+
+                   editButton(button,name);
+                }
+
+
+
+                //input.setVisibility(View.INVISIBLE);
+
+
+                if(input.getText().toString().length() > 1)
+                {
+                    dialog.dismiss();
+                    m_Text = input.getText().toString();
+                    button.setText(input.getText().toString());
+                }
+
+            }
+        });
+    /*    builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                input.setVisibility(View.INVISIBLE);
+                dialog.cancel();
+            }
+        });*/
+
+
+        builder.show();
+
+
+    }
 
 
 }

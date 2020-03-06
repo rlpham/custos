@@ -41,6 +41,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+    >
+    <AutoCompleteTextView
+        android:id="@+id/input"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/space"
+        android:imeOptions="actionDone"
+        android:inputType="textPersonName" />
+
 
 
 </RelativeLayout>
