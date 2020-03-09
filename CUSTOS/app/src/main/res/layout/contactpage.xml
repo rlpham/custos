@@ -31,10 +31,10 @@
 
         android:id="@+id/listContact"
         android:layout_width="match_parent"
-        android:layout_height="573dp"
-        android:layout_below="@+id/contacttext"
+        android:layout_height="504dp"
+        android:layout_below="@+id/button33"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="50dp">
 
         <LinearLayout
@@ -44,20 +44,20 @@
             android:orientation="vertical">
 
 
-            <Button
-                android:id="@+id/button33"
-                android:layout_width="401dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="152dp"
-                android:gravity="center"
-                android:text="@string/addContact" />
-
-
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/button33"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contacttext"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center"
+        android:text="@string/addContact" />
     <!--
 
         <AutoCompleteTextView
