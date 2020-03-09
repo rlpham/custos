@@ -2,137 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/theme">
+    android:background="#1D1D1D">
 
-
-    <Button
-        android:id="@+id/btn1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginBottom="300dp"
-        android:onClick="buttonClick"
-        android:text="@string/_1" />
-
-    <Button
-        android:id="@+id/btn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginBottom="300dp"
-        android:layout_toEndOf="@+id/btn1"
-        android:onClick="buttonClick"
-        android:text="@string/_2" />
-
-    <Button
-        android:id="@+id/btn3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="300dp"
-        android:layout_toEndOf="@+id/btn2"
-        android:onClick="buttonClick"
-        android:text="@string/_3" />
-
-    <Button
-        android:id="@+id/btn4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginBottom="200dp"
-        android:onClick="buttonClick"
-        android:text="@string/_4" />
-
-    <Button
-        android:id="@+id/btn5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginBottom="200dp"
-        android:layout_toEndOf="@+id/btn4"
-        android:onClick="buttonClick"
-        android:text="@string/_5" />
-
-    <Button
-        android:id="@+id/btn6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="200dp"
-        android:layout_toEndOf="@+id/btn5"
-        android:onClick="buttonClick"
-        android:text="@string/_6" />
-
-    <Button
-        android:id="@+id/btn7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="42dp"
-        android:layout_marginBottom="100dp"
-        android:onClick="buttonClick"
-        android:text="@string/_7" />
-
-    <Button
-        android:id="@+id/btn8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginBottom="100dp"
-        android:layout_toEndOf="@+id/btn7"
-        android:onClick="buttonClick"
-        android:text="@string/_8" />
-
-    <Button
-        android:id="@+id/btn9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="100dp"
-        android:layout_toEndOf="@+id/btn8"
-        android:onClick="buttonClick"
-        android:text="@string/_9" />
-
-    <Button
-        android:id="@+id/deletesafetypin"
-        android:layout_width="109dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="29dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="31dp"
-        android:layout_toEndOf="@+id/btn0"
-        android:onClick="deleteNumber"
-        android:text="@string/delete" />
-
-    <Button
-        android:id="@+id/btn0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="27dp"
-        android:layout_marginBottom="31dp"
-        android:layout_toEndOf="@+id/confirmSafetyButton"
-        android:onClick="buttonClick"
-        android:text="@string/_0" />
 
     <TextView
         android:id="@+id/safety_pin_msg"
@@ -141,7 +12,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="89dp"
-        android:text="@string/enter_new_safety_pin" />
+        android:text="@string/enter_new_safety_pin"
+        android:gravity="center"
+        android:textColor="@color/colorwhite"/>
 
     <TextView
         android:id="@+id/pinmessage"
@@ -153,7 +26,8 @@
         android:layout_marginStart="183dp"
         android:layout_marginTop="165dp"
         android:text="@string/pinMessage"
-
+        android:gravity="center"
+        android:textColor="@color/colorwhite"
         />
 
     <TextView
@@ -165,32 +39,163 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="183dp"
         android:layout_marginTop="163dp"
-        android:text="@string/pinMessage" />
-
-    <Button
-        android:id="@+id/confirmSafetyButton"
-        android:layout_width="101dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="33dp"
-        android:layout_marginBottom="30dp"
-        android:onClick="confirm"
-        android:text="@string/confirm"
-        android:visibility="invisible"
-        tools:visibility="invisible" />
+        android:text="@string/pinMessage"
+        android:gravity="center"
+        android:textColor="@color/colorwhite"/>
 
     <Button
         android:id="@+id/redoPin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn3"
+
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="55dp"
         android:onClick="doRedo"
         android:text="@string/redo"
         android:visibility="invisible"
         tools:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout123"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="300dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_1" />
+
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_2" />
+
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_3" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout456"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="400dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_4" />
+
+        <Button
+            android:id="@+id/btn5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_5" />
+
+        <Button
+            android:id="@+id/btn6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout789"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="500dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btn7"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_7" />
+
+        <Button
+            android:id="@+id/btn8"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_8" />
+
+        <Button
+            android:id="@+id/btn9"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_9" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayoutlastrow"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="600dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/confirmSafetyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="confirm"
+            android:text="@string/confirm"
+            android:visibility="invisible"
+            tools:visibility="invisible" />
+
+        <Button
+            android:id="@+id/btn0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="buttonClick"
+            android:text="@string/_0" />
+
+        <Button
+            android:id="@+id/deletesafetypin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="deleteNumber"
+            android:text="@string/delete" />
+    </LinearLayout>
 
 </RelativeLayout>
