@@ -117,19 +117,26 @@ public class ContactsActivity extends DialogFragment  {
 
 
         try {
-            JSONArray name = db.getContacts();
 
+
+
+
+            JSONArray name = db.getContacts();
+            JSONArray number = db.getNumber();
             ArrayList<String> listShow = new ArrayList<String>();
+            ArrayList<String> listShow2 = new ArrayList<String>();
           for(int i= 0;i < db.getContacts().length(); i -=- 1) {
               listShow.add(name.get(i).toString());
-
+              listShow2.add(number.get(i).toString());
           }
-            Collections.sort(listShow);
+
+
+
 
             for(int i= 0;i < db.getContacts().length(); i -=- 1) {
 
 
-                generateButton(listShow.get(i), layout);
+                generateButton(listShow.get(i) + ": +" + listShow2.get(i), layout);
 
             }
 
@@ -152,12 +159,13 @@ public class ContactsActivity extends DialogFragment  {
 
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Enter Contact Name");
+            builder.setTitle("Enter Contact Information");
             builder.setCancelable(false);
-
+            //builder.setMessage("test");
             View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
 
             final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+            final EditText input2 = (EditText) viewInflated.findViewById(R.id.input2);
             builder.setView(viewInflated);
 
 
@@ -166,9 +174,9 @@ public class ContactsActivity extends DialogFragment  {
                 public void onClick(DialogInterface dialog, int which) {
 
 
-                    if(TextUtils.isEmpty(input.getText().toString())) {
-                        Toast.makeText(getActivity(), "Invalid Name", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
+                    if(TextUtils.isEmpty(input.getText().toString()) || input.getText().toString().trim().length() == 0  || TextUtils.isEmpty(input2.getText().toString()) || input2.getText().toString().length() != 10) {
+                        Toast.makeText(getActivity(), "Invalid Input", Toast.LENGTH_SHORT).show();
+                      //  dialog.dismiss();
 
                         addContactToLayout(button,layout);
 
@@ -177,11 +185,10 @@ public class ContactsActivity extends DialogFragment  {
 
                         dialog.dismiss();
 
-                        if(input.getText().toString().length() >= 1)
-                        {
 
-                            m_Text = input.getText().toString();
-                            System.out.println("test");
+
+                            m_Text = input.getText().toString() + ": +" + input2.getText().toString();
+                           // System.out.println("test");
                             ImageView imageView = new ImageView(layout.getContext());
 
 
@@ -204,7 +211,7 @@ public class ContactsActivity extends DialogFragment  {
                             layout.addView(btnTag);
 
 
-                        }
+
 
 
                     }
@@ -216,11 +223,6 @@ public class ContactsActivity extends DialogFragment  {
             });
 
             builder.show();
-
-
-
-
-
 
 
         }
@@ -268,7 +270,7 @@ public class ContactsActivity extends DialogFragment  {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
+                int colon = button.getText().toString().indexOf(":");
                 final String personName = button.getText().toString();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(false);
@@ -334,6 +336,7 @@ public class ContactsActivity extends DialogFragment  {
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
 
         final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+        final EditText input2 = (EditText) viewInflated.findViewById(R.id.input2);
         builder.setView(viewInflated);
 
 
@@ -342,19 +345,18 @@ public class ContactsActivity extends DialogFragment  {
             public void onClick(DialogInterface dialog, int which) {
 
 
-                if(TextUtils.isEmpty(input.getText().toString())) {
-                    Toast.makeText(getActivity(), "Invalid Name", Toast.LENGTH_SHORT).show();
+                if(TextUtils.isEmpty(input.getText().toString()) ||input.getText().toString().trim().length() == 0 || TextUtils.isEmpty(input2.getText().toString()) ||  input2.getText().toString().length() != 10) {
+                    Toast.makeText(getActivity(), "Invalid Input", Toast.LENGTH_SHORT).show();
 
                    editButton(button,name);
                 }
 
 
-                if(input.getText().toString().length() >= 1)
-                {
+
                     dialog.dismiss();
-                    m_Text = input.getText().toString();
-                    button.setText(input.getText().toString());
-                }
+                    m_Text = input.getText().toString() + ": +" + input2.getText().toString();
+                    button.setText(m_Text);
+
 
             }
         });

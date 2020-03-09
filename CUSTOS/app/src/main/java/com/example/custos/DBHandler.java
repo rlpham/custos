@@ -129,6 +129,7 @@ public class DBHandler {
 
 
 
+
             contacts.put("Fred Toadey");
             contacts.put("Bob Saget");
             contacts.put("Chris Paul");
@@ -158,4 +159,55 @@ public class DBHandler {
 
 
 }
+
+
+
+
+    public JSONArray getNumber() throws JSONException {
+        JSONArray contacts;
+        try {
+
+
+
+            contacts = new JSONArray();
+
+            contacts.put("1345561342");
+            contacts.put("1654565678");
+            contacts.put("6545562346");
+            contacts.put("1567567246");
+            contacts.put("1234567853");
+            contacts.put("4357567821");
+            contacts.put("1275567897");
+            contacts.put("3572567895");
+            contacts.put("9888067891");
+            contacts.put("5895867893");
+            contacts.put("5553667895");
+            contacts.put("4343367892");
+            contacts.put("1111167892");
+            contacts.put("4444467897");
+            contacts.put("2353235890");
+            contacts.put("3525267890");
+            contacts.put("3253267890");
+
+
+
+
+            return contacts;
+
+        }catch(Exception e) {
+            System.out.println(e);
+        }
+        return null;
+
+
+
+    }
+
+
+
+
+
+
+
+
 }
