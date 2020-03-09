@@ -129,19 +129,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_events:
+                        searchView.setVisibility(View.GONE);
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
+                        searchView.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
+                    searchView.setVisibility(View.GONE);
                       openFragment(ContactsActivity.newInstance());
                         return true;
                     case R.id.navigation_settings:
+                        searchView.setVisibility(View.GONE);
                         Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
                         startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
+                        searchView.setVisibility(View.VISIBLE);
                       closeFragment();
                         return true;
 

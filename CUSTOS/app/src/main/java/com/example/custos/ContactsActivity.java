@@ -34,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -62,6 +63,7 @@ import androidx.annotation.IntDef;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.SupportMapFragment;
@@ -76,6 +78,7 @@ public class ContactsActivity extends DialogFragment  {
     DBHandler db = new DBHandler();
     private String m_Text = "";
     boolean checkEdit = false;
+    public SearchView searchView;
 
     public ContactsActivity() {
 
@@ -90,17 +93,18 @@ public class ContactsActivity extends DialogFragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     getActivity().setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+    getActivity().setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view=inflater.inflate(R.layout.contactpage, container, false);
+
+        View view = inflater.inflate(R.layout.contactpage, container, false);
 
         final LinearLayout layout = (LinearLayout) view.findViewById(R.id.contactscroller);
             //LinearLayout
@@ -148,6 +152,10 @@ public class ContactsActivity extends DialogFragment  {
         // Inflate the layout for this fragment
         return view;
     }
+
+
+
+
 
         public void addContactToLayout(final Button button, final LinearLayout layout)
         {
@@ -319,6 +327,7 @@ public class ContactsActivity extends DialogFragment  {
             public void onClick(DialogInterface dialog, int which) {
 
                 dialog.cancel();
+
             }
         });
         builder.show();
