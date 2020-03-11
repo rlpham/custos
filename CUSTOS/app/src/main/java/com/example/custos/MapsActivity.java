@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
@@ -22,11 +23,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -59,11 +62,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Testcode below
 
     public void openFragment(Fragment fragment) {
+/*
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(android.R.id.content, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+*/
+
         transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.addToBackStack(null);
-        transaction.replace(R.id.container, fragment);
+       transaction.replace(R.id.container, fragment);
         transaction.commit();
+
+
     }
 
     public void closeFragment() {
@@ -77,7 +90,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     //tillhere
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         super.onCreate(savedInstanceState);
@@ -141,13 +154,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                       openFragment(ContactsActivity.newInstance());
                         return true;
                     case R.id.navigation_settings:
-                        searchView.setVisibility(View.GONE);
                         Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
                         startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
                         searchView.setVisibility(View.VISIBLE);
-                      closeFragment();
+
+                        FragmentManager fm = MapsActivity.this.getSupportFragmentManager();
+                        System.out.println(fm.getBackStackEntryCount());
+
+
+                       while(fm.getBackStackEntryCount() >= 1) {
+
+                            fm.popBackStackImmediate();
+                        }
+                        System.out.println("TEST " + fm.getBackStackEntryCount());
+
+
+
                         return true;
 
 
