@@ -6,7 +6,7 @@
     android:background="@color/colorwhite">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/add_event"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
@@ -38,9 +38,8 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_list_label"
-        android:layout_marginTop="0dp" />
-
+        android:layout_below="@id/event_list_label"
+        android:scrollbars="vertical" />
 
 
 </RelativeLayout>

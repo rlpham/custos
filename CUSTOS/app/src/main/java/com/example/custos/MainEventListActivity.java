@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -47,6 +49,7 @@ public class MainEventListActivity extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHandler = new DBHandler();
+
     }
 
     class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
@@ -109,6 +112,15 @@ public class MainEventListActivity extends Fragment {
         RecyclerView rv;
         LinearLayoutManager llm;
         view = inflater.inflate(R.layout.main_event, container, false);
+
+        view.findViewById(R.id.add_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CreateEventActivity.class);
+                startActivityForResult(intent, 18);
+            }
+        });
+
         try {
             JSONArray data = dbHandler.getEventsList();
             rv = view.findViewById(R.id.recycler);

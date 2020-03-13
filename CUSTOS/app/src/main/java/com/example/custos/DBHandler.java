@@ -123,12 +123,7 @@ public class DBHandler {
         JSONArray contacts;
         try {
 
-
-
             contacts = new JSONArray();
-
-
-
 
             contacts.put("Fred Toadey");
             contacts.put("Bob Saget");
@@ -146,8 +141,6 @@ public class DBHandler {
             contacts.put("Hope Posat");
             contacts.put("Hilary Oiusian");
             contacts.put("Sam Fradeg");
-
-
 
             return contacts;
 

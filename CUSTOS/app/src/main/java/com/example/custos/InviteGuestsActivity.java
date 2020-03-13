@@ -20,17 +20,17 @@ public class InviteGuestsActivity extends AppCompatActivity {
         // TODO: Set up checkable text views in list, then pass them into intent and test
         // https://abhiandroid.com/ui/checkedtextview
 
-        listView =findViewById(R.id.list);
-        ArrayList<String> names = new ArrayList<String>();
-        names.add("Ryan");
-        names.add("This");
-        names.add("asdgsa");
-        names.add("bar");
-        names.add("foo");
-        names.add("baz");
-        names.add("abcdefg");
-        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.invite_guests, names);
-        listView.setAdapter(adapter);
+//        listView =findViewById(R.id.list);
+//        ArrayList<String> names = new ArrayList<String>();
+//        names.add("Ryan");
+//        names.add("This");
+//        names.add("asdgsa");
+//        names.add("bar");
+//        names.add("foo");
+//        names.add("baz");
+//        names.add("abcdefg");
+//        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.invite_guests, names);
+//        listView.setAdapter(adapter);
     }
 
     public void doneAddingGuests() {
