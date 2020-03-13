@@ -51,17 +51,19 @@
         android:layout_marginTop="519dp"
         android:layout_marginEnd="137dp"
         android:text="Save"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:background="@drawable/sv_round"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_width="336dp"
+        android:layout_height="53dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="178dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="186dp"
+        android:layout_marginEnd="29dp"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/sv_round"
         android:orientation="horizontal"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"

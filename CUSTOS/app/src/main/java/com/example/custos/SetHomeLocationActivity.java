@@ -18,6 +18,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 
 import java.util.Arrays;
 
+
 public class SetHomeLocationActivity extends AppCompatActivity {
 
 
@@ -25,7 +26,12 @@ public class SetHomeLocationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_location);
-        Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
+        String apiKey = "AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc";
+
+        if(!Places.isInitialized()){
+            Places.initialize(getApplicationContext(),apiKey);
+        }
+
 
 //        placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
@@ -36,7 +42,6 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
         autocompleteFragment.setTypeFilter(TypeFilter.ADDRESS);
         //autocompleteFragment.setLocationRestriction(RectangularBounds.newInstance(new LatLng(40.263680,-76.890739), new LatLng(40.285519,-76.650589)));
-
 // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
