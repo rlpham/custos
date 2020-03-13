@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 
@@ -136,30 +137,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Rahul TestCode below
 
+        final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+        dangerzonebutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
+                       startActivityForResult(intent,2);
+            }
+        });
+
+
+
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_events:
+                        dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
+                        dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
+                        dangerzonebutton.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
                       openFragment(ContactsActivity.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
+                        dangerzonebutton.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
 //                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
 //                        startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
+                        dangerzonebutton.setVisibility(View.VISIBLE);
                         searchView.setVisibility(View.VISIBLE);
 
                         FragmentManager fm = MapsActivity.this.getSupportFragmentManager();

@@ -1,6 +1,7 @@
 <resources>
     //there are multiple dupilcates, control f before adding!
     <string name="app_name">CUSTOS</string>
+    <string name="empty"></string>
     <string name="event_add">+</string>
     <string name="title_activity_maps">Map</string>
     <string name="notification">Notifications</string>
