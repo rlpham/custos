@@ -23,7 +23,8 @@
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textCursorDrawable="@color/colorwhite"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-thin"/>
 
 
     <TextView
@@ -38,7 +39,8 @@
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textCursorDrawable="@color/colorwhite"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-thin"/>
 
     <Button
         android:id="@+id/signout_button"
