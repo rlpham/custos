@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/theme">
+    android:background="#1D1D1D">
 
 
     <RelativeLayout
@@ -25,7 +25,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_name_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/phone_input4"
@@ -33,7 +37,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_phone_placeholder"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/username_input4"
@@ -41,7 +49,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_username_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
     </LinearLayout>
 
     <LinearLayout
@@ -60,7 +72,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_name_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/phone_input2"
@@ -68,7 +84,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_phone_placeholder"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/username_input2"
@@ -76,7 +96,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_username_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
     </LinearLayout>
 
     <LinearLayout
@@ -95,7 +119,11 @@
             android:layout_height="50dp"
             android:ems="10"
             android:hint="@string/emergency_contacts_name_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/phone_input"
@@ -103,7 +131,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_phone_placeholder"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/username_input"
@@ -111,7 +143,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_username_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
     </LinearLayout>
 
     <TextView
@@ -123,7 +159,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="132dp"
         android:layout_marginTop="22dp"
-        android:text="@string/emergency_contacts_label" />
+        android:text="@string/emergency_contacts_label"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"/>
 
     <LinearLayout
         android:id="@+id/contact_group3"
@@ -141,7 +181,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_name_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/phone_input3"
@@ -149,7 +193,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_phone_placeholder"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
 
         <EditText
             android:id="@+id/username_input3"
@@ -157,7 +205,11 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/emergency_contacts_username_placeholder"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"/>
     </LinearLayout>
 
     <TextView
@@ -169,7 +221,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="75dp"
         android:text="@string/_1"
-        android:textSize="64sp" />
+        android:textSize="64sp"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"/>
 
     <TextView
         android:id="@+id/label_no_2"
@@ -180,7 +236,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="55dp"
         android:text="@string/_2"
-        android:textSize="64sp" />
+        android:textSize="64sp"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"/>
 
     <TextView
         android:id="@+id/label_no_3"
@@ -191,7 +251,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="55dp"
         android:text="@string/_3"
-        android:textSize="64sp" />
+        android:textSize="64sp"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"/>
 
     <TextView
         android:id="@+id/label_no_4"
@@ -202,7 +266,11 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="55dp"
         android:text="@string/_4"
-        android:textSize="64sp" />
+        android:textSize="64sp"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"/>
 
 
         <Button
@@ -215,7 +283,8 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="11dp"
             android:onClick="addContact"
-            android:text="@string/plus" />
+            android:text="@string/plus"
+            />
 
         <Button
             android:id="@+id/button5"
