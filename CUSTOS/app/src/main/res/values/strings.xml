@@ -1,9 +1,13 @@
 <resources>
+    //there are multiple dupilcates, control f before adding!
     <string name="app_name">CUSTOS</string>
     <string name="event_add">+</string>
     <string name="title_activity_maps">Map</string>
     <string name="notification">Notifications</string>
+    <string name="settings">Settings</string>
     <string name="search_placeholder">Search</string>
+    <string name="Report">Report</string>
+    <string name="signout">Sign Out</string>
     <string name="login_button_label">Log In</string>
     <string name="signup_button_label">Sign Up</string>
     <string name="username_input_placeholder">Username</string>
