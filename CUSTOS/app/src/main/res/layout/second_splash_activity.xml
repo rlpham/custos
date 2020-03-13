@@ -44,11 +44,12 @@
 
     <Button
         android:id="@+id/signout_button"
-        android:layout_width="192dp"
-        android:layout_height="65dp"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
         android:layout_marginTop="100dp"
         android:text="Signout"
-        android:textSize="20sp"/>
+        android:textSize="17sp"
+        android:background="@drawable/sv_round"/>
 
     <TextView
         android:id="@+id/textId"
