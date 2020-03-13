@@ -154,8 +154,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                       openFragment(ContactsActivity.newInstance());
                         return true;
                     case R.id.navigation_settings:
-                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
-                        startActivityForResult(intent,2);
+                        searchView.setVisibility(View.GONE);
+                        openFragment(SettingsActivity.newInstance());
+//                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
+//                        startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
                         searchView.setVisibility(View.VISIBLE);
