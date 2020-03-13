@@ -9,6 +9,17 @@
     >
 
 
+    <Button
+        android:id="@+id/mapsDsngerZoneButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="300dp"
+
+        android:layout_marginTop="550dp"
+        android:background="@drawable/circlebutton"
+        android:text="@string/empty" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -45,7 +56,10 @@
             android:background="@drawable/sv_round"
 
             android:iconifiedByDefault="false"
-            android:queryHint="Search..." />
+            android:queryHint="Search..." >
+
+        </SearchView>
+
     </FrameLayout>
 
 
