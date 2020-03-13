@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/theme">
+    android:background="#1D1D1D">
 
 <!--    <androidx.appcompat.widget.Toolbar-->
 <!--        android:id="@+id/my_toolbar"-->
@@ -20,7 +20,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="78dp"
-        android:text="@string/dangerzoneheader" />
+        android:text="@string/dangerzoneheader"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:textSize="35dp"
+        android:fontFamily="sans-serif-thin"
+        />
 
     <TextView
         android:id="@+id/locaationheader"
@@ -28,22 +35,32 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="123dp"
-        android:text="@string/locationheader" />
+        android:layout_marginStart="77dp"
+        android:layout_marginTop="215dp"
+        android:text="@string/locationheader"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:fontFamily="sans-serif-thin"
+        android:textSize="20dp"/>
 
     <EditText
         android:id="@+id/locationplaceholder"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="53dp"
-        android:layout_marginTop="152dp"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="250dp"
         android:autofillHints="Add in location"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/locationPlaceHolder" />
+        android:text="@string/locationPlaceHolder"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"/>
 
     <TextView
         android:id="@+id/risklevelheader"
@@ -51,9 +68,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="203dp"
-        android:text="@string/risklevelheader" />
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="314dp"
+        android:text="@string/risklevelheader"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:fontFamily="sans-serif-thin"
+        android:textSize="20dp"/>
 
     <Spinner
         android:id="@+id/risklevelspinner"
@@ -61,8 +84,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="53dp"
-        android:layout_marginTop="238dp" />
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="347dp"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite" />
 
     <TextView
         android:id="@+id/descriptionheader"
@@ -70,20 +97,31 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="294dp"
-        android:text="@string/descriptionHeader" />
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="394dp"
+        android:text="@string/descriptionHeader"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:fontFamily="sans-serif-thin"
+        android:textSize="20dp"
+        />
 
     <EditText
         android:id="@+id/descriptionfillin"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="49dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="53dp"
-        android:layout_marginTop="325dp"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="425dp"
         android:ems="10"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite" />
 
     <Button
         android:id="@+id/submitdangerzonebutton"
@@ -91,8 +129,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="98dp"
-        android:layout_marginBottom="229dp"
+        android:layout_marginStart="122dp"
+        android:layout_marginBottom="142dp"
         android:text="@string/submitdangerzone"
         android:visibility="visible" />
 
