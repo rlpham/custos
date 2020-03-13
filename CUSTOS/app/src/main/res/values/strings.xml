@@ -8,7 +8,7 @@
     <string name="settings">Settings</string>
     <string name="search_placeholder">Search</string>
     <string name="Report">Report</string>
-    <string name="userinfo">User Information</string>
+    <string name="userinfo">User Account</string>
     <string name="login_button_label">Log In</string>
     <string name="signup_button_label">Sign Up</string>
     <string name="username_input_placeholder">Username</string>
