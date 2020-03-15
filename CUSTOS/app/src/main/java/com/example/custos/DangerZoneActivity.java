@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DangerZoneActivity extends AppCompatActivity {
 
+    int highdangerzone = 2;
+    int mediumdangerzone = 3;
+    String userInputDangerLevel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +29,10 @@ public class DangerZoneActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         riskLevelSpinner.setAdapter(adapter);
 
-        //TODO: Add in item listener
-
         /**
-         * TODO: Use in autofill address to set address page
-         * Sample link: https://developers.google.com/maps/documentation/android-sdk/map
+         * String to get critical level input from the user
          */
+        userInputDangerLevel = riskLevelSpinner.getSelectedItem().toString();
 
         /**
          * Adding in action listener to submit button
@@ -40,10 +42,28 @@ public class DangerZoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Add in handler code here
-                Intent intent = new Intent();
-                intent.putExtra("MESSAGE","");
-                System.out.println("It worked");
-                onActivityResult(2,2,intent);
+                Intent dangerIntent = new Intent(DangerZoneActivity.this, MapsActivity.class);
+
+                if (userInputDangerLevel.equals("High")) {
+                    System.out.println(userInputDangerLevel);
+                    //Intent highintent = new Intent(DangerZoneActivity.this,MapsActivity.class);
+                    dangerIntent.putExtra("dangervalue",2);
+                    System.out.println("It worked");
+                    onActivityResult(2,2,dangerIntent);
+                    //setResult(2,dangerIntent);
+                    //finish();
+                }
+                else if (userInputDangerLevel.equals("Medium")) {
+                    //Intent mediumintent = new Intent(DangerZoneActivity.this,MapsActivity.class);
+                    dangerIntent.putExtra("dangervalue",3);
+                    System.out.println("It worked");
+                    onActivityResult(3,3,dangerIntent);
+                    //setResult(3,dangerIntent);
+                    //finish();
+                }
+                else if (userInputDangerLevel.equals("Low")) {
+
+                }
                 finish();
             }
         });

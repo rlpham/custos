@@ -62,6 +62,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private final int ok = 0;
     //Testcode below
 
+    int dangerZoneRequestCode = 0;
+
+
     public void openFragment(Fragment fragment) {
 /*
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -141,7 +144,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
-                startActivityForResult(intent,2);
+                int requestCode = intent.getIntExtra("dangervalue",2);
+                startActivityForResult(intent,requestCode);
+                //startActivity(intent);
             }
         });
 
@@ -336,7 +341,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(requestCode==2)
         {
             //TODO: Add marker at current location
-            Location dangerzonelocation = new Location("danger");
+            Location dangerzonelocation = new Location("High Danger");
             dangerzonelocation.setLatitude(40.7934);
             dangerzonelocation.setLongitude(77.86);
 
@@ -348,6 +353,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             //TODO: Modify the marker imagery and implement current location
             // https://stackoverflow.com/questions/17549372/how-to-get-click-event-of-the-marker-text
             System.out.println("This MAP ish workin");
+        }
+
+        if (requestCode == 3){
+            Location dangerzonelocation = new Location("Medium Danger");
+            dangerzonelocation.setLatitude(40.7934);
+            dangerzonelocation.setLongitude(77.86);
+
+            LatLng desmoines = new LatLng(41.619,-93.598);
+            MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+            mMap.addMarker(dangerMarker);
+            moveToCurrentLocation(desmoines);
+
         }
     }
 
