@@ -87,23 +87,10 @@ public class InviteGuestsActivity extends AppCompatActivity {
         findViewById(R.id.invite_guests_done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+
             }
         });
-
-
-
-//        listView =findViewById(R.id.list);
-//        ArrayList<String> names = new ArrayList<String>();
-//        names.add("Ryan");
-//        names.add("This");
-//        names.add("asdgsa");
-//        names.add("bar");
-//        names.add("foo");
-//        names.add("baz");
-//        names.add("abcdefg");
-//        ArrayAdapter adapter = new ArrayAdapter(getApplicationContext(), R.layout.invite_guests, names);
-//        listView.setAdapter(adapter);
+        
     }
 
     public void doneAddingGuests() {
