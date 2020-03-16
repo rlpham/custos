@@ -185,7 +185,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         searchView.setVisibility(View.VISIBLE);
                         FragmentManager fm = MapsActivity.this.getSupportFragmentManager();
 
-                        while(fm.getBackStackEntryCount() > 1) {
+                        while(fm.getBackStackEntryCount() >= 1) {
                             fm.popBackStackImmediate();
                         }
 
