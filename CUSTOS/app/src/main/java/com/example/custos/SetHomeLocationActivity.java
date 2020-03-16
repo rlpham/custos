@@ -84,6 +84,12 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 setHomeLocation.setLatitude(latLng.latitude);
                 setHomeLocation.setLongtitude(latLng.longitude);
                 System.out.println(setHomeLocation.getLatitude() + " " + setHomeLocation.getLongtitude());
+                DBHandler db = new DBHandler();
+                try {
+                    db.setHomeLocation(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 stringAddress(latLng);
 
             }
@@ -95,6 +101,8 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     private void stringAddress(LatLng latLng){
         if(!addresses.isEmpty()){
