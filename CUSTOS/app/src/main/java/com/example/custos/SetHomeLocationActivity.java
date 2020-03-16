@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -40,17 +41,26 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
     TextView address;
     Geocoder geocoder;
+    Button saveButton;
     List<Address> addresses = new ArrayList<>();
+    SetHomeLocation setHomeLocation = new SetHomeLocation();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_location);
         address = findViewById(R.id.home_address);
+        saveButton = findViewById(R.id.save_button);
         final String apiKey = "AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc";
         if(!Places.isInitialized()){
             Places.initialize(getApplicationContext(),apiKey);
         }
-
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
+                startActivity(intent);
+            }
+        });
         geocoder = new Geocoder(this,Locale.getDefault());
 
 
@@ -71,7 +81,9 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 final LatLng latLng = place.getLatLng();
 
                 Log.i("tester", "Place: " + latLng.latitude+"\n" + latLng.longitude);
-
+                setHomeLocation.setLatitude(latLng.latitude);
+                setHomeLocation.setLongtitude(latLng.longitude);
+                System.out.println(setHomeLocation.getLatitude() + " " + setHomeLocation.getLongtitude());
                 stringAddress(latLng);
 
             }
@@ -83,6 +95,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         });
 
     }
+
     private void stringAddress(LatLng latLng){
         if(!addresses.isEmpty()){
             try {
@@ -91,7 +104,8 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                     String myAddress = addresses.get(0).getAddressLine(0);
                     String city = addresses.get(0).getLocality();
                     String state = addresses.get(0).getAdminArea();
-                    address.setText(myAddress + " " + city + " " + state);
+                    String fullAddress = myAddress + " " + city + " " + state;
+                    address.setText(fullAddress);
                     System.out.println("---------------------------------"+myAddress + city);
                     Log.i("test","address: "+ myAddress + city + state);
                 }
