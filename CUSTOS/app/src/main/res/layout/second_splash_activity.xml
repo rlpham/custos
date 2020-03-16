@@ -26,6 +26,29 @@
         android:textSize="20sp"
         android:fontFamily="sans-serif-thin"/>
 
+    <TextView
+        android:id="@+id/homeLocation"
+        android:layout_width="159dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        android:text="Home Location"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-thin"/>
+
+    <Button
+        android:id="@+id/setHomeLocation"
+        android:layout_width="67dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/sv_round"
+        android:text="Set"
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/textEmail"
@@ -42,14 +65,18 @@
         android:textSize="20sp"
         android:fontFamily="sans-serif-thin"/>
 
+
+
     <Button
         android:id="@+id/signout_button"
         android:layout_width="160dp"
         android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:text="Signout"
         android:textSize="17sp"
         android:background="@drawable/sv_round"/>
+
+
 
     <TextView
         android:id="@+id/textId"
