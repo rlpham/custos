@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 public class DBHandler {
 
+    private JSONArray latLng;
     public JSONObject getUser() throws JSONException {
         JSONObject user;
 
@@ -153,6 +154,18 @@ public class DBHandler {
 
 }
 
+public void setHomeLocation (double latitude, double longtitude) throws JSONException{
+        latLng = new JSONArray();
+        latLng.put(latitude);
+        latLng.put(longtitude);
+}
+
+public JSONArray getHomeLocation() throws JSONException {
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(40.2133);
+        jsonArray.put(77.0080);
+        return jsonArray;
+}
 
 
 
