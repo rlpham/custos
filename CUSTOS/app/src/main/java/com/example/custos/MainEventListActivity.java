@@ -5,30 +5,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.EventLog;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.net.URI;
-import java.util.List;
 
 public class MainEventListActivity extends Fragment {
 
@@ -58,12 +46,16 @@ public class MainEventListActivity extends Fragment {
             CardView cardView;
             TextView eventTitle;
             TextView eventLocation;
+            TextView eventDate;
+            TextView eventTime;
             ImageView img;
             ViewHolder(View v) {
                 super(v);
                 cardView = v.findViewById(R.id.cv);
                 eventTitle = v.findViewById(R.id.event_title);
                 eventLocation = v.findViewById(R.id.event_location);
+                eventDate = v.findViewById(R.id.event_date);
+                eventTime = v.findViewById(R.id.event_time);
             }
         }
 
@@ -87,7 +79,9 @@ public class MainEventListActivity extends Fragment {
             // - replace the contents of the view with that element
             try {
                 holder.eventTitle.setText(data.getJSONObject(position).getString("name"));
-                holder.eventLocation.setText("LOCATION_PLACEHOLDER");
+                holder.eventLocation.setText("Philadelphia, PA");
+                holder.eventDate.setText("06/18/2020");
+                holder.eventTime.setText("6:30PM");
             } catch(JSONException e) {
                 System.out.println(e);
             }
@@ -130,6 +124,7 @@ public class MainEventListActivity extends Fragment {
             rv.setLayoutManager(llm);
             rv.setAdapter(adapter);
         } catch(JSONException e) {
+            System.out.print(e);
             System.out.print(e);
         }
             return view;

@@ -65,4 +65,5 @@
     <string name="addContact">Add</string>
     <string name="event_list_label">Events</string>
     <string name="numberContact">Number</string>
+    <string name="invite_guests_done_button">Done</string>
 </resources>
