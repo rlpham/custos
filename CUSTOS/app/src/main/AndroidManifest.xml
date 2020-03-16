@@ -48,13 +48,14 @@
             android:exported="true" />
         <activity
             android:name=".SetHomeLocationActivity"
-            android:exported="true" />
+            android:parentActivityName=".SecondSplashActivity"/>
+            />
+        <activity android:name=".SecondSplashActivity"
+            android:exported="true"/>
         <activity
             android:name=".DangerZoneActivity"
             android:exported="true" />
-        <activity
-            android:name=".SecondSplashActivity"
-            android:exported="true" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
