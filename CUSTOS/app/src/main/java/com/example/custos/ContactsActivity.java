@@ -31,6 +31,9 @@ public class ContactsActivity extends DialogFragment  {
     boolean checkEdit = false;
     public SearchView searchView;
 
+
+
+
     public ContactsActivity() {
 
     }
