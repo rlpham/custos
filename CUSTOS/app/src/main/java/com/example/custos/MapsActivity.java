@@ -153,6 +153,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -182,18 +183,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_maps:
                         dangerzonebutton.setVisibility(View.VISIBLE);
                         searchView.setVisibility(View.VISIBLE);
-
                         FragmentManager fm = MapsActivity.this.getSupportFragmentManager();
-                        System.out.println(fm.getBackStackEntryCount());
 
-
-                       while(fm.getBackStackEntryCount() >= 1) {
-
+                        while(fm.getBackStackEntryCount() > 1) {
                             fm.popBackStackImmediate();
                         }
-                        System.out.println("TEST " + fm.getBackStackEntryCount());
-
-
 
                         return true;
 
