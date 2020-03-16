@@ -1,8 +1,12 @@
 package com.example.custos;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,14 +22,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SecondSplashActivity extends AppCompatActivity {
     ImageView imageView;
-    TextView name, email, id;
-    Button signOut;
+    TextView name, email, id, homeLocation;
+    Button signOut,setHomeButton;
     GoogleSignInClient googleSignInClient;
+    List<Address> addresses=new ArrayList<>();
+    Geocoder geocoder;
+    SetHomeLocation setHomeLocation = new SetHomeLocation();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -40,6 +52,10 @@ public class SecondSplashActivity extends AppCompatActivity {
         email =         findViewById(R.id.textEmail);
         id =            findViewById(R.id.textId);
         signOut =       findViewById(R.id.signout_button);
+        homeLocation =  findViewById(R.id.homeLocation);
+        setHomeButton = findViewById(R.id.setHomeLocation);
+        stringAddress(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
+
         signOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -48,6 +64,14 @@ public class SecondSplashActivity extends AppCompatActivity {
                         signOut();
                         break;
                 }
+            }
+        });
+
+        setHomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SecondSplashActivity.this,SetHomeLocationActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -63,6 +87,25 @@ public class SecondSplashActivity extends AppCompatActivity {
             id.setText(personID);
             Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }
+    }
+    private void stringAddress(double latitude, double longitude){
+        if(!addresses.isEmpty()){
+            try {
+                addresses = geocoder.getFromLocation(latitude,longitude,1);
+                if(addresses.size()>0){
+                    String myAddress = addresses.get(0).getAddressLine(0);
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String fullAddress = myAddress + " " + city + " " + state;
+                    homeLocation.setText(fullAddress);
+                    System.out.println("---------------------------------"+myAddress + city);
+                    Log.i("test","address: "+ myAddress + city + state);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private void signOut(){
