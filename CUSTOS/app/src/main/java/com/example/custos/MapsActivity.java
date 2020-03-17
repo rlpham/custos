@@ -145,6 +145,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
                 int requestCode = intent.getIntExtra("dangervalue",2);
+                //startActivityForResult(intent,requestCode);
                 startActivityForResult(intent,requestCode);
                 //startActivity(intent);
             }
@@ -360,6 +361,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             moveToCurrentLocation(desmoines);
 
         }
+
+        if (requestCode == 4){
+            Location dangerzonelocation = new Location("Low Danger");
+            dangerzonelocation.setLatitude(40.7934);
+            dangerzonelocation.setLongitude(77.86);
+
+            LatLng hershey = new LatLng(40.2859,-76.658);
+            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+            mMap.addMarker(dangerMarker);
+            moveToCurrentLocation(hershey);
+
+        }
+
+
     }
 
 
