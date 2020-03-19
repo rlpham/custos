@@ -2,6 +2,7 @@ package com.example.custos;
 
 
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,6 +21,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +39,7 @@ public class ContactsActivity extends DialogFragment  {
     boolean checkEdit = false;
     public SearchView searchView;
 
-
+    DatabaseReference datta;
 
 
     public ContactsActivity() {
@@ -49,6 +57,10 @@ public class ContactsActivity extends DialogFragment  {
         super.onCreate(savedInstanceState);
 
     getActivity().setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+    datta = FirebaseDatabase.getInstance().getReference();
+
+
 
 
     }
@@ -72,6 +84,21 @@ public class ContactsActivity extends DialogFragment  {
 
 
             });
+
+
+
+
+            //////testing db
+
+
+
+
+
+
+
+
+
+
 
 
         try {
