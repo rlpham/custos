@@ -46,7 +46,10 @@ public class ContactsActivity extends DialogFragment {
 
 
     DatabaseReference datta;
+
+    DatabaseReference datta2;
     boolean deleting = false;
+    boolean adding = false;
 
     public ContactsActivity() {
 
@@ -66,9 +69,9 @@ public class ContactsActivity extends DialogFragment {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        //temporary till someone can figure out how to get right user11
+        //temporary till someone can figure out how to get right user
         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-
+        datta2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
 
     }
 
@@ -96,8 +99,7 @@ public class ContactsActivity extends DialogFragment {
         //////testing db
 
 
-        if(deleting == false)
-        {
+
 
 
 
@@ -106,7 +108,7 @@ public class ContactsActivity extends DialogFragment {
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                if(deleting == false && adding == false) {
 
                     for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
@@ -115,7 +117,7 @@ public class ContactsActivity extends DialogFragment {
                         String contact = Users.toString().substring(nameequal + 5, comma);
 
 
-                            listShow.add(contact);
+                        listShow.add(contact);
 
                         System.out.println(contact);    //seeing output of names
 
@@ -124,20 +126,23 @@ public class ContactsActivity extends DialogFragment {
                         String number = Users.toString().substring(phonenumberequala + 13, end);
 
 
-
-                            listShow2.add(number);
+                        listShow2.add(number);
 
 
                         System.out.println(number);     //seeing output of #s
                     }
+
+
                     for (int i = 0; i < listShow.size(); i -= -1) {
 
-                        if(deleting == false)
+
                         generateButton(listShow.get(i) + ": +" + listShow2.get(i), layout);
 
                     }
+                }
 
-
+                 listShow.clear();
+                listShow2.clear();
             }
 
             @Override
@@ -147,10 +152,10 @@ public class ContactsActivity extends DialogFragment {
 
         });
 
-        }
 
 
 
+        deleting = false;
 
         //TODO somewhere below be able to update,modifly, and delete user
 
@@ -211,6 +216,11 @@ public class ContactsActivity extends DialogFragment {
                     buttonAction(btnTag);
 
                     layout.addView(btnTag);
+
+
+
+
+
 
 
                 }
@@ -306,7 +316,7 @@ public class ContactsActivity extends DialogFragment {
         deleting = true;
 
 
-        if(deleting)
+        if(deleting && adding == false)
         {
 
 
@@ -340,13 +350,6 @@ public class ContactsActivity extends DialogFragment {
 
                 button.setVisibility(View.GONE);
 
-                deleting = false;
-
-                Fragment currentFragment = getFragmentManager().findFragmentByTag("ContactActivity");
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.detach(currentFragment);
-                fragmentTransaction.attach(currentFragment);
-                fragmentTransaction.commit();
 
 
             }
@@ -366,6 +369,7 @@ public class ContactsActivity extends DialogFragment {
 
             }
         });
+
         builder.show();
     }
 
