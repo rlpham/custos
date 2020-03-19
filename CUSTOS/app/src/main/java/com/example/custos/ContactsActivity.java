@@ -39,6 +39,9 @@ public class ContactsActivity extends DialogFragment  {
     boolean checkEdit = false;
     public SearchView searchView;
 
+    final ArrayList<String> namesFromDB = new ArrayList<String>();
+    final ArrayList<String> phoneNumbersFromDB = new ArrayList<String>();
+
     DatabaseReference datta;
 
 
@@ -58,12 +61,15 @@ public class ContactsActivity extends DialogFragment  {
 
     getActivity().setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-    datta = FirebaseDatabase.getInstance().getReference();
+
+    //temporary till someone can figure out how to get right user11
+    datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
 
 
 
 
     }
+
 
 
     @Override
@@ -90,47 +96,51 @@ public class ContactsActivity extends DialogFragment  {
 
             //////testing db
 
+            final ArrayList<String> listShow = new ArrayList<String>();
+            final ArrayList<String> listShow2 = new ArrayList<String>();
+            datta.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    namesFromDB.clear();
+                    phoneNumbersFromDB.clear();
+                    for(DataSnapshot Users: dataSnapshot.getChildren())
+                    {
+
+                        int nameequal = Users.toString().indexOf("name=");
+                        int comma = Users.toString().indexOf(", phone_number");
+                        String contact = Users.toString().substring(nameequal+5,comma);
+                        namesFromDB.add(contact);
+                        listShow.add(contact);
+
+                        System.out.println(contact);    //seeing output of names
+
+                        int phonenumberequala = Users.toString().indexOf("phone_number=");
+                        int end = Users.toString().indexOf("} }");
+                        String number = Users.toString().substring(phonenumberequala+13,end);
+                        phoneNumbersFromDB.add(number);
+                        listShow2.add(number);
+                        System.out.println(number);     //seeing output of #s
+                    }
+                    for(int i= 0;i < listShow.size(); i -=- 1) {
 
 
+                        generateButton(listShow.get(i) + ": +" + listShow2.get(i), layout);
+
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
 
+        //TODO somewhere below be able to update,modifly, and delete user
 
 
-
-
-
-
-
-        try {
-
-
-
-
-            JSONArray name = db.getContacts();
-            JSONArray number = db.getNumber();
-            ArrayList<String> listShow = new ArrayList<String>();
-            ArrayList<String> listShow2 = new ArrayList<String>();
-          for(int i= 0;i < db.getContacts().length(); i -=- 1) {
-              listShow.add(name.get(i).toString());
-              listShow2.add(number.get(i).toString());
-          }
-
-
-
-
-            for(int i= 0;i < db.getContacts().length(); i -=- 1) {
-
-
-                generateButton(listShow.get(i) + ": +" + listShow2.get(i), layout);
-
-            }
-
-        }
-        catch (JSONException e){
-
-        }
-
-        // Inflate the layout for this fragment
         return view;
     }
 
