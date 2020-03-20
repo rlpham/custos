@@ -53,6 +53,7 @@ public class ContactsActivity extends DialogFragment {
 
     DatabaseReference datta2;
     boolean deleting = false;
+    boolean duplicate = false;
 
 
     public ContactsActivity() {
@@ -111,13 +112,13 @@ public class ContactsActivity extends DialogFragment {
                 if (deleting == false) {
 
                     for (DataSnapshot Users : dataSnapshot.getChildren()) {
-
+                            
                         int nameequal = Users.toString().indexOf("name=");
                         int comma = Users.toString().indexOf(", phone_number");
                         String contact = Users.toString().substring(nameequal + 5, comma);
 
 
-                        if (!contact.contains("dontdeletethis")) {
+                        if (!contact.contains("donotdeletethis")) {
                             listShow.add(contact);
                         }
 
@@ -129,7 +130,7 @@ public class ContactsActivity extends DialogFragment {
                         String number = Users.toString().substring(phonenumberequala + 13, end);
 
 
-                        if (!number.contains("dontdeletethis")) {
+                        if (!number.contains("donotdeletethis")) {
                             listShow2.add(number);
                         }
 
@@ -217,9 +218,7 @@ public class ContactsActivity extends DialogFragment {
                     btnTag.setText(m_Text);
                     btnTag.setTextColor(Color.WHITE);
 
-                    buttonAction(btnTag);
 
-                    layout.addView(btnTag);
 
 
                     //TODO temporary username till we figure what to do
@@ -229,22 +228,50 @@ public class ContactsActivity extends DialogFragment {
 
                 if(deleting)
                 {
+
+
                         datta.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                boolean dupe = false;
 
+                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
                                 //checking if there is duplicate contact
+                                for (DataSnapshot Users : dataSnapshot.getChildren()) {
+
+
+                                    int nameequal = Users.toString().indexOf("name=");
+                                    int comma = Users.toString().indexOf(", phone_number");
+                                    String contact = Users.toString().substring(nameequal + 5);
+                                    System.out.println("CONTACT: " + contact);
+
+
+                                    System.out.println("INPUT: " +  input.getText().toString());
+
+
+                                    if(input.getText().toString().equals(contact))
+                                    {
+                                        dupe = true;
+                                        Toast.makeText(getActivity(), "Duplicate Contact", Toast.LENGTH_SHORT).show();
+                                        duplicate = true;
+                                        break;
+
+                                    }
+                                    else
+                                    {
+                                        dupe = false;
+                                        duplicate = false;
+                                    }
+
+
+
+                                }
 
 
 
 
 
-                                ///doing it
 
-                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
-
-                               datta.child("name").setValue(input.getText().toString());
-                               datta.child("phone_number").setValue(input2.getText().toString());
                             }
 
                             @Override
@@ -260,7 +287,17 @@ public class ContactsActivity extends DialogFragment {
 
 
 
+                    if(!duplicate)
+                    {
+                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
 
+                        datta.child("name").setValue(input.getText().toString());
+                        datta.child("phone_number").setValue(input2.getText().toString());
+
+                        buttonAction(btnTag);
+
+                        layout.addView(btnTag);
+                    }
 
 
 
@@ -268,9 +305,15 @@ public class ContactsActivity extends DialogFragment {
                 }
 
 
-            }
-        });
 
+
+
+            }
+
+
+
+        });
+        duplicate = false;
         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
 
         builder.show();
