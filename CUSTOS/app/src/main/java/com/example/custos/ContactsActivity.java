@@ -4,6 +4,7 @@ package com.example.custos;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
@@ -76,7 +77,7 @@ public class ContactsActivity extends DialogFragment {
 
         //temporary till someone can figure out how to get right user
         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-
+        datta2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
 
     }
 
@@ -123,7 +124,7 @@ public class ContactsActivity extends DialogFragment {
                         }
 
 
-                        System.out.println(contact);    //seeing output of names
+                     //   System.out.println(contact);    //seeing output of names
 
                         int phonenumberequala = Users.toString().indexOf("phone_number=");
                         int end = Users.toString().indexOf("} }");
@@ -135,7 +136,7 @@ public class ContactsActivity extends DialogFragment {
                         }
 
 
-                        System.out.println(number);     //seeing output of #s
+                  //      System.out.println(number);     //seeing output of #s
                     }
 
 
@@ -175,7 +176,7 @@ public class ContactsActivity extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Enter Contact Information");
         builder.setCancelable(false);
-        //builder.setMessage("test");
+
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
 
         final EditText input = (EditText) viewInflated.findViewById(R.id.input);
@@ -233,35 +234,33 @@ public class ContactsActivity extends DialogFragment {
                         datta.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                boolean dupe = false;
+
 
                                 datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-                                //checking if there is duplicate contact
-                                for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
+                                for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
                                     int nameequal = Users.toString().indexOf("name=");
                                     int comma = Users.toString().indexOf(", phone_number");
-                                    String contact = Users.toString().substring(nameequal + 5);
-                                    System.out.println("CONTACT: " + contact);
+                                    String contact = Users.toString().substring(nameequal + 5); //works cause firebase can't handle comma lmao
+                                    //contact = contact.substring(0,input.getText().toString().length());
+
+                                   System.out.println("CONTACT: " + contact);
 
 
                                     System.out.println("INPUT: " +  input.getText().toString());
 
 
-                                    if(input.getText().toString().equals(contact))
-                                    {
-                                        dupe = true;
-                                        Toast.makeText(getActivity(), "Duplicate Contact", Toast.LENGTH_SHORT).show();
-                                        duplicate = true;
-                                        break;
+//                                    if(input.getText().toString().equals(contact))
+//                                    {
+//
+//                                        duplicate = true;
+//                                        Toast.makeText(getActivity(), "Duplicate Contact", Toast.LENGTH_SHORT).show();
+//
+//                                       break;
+//
+//                                    }
 
-                                    }
-                                    else
-                                    {
-                                        dupe = false;
-                                        duplicate = false;
-                                    }
 
 
 
@@ -283,12 +282,6 @@ public class ContactsActivity extends DialogFragment {
                 }
 
 
-
-
-
-
-                    if(!duplicate)
-                    {
                         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
 
                         datta.child("name").setValue(input.getText().toString());
@@ -297,7 +290,8 @@ public class ContactsActivity extends DialogFragment {
                         buttonAction(btnTag);
 
                         layout.addView(btnTag);
-                    }
+
+
 
 
 
@@ -428,8 +422,15 @@ public class ContactsActivity extends DialogFragment {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
 
                             for (DataSnapshot Users : dataSnapshot2.getChildren()) {
-                                System.out.println(Users.toString());
-                                if (Users.toString().contains(delName))
+
+                                int nameequal = Users.toString().indexOf("name=");
+                                int comma = Users.toString().indexOf(", phone_number");
+                                String contact = Users.toString().substring(nameequal + 5);      ///TODO fix this somehow, either restart fragment or fix substring bs or cheese it
+
+                               // contact = contact.substring(0, delName.length());
+                               // System.out.println("CONTACT: " + contact);
+                              //  System.out.println("WHAT I WANT TO DELETE: "+ delName);
+                                if (contact.contains(delName))
                                     Users.getRef().removeValue();
 
                             }
@@ -462,9 +463,18 @@ public class ContactsActivity extends DialogFragment {
 
             }
         });
-
         builder.show();
+//        boolean build = false;
+//        while(builder != null && build == false)
+//        {
+//
+//        }
+
+
+
+
     }
+
 
 
     public void editButton(final Button button, final String name) {
