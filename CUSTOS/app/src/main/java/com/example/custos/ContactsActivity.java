@@ -17,6 +17,10 @@ import android.widget.EditText;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -43,13 +47,13 @@ public class ContactsActivity extends DialogFragment {
     private String m_Text = "";
     boolean checkEdit = false;
     public SearchView searchView;
-
+    final String ALPHABET = "123456789abcdefghjkmnpqrstuvwxyz";
 
     DatabaseReference datta;
 
     DatabaseReference datta2;
     boolean deleting = false;
-    boolean adding = false;
+
 
     public ContactsActivity() {
 
@@ -71,7 +75,7 @@ public class ContactsActivity extends DialogFragment {
 
         //temporary till someone can figure out how to get right user
         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-        datta2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+
 
     }
 
@@ -99,16 +103,12 @@ public class ContactsActivity extends DialogFragment {
         //////testing db
 
 
-
-
-
-
         final ArrayList<String> listShow = new ArrayList<String>();
         final ArrayList<String> listShow2 = new ArrayList<String>();
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(deleting == false && adding == false) {
+                if (deleting == false) {
 
                     for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
@@ -117,7 +117,10 @@ public class ContactsActivity extends DialogFragment {
                         String contact = Users.toString().substring(nameequal + 5, comma);
 
 
-                        listShow.add(contact);
+                        if (!contact.contains("dontdeletethis")) {
+                            listShow.add(contact);
+                        }
+
 
                         System.out.println(contact);    //seeing output of names
 
@@ -126,7 +129,9 @@ public class ContactsActivity extends DialogFragment {
                         String number = Users.toString().substring(phonenumberequala + 13, end);
 
 
-                        listShow2.add(number);
+                        if (!number.contains("dontdeletethis")) {
+                            listShow2.add(number);
+                        }
 
 
                         System.out.println(number);     //seeing output of #s
@@ -141,7 +146,7 @@ public class ContactsActivity extends DialogFragment {
                     }
                 }
 
-                 listShow.clear();
+                listShow.clear();
                 listShow2.clear();
             }
 
@@ -153,9 +158,8 @@ public class ContactsActivity extends DialogFragment {
         });
 
 
-
-
         deleting = false;
+
 
         //TODO somewhere below be able to update,modifly, and delete user
 
@@ -218,6 +222,44 @@ public class ContactsActivity extends DialogFragment {
                     layout.addView(btnTag);
 
 
+                    //TODO temporary username till we figure what to do
+                    final String username = getRandomWord(20);
+
+                deleting = true;
+
+                if(deleting)
+                {
+                        datta.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                //checking if there is duplicate contact
+
+
+
+
+
+                                ///doing it
+
+                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
+
+                               datta.child("name").setValue(input.getText().toString());
+                               datta.child("phone_number").setValue(input2.getText().toString());
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                }
+
+
+
+
+
+
 
 
 
@@ -229,10 +271,24 @@ public class ContactsActivity extends DialogFragment {
             }
         });
 
+        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+
         builder.show();
 
 
+
     }
+
+    String getRandomWord(int length) {
+        String r = "";
+        for(int i = 0; i < length; i++) {
+            r += (char)(Math.random() * 26 + 97);
+        }
+        return r;
+    }
+
+
+
 
 
     public void generateButton(String title, LinearLayout layout) {
@@ -316,19 +372,17 @@ public class ContactsActivity extends DialogFragment {
         deleting = true;
 
 
-        if(deleting && adding == false)
-        {
+        if (deleting) {
 
 
+            builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
 
-
-                datta.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                    datta.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
 
                             for (DataSnapshot Users : dataSnapshot2.getChildren()) {
                                 System.out.println(Users.toString());
@@ -338,27 +392,23 @@ public class ContactsActivity extends DialogFragment {
                             }
 
 
+                        }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-
-                button.setVisibility(View.GONE);
+                        }
+                    });
 
 
+                    button.setVisibility(View.GONE);
 
-            }
-        });
 
+                }
+            });
 
 
         }
-
 
 
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
