@@ -1,7 +1,6 @@
 package com.example.custos.services;
 
-import android.app.IntentService;
-import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
@@ -11,11 +10,12 @@ import androidx.core.app.JobIntentService;
 
 public class BackgroundLocationService extends JobIntentService {
 
-    
+    //https://androidwave.com/working-with-jobintentservice/
+    private static final int JOB_ID = 1;
 
     @Override
     public void onCreate() {
-
+        super.onCreate();
     }
 
     @Nullable
@@ -31,6 +31,16 @@ public class BackgroundLocationService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
+        System.out.println("HELLO WORLD");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        }
 
+    }
+
+    public static void enqueueWork(Context context, Intent intent) {
+        enqueueWork(context, BackgroundLocationService.class, JOB_ID, intent);
     }
 }
