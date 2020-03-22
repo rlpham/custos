@@ -13,11 +13,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +38,7 @@ public class NotificationActivity extends Fragment {
 //    // TODO: Rename and change types of parameters
 //    private String mParam1;
 //    private String mParam2;
-    public int numOfNotification;
+    public long numOfNotification;
     private View buttonview;
     private DBHandler database=new DBHandler();
     public NotificationActivity() {
@@ -50,9 +57,13 @@ public class NotificationActivity extends Fragment {
       //  fragment.setArguments(args);
         return fragment;
     }
+    private DatabaseReference db;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event");
+
 
      //   if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
@@ -71,7 +82,38 @@ public class NotificationActivity extends Fragment {
         String eventTitle= "TEST";
         numOfNotification=3;
 
-           for(int i=numOfNotification-1;i>=0;i--) {
+
+        //TEST
+
+        db.orderByKey().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                System.out.println(dataSnapshot.getKey());
+            }
+    @Override
+            public void onChildChanged(DataSnapshot dataSnapshot,String prevkey){
+
+    }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot){
+
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot,String prevkey){
+
+            }
+            @Override
+            public void onCancelled(DatabaseError er){
+
+            }
+        });
+
+
+
+        //Test end
+
+
+           for(int i=(int)numOfNotification-1;i>=0;i--) {
                try {
                    JSONArray event = database.getNotifications();
                    eventID = event.getJSONObject(i).getString("id");
@@ -184,7 +226,7 @@ public class NotificationActivity extends Fragment {
         messageView.setBackgroundColor(Color.parseColor("#232323"));
         messageView.setTextColor(Color.WHITE);
         messageView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        messageView.setText("Description :- "+message);
+        messageView.setText(message);
         layout.addView(messageView);
 
         //ACCEPT REJECT
@@ -228,11 +270,132 @@ public class NotificationActivity extends Fragment {
 
     }
     public void eventNotification(String eventID){
+        int eventLocation=findEventID(eventID);
+        String message="";
+        String sender="";
+        try {
+            JSONArray event = database.getNotifications();
 
+            message= event.getJSONObject(eventLocation).getString("message");
+            sender=event.getJSONObject(eventLocation).getString("sender");
+
+        }catch (JSONException e){
+
+        }
+
+        LinearLayout layout = (LinearLayout) buttonview.findViewById(R.id.specificNotification);
+        layout.setBackgroundColor(Color.parseColor("#232323"));
+
+        //For senders name
+        TextView name=new TextView(layout.getContext());
+        name.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT+100));
+        name.setBackgroundColor(Color.parseColor("#232323"));
+        name.setTextColor(Color.WHITE);
+        name.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        name.setText(sender);
+        layout.addView(name);
+
+        //for now its getting message lets see later
+        TextView messageView=new TextView(layout.getContext());
+        messageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT+400));
+        messageView.setBackgroundColor(Color.parseColor("#232323"));
+        messageView.setTextColor(Color.WHITE);
+        messageView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        messageView.setText("Description :- "+message);
+        layout.addView(messageView);
+
+        //ACCEPT REJECT
+        LinearLayout arLayout = (LinearLayout) buttonview.findViewById(R.id.notificationAccept);
+        arLayout.setBackgroundColor(Color.parseColor("#232323"));
+
+        //ACCEPT
+        Button btnTag = new Button(layout.getContext());
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // btnTag.setPaddingRelative(0,100,200,500);
+        // btnTag.setLeftTopRightBottom(100, 100, 100);
+        btnTag.setBackgroundColor(Color.parseColor("#036303"));
+
+        btnTag.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        btnTag.setText("Accept");
+        btnTag.setTextColor(Color.WHITE);
+
+        buttonAction(btnTag,"X");
+        //add button to the layout
+        arLayout.addView(btnTag);
 
     }
     public void safetyNotification(String eventID){
+        int eventLocation=findEventID(eventID);
+        String message="";
+        String sender="";
+        try {
+            JSONArray event = database.getNotifications();
 
+            message= event.getJSONObject(eventLocation).getString("message");
+            sender=event.getJSONObject(eventLocation).getString("sender");
+
+        }catch (JSONException e){
+
+        }
+
+        LinearLayout layout = (LinearLayout) buttonview.findViewById(R.id.specificNotification);
+        layout.setBackgroundColor(Color.parseColor("#232323"));
+
+        //For senders name
+        TextView name=new TextView(layout.getContext());
+        name.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT+100));
+        name.setBackgroundColor(Color.parseColor("#232323"));
+        name.setTextColor(Color.WHITE);
+        name.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        name.setText(sender);
+        layout.addView(name);
+
+        //for now its getting message lets see later
+        TextView messageView=new TextView(layout.getContext());
+        messageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT+400));
+        messageView.setBackgroundColor(Color.parseColor("#232323"));
+        messageView.setTextColor(Color.WHITE);
+        messageView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        messageView.setText("Description :- "+message);
+        layout.addView(messageView);
+
+        //ACCEPT REJECT
+        LinearLayout arLayout = (LinearLayout) buttonview.findViewById(R.id.notificationAccept);
+        arLayout.setBackgroundColor(Color.parseColor("#232323"));
+
+        //ACCEPT
+        Button btnTag = new Button(layout.getContext());
+        btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // btnTag.setPaddingRelative(0,100,200,500);
+        // btnTag.setLeftTopRightBottom(100, 100, 100);
+        btnTag.setBackgroundColor(Color.parseColor("#036303"));
+
+        btnTag.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        btnTag.setText("Safe");
+        btnTag.setTextColor(Color.WHITE);
+
+        buttonAction(btnTag,"X");
+
+        //add button to the layout
+        arLayout.addView(btnTag);
+
+        LinearLayout rLayout = (LinearLayout) buttonview.findViewById(R.id.notificationReject);
+        rLayout.setBackgroundColor(Color.parseColor("#232323"));
+
+        //ACCEPT
+        Button btnTag2 = new Button(layout.getContext());
+        btnTag2.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // btnTag.setPaddingRelative(0,100,200,500);
+        // btnTag.setLeftTopRightBottom(100, 100, 100);
+        btnTag2.setBackgroundColor(Color.parseColor("#990000"));
+        btnTag2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        btnTag2.setText("Alert");
+        btnTag2.setTextColor(Color.WHITE);
+
+        buttonAction(btnTag2,"X");
+
+        //add button to the layout
+        rLayout.addView(btnTag2);
     }
 
 
