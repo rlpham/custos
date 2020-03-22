@@ -96,13 +96,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-    private DatabaseReference db,db2;
+    private DatabaseReference db,db2,db3;
     //tillhere
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
         db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
+        db3 = FirebaseDatabase.getInstance().getReference("Home Location latlng");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         super.onCreate(savedInstanceState);
@@ -234,8 +235,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
+        if(mess.equals("Home Location")){
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory
+                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            moveToCurrentLocation(eventlocation);
+
+        }else
         if(eventlocation!=null) {
-            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
+            mMap.addMarker(new MarkerOptions().position(eventlocation));
             moveToCurrentLocation(eventlocation);
         }
     }
@@ -281,6 +288,20 @@ private LatLng eventlocation;
 
             }
         });
+        db3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                double  eventlonitude=Double.parseDouble(dataSnapshot.child("longtitude").getValue().toString());
+                double eventlatitude=Double.parseDouble(dataSnapshot.child("latitude").getValue().toString());
+                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
+                setEventsLocation(eventloc,"Home Location");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         if (checkPermissions()) {
             googleMap.setMyLocationEnabled(true);
 
@@ -291,7 +312,8 @@ private LatLng eventlocation;
                         public void onSuccess(Location location) {
 
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location"));
+                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE )));
                             //  mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
                          //   moveToCurrentLocation(sydney);
                             // Got last known location. In some rare situations this can be null.
@@ -317,7 +339,7 @@ private LatLng eventlocation;
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(7), 2000, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
 
 
     }
