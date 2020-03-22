@@ -124,7 +124,7 @@ public class SplashActivity extends AppCompatActivity {
             String personEmail = googleSignInAccount.getEmail();
             String personId = googleSignInAccount.getId();
             Uri personPhoto = googleSignInAccount.getPhotoUrl();
-            Toast.makeText(SplashActivity.this, personName + "\n" + personEmail,Toast.LENGTH_SHORT).show();
+            Toast.makeText(SplashActivity.this, "\t"+personName + "\n" + personEmail,Toast.LENGTH_SHORT).show();
         }
     }
 
