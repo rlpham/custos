@@ -96,13 +96,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-    private DatabaseReference db;
+    private DatabaseReference db,db2;
     //tillhere
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
-
+        db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         super.onCreate(savedInstanceState);
@@ -211,18 +211,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //rahul new
 
 
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String eventaddress=dataSnapshot.child("address").getValue().toString();
-                System.out.println(eventaddress);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        db.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String eventaddress=dataSnapshot.child("address").getValue().toString();
+//                System.out.println(eventaddress);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         //rahul new end
@@ -255,6 +255,21 @@ private LatLng eventlocation;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
+                double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
+                String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
+                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
+                setEventsLocation(eventloc,mess);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        db2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
                 double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
                 String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
                 LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
