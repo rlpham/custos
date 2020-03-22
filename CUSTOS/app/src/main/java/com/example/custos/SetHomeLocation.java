@@ -5,6 +5,13 @@ public class SetHomeLocation {
     private double latitude;
     private double longtitude;
 
+    public  SetHomeLocation(){
+
+    }
+    public SetHomeLocation(double lat, double longtit){
+        latitude = lat;
+        longtitude = longtit;
+    }
     public double getLatitude(){
         return latitude;
     }

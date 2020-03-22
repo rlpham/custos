@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
@@ -26,6 +29,7 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +47,6 @@ public class SetHomeLocationActivity extends AppCompatActivity {
     Geocoder geocoder;
     Button saveButton;
     List<Address> addresses = new ArrayList<>();
-    SetHomeLocation setHomeLocation = new SetHomeLocation();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -79,17 +82,24 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
-
+                SetHomeLocation setHomeLocation = new SetHomeLocation();
                 Log.i("tester", "Place: " + latLng.latitude+"\n" + latLng.longitude);
+
                 setHomeLocation.setLatitude(latLng.latitude);
                 setHomeLocation.setLongtitude(latLng.longitude);
+                FirebaseDatabase.getInstance().getReference("Home Location latlng")
+                        .setValue(setHomeLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 System.out.println(setHomeLocation.getLatitude() + " " + setHomeLocation.getLongtitude());
-                DBHandler db = new DBHandler();
-                try {
-                    db.setHomeLocation(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
                 stringAddress(latLng);
 
             }
