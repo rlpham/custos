@@ -188,19 +188,36 @@ public class ContactsActivity extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                String str = input2.getText().toString().replaceAll("[^\\d]", "");
+                str = str.trim();
+                System.out.println("TESTING PHONE: " + str);
 
-                if (TextUtils.isEmpty(input.getText().toString()) || input.getText().toString().trim().length() == 0 || TextUtils.isEmpty(input2.getText().toString()) || input2.getText().toString().length() != 10) {
-                    Toast.makeText(getActivity(), "Invalid Input", Toast.LENGTH_SHORT).show();
+                if (input.getText().toString().trim().length() <= 3) {
+                    Toast.makeText(getActivity(), "Name is too short", Toast.LENGTH_SHORT).show();
                     //  dialog.dismiss();
 
                     addContactToLayout(button, layout);
 
-                } else {
+                }
+
+
+
+                else if(str.length() != 10)
+                {
+
+                    Toast.makeText(getActivity(), "Enter only 10 digits", Toast.LENGTH_SHORT).show();
+                    //  dialog.dismiss();
+
+                    addContactToLayout(button, layout);
+
+                }
+
+                else {
 
                     dialog.dismiss();
 
 
-                    m_Text = input.getText().toString() + ": +" + input2.getText().toString();
+                    m_Text = input.getText().toString() + ": +" + str;
                     // System.out.println("test");
                     ImageView imageView = new ImageView(layout.getContext());
 
@@ -262,11 +279,7 @@ public class ContactsActivity extends DialogFragment {
 //                                    }
 
 
-
-
                                 }
-
-
 
 
 
@@ -284,8 +297,8 @@ public class ContactsActivity extends DialogFragment {
 
                         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
 
-                        datta.child("name").setValue(input.getText().toString());
-                        datta.child("phone_number").setValue(input2.getText().toString());
+                        datta.child("name").setValue(input.getText().toString().trim());
+                        datta.child("phone_number").setValue(str);
 
                         buttonAction(btnTag);
 
@@ -499,6 +512,7 @@ public class ContactsActivity extends DialogFragment {
 
                     editButton(button, name);
                 }
+
 
 
                 dialog.dismiss();
