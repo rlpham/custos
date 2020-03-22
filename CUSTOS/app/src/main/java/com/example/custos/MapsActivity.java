@@ -47,6 +47,12 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -90,11 +96,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-
+    private DatabaseReference db;
     //tillhere
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         super.onCreate(savedInstanceState);
@@ -200,10 +208,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //rahul end
 
 
+        //rahul new
+
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String eventaddress=dataSnapshot.child("address").getValue().toString();
+                System.out.println(eventaddress);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        //rahul new end
+
+
 
     }
 
-
+private LatLng eventlocation;
+    public void setEventsLocation(LatLng ll){
+        eventlocation=ll;
+        if(eventlocation!=null) {
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title("Kennys Birthday"));
+            moveToCurrentLocation(eventlocation);
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -215,6 +250,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+               double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
+                double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
+                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
+                setEventsLocation(eventloc);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         if (checkPermissions()) {
             googleMap.setMyLocationEnabled(true);
 

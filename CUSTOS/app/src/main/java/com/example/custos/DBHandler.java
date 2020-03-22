@@ -59,6 +59,8 @@ public class DBHandler {
         return null;
     }
 
+
+
     public JSONArray getNotifications() throws JSONException {
         JSONArray notifications;
         try {
@@ -75,7 +77,7 @@ public class DBHandler {
             n2.put("id","D1234");
             n2.put("sender", "xxDragonSlayer_3.14");
             n2.put("type", "alert");
-            n2.put("message", "xxDragonSlayer_3.14 might be in danger");
+            n2.put("message", "xxDragonSlayer_3.14 wants to know if you are safe");
 
             n3.put("id","L1234");
             n3.put("sender", "DFA987");
