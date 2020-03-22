@@ -236,6 +236,7 @@ private LatLng eventlocation;
         eventlocation=ll;
         if(eventlocation!=null) {
             mMap.addMarker(new MarkerOptions().position(eventlocation).title("Kennys Birthday"));
+            moveToCurrentLocation(eventlocation);
         }
     }
     /**
