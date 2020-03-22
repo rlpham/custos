@@ -82,7 +82,7 @@ public class NotificationActivity extends Fragment {
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.scrollnotification);
         String eventID="0000";
         String eventTitle= "TEST";
-        numOfNotification=2;
+        numOfNotification=3;
 
 
         //TEST
