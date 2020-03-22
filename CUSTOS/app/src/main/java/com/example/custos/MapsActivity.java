@@ -276,9 +276,9 @@ private LatLng eventlocation;
                         public void onSuccess(Location location) {
 
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location"));
                             //  mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-                            moveToCurrentLocation(sydney);
+                         //   moveToCurrentLocation(sydney);
                             // Got last known location. In some rare situations this can be null.
                             if (location != null) {
 
@@ -302,7 +302,7 @@ private LatLng eventlocation;
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(7), 2000, null);
 
 
     }
