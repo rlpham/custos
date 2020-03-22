@@ -30,6 +30,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class NotificationActivity extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,11 +86,14 @@ public class NotificationActivity extends Fragment {
 
 
         //TEST
-
+        final ArrayList<String> eventlist = new ArrayList<String>();
+        final ArrayList<String> sender = new ArrayList<String>();
+        final ArrayList<String> message = new ArrayList<String>();
         db.orderByKey().addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                System.out.println(dataSnapshot.getKey());
+              eventlist.add(dataSnapshot.getKey());
+
             }
     @Override
             public void onChildChanged(DataSnapshot dataSnapshot,String prevkey){
@@ -108,7 +113,7 @@ public class NotificationActivity extends Fragment {
             }
         });
 
-
+        System.out.println(eventlist);
 
         //Test end
 
