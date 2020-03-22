@@ -123,7 +123,9 @@ public class ContactsActivity extends DialogFragment {
                         String contact = Users.toString().substring(nameequal + 5, comma);
 
 
-                        if (!contact.contains("donotdeletethis")) {
+
+
+                        if (!contact.equals("donotdeletethis")) {
                             listShow.add(contact);
                         }
 
@@ -135,7 +137,7 @@ public class ContactsActivity extends DialogFragment {
                         String number = Users.toString().substring(phonenumberequala + 13, end);
 
 
-                        if (!number.contains("donotdeletethis")) {
+                        if (!number.equals("donotdeletethis")) {
                             listShow2.add(number);
                         }
 
@@ -301,7 +303,7 @@ public class ContactsActivity extends DialogFragment {
 
                         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
 
-                        datta.child("name").setValue(input.getText().toString().trim());
+                        datta.child("name").setValue(input.getText().toString());
                         datta.child("phone_number").setValue(str);
 
                         buttonAction(btnTag);
@@ -496,13 +498,16 @@ public class ContactsActivity extends DialogFragment {
 
                                 int nameequal = Users.toString().indexOf("name=");
                                 int comma = Users.toString().indexOf(", phone_number");
-                                String contact = Users.toString().substring(nameequal + 5);      ///TODO fix this somehow, either restart fragment or fix substring bs or cheese it
+                                String contact = Users.toString().substring(nameequal + 5);
 
-                               // contact = contact.substring(0, delName.length());
-                               // System.out.println("CONTACT: " + contact);
-                              //  System.out.println("WHAT I WANT TO DELETE: "+ delName);
-                                if (contact.contains(delName))
+                                contact = contact.substring(0, delName.length());
+                                System.out.println("CONTACT: " + contact);
+                               System.out.println("WHAT I WANT TO DELETE: "+ delName);
+                                if (contact.equals(delName)){
                                     Users.getRef().removeValue();
+                                    break;
+                                }
+
 
                             }
 
@@ -559,29 +564,110 @@ public class ContactsActivity extends DialogFragment {
         final EditText input2 = (EditText) viewInflated.findViewById(R.id.input2);
         builder.setView(viewInflated);
 
+        final String titlename = name.substring(0,name.indexOf(':'));
+        final String titleph = name.substring(name.indexOf('+')+1);
+
+
+        System.out.println(titlename + " testing " + titleph);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                final String str = input2.getText().toString().replaceAll("[^\\d]", "").trim();
 
+                System.out.println("TESTING PHONE: " + str);
 
-                if (TextUtils.isEmpty(input.getText().toString()) || input.getText().toString().trim().length() == 0 || TextUtils.isEmpty(input2.getText().toString()) || input2.getText().toString().length() != 10) {
-                    Toast.makeText(getActivity(), "Invalid Input", Toast.LENGTH_SHORT).show();
-
+                if (input.getText().toString().trim().length() <= 3) {
+                    Toast.makeText(getActivity(), "Name is too short", Toast.LENGTH_SHORT).show();
+                    //  dialog.dismiss();
                     editButton(button, name);
+
+
                 }
 
 
 
-                dialog.dismiss();
-                m_Text = input.getText().toString() + ": +" + input2.getText().toString();
-                button.setText(m_Text);
+                else if(str.length() != 10)
+                {
+
+                    Toast.makeText(getActivity(), "Enter only 10 digits", Toast.LENGTH_SHORT).show();
+                    //  dialog.dismiss();
+
+                    editButton(button, name);
+
+                }
+
+
+                  else
+                {
+                    deleting = true;
+                    if (deleting) {
+
+
+
+
+                                datta.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+
+                                        for (DataSnapshot Users : dataSnapshot2.getChildren()) {
+
+                                            int nameequal = Users.toString().indexOf("name=");
+                                            int comma = Users.toString().indexOf(", phone_number");
+                                            String contact = Users.toString().substring(nameequal + 5);
+
+                                            System.out.println(Users.toString());
+                                            int keypos = Users.toString().indexOf("key =");
+                                            int keystop = Users.toString().indexOf(", value");
+                                            String key = Users.toString().substring(keypos + 5,keystop);
+                                            key = key.trim();
+                                            System.out.println("KEY : " + key);
+                                            datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key);
+                                            if(contact.equals(titlename))
+                                            {
+                                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
+
+                                                datta.setValue(input.getText().toString());
+                                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
+                                                datta.setValue(str);
+                                                break;
+                                            }
+
+
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+
+                    }
+
+
+
+
+
+
+                    dialog.dismiss();
+                    m_Text = input.getText().toString() + ": +" + input2.getText().toString();
+                    button.setText(m_Text);
+                }
+
+
+
 
 
             }
         });
 
         builder.show();
+        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
     }
 }
 
