@@ -232,10 +232,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 private LatLng eventlocation;
-    public void setEventsLocation(LatLng ll){
+    public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
         if(eventlocation!=null) {
-            mMap.addMarker(new MarkerOptions().position(eventlocation).title("Kennys Birthday"));
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
             moveToCurrentLocation(eventlocation);
         }
     }
@@ -256,8 +256,9 @@ private LatLng eventlocation;
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
                 double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
+                String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
                 LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
-                setEventsLocation(eventloc);
+                setEventsLocation(eventloc,mess);
             }
 
             @Override

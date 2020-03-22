@@ -64,7 +64,7 @@ public class NotificationActivity extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event");
+        db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("notifications");
 
 
      //   if (getArguments() != null) {
@@ -82,38 +82,10 @@ public class NotificationActivity extends Fragment {
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.scrollnotification);
         String eventID="0000";
         String eventTitle= "TEST";
-        numOfNotification=3;
+        numOfNotification=2;
 
 
         //TEST
-        final ArrayList<String> eventlist = new ArrayList<String>();
-        final ArrayList<String> sender = new ArrayList<String>();
-        final ArrayList<String> message = new ArrayList<String>();
-        db.orderByKey().addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-              eventlist.add(dataSnapshot.getKey());
-
-            }
-    @Override
-            public void onChildChanged(DataSnapshot dataSnapshot,String prevkey){
-
-    }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot){
-
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot,String prevkey){
-
-            }
-            @Override
-            public void onCancelled(DatabaseError er){
-
-            }
-        });
-
-        System.out.println(eventlist);
 
         //Test end
 
