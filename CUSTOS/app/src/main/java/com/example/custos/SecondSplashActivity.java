@@ -25,6 +25,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
 
@@ -41,6 +42,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     Geocoder geocoder;
     SetHomeLocation setHomeLocation = new SetHomeLocation();
     DBHandler db = new DBHandler();
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

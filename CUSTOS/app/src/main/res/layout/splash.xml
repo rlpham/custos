@@ -25,4 +25,17 @@
             android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/signout_button"
+        android:layout_width="136dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="489dp"
+        android:layout_marginEnd="130dp"
+        android:background="@drawable/sv_round"
+        android:text="Signout"
+        android:visibility="invisible"
+        android:textSize="17sp" />
+
 </RelativeLayout>
