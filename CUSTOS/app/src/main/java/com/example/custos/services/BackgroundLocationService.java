@@ -31,12 +31,15 @@ public class BackgroundLocationService extends JobIntentService {
 
     @Override
     protected void onHandleWork(@NonNull Intent intent) {
-        System.out.println("HELLO WORLD");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            System.out.println(e);
+        for(int i = 0; i < 1000; i++) {
+            try {
+                System.out.println("Background Service " + i);
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
         }
+
 
     }
 
