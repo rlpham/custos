@@ -39,8 +39,6 @@ public class BackgroundLocationService extends JobIntentService {
                 System.out.println(e);
             }
         }
-
-
     }
 
     public static void enqueueWork(Context context, Intent intent) {
