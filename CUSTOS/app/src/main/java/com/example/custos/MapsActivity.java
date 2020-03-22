@@ -242,7 +242,7 @@ private LatLng eventlocation;
 
         }else
         if(eventlocation!=null) {
-            mMap.addMarker(new MarkerOptions().position(eventlocation));
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
             moveToCurrentLocation(eventlocation);
         }
     }
