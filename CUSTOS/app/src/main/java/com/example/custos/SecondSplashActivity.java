@@ -26,6 +26,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     List<Address> addresses=new ArrayList<>();
     Geocoder geocoder;
     SetHomeLocation setHomeLocation = new SetHomeLocation();
+    DBHandler db = new DBHandler();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
