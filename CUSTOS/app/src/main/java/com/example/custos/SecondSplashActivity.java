@@ -26,6 +26,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 
@@ -42,11 +47,13 @@ public class SecondSplashActivity extends AppCompatActivity {
     Geocoder geocoder;
     SetHomeLocation setHomeLocation = new SetHomeLocation();
     DBHandler db = new DBHandler();
+    private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_splash_activity);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Home Location latlng");
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -86,6 +93,20 @@ public class SecondSplashActivity extends AppCompatActivity {
             String personEmail = account.getEmail();
             String personID = account.getId();
             Uri personPhoto = account.getPhotoUrl();
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String latitude = dataSnapshot.child("latitude").getValue().toString();
+                    String longtitude = dataSnapshot.child("longtitude").getValue().toString();
+                    String latlng = latitude + " " + longtitude;
+                    homeLocation.setText(latlng);
+                 }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             name.setText(personName);
             email.setText(personEmail);

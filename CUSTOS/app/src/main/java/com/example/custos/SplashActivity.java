@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashActivity extends AppCompatActivity {
     private SignInButton signInButton;
@@ -31,11 +33,11 @@ public class SplashActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN =0;
     private FirebaseAuth mAuth;
+    private User userApp = new User();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
         signOutButton = findViewById(R.id.signout_button);
@@ -85,7 +87,29 @@ public class SplashActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(SplashActivity.this,"Signin Successful!",Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(account);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+            account = GoogleSignIn.getLastSignedInAccount(this);
+            if(account != null){
+                String personName = account.getDisplayName();
+                String personEmail = account.getEmail();
+                String personID = account.getId();
+                userApp.setUserName(personName);
+                userApp.setUserEmail(personEmail);
+                userApp.setUserId(personID);
+                FirebaseDatabase.getInstance().getReference("User Account by Email")
+                        .setValue(userApp).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+            }
             startActivity(intent);
         }catch (Exception e){
             //the ApiException status code indicates the detailed failure reason
