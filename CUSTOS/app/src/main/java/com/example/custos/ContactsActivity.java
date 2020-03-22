@@ -8,10 +8,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -354,7 +358,7 @@ public class ContactsActivity extends DialogFragment {
         final Button btnTag = new Button(layout.getContext());
 
         btnTag.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        btnTag.setBackgroundColor(Color.parseColor("#1B1B1B"));
+        btnTag.setBackgroundColor(Color.parseColor("#1D1D1D"));
         btnTag.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
         btnTag.setText(title);
         btnTag.setTextColor(Color.WHITE);
@@ -369,11 +373,13 @@ public class ContactsActivity extends DialogFragment {
 
     public void buttonAction(final Button button) {
 
+        int colon = button.getText().toString().indexOf(":");
+        final String personName = button.getText().toString();
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                int colon = button.getText().toString().indexOf(":");
-                final String personName = button.getText().toString();
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(false);
 
@@ -397,11 +403,63 @@ public class ContactsActivity extends DialogFragment {
 
                             }
                         });
+
+
+
                 builder.create();
                 builder.show();
 
             }
         });
+
+
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
+                builder2.setCancelable(false);
+                builder2.setTitle((button.getText().toString()))
+                        .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+
+                            }
+                        })
+                        .setNeutralButton("Call", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+                                ph = ph.trim();
+
+                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
+                            }
+                        })
+                        .setNegativeButton("Text", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+                                ph = ph.trim();
+//                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+//                                sendIntent.setData(Uri.parse("sms:"));
+//                                startActivity(sendIntent);
+
+                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                                sendIntent.setData(Uri.parse("sms:"+ph));
+                                startActivityForResult(sendIntent , 0);
+
+                            }
+
+                        });
+
+                builder2.create();
+                builder2.show();
+
+
+            return false;
+            }
+        });
+
 
     }
 
