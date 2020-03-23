@@ -78,7 +78,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 LatLng myCoordinates = new LatLng(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
                 user.setUserAddress(getFullAddress(myCoordinates));
 
-                FirebaseDatabase.getInstance().getReference("User Account by Email").child("userAddress")
+                FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userAddress")
                         .setValue(user.getUserAddress()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -98,8 +98,14 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String fullAddress = dataSnapshot.child("userAddress").getValue().toString();
-                address.setText(fullAddress);
+                if(dataSnapshot.child("UID").child("userAddress").exists()){
+                    String fullAddress = dataSnapshot.child("UID").child("userAddress").getValue().toString();
+                    address.setText(fullAddress);
+                }else {
+                    address.setText(" ");
+                }
+
+
             }
 
             @Override

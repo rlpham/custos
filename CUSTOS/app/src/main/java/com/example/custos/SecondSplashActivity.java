@@ -105,8 +105,13 @@ public class SecondSplashActivity extends AppCompatActivity {
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String fullAddress = dataSnapshot.child("userAddress").getValue().toString();
-                    homeLocation.setText(fullAddress);
+                    if(dataSnapshot.child("UID").child("userAddress").exists()){
+                        String fullAddress = dataSnapshot.child("UID").child("userAddress").getValue().toString();
+                        homeLocation.setText(fullAddress);
+                    }else {
+                        homeLocation.setText(" ");
+                    }
+
                  }
 
                 @Override

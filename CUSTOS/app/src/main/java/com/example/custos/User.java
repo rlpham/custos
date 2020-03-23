@@ -6,6 +6,7 @@ public class User {
     private String userEmail;
     private String userId;
     private String userAddress;
+    private String UID;
 
     public User(){
 
@@ -35,5 +36,13 @@ public class User {
 
     public void setUserAddress(String userAddress) {
         this.userAddress = userAddress;
+    }
+
+    public String getUID() {
+        return UID;
+    }
+
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 }
