@@ -53,7 +53,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_splash_activity);
-        databaseReference = FirebaseDatabase.getInstance().getReference("Home Location latlng");
+        databaseReference = FirebaseDatabase.getInstance().getReference("User Account by Email");
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -96,10 +96,8 @@ public class SecondSplashActivity extends AppCompatActivity {
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    String latitude = dataSnapshot.child("latitude").getValue().toString();
-                    String longtitude = dataSnapshot.child("longtitude").getValue().toString();
-                    String latlng = latitude + " " + longtitude;
-                    homeLocation.setText(latlng);
+                    String fullAddress = dataSnapshot.child("userAddress").getValue().toString();
+                    homeLocation.setText(fullAddress);
                  }
 
                 @Override

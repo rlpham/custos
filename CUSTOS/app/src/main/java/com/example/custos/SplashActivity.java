@@ -97,12 +97,34 @@ public class SplashActivity extends AppCompatActivity {
                 userApp.setUserName(personName);
                 userApp.setUserEmail(personEmail);
                 userApp.setUserId(personID);
-                FirebaseDatabase.getInstance().getReference("User Account by Email")
-                        .setValue(userApp).addOnCompleteListener(new OnCompleteListener<Void>() {
+                FirebaseDatabase.getInstance().getReference("User Account by Email").child("userName")
+                        .setValue(userApp.getUserName()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
                             Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                FirebaseDatabase.getInstance().getReference("User Account by Email").child("userEmail")
+                        .setValue(userApp.getUserEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                FirebaseDatabase.getInstance().getReference("User Account by Email").child("userId")
+                        .setValue(userApp.getUserId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
                         }

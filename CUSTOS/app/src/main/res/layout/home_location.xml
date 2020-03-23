@@ -24,16 +24,31 @@
         android:textSize="35sp" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="315dp"
+        android:layout_marginEnd="141dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Current Address"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/home_address"
-        android:layout_width="159dp"
-        android:layout_height="50dp"
+        android:layout_width="381dp"
+        android:layout_height="47dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="124dp"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="341dp"
-        android:layout_marginEnd="128dp"
-        android:fontFamily="sans-serif-thin"
+        android:layout_marginEnd="8dp"
         android:text="Address"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"

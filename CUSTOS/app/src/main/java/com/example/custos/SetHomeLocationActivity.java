@@ -29,7 +29,11 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,10 +47,13 @@ import java.util.Locale;
 
 public class SetHomeLocationActivity extends AppCompatActivity {
 
-    TextView address;
-    Geocoder geocoder;
-    Button saveButton;
-    List<Address> addresses = new ArrayList<>();
+    private TextView address;
+    private Geocoder geocoder;
+    private Button saveButton;
+    private List<Address> addresses = new ArrayList<>();
+    private User user = new User();
+    private SetHomeLocation setHomeLocation = new SetHomeLocation();
+    private DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -60,12 +67,38 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LatLng myCoordinates = new LatLng(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
+                user.setUserAddress(getFullAddress(myCoordinates));
+
+                FirebaseDatabase.getInstance().getReference("User Account by Email").child("userAddress")
+                        .setValue(user.getUserAddress()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
                 startActivity(intent);
             }
         });
         geocoder = new Geocoder(this,Locale.getDefault());
+        databaseReference = FirebaseDatabase.getInstance().getReference("User Account by Email");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String fullAddress = dataSnapshot.child("userAddress").getValue().toString();
+                address.setText(fullAddress);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 //        placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
@@ -82,25 +115,29 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
-                SetHomeLocation setHomeLocation = new SetHomeLocation();
+
+
                 Log.i("tester", "Place: " + latLng.latitude+"\n" + latLng.longitude);
 
                 setHomeLocation.setLatitude(latLng.latitude);
                 setHomeLocation.setLongtitude(latLng.longitude);
+                final String fullAd = stringAddress(latLng.latitude,latLng.longitude);
+
+
                 FirebaseDatabase.getInstance().getReference("Home Location latlng")
                         .setValue(setHomeLocation).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
                 System.out.println(setHomeLocation.getLatitude() + " " + setHomeLocation.getLongtitude());
 
-                stringAddress(latLng);
 
             }
 
@@ -112,25 +149,39 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
     }
 
+    private String getFullAddress(LatLng myCoordinates) {
+        String fullAddress = " ";
+        Geocoder geocoder = new Geocoder(SetHomeLocationActivity.this,Locale.getDefault());
+        try {
+            List<Address> addresses2 = geocoder.getFromLocation(myCoordinates.latitude,myCoordinates.longitude,1);
+            fullAddress = addresses2.get(0).getAddressLine(0);
+            Log.d("mylog","complete address: " + addresses2.toString());
+            Log.d("mylog","address: " + fullAddress);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return fullAddress;
+    }
 
 
-    private void stringAddress(LatLng latLng){
+    private String stringAddress(double latitude, double longtitude){
+        String fullAddress="";
         if(!addresses.isEmpty()){
             try {
-                addresses = geocoder.getFromLocation(latLng.latitude,latLng.longitude,1);
+                addresses = geocoder.getFromLocation(latitude,longtitude,1);
                 if(addresses.size()>0){
                     String myAddress = addresses.get(0).getAddressLine(0);
                     String city = addresses.get(0).getLocality();
                     String state = addresses.get(0).getAdminArea();
-                    String fullAddress = myAddress + " " + city + " " + state;
-                    address.setText(fullAddress);
-                    System.out.println("---------------------------------"+myAddress + city);
-                    Log.i("test","address: "+ myAddress + city + state);
+                    fullAddress = myAddress + " " + city + " " + state;
+                    return fullAddress;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        }return fullAddress;
 
     }
 }
