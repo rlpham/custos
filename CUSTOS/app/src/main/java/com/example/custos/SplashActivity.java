@@ -28,9 +28,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SplashActivity extends AppCompatActivity {
-    private SignInButton signInButton;
-    private Button signOutButton;
-    private GoogleSignInClient googleSignInClient;
+    SignInButton signInButton;
+    Button signOutButton;
+    GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN =0;
     private FirebaseAuth mAuth;
     private User userApp = new User();

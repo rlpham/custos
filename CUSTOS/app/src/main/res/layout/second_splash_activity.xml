@@ -104,17 +104,38 @@
         android:textCursorDrawable="@color/colorwhite"
         android:textSize="20sp"/>
 
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/signout_button"
-        android:layout_width="160dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginLeft="120dp"
+        android:layout_marginTop="51dp"
+        android:layout_marginEnd="65dp"
+        android:background="@drawable/sv_round"
         android:text="Signout"
-        android:textSize="17sp"
-        android:background="@drawable/sv_round"/>
+        android:textSize="17sp" />
+
+    <Button
+        android:id="@+id/back_button2"
+        android:layout_width="126dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="51dp"
+        android:layout_marginEnd="219dp"
+        android:background="@drawable/sv_round"
+        android:text="Cancel"
+        android:textSize="16sp" />
+
+</RelativeLayout>
+
+
 
 
 

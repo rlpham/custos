@@ -50,6 +50,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
     private TextView address;
     private Geocoder geocoder;
     private Button saveButton;
+    private Button backButton;
     private List<Address> addresses = new ArrayList<>();
     private User user = new User();
     private SetHomeLocation setHomeLocation = new SetHomeLocation();
@@ -60,10 +61,17 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         setContentView(R.layout.home_location);
         address = findViewById(R.id.home_address);
         saveButton = findViewById(R.id.save_button);
+        backButton = findViewById(R.id.back_button);
         final String apiKey = "AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc";
         if(!Places.isInitialized()){
             Places.initialize(getApplicationContext(),apiKey);
         }
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

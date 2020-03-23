@@ -41,12 +41,12 @@ import java.util.List;
 public class SecondSplashActivity extends AppCompatActivity {
     ImageView imageView;
     TextView name, email, id, homeLocation;
-    Button signOut,setHomeButton;
+    Button signOut,setHomeButton,backButton;
     GoogleSignInClient googleSignInClient;
     List<Address> addresses=new ArrayList<>();
     Geocoder geocoder;
     SetHomeLocation setHomeLocation = new SetHomeLocation();
-    DBHandler db = new DBHandler();
+    //DBHandler db = new DBHandler();
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
     @Override
@@ -66,8 +66,17 @@ public class SecondSplashActivity extends AppCompatActivity {
         signOut =       findViewById(R.id.signout_button);
         homeLocation =  findViewById(R.id.homeLocation);
         setHomeButton = findViewById(R.id.setHomeLocation);
+        backButton =    findViewById(R.id.back_button2);
         stringAddress(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SecondSplashActivity.this,MapsActivity.class);
+                startActivity(intent);
+
+            }
+        });
         signOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){

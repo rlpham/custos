@@ -41,14 +41,14 @@
 
     <TextView
         android:id="@+id/home_address"
-        android:layout_width="381dp"
-        android:layout_height="47dp"
+        android:layout_width="303dp"
+        android:layout_height="76dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="63dp"
         android:layout_marginTop="341dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="45dp"
         android:text="Address"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
@@ -81,11 +81,23 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="519dp"
-        android:layout_marginEnd="137dp"
+        android:layout_marginTop="560dp"
+        android:layout_marginEnd="49dp"
+        android:background="@drawable/sv_round"
         android:text="Save"
-        android:textSize="16sp"
-        android:background="@drawable/sv_round"/>
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="137dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="560dp"
+        android:layout_marginEnd="204dp"
+        android:background="@drawable/sv_round"
+        android:text="Cancel"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="336dp"
