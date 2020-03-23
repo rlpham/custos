@@ -461,7 +461,7 @@ private LatLng eventlocation;
             dangerzonelocation.setLongitude(77.86);
 
             LatLng hershey = new LatLng(40.2859,-76.658);
-            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(hershey);
 

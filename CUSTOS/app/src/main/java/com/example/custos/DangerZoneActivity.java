@@ -76,8 +76,6 @@ public class DangerZoneActivity extends AppCompatActivity {
                     finish();
                 }
 
-                //startActivityForResult(dangerIntent,requestCode);
-                //finish();
             }
         });
     }
