@@ -12,9 +12,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="140dp"
-        android:layout_marginEnd="125dp"
-        android:layout_marginBottom="291dp"
+        android:layout_marginStart="133dp"
+        android:layout_marginEnd="132dp"
+        android:layout_marginBottom="114dp"
         android:orientation="vertical"
         android:visibility="visible">
 
