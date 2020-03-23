@@ -59,6 +59,7 @@ public class ContactsActivity extends DialogFragment {
 
     DatabaseReference datta2;
     boolean deleting = false;
+    boolean editing = false;
     boolean duplicate = false;
 
 
@@ -135,7 +136,7 @@ public class ContactsActivity extends DialogFragment {
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (deleting == false) {
+                if (deleting == false && editing == false) {
 
                     for (DataSnapshot Users : dataSnapshot.getChildren()) {
                             
@@ -270,8 +271,9 @@ public class ContactsActivity extends DialogFragment {
                     final String username = getRandomWord(20);
 
                 deleting = true;
+                editing = true;
 
-                if(deleting)
+                if(deleting && editing)
                 {
 
 
@@ -521,10 +523,10 @@ public class ContactsActivity extends DialogFragment {
                                 int comma = Users.toString().indexOf(", phone_number");
                                 String contact = Users.toString().substring(nameequal + 5);
 
-                                contact = contact.substring(0, delName.length());
+//                                contact = contact.substring(0, delName.length());
                                 System.out.println("CONTACT: " + contact);
                                System.out.println("WHAT I WANT TO DELETE: "+ delName);
-                                if (contact.equals(delName)){
+                                if (contact.contains(delName)){
                                     Users.getRef().removeValue();
                                     break;
                                 }
@@ -578,6 +580,7 @@ public class ContactsActivity extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(name);
         builder.setCancelable(false);
+        editing = true;
 
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.blank_page, (ViewGroup) getView(), false);
 
@@ -585,11 +588,10 @@ public class ContactsActivity extends DialogFragment {
         final EditText input2 = (EditText) viewInflated.findViewById(R.id.input2);
         builder.setView(viewInflated);
 
-        final String titlename = name.substring(0,name.indexOf(':'));
-        final String titleph = name.substring(name.indexOf('+')+1);
+        String titleph = name.substring(name.indexOf('+')+1);
 
 
-        System.out.println(titlename + " testing " + titleph);
+   //     System.out.println(titlename + " testing " + titleph);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -621,8 +623,8 @@ public class ContactsActivity extends DialogFragment {
 
                   else
                 {
-                    deleting = true;
-                    if (deleting) {
+
+                    if (editing) {
 
 
 
@@ -636,7 +638,7 @@ public class ContactsActivity extends DialogFragment {
                                             int nameequal = Users.toString().indexOf("name=");
                                             int comma = Users.toString().indexOf(", phone_number");
                                             String contact = Users.toString().substring(nameequal + 5);
-
+//                                            contact = contact.substring(0,contact.indexOf(','));
                                             System.out.println(Users.toString());
                                             int keypos = Users.toString().indexOf("key =");
                                             int keystop = Users.toString().indexOf(", value");
@@ -644,7 +646,11 @@ public class ContactsActivity extends DialogFragment {
                                             key = key.trim();
                                             System.out.println("KEY : " + key);
                                             datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key);
-                                            if(contact.equals(titlename))
+                                            String titlename = name.substring(0,name.indexOf(':'));
+                                            System.out.println("");
+                                            System.out.println(contact + ":" + titlename);
+                                            System.out.println("");
+                                            if(contact.contains(titlename))
                                             {
                                                 datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
 
