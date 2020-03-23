@@ -421,6 +421,8 @@ private LatLng eventlocation;
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 
+        //High Danger Marker Code
+        //TODO: Fix default value
         if(requestCode==2)
         {
             //TODO: Add marker at current location
@@ -438,6 +440,7 @@ private LatLng eventlocation;
             System.out.println("This MAP ish workin");
         }
 
+        //Medium Danger Value
         if (requestCode == 3){
             Location dangerzonelocation = new Location("Medium Danger");
             dangerzonelocation.setLatitude(40.7934);
@@ -450,6 +453,7 @@ private LatLng eventlocation;
 
         }
 
+        //Low Danger Value
         if (requestCode == 4){
             Location dangerzonelocation = new Location("Low Danger");
             dangerzonelocation.setLatitude(40.7934);
