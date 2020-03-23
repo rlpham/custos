@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -82,8 +83,8 @@ public class ContactsActivity extends DialogFragment {
         //temporary till someone can figure out how to get right user
         datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
         datta2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-
     }
+
 
 
     @Override
@@ -104,6 +105,26 @@ public class ContactsActivity extends DialogFragment {
 
 
         });
+
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            final public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP)
+                {
+                    Intent intent = new Intent(v.getContext(), MapsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    getActivity().finish();
+                    return true;
+                }
+                return false;
+            }
+        } );
 
 
         //////testing db
