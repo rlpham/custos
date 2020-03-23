@@ -52,7 +52,8 @@
             android:exported="true" />
         <activity
             android:name=".SetHomeLocationActivity"
-            android:parentActivityName=".SecondSplashActivity"/>
+            android:exported="true"
+            />
         <activity android:name=".SecondSplashActivity"
             android:exported="true"/>
         <activity
