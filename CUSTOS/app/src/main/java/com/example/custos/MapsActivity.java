@@ -153,7 +153,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
-                int requestCode = intent.getIntExtra("dangervalue",2);
+                int requestCode = intent.getIntExtra("dangervalue",3);
                 //startActivityForResult(intent,requestCode);
                 startActivityForResult(intent,requestCode);
                 //startActivity(intent);
@@ -418,6 +418,7 @@ private LatLng eventlocation;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        requestCode = data.getIntExtra("dangervalue",0);
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 

@@ -69,7 +69,7 @@ public class DangerZoneActivity extends AppCompatActivity {
                     requestCode = 4;
                     System.out.println(userInputDangerLevel);
                     //Intent highintent = new Intent(DangerZoneActivity.this,MapsActivity.class);
-                    dangerIntent.putExtra("dangervalue",2);
+                    dangerIntent.putExtra("dangervalue",4);
                     System.out.println("It worked");
                     onActivityResult(4,4,dangerIntent);
                     setResult(4,dangerIntent);
