@@ -17,12 +17,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.api.Status;
@@ -30,17 +32,20 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 //import com.google.android.libraries.places.api.Places;
 //import com.google.android.libraries.places.api.model.TypeFilter;
 //import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.TypeFilter;
@@ -96,7 +101,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-    private DatabaseReference db,db2,db3;
+    private DatabaseReference db,db2,db3,db4;
     //tillhere
 
     @Override
@@ -104,6 +109,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
         db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
         db3 = FirebaseDatabase.getInstance().getReference("Home Location latlng");
+        db4 = FirebaseDatabase.getInstance().getReference("userLocation");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         super.onCreate(savedInstanceState);
@@ -258,6 +264,9 @@ private LatLng eventlocation;
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+
+
+
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -309,7 +318,7 @@ private LatLng eventlocation;
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
-                        public void onSuccess(Location location) {
+                        public void onSuccess(final Location location) {
 
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
@@ -317,6 +326,7 @@ private LatLng eventlocation;
                             //  mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
                          //   moveToCurrentLocation(sydney);
                             // Got last known location. In some rare situations this can be null.
+
                             if (location != null) {
 
                             }
@@ -329,9 +339,64 @@ private LatLng eventlocation;
                 }
             });
         }
-
+        setlocationeveryfeesec(googleMap);
         // Add a marker in Sydney and move the camera
 
+    }
+
+    private void getcurrentlocation(GoogleMap googleMap){
+         Location temploc;
+        if (checkPermissions()) {
+
+            mMap = googleMap;
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(final Location location) {
+                            FirebaseDatabase.getInstance().getReference("userLocation").child("latitude")
+                                    .setValue(location.getLatitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            FirebaseDatabase.getInstance().getReference("userLocation").child("longtitude")
+                                    .setValue(location.getLongitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                    e.printStackTrace();
+                }
+            });
+        }
+    }
+
+    private void setlocationeveryfeesec(final GoogleMap googleMap){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               getcurrentlocation(googleMap);
+                handler.postDelayed(this, 10000);
+            }
+        }, 5000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
