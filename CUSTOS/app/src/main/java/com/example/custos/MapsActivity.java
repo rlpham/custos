@@ -495,7 +495,7 @@ private LatLng eventlocation;
             dangerzonelocation.setLongitude(77.86);
 
             LatLng stateCollege = new LatLng(40.7934,-77.86);
-            MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
+            MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
             dangerMarker.snippet(description);
 
             mMap.addMarker(dangerMarker);
@@ -513,7 +513,7 @@ private LatLng eventlocation;
             dangerzonelocation.setLongitude(77.86);
 
             LatLng desmoines = new LatLng(41.619,-93.598);
-            MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+            MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
             dangerMarker.snippet(description);
 
             mMap.addMarker(dangerMarker);
@@ -528,7 +528,7 @@ private LatLng eventlocation;
             dangerzonelocation.setLongitude(77.86);
 
             LatLng hershey = new LatLng(40.2859,-76.658);
-            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
+            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
             dangerMarker.snippet(description);
 
             mMap.addMarker(dangerMarker);
@@ -547,13 +547,13 @@ private LatLng eventlocation;
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(marker.getTitle().equals("Danger Zone Marker")) {
-            String criticalLevel;
+        if((marker.getTitle().equals("High")) || (marker.getTitle().equals("Medium")) || (marker.getTitle().equals("Low")) ) {
+            String criticalLevel = marker.getTitle();
             String description = marker.getSnippet();
             DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
             Bundle args = new Bundle();
             //Set arguments in the bundle
-            args.putString("criticallevel", "low");
+            args.putString("criticallevel", "Danger: " + criticalLevel);
             args.putString("description", description);
             dangerZoneDialogue.setArguments(args);
             dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
