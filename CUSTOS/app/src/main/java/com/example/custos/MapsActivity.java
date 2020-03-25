@@ -1,15 +1,5 @@
 package com.example.custos;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,37 +12,33 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.api.Status;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-//import com.google.android.libraries.places.api.Places;
-//import com.google.android.libraries.places.api.model.TypeFilter;
-//import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,9 +46,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
+//import com.google.android.libraries.places.api.Places;
+//import com.google.android.libraries.places.api.model.TypeFilter;
+//import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
@@ -106,6 +94,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
+        // Dale's Code
+        //mMap.setOnMarkerClickListener(this);
+        //
+
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
         db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
         db3 = FirebaseDatabase.getInstance().getReference("Home Location latlng");
@@ -527,6 +520,7 @@ private LatLng eventlocation;
 
             LatLng hershey = new LatLng(40.2859,-76.658);
             MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
+
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(hershey);
 
@@ -536,4 +530,13 @@ private LatLng eventlocation;
     }
 
 
+//    @Override
+//    public boolean onMarkerClick(Marker marker) {
+//        DangerZoneDialogue displayPunchlineDialog = new DangerZoneDialogue();
+//        Bundle args = new Bundle();
+//        //Set arguments in the bundle
+//
+//        displayPunchlineDialog.show(getSupportFragmentManager(),"danger zone dialogue");
+//        return false;
+//    }
 }
