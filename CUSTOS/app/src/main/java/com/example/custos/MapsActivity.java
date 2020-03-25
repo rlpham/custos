@@ -52,7 +52,7 @@ import java.util.List;
 //import com.google.android.libraries.places.api.model.TypeFilter;
 //import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
     private SearchView searchView;
@@ -527,6 +527,11 @@ private LatLng eventlocation;
         }
 
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
     }
 
 
