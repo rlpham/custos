@@ -335,6 +335,9 @@ private LatLng eventlocation;
         setlocationeveryfeesec(googleMap);
         // Add a marker in Sydney and move the camera
 
+        //Dale Code
+        mMap.setOnMarkerClickListener(this);
+
     }
 
     private void getcurrentlocation(GoogleMap googleMap){
@@ -531,17 +534,13 @@ private LatLng eventlocation;
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+        DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
+        Bundle args = new Bundle();
+        //Set arguments in the bundle
+        args.putString("criticallevel", "low");
+        args.putString("description", "yuh");
+        dangerZoneDialogue.setArguments(args);
+        dangerZoneDialogue.show(getSupportFragmentManager(),"danger zone dialogue");
         return false;
     }
-
-
-//    @Override
-//    public boolean onMarkerClick(Marker marker) {
-//        DangerZoneDialogue displayPunchlineDialog = new DangerZoneDialogue();
-//        Bundle args = new Bundle();
-//        //Set arguments in the bundle
-//
-//        displayPunchlineDialog.show(getSupportFragmentManager(),"danger zone dialogue");
-//        return false;
-//    }
 }
