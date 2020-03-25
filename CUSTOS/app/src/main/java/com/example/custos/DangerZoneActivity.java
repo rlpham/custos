@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import com.google.android.libraries.places.api.Places;
 
@@ -15,6 +16,7 @@ public class DangerZoneActivity extends AppCompatActivity {
     int highdangerzone = 2;
     int mediumdangerzone = 3;
     String userInputDangerLevel;
+    String userInputDescription;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,12 @@ public class DangerZoneActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         riskLevelSpinner.setAdapter(adapter);
 
+
         /**
-         * String to get critical level input from the user
+         * Description Text Box Code
          */
-        //userInputDangerLevel = riskLevelSpinner.getSelectedItem().toString();
+        final EditText descriptionFillIn = findViewById(R.id.descriptionfillin);
+
 
         /**
          * Adding in action listener to submit button
@@ -44,23 +48,30 @@ public class DangerZoneActivity extends AppCompatActivity {
                 //Add in handler code here
                 int requestCode = 0;
                 Intent dangerIntent = new Intent(DangerZoneActivity.this, MapsActivity.class);
+
                 userInputDangerLevel = riskLevelSpinner.getSelectedItem().toString();
                 System.out.println(userInputDangerLevel);
+
+                userInputDescription = descriptionFillIn.getText().toString();
+
                 if (userInputDangerLevel.equals("High")) {
                     requestCode = 2;
                     System.out.println(userInputDangerLevel);
-                    //Intent highintent = new Intent(DangerZoneActivity.this,MapsActivity.class);
+
                     dangerIntent.putExtra("dangervalue",2);
+                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
+                    dangerIntent.putExtra("dangerdescription",userInputDescription);
                     System.out.println("It worked");
+
                     onActivityResult(2,2,dangerIntent);
                     setResult(2,dangerIntent);
                     finish();
                 }
                 else if (userInputDangerLevel.equals("Medium")) {
                     requestCode = 3;
-                    //Intent mediumintent = new Intent(DangerZoneActivity.this,MapsActivity.class);
                     dangerIntent.putExtra("dangervalue",3);
                     System.out.println("It worked");
+
                     onActivityResult(3,3,dangerIntent);
                     setResult(3,dangerIntent);
                     finish();
@@ -68,9 +79,10 @@ public class DangerZoneActivity extends AppCompatActivity {
                 else if (userInputDangerLevel.equals("Low")) {
                     requestCode = 4;
                     System.out.println(userInputDangerLevel);
-                    //Intent highintent = new Intent(DangerZoneActivity.this,MapsActivity.class);
+
                     dangerIntent.putExtra("dangervalue",4);
                     System.out.println("It worked");
+
                     onActivityResult(4,4,dangerIntent);
                     setResult(4,dangerIntent);
                     finish();

@@ -480,6 +480,8 @@ private LatLng eventlocation;
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         requestCode = data.getIntExtra("dangervalue",0);
+        String criticallevel = data.getStringExtra("criticallevel");
+        String description = data.getStringExtra("dangerdescription");
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 
@@ -494,6 +496,8 @@ private LatLng eventlocation;
 
             LatLng stateCollege = new LatLng(40.7934,-77.86);
             MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
+            dangerMarker.snippet(description);
+
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(stateCollege);
 
@@ -532,15 +536,25 @@ private LatLng eventlocation;
 
     }
 
+    /**
+     * This is the actionlistener for all the markers!! Add to this method if you want marker
+     * to do something when clicked.
+     * @param marker
+     * @return
+     */
     @Override
     public boolean onMarkerClick(Marker marker) {
-        DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
-        Bundle args = new Bundle();
-        //Set arguments in the bundle
-        args.putString("criticallevel", "low");
-        args.putString("description", "yuh");
-        dangerZoneDialogue.setArguments(args);
-        dangerZoneDialogue.show(getSupportFragmentManager(),"danger zone dialogue");
+        if(marker.getTitle().equals("Danger Zone Marker")) {
+            String criticalLevel;
+            String description = marker.getSnippet();
+            DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
+            Bundle args = new Bundle();
+            //Set arguments in the bundle
+            args.putString("criticallevel", "low");
+            args.putString("description", description);
+            dangerZoneDialogue.setArguments(args);
+            dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
+        }
         return false;
     }
 }
