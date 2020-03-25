@@ -69,7 +69,10 @@ public class DangerZoneActivity extends AppCompatActivity {
                 }
                 else if (userInputDangerLevel.equals("Medium")) {
                     requestCode = 3;
+
                     dangerIntent.putExtra("dangervalue",3);
+                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
+                    dangerIntent.putExtra("dangerdescription",userInputDescription);
                     System.out.println("It worked");
 
                     onActivityResult(3,3,dangerIntent);
@@ -81,6 +84,8 @@ public class DangerZoneActivity extends AppCompatActivity {
                     System.out.println(userInputDangerLevel);
 
                     dangerIntent.putExtra("dangervalue",4);
+                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
+                    dangerIntent.putExtra("dangerdescription",userInputDescription);
                     System.out.println("It worked");
 
                     onActivityResult(4,4,dangerIntent);

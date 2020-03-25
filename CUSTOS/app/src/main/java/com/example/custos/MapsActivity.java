@@ -514,6 +514,8 @@ private LatLng eventlocation;
 
             LatLng desmoines = new LatLng(41.619,-93.598);
             MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+            dangerMarker.snippet(description);
+
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(desmoines);
 
@@ -527,6 +529,7 @@ private LatLng eventlocation;
 
             LatLng hershey = new LatLng(40.2859,-76.658);
             MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title("Danger Zone Marker").icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
+            dangerMarker.snippet(description);
 
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(hershey);
