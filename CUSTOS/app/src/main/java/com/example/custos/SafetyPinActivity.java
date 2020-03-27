@@ -84,10 +84,7 @@ public class SafetyPinActivity extends AppCompatActivity {
 
     DatabaseReference datta;
 
-    /**
-     * Question From Dale: Are all these buttons coordinates??
-     * @param savedInstanceState
-     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
