@@ -63,6 +63,20 @@ public class SplashActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
             googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+        if(mAuth.getCurrentUser()!= null){
+            userApp.setUID(mAuth.getCurrentUser().getUid());
+        }
+        FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID")
+                .setValue(userApp.getUID()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     private void signIn(){
         Intent signInIntent = googleSignInClient.getSignInIntent();
@@ -97,20 +111,7 @@ public class SplashActivity extends AppCompatActivity {
                 userApp.setUserName(personName);
                 userApp.setUserEmail(personEmail);
                 userApp.setUserId(personID);
-                if(mAuth.getCurrentUser()!= null){
-                    userApp.setUID(mAuth.getCurrentUser().getUid());
-                }
-                FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID")
-                        .setValue(userApp.getUID()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                //TODO if(mAuth.getCurrentUser().getUid().equals())
                 FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userName")
                         .setValue(userApp.getUserName()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
