@@ -1,6 +1,7 @@
 package com.example.custos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -51,11 +52,11 @@ import io.paperdb.Paper;
 
 public class SplashActivity extends AppCompatActivity {
     SignInButton signInButton;
-    Button signOutButton;
+   // Button signOutButton;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN =0;
     private FirebaseAuth mAuth;
-    private User userApp = new User();
+    User userApp = new User();
     DatabaseReference user_information;
     private static final int MY_REQUEST_CODE = 7773;
     List<AuthUI.IdpConfig> provider;
@@ -66,34 +67,35 @@ public class SplashActivity extends AppCompatActivity {
         Paper.init(this);
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
-        signOutButton = findViewById(R.id.signout_button);
+       // signOutButton = findViewById(R.id.signout_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.sign_in_button:
-                        signIn();
+                        showSignInOptions();
                         break;
                 }
             }
         });
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-                signOutButton.setVisibility(View.INVISIBLE);
-            }
-        });
+//        signOutButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mAuth.signOut();
+//                signOutButton.setVisibility(View.INVISIBLE);
+//            }
+//        });
         user_information = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
-        provider = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-        );
+//        provider = Arrays.asList(
+//                new AuthUI.IdpConfig.GoogleBuilder().build(),
+//                new AuthUI.IdpConfig.EmailBuilder().build()
+//        );
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        signIn();
+                        showSignInOptions();
                     }
 
                     @Override
@@ -115,71 +117,72 @@ public class SplashActivity extends AppCompatActivity {
         if(mAuth.getCurrentUser()!= null){
             userApp.setUID(mAuth.getCurrentUser().getUid());
         }
-        FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID")
-                .setValue(userApp.getUID()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID")
+//                .setValue(userApp.getUID()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                if(task.isSuccessful()){
+//                    Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
     }
-    private void signIn(){
+    private void showSignInOptions(){
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent,MY_REQUEST_CODE);
 //        startActivityForResult(
 //                AuthUI.getInstance()
-//                .createSignInIntentBuilder().setAvailableProviders(provider)
+//                        .createSignInIntentBuilder()
+//                        .setAvailableProviders(provider)
 //                .build(),MY_REQUEST_CODE);
     }
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
 
         //Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if(requestCode == MY_REQUEST_CODE){
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-            if(resultCode == RESULT_OK){
-                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                user_information.orderByKey()
-                        .equalTo(firebaseUser.getUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.getValue() == null){
-                                    //uid not exist
-                                    if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
-                                        Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
-                                        user_information.child(Common.loggedUser.getUID())
-                                                .setValue(Common.loggedUser);
-                                    }
-                                }
-                                //if user available
-                                else{
-                                    Common.loggedUser = dataSnapshot.child(firebaseUser.getUid()).getValue(User.class);
-                                }
-                                Paper.book().write(Common.USER_UID_SAVE_KEY,Common.loggedUser.getUID());
-                                updateToken(firebaseUser);
-                                setupUI();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-            }
+//        if(requestCode == MY_REQUEST_CODE){
+//            IdpResponse response = IdpResponse.fromResultIntent(data);
+//            if(resultCode == RESULT_OK){
+//                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//                user_information.orderByKey()
+//                        .equalTo(firebaseUser.getUid())
+//                        .addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if(dataSnapshot.getValue() == null){
+//                                    //uid not exist
+//                                    if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
+//                                        Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
+//                                        user_information.child(Common.loggedUser.getUID())
+//                                                .setValue(Common.loggedUser);
+//                                    }
+//                                }
+//                                //if user available
+//                                else{
+//                                    Common.loggedUser = dataSnapshot.child(firebaseUser.getUid()).getValue(User.class);
+//                                }
+//                                Paper.book().write(Common.USER_UID_SAVE_KEY,Common.loggedUser.getUID());
+//                                updateToken(firebaseUser);
+//                                setupUI();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//            }
             //The task returned from this call is always completed no need to attach a listener
-//           Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            handleSignInResult(task);
+           Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task,requestCode,resultCode,data);
         }
 
-    }
+
 
     private void updateToken(final FirebaseUser firebaseUser) {
         final DatabaseReference tokens = FirebaseDatabase.getInstance()
@@ -203,63 +206,97 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
-        try{
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask, int requestCode, int resultCode,Intent data) {
+        try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(SplashActivity.this,"Signin Successful!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SplashActivity.this, "Signin Successful!", Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(account);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+            Intent intent = new Intent(SplashActivity.this, MapsActivity.class);
             account = GoogleSignIn.getLastSignedInAccount(this);
-            if(account != null){
-                String personName = account.getDisplayName();
-                String personEmail = account.getEmail();
-                String personID = account.getId();
-                userApp.setUserName(personName);
-                userApp.setUserEmail(personEmail);
-                userApp.setUserId(personID);
-                //TODO if(mAuth.getCurrentUser().getUid().equals())
-                FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userName")
-                        .setValue(userApp.getUserName()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userEmail")
-                        .setValue(userApp.getUserEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userId")
-                        .setValue(userApp.getUserId()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            if (requestCode == MY_REQUEST_CODE) {
+                IdpResponse response = IdpResponse.fromResultIntent(data);
+                if (resultCode == RESULT_OK) {
+                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    user_information.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.getValue() == null) {
+                                        //uid not exist
+                                        if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+                                            Common.loggedUser = new User(firebaseUser.getUid(), firebaseUser.getEmail(), firebaseUser.getDisplayName());
+                                            user_information.child(Common.loggedUser.getUID())
+                                                    .setValue(Common.loggedUser);
+                                        }
+                                    }
+                                    //if user available
+                                    else {
+                                        Common.loggedUser = dataSnapshot.child(firebaseUser.getUid()).getValue(User.class);
+                                    }
+                                    Paper.book().write(Common.USER_UID_SAVE_KEY, Common.loggedUser.getUID());
+                                    updateToken(firebaseUser);
+                                    setupUI();
+                                }
 
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                }
+//                if (account != null) {
+//                    String personName = account.getDisplayName();
+//                    String personEmail = account.getEmail();
+//                    String personID = account.getId();
+//                    userApp.setUserName(personName);
+//                    userApp.setUserEmail(personEmail);
+//                    userApp.setUserId(personID);
+//                    //TODO if(mAuth.getCurrentUser().getUid().equals())
+//
+//                    FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userName")
+//                            .setValue(userApp.getUserName()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                Toast.makeText(SplashActivity.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(SplashActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//                    FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userEmail")
+//                            .setValue(userApp.getUserEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(SplashActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//                    FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userId")
+//                            .setValue(userApp.getUserId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()) {
+//                                //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(SplashActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//
+//                }
+                startActivity(intent);
             }
-            startActivity(intent);
-        }catch (Exception e){
+        }catch(Exception e){
             //the ApiException status code indicates the detailed failure reason
             //Please refer to the googlesigninstatuscodes class reference for more info
             //Log.w("Error", "signInResult:failed code =" + e.getStatusCode());
-            Toast.makeText(SplashActivity.this,"Signin Failed!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SplashActivity.this, "Signin Failed!", Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(null);
             Log.getStackTraceString(e);
         }
@@ -283,7 +320,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser firebaseUser){
-        signOutButton.setVisibility(View.VISIBLE);
+        //signOutButton.setVisibility(View.VISIBLE);
         GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(googleSignInAccount != null){
             String personName = googleSignInAccount.getDisplayName();
