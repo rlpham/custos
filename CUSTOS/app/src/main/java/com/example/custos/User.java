@@ -1,5 +1,7 @@
 package com.example.custos;
 
+import java.util.HashMap;
+
 public class User {
 
     private String userName;
@@ -7,10 +9,17 @@ public class User {
     private String userId;
     private String userAddress;
     private String UID;
-
+    private HashMap<String,User> acceptList;
     public User(){
 
     }
+    public User(String uid, String email,String name){
+        this.UID =uid;
+        this.userEmail = email;
+        this.userName = name;
+        acceptList = new HashMap<>();
+    }
+
     public String getUserName(){
         return userName;
     }
