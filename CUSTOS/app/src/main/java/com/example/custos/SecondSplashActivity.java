@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,7 +54,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_splash_activity);
-        databaseReference = FirebaseDatabase.getInstance().getReference("User Account by Email");
+        databaseReference = FirebaseDatabase.getInstance().getReference("User Information");
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -102,14 +103,18 @@ public class SecondSplashActivity extends AppCompatActivity {
             String personEmail = account.getEmail();
             String personID = account.getId();
             Uri personPhoto = account.getPhotoUrl();
+
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.child("UID").child("userAddress").exists()){
-                        String fullAddress = dataSnapshot.child("UID").child("userAddress").getValue().toString();
+                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    User user = new User();
+                    user.setUID(firebaseUser.getUid());
+                    if(dataSnapshot.child(user.getUID()).child("userAddress").exists() || dataSnapshot.child(user.getUID()).child("userAddress").getValue().equals(" ")){
+                        String fullAddress = dataSnapshot.child(user.getUID()).child("userAddress").getValue().toString();
                         homeLocation.setText(fullAddress);
                     }else {
-                        homeLocation.setText(" ");
+                        homeLocation.setText("Home address is not set");
                     }
 
                  }
