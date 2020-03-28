@@ -102,7 +102,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                     String fullAddress = dataSnapshot.child("UID").child("userAddress").getValue().toString();
                     address.setText(fullAddress);
                 }else {
-                    address.setText(" ");
+                    address.setText("User have not set their home location");
                 }
 
 
