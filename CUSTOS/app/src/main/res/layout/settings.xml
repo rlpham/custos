@@ -48,6 +48,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/userinfo" />
+            <Button
+                android:id="@+id/findFriend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/findFriend" />
         </LinearLayout>
     </ScrollView>
 
