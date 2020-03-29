@@ -314,7 +314,7 @@ private LatLng eventlocation;
             }
         });
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (checkPermissions()) {
+        if (checkPermissions()&&firebaseUser.getUid()!=null) {
             googleMap.setMyLocationEnabled(true);
 
             mMap = googleMap;
