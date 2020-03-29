@@ -260,6 +260,7 @@ private LatLng eventlocation;
 
     private String userID="nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
+    DatabaseReference user_information2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -344,12 +345,34 @@ private LatLng eventlocation;
                                                 userID=firebaseUser.getUid();
                                                 Common.currentUser = dataSnapshot.child(firebaseUser.getUid()).getValue(UserLocation.class);
                                             }
+
+
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
                                     });
+                            user_information2.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.getValue() == null){
+                                        //uid not exist
+                                        if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
+                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
+                                            user_information2.child(Common.loggedUser.getUID())
+                                                    .setValue(Common.loggedUser);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
 
                             if (location != null) {
 
