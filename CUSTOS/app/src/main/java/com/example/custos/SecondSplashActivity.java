@@ -152,6 +152,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     }
 
     private void signOut(){
+        mAuth.signOut();
         googleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
