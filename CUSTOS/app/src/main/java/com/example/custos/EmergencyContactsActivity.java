@@ -91,7 +91,6 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
 
 
-
         datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11");
 
 
@@ -221,18 +220,19 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                                     String key = Users.toString().substring(keypos + 5,keystop);
                                     key = key.trim();
                                     System.out.println("KEY : " + key);
-                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key); /////////////
+                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec).child(key);
+                                 //   datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key); /////////////
                                     String titlename = name.substring(0,name.indexOf(':'));
                                     System.out.println("");
                                     System.out.println(contact + ":" + titlename);
                                     System.out.println("");
                                     if(contact.contains(titlename))
                                     {
-                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
+                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child(ec).child(key).child("name");
 
-                                        datta.setValue(input.getText().toString());
-                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
-                                        datta.setValue(str);
+                                        datta3.setValue(input.getText().toString());
+                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child(ec).child(key).child("phone_number");
+                                        datta3.setValue(str);
                                         break;
                                     }
 
@@ -270,7 +270,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
         });
 
         builder.show();
-        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
     }
 
 
@@ -323,14 +323,17 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                             }
                         })
-                        .setNeutralButton("Call", new DialogInterface.OnClickListener() {
+                        .setNeutralButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
+                                editButton(button,);
+                                
 
-                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
-                                ph = ph.trim();
-
-                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
+//
+//                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+//                                ph = ph.trim();
+//
+//                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
                             }
                         })
                         .setNegativeButton("Text", new DialogInterface.OnClickListener() {

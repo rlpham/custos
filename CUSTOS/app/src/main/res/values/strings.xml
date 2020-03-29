@@ -69,4 +69,5 @@
     <string name="emergency_contacts">Emergency Contacts</string>
     <string name="findFriend">Find Friends</string>
     <string name="ecedit">Edit</string>
+    <string name="ecexit">Exit</string>
 </resources>
