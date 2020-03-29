@@ -73,7 +73,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.sign_in_button:
-                        showSignInOptions();
+                        signIn();
                         break;
                 }
             }
@@ -95,7 +95,7 @@ public class SplashActivity extends AppCompatActivity {
                 .withListener(new PermissionListener() {
                     @Override
                     public void onPermissionGranted(PermissionGrantedResponse response) {
-                        showSignInOptions();
+                        signIn();
                     }
 
                     @Override
@@ -129,9 +129,9 @@ public class SplashActivity extends AppCompatActivity {
 //            }
 //        });
     }
-    private void showSignInOptions(){
+    private void signIn(){
         Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent,MY_REQUEST_CODE);
+        startActivityForResult(signInIntent,RC_SIGN_IN);
 //        startActivityForResult(
 //                AuthUI.getInstance()
 //                        .createSignInIntentBuilder()
@@ -143,7 +143,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode,@Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-
+        if(requestCode == RC_SIGN_IN){
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task,requestCode,resultCode,data);
+        }
         //Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
 //        if(requestCode == MY_REQUEST_CODE){
 //            IdpResponse response = IdpResponse.fromResultIntent(data);
@@ -178,8 +181,7 @@ public class SplashActivity extends AppCompatActivity {
 //                        });
 //            }
             //The task returned from this call is always completed no need to attach a listener
-           Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task,requestCode,resultCode,data);
+
         }
 
 
@@ -191,6 +193,7 @@ public class SplashActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
                     @Override
                     public void onSuccess(InstanceIdResult instanceIdResult) {
+
                         tokens.child(firebaseUser.getUid())
                                 .setValue(instanceIdResult.getToken());
                     }
@@ -202,8 +205,8 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
     private void setupUI(){
-        startActivity(new Intent(SplashActivity.this,MapsActivity.class));
-        finish();
+        Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+        startActivity(intent);
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask, int requestCode, int resultCode,Intent data) {
@@ -211,13 +214,13 @@ public class SplashActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(SplashActivity.this, "Signin Successful!", Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(account);
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             Intent intent = new Intent(SplashActivity.this, MapsActivity.class);
             account = GoogleSignIn.getLastSignedInAccount(this);
+            setupUI();
             if (requestCode == MY_REQUEST_CODE) {
                 IdpResponse response = IdpResponse.fromResultIntent(data);
                 if (resultCode == RESULT_OK) {
-                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     user_information.orderByKey()
                             .equalTo(firebaseUser.getUid())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -235,7 +238,10 @@ public class SplashActivity extends AppCompatActivity {
                                     else {
                                         Common.loggedUser = dataSnapshot.child(firebaseUser.getUid()).getValue(User.class);
                                     }
-                                    Paper.book().write(Common.USER_UID_SAVE_KEY, Common.loggedUser.getUID());
+                                    if(Common.loggedUser.getUID()!=null){
+                                        Paper.book().write(Common.USER_UID_SAVE_KEY, Common.loggedUser.getUID());
+
+                                    }
                                     updateToken(firebaseUser);
                                     setupUI();
                                 }
@@ -330,6 +336,15 @@ public class SplashActivity extends AppCompatActivity {
             String personId = googleSignInAccount.getId();
             Uri personPhoto = googleSignInAccount.getPhotoUrl();
             Toast.makeText(SplashActivity.this, "\t"+personName + "\n" + personEmail,Toast.LENGTH_SHORT).show();
+        }
+        User user = new User();
+        if(firebaseUser != null){
+
+            user.setUserEmail(firebaseUser.getEmail());
+            user.setUID(firebaseUser.getUid());
+        }else{
+            user.setUserEmail(null);
+            user.setUID(null);
         }
     }
 
