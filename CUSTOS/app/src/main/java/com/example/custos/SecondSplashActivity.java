@@ -49,7 +49,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     SetHomeLocation setHomeLocation = new SetHomeLocation();
     //DBHandler db = new DBHandler();
     private DatabaseReference databaseReference;
-    private FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -84,7 +84,6 @@ public class SecondSplashActivity extends AppCompatActivity {
                 switch (view.getId()){
                     case R.id.signout_button:
                         signOut();
-                        break;
                 }
             }
         });
@@ -150,17 +149,38 @@ public class SecondSplashActivity extends AppCompatActivity {
         }
 
     }
+    private void updateUI(FirebaseUser firebaseUser){
+        //signOutButton.setVisibility(View.VISIBLE);
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        if(googleSignInAccount != null){
+            String personName = googleSignInAccount.getDisplayName();
+            String personGivenName = googleSignInAccount.getGivenName();
+            String personFamilyName = googleSignInAccount.getFamilyName();
+            String personEmail = googleSignInAccount.getEmail();
+            String personId = googleSignInAccount.getId();
+            Uri personPhoto = googleSignInAccount.getPhotoUrl();
+            Toast.makeText(SecondSplashActivity.this, "\t"+personName + "\n" + personEmail,Toast.LENGTH_SHORT).show();
+        }
+        User user = new User();
+        if(firebaseUser != null){
+
+            user.setUserEmail(firebaseUser.getEmail());
+            user.setUID(firebaseUser.getUid());
+        }else{
+            user.setUserEmail(null);
+            user.setUID(null);
+        }
+    }
 
     private void signOut(){
-        mAuth.signOut();
+        FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
                         Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
                         startActivity(intent);
-                        Toast.makeText(SecondSplashActivity.this,"Sign out successfully",Toast.LENGTH_LONG).show();
-                        finish();
                     }
                 });
 
