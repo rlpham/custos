@@ -147,6 +147,135 @@ public class EmergencyContactsActivity extends AppCompatActivity {
     }
 
 
+
+
+
+    public void editButton(final Button button, final String name) {
+        ViewGroup layout = (ViewGroup) findViewById(R.id.listContact);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(EmergencyContactsActivity.this);
+        builder.setTitle(name);
+        builder.setCancelable(false);
+        editing = true;
+
+        View viewInflated = LayoutInflater.from(EmergencyContactsActivity.this).inflate(R.layout.blank_page, (ViewGroup) layout, false);
+
+        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+        final EditText input2 = (EditText) viewInflated.findViewById(R.id.input2);
+        builder.setView(viewInflated);
+
+        String titleph = name.substring(name.indexOf('+')+1);
+
+
+        //     System.out.println(titlename + " testing " + titleph);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String str = input2.getText().toString().replaceAll("[^\\d]", "").trim();
+
+                System.out.println("TESTING PHONE: " + str);
+
+                if (input.getText().toString().trim().length() <= 3) {
+                    Toast.makeText(EmergencyContactsActivity.this, "Name is too short", Toast.LENGTH_SHORT).show();
+                    //  dialog.dismiss();
+                    editButton(button, name);
+
+
+                }
+
+
+
+                else if(str.length() != 10)
+                {
+
+                    Toast.makeText(EmergencyContactsActivity.this, "Enter only 10 digits", Toast.LENGTH_SHORT).show();
+                    //  dialog.dismiss();
+
+                    editButton(button, name);
+
+                }
+
+
+                else
+                {
+
+                    if (editing) {
+
+
+
+
+                        datta3.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+
+                                for (DataSnapshot Users : dataSnapshot2.getChildren()) {
+
+                                    int nameequal = Users.toString().indexOf("name=");
+                                    int comma = Users.toString().indexOf(", phone_number");
+                                    String contact = Users.toString().substring(nameequal + 5);
+//                                            contact = contact.substring(0,contact.indexOf(','));
+                                    System.out.println(Users.toString());
+                                    int keypos = Users.toString().indexOf("key =");
+                                    int keystop = Users.toString().indexOf(", value");
+                                    String key = Users.toString().substring(keypos + 5,keystop);
+                                    key = key.trim();
+                                    System.out.println("KEY : " + key);
+                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key); /////////////
+                                    String titlename = name.substring(0,name.indexOf(':'));
+                                    System.out.println("");
+                                    System.out.println(contact + ":" + titlename);
+                                    System.out.println("");
+                                    if(contact.contains(titlename))
+                                    {
+                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
+
+                                        datta.setValue(input.getText().toString());
+                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
+                                        datta.setValue(str);
+                                        break;
+                                    }
+
+
+                                }
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+
+                    }
+
+
+
+
+
+
+                    dialog.dismiss();
+                    m_Text = input.getText().toString() + ": +" + input2.getText().toString();
+                    button.setText(m_Text);
+                }
+
+
+
+
+
+            }
+        });
+
+        builder.show();
+        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+    }
+
+
+
+
     public void generateButton(String title) {
         ImageView imageView = new ImageView(EmergencyContactsActivity.this);
 
@@ -194,16 +323,26 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                             }
                         })
-                        .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                        .setNeutralButton("Call", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                              //  deleteButton(button);
+
+                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+                                ph = ph.trim();
+
+                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
                             }
                         })
-                        .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Text", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                            //    editButton(button, personName);
+                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+                                ph = ph.trim();
+
+
+                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                                sendIntent.setData(Uri.parse("sms:"+ph));
+                                startActivityForResult(sendIntent , 0);
 
                             }
                         });
@@ -217,50 +356,50 @@ public class EmergencyContactsActivity extends AppCompatActivity {
         });
 
 
-        button.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-
-                AlertDialog.Builder builder2 = new AlertDialog.Builder(EmergencyContactsActivity.this);
-                builder2.setCancelable(false);
-                builder2.setTitle((button.getText().toString()))
-                        .setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-
-                            }
-                        })
-                        .setNeutralButton("Call", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
-                                ph = ph.trim();
-
-                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
-                            }
-                        })
-                        .setNegativeButton("Text", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
-                                ph = ph.trim();
-
-
-                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                                sendIntent.setData(Uri.parse("sms:"+ph));
-                                startActivityForResult(sendIntent , 0);
-
-                            }
-
-                        });
-
-                builder2.create();
-                builder2.show();
-
-
-                return false;
-            }
-        });
+//        button.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//
+//
+//                AlertDialog.Builder builder2 = new AlertDialog.Builder(EmergencyContactsActivity.this);
+//                builder2.setCancelable(false);
+//                builder2.setTitle((button.getText().toString()))
+//                        .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//
+//
+//                            }
+//                        })
+//                        .setNeutralButton("Call", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//
+//                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+//                                ph = ph.trim();
+//
+//                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
+//                            }
+//                        })
+//                        .setNegativeButton("Text", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int id) {
+//                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
+//                                ph = ph.trim();
+//
+//
+//                                Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+//                                sendIntent.setData(Uri.parse("sms:"+ph));
+//                                startActivityForResult(sendIntent , 0);
+//
+//                            }
+//
+//                        });
+//
+//                builder2.create();
+//                builder2.show();
+//
+//
+//                return false;
+//            }
+//        });
 
 
     }
