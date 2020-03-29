@@ -86,13 +86,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".services.BackgroundLocationService"
-            android:permission="BIND_JOB_SERVICE"></service>
-        <receiver android:name=".services.BootCompleteReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>
