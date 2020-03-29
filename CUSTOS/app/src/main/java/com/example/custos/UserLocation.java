@@ -4,7 +4,6 @@ public class UserLocation {
     private String userAddress;
     private double latitude;
     private double longitude;
-
     public UserLocation(){
 
 
@@ -23,6 +22,10 @@ public class UserLocation {
     }
     public String getUID(){
         return userAddress;
+    }
+    public void setUID(String uid){
+        userAddress=uid;
+
     }
 
 }

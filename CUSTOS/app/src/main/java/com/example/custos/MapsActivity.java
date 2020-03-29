@@ -49,6 +49,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.io.PushbackInputStream;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -259,6 +260,8 @@ private LatLng eventlocation;
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+    private String userID;
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
 
     @Override
@@ -311,6 +314,7 @@ private LatLng eventlocation;
 
             }
         });
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()) {
             googleMap.setMyLocationEnabled(true);
 
@@ -323,9 +327,32 @@ private LatLng eventlocation;
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
                                     .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE )));
-                            //  mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-                         //   moveToCurrentLocation(sydney);
-                            // Got last known location. In some rare situations this can be null.
+                            user_information.orderByKey()
+                                    .equalTo(firebaseUser.getUid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue() == null) {
+                                                //uid not exist
+                                                if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+                                                    Common.currentUser = new UserLocation(firebaseUser.getUid(),location.getLatitude() ,location.getLongitude() );
+                                                    user_information.child(Common.currentUser.getUID())
+                                                            .setValue(Common.currentUser);
+                                                    userID=firebaseUser.getUid();
+                                                }
+                                            }
+                                            //if user available
+                                            else {
+                                                userID=firebaseUser.getUid();
+                                                Common.currentUser = dataSnapshot.child(firebaseUser.getUid()).getValue(UserLocation.class);
+                                            }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
 
                             if (location != null) {
 
@@ -339,6 +366,7 @@ private LatLng eventlocation;
                 }
             });
         }
+
         setlocationeveryfeesec(googleMap);
         // Add a marker in Sydney and move the camera
 
@@ -348,9 +376,6 @@ private LatLng eventlocation;
     }
 
     private void getcurrentlocation(GoogleMap googleMap){
-         final Location temploc;
-
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()) {
 
             mMap = googleMap;
@@ -358,37 +383,28 @@ private LatLng eventlocation;
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(final Location location) {
-
-
-                            user_information.orderByKey()
-                                    .equalTo(firebaseUser.getUid())
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.getValue() == null) {
-                                                //uid not exist
-                                                if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
-
-                                                   Common.currentUser = new UserLocation(firebaseUser.getUid(),location.getLatitude() ,location.getLongitude() );
-                                                    user_information.child(Common.currentUser.getUID())
-                                                            .setValue(Common.currentUser);
-                                                }
-                                            }
-                                            //if user available
-                                            else {
-                                                Common.currentUser = new UserLocation(firebaseUser.getUid(),location.getLatitude() ,location.getLongitude() );
-                                                user_information.child(Common.currentUser.getUID())
-                                                        .setValue(Common.currentUser);
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-
-
+                            FirebaseDatabase.getInstance().getReference("userLocation").child(userID).child("lat")
+                                    .setValue(location.getLatitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            FirebaseDatabase.getInstance().getReference("userLocation").child(userID).child("lon")
+                                    .setValue(location.getLongitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
 
 
@@ -410,7 +426,7 @@ private LatLng eventlocation;
                getcurrentlocation(googleMap);
                 handler.postDelayed(this, 10000);
             }
-        }, 5000);
+        }, 10000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
