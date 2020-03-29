@@ -58,13 +58,13 @@ public class EmergencyContactsActivity extends AppCompatActivity {
     public SearchView searchView;
     final String ALPHABET = "123456789abcdefghjkmnpqrstuvwxyz";
 
-
     boolean deleting = false;
     boolean editing = false;
     boolean duplicate = false;
     final String ec = "emergency_contacts";
     int checkEC = 0;
 
+    Button exit;
 
 
 
@@ -90,8 +90,16 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
         ViewGroup layout = (ViewGroup) findViewById(R.id.listContact);
 
-
-
+        exit = (Button) findViewById(R.id.button33);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MapsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+              EmergencyContactsActivity.this.finish();
+            }
+        });
 
 
         datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11");
@@ -131,13 +139,14 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                 System.out.println(info);
                 System.out.println(number);
-                generateButton(info  + ": +" + number);
-
+                if(count == 0) {
+                    generateButton(info + ": +" + number);
+                }
 
             }
 
 
-                System.out.println("TEST" + "\t\t\t" + count);
+
             }
 
             @Override
@@ -148,7 +157,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
         });
         }
-
+        System.out.println("TEST" + "\t\t\t" + count);
         editing = false;
 
 
@@ -160,6 +169,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
 
     public void editButton(final Button button, final String name) {
+        count++;
         ViewGroup layout = (ViewGroup) findViewById(R.id.listContact);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(EmergencyContactsActivity.this);
