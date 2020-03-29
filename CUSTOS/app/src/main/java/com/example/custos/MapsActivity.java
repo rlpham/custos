@@ -49,10 +49,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.io.PushbackInputStream;
 import java.util.List;
-
-import io.paperdb.Paper;
 
 //import com.google.android.libraries.places.api.Places;
 //import com.google.android.libraries.places.api.model.TypeFilter;
@@ -523,9 +520,6 @@ private LatLng eventlocation;
         if(requestCode==2)
         {
             //TODO: Add marker at current location
-            Location dangerzonelocation = new Location("High Danger");
-            dangerzonelocation.setLatitude(40.7934);
-            dangerzonelocation.setLongitude(77.86);
 
             LatLng stateCollege = new LatLng(40.7934,-77.86);
             MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
@@ -541,9 +535,7 @@ private LatLng eventlocation;
 
         //Medium Danger Value
         if (requestCode == 3){
-            Location dangerzonelocation = new Location("Medium Danger");
-            dangerzonelocation.setLatitude(40.7934);
-            dangerzonelocation.setLongitude(77.86);
+            //TODO: Add marker at current location
 
             LatLng desmoines = new LatLng(41.619,-93.598);
             MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
@@ -556,9 +548,7 @@ private LatLng eventlocation;
 
         //Low Danger Value
         if (requestCode == 4){
-            Location dangerzonelocation = new Location("Low Danger");
-            dangerzonelocation.setLatitude(40.7934);
-            dangerzonelocation.setLongitude(77.86);
+            //TODO: Add marker at current location
 
             LatLng hershey = new LatLng(40.2859,-76.658);
             MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
