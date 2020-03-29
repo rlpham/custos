@@ -269,7 +269,6 @@ private LatLng eventlocation;
 
 
 
-
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -417,9 +416,9 @@ private LatLng eventlocation;
             });
         }
     }
-
+    final Handler handler = new Handler();
     private void setlocationeveryfeesec(final GoogleMap googleMap){
-        final Handler handler = new Handler();
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
