@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.custos.utils.Common;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +40,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +50,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.List;
+
+import io.paperdb.Paper;
 
 //import com.google.android.libraries.places.api.Places;
 //import com.google.android.libraries.places.api.model.TypeFilter;
@@ -254,6 +259,8 @@ private LatLng eventlocation;
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -341,7 +348,9 @@ private LatLng eventlocation;
     }
 
     private void getcurrentlocation(GoogleMap googleMap){
-         Location temploc;
+         final Location temploc;
+
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()) {
 
             mMap = googleMap;
@@ -349,28 +358,37 @@ private LatLng eventlocation;
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(final Location location) {
-                            FirebaseDatabase.getInstance().getReference("userLocation").child("latitude")
-                                    .setValue(location.getLatitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            FirebaseDatabase.getInstance().getReference("userLocation").child("longtitude")
-                                    .setValue(location.getLongitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+
+
+                            user_information.orderByKey()
+                                    .equalTo(firebaseUser.getUid())
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.getValue() == null) {
+                                                //uid not exist
+                                                if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+                                                   Common.currentUser = new UserLocation(firebaseUser.getUid(),location.getLatitude() ,location.getLongitude() );
+                                                    user_information.child(Common.currentUser.getUID())
+                                                            .setValue(Common.currentUser);
+                                                }
+                                            }
+                                            //if user available
+                                            else {
+                                                Common.currentUser = new UserLocation(firebaseUser.getUid(),location.getLatitude() ,location.getLongitude() );
+                                                user_information.child(Common.currentUser.getUID())
+                                                        .setValue(Common.currentUser);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
                         }
 
 
