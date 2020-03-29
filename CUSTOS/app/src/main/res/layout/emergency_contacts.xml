@@ -1,4 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#1D1D1D">
+
+    <TextView
+        android:id="@+id/contacttext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="0dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center"
+        android:text="@string/emergency_contacts"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:textSize="46sp" />
+
+    <ScrollView
+
+        android:id="@+id/listContact"
+        android:layout_width="match_parent"
+        android:layout_height="504dp"
+        android:layout_below="@+id/button33"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="50dp">
+
+        <LinearLayout
+            android:id="@+id/contactscroller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/button33"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contacttext"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        android:gravity="center"
+        android:text="@string/addContact" />
+    <!--
+
+        <AutoCompleteTextView
+            android:id="@+id/input"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/space"
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName" />
+
+
+        <AutoCompleteTextView
+            android:id="@+id/input2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible"
+            android:layout_below="@+id/input"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="-5dp"
+            android:layout_marginTop="0dp"
+            android:hint="Number"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal" />-->
+
+
+</RelativeLayout>
+<!--
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#1D1D1D">
@@ -300,4 +387,4 @@
 
 
 
-</ScrollView>
+</ScrollView> -->

@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.custos.utils.Common;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +30,8 @@ import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,14 +50,14 @@ import java.util.Locale;
 
 public class SetHomeLocationActivity extends AppCompatActivity {
 
-    private TextView address;
-    private Geocoder geocoder;
-    private Button saveButton;
-    private Button backButton;
-    private List<Address> addresses = new ArrayList<>();
-    private User user = new User();
-    private SetHomeLocation setHomeLocation = new SetHomeLocation();
-    private DatabaseReference databaseReference;
+    TextView address;
+    Geocoder geocoder;
+    Button saveButton;
+    Button backButton;
+    List<Address> addresses = new ArrayList<>();
+    User user = new User();
+    SetHomeLocation setHomeLocation = new SetHomeLocation();
+    DatabaseReference databaseReference;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -77,8 +80,9 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 LatLng myCoordinates = new LatLng(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
                 user.setUserAddress(getFullAddress(myCoordinates));
+                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID").child("userAddress")
+                FirebaseDatabase.getInstance().getReference("User Information").child(user.getUID()).child("userAddress")
                         .setValue(user.getUserAddress()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -94,15 +98,17 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             }
         });
         geocoder = new Geocoder(this,Locale.getDefault());
-        databaseReference = FirebaseDatabase.getInstance().getReference("User Account by Email");
+        databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("UID").child("userAddress").exists()){
-                    String fullAddress = dataSnapshot.child("UID").child("userAddress").getValue().toString();
+                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                user.setUID(firebaseUser.getUid());
+                if(dataSnapshot.child(user.getUID()).child("userAddress").exists()){
+                    String fullAddress = dataSnapshot.child(user.getUID()).child("userAddress").getValue().toString();
                     address.setText(fullAddress);
                 }else {
-                    address.setText(" ");
+                    address.setText("User have not set their home location");
                 }
 
 

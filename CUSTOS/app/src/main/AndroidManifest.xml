@@ -59,6 +59,11 @@
         <activity
             android:name=".DangerZoneActivity"
             android:exported="true" />
+        <activity
+            android:name=".ConfirmSafetyActivity"
+            android:exported="true" />
+        <activity android:name=".FindFriendsActivity"
+            android:exported="true"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

@@ -66,4 +66,6 @@
     <string name="event_list_label">Events</string>
     <string name="numberContact">Number</string>
     <string name="invite_guests_done_button">Done</string>
+    <string name="emergency_contacts">Emergency Contacts</string>
+    <string name="findFriend">Find Friends</string>
 </resources>
