@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 //import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
+import com.example.custos.utils.Common;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -54,7 +55,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_splash_activity);
-        databaseReference = FirebaseDatabase.getInstance().getReference("User Information");
+        databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -109,8 +110,8 @@ public class SecondSplashActivity extends AppCompatActivity {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     User user = new User();
                     user.setUID(firebaseUser.getUid());
-                    if(dataSnapshot.child(firebaseUser.getUid()).child("userAddress").exists()){
-                        String fullAddress = dataSnapshot.child(firebaseUser.getUid()).child("userAddress").getValue().toString();
+                    if(dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_ADDRESS).exists()){
+                        String fullAddress = dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_ADDRESS).getValue().toString();
                         homeLocation.setText(fullAddress);
                     }else {
                         homeLocation.setText("Home address is not set");
