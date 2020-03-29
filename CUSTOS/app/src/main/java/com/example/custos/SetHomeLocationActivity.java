@@ -82,8 +82,11 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 user.setUserAddress(getFullAddress(myCoordinates));
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                FirebaseDatabase.getInstance().getReference("User Information").child(user.getUID()).child("userAddress")
-                        .setValue(user.getUserAddress()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .setValue(user.getUserAddress())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
@@ -93,6 +96,37 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.USER_HOME_LAT)
+                        .setValue(setHomeLocation.getLatitude())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.USER_HOME_LNG)
+                        .setValue(setHomeLocation.getLongtitude())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                 Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
                 startActivity(intent);
             }
@@ -104,8 +138,8 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 user.setUID(firebaseUser.getUid());
-                if(dataSnapshot.child(user.getUID()).child("userAddress").exists()){
-                    String fullAddress = dataSnapshot.child(user.getUID()).child("userAddress").getValue().toString();
+                if(dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS).exists()){
+                    String fullAddress = dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS).getValue().toString();
                     address.setText(fullAddress);
                 }else {
                     address.setText("User have not set their home location");
