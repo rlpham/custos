@@ -532,8 +532,7 @@ private LatLng eventlocation;
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(stateCollege);
 
-            //TODO: Modify the marker imagery and implement current location
-            // https://stackoverflow.com/questions/17549372/how-to-get-click-event-of-the-marker-text
+
             System.out.println("This MAP ish workin");
         }
 
