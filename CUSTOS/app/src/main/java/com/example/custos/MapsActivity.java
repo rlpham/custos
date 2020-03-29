@@ -520,7 +520,6 @@ private LatLng eventlocation;
         // check if the request code is same as what is passed  here it is 2
 
         //High Danger Marker Code
-        //TODO: Fix default value
         if(requestCode==2)
         {
             //TODO: Add marker at current location
