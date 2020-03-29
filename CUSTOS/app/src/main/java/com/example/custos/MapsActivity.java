@@ -258,7 +258,7 @@ private LatLng eventlocation;
      * installed Google Play services and returned to the app.
      */
 
-    private String userID;
+    private String userID="nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
 
     @Override
@@ -310,6 +310,7 @@ private LatLng eventlocation;
 
             }
         });
+        try {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()&&firebaseUser.getUid()!=null) {
             googleMap.setMyLocationEnabled(true);
@@ -361,6 +362,9 @@ private LatLng eventlocation;
                     e.printStackTrace();
                 }
             });
+        }}
+        catch (Exception e){
+
         }
 
         setlocationeveryfeesec(googleMap);
@@ -372,7 +376,7 @@ private LatLng eventlocation;
     }
 
     private void getcurrentlocation(GoogleMap googleMap){
-        if (checkPermissions()) {
+        if (checkPermissions()&&!userID.equals("nope")) {
 
             mMap = googleMap;
             fusedLocationClient.getLastLocation()
