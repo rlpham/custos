@@ -547,6 +547,9 @@ private LatLng eventlocation;
      */
     @Override
     public boolean onMarkerClick(Marker marker) {
+        /**
+         * Dale's danger zone markers
+         */
         if((marker.getTitle().equals("High")) || (marker.getTitle().equals("Medium")) || (marker.getTitle().equals("Low")) ) {
             String criticalLevel = marker.getTitle();
             String description = marker.getSnippet();
