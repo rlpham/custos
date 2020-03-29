@@ -93,10 +93,16 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
         datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11");
 
+        if(editing == false)
+        {
+
 
         datta3.addValueEventListener(new ValueEventListener() {
         String info = "";
         String number = "";
+
+
+
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 System.out.println(dataSnapshot.toString());
@@ -140,6 +146,8 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
 
         });
+        }
+        editing = false;
 
 
 
@@ -228,10 +236,10 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                                     System.out.println("");
                                     if(contact.contains(titlename))
                                     {
-                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child(ec).child(key).child("name");
+                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec).child(key).child("name");
 
                                         datta3.setValue(input.getText().toString());
-                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child(ec).child(key).child("phone_number");
+                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec).child(key).child("phone_number");
                                         datta3.setValue(str);
                                         break;
                                     }
@@ -326,8 +334,8 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                         .setNeutralButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                editButton(button,);
-                                
+                                editButton(button,button.getText().toString());
+
 
 //
 //                                String ph = button.getText().toString().replaceAll("[^\\d]", "");
