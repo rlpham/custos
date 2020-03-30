@@ -258,7 +258,7 @@ private LatLng eventlocation;
      * installed Google Play services and returned to the app.
      */
 
-    private void setHomeLoc(){
+    public void setHomeLoc(){
 
         db3.addValueEventListener(new ValueEventListener() {
             @Override
