@@ -1,5 +1,7 @@
 package com.example.custos;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +16,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.checkerframework.checker.linear.qual.Linear;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +33,12 @@ import org.json.JSONObject;
 public class MainEventListActivity extends Fragment {
 
     DBHandler dbHandler;
+    DatabaseReference db;
+    FirebaseUser firebaseUser;
+    JSONArray data2;
+    RecyclerView rv;
+    View view;
+    LinearLayoutManager llm;
 
     //EMPTY CONSTRUCTOR
     public MainEventListActivity() {
@@ -79,9 +97,9 @@ public class MainEventListActivity extends Fragment {
             // - replace the contents of the view with that element
             try {
                 holder.eventTitle.setText(data.getJSONObject(position).getString("name"));
-                holder.eventLocation.setText("Philadelphia, PA");
-                holder.eventDate.setText("06/18/2020");
-                holder.eventTime.setText("6:30PM");
+                holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
+                holder.eventDate.setText(data.getJSONObject(position).getString("date_time"));
+                holder.eventTime.setText(data.getJSONObject(position).getString("date_time"));
             } catch(JSONException e) {
                 System.out.println(e);
             }
@@ -102,41 +120,75 @@ public class MainEventListActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view;
-        RecyclerView rv;
-        LinearLayoutManager llm;
+
         view = inflater.inflate(R.layout.main_event, container, false);
 
         view.findViewById(R.id.add_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CreateEventActivity.class);
-                startActivityForResult(intent, 18);
+                Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
 
+        rv = view.findViewById(R.id.recycler);
+        llm = new LinearLayoutManager(this.getContext());
+
         try {
-            JSONArray data = dbHandler.getEventsList();
-            rv = view.findViewById(R.id.recycler);
-            llm = new LinearLayoutManager(this.getContext());
-            RecyclerView.Adapter adapter = new EventListAdapter(data);
-            rv.setHasFixedSize(true);
-            rv.setLayoutManager(llm);
-            rv.setAdapter(adapter);
+            listify();
         } catch(JSONException e) {
-            System.out.print(e);
-            System.out.print(e);
+            System.out.println(e);
         }
-            return view;
+
+        return view;
     }
 
-    public void generateEvent(JSONObject event, LinearLayout layout) throws JSONException {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1) {
+
+            System.out.println("DONE");
+        }
+
+    }
+
+    public void listify() throws JSONException {
+
+        JSONArray data = dbHandler.getEventsList();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                data2 = new JSONArray();
+                for(DataSnapshot element : dataSnapshot.getChildren()) {
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("name", element.getKey());
+                        obj.put("location", element.child("location").child("latitude").getValue() + ", " + element.child("location").child("longitude").getValue());
+                        obj.put("date_time", element.child("date_time").getValue());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    data2.put(obj);
+                }
+                rv = view.findViewById(R.id.recycler);
+                llm = new LinearLayoutManager(getContext());
+                RecyclerView.Adapter adapter = new EventListAdapter(data2);
+                rv.setHasFixedSize(true);
+                rv.setLayoutManager(llm);
+                rv.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
 }
-
-//1. Extend Fragment
-//2. create newInstance method returning a fragment
-//3. create and override onCreateView method.
-//4. populate contact list using mock database

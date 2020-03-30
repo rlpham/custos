@@ -3,18 +3,18 @@ package com.example.custos;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.custos.utils.Common;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
+import com.example.custos.utils.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,65 +30,51 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
-
-import java.util.Arrays;
-import java.util.List;
-
-import io.paperdb.Paper;
 
 public class SplashActivity extends AppCompatActivity {
-    SignInButton signInButton;
+    Button signInButton;
     Button signOutButton;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN =0;
-    private FirebaseAuth mAuth;
-    private User userApp = new User();
+    FirebaseAuth mAuth;
+    User userApp = new User();
+    ProgressBar progressBar;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        if(firebaseUser != null){
+            Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+            startActivity(intent);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-        signInButton = findViewById(R.id.sign_in_button);
+        progressBar = findViewById(R.id.progress_circular);
+        progressBar.setVisibility(View.INVISIBLE);
+        signInButton = findViewById(R.id.google_login);
         mAuth = FirebaseAuth.getInstance();
         signOutButton = findViewById(R.id.signout_button);
+        createRequest();
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.sign_in_button:
-                        signIn();
-                        break;
-                }
+                signIn();
             }
         });
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-                signOutButton.setVisibility(View.INVISIBLE);
-            }
-        });
-
         //.check() not working
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+
         if(mAuth.getCurrentUser()!= null){
+            FirebaseUser firebaseUser =mAuth.getCurrentUser();
+            updateUI(firebaseUser);
             userApp.setUID(mAuth.getCurrentUser().getUid());
         }
         FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID")
@@ -103,9 +89,27 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createRequest() {
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+    }
+
+
+    final Handler handler = new Handler();
     private void signIn(){
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent,RC_SIGN_IN);
+        progressBar.setVisibility(View.VISIBLE);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent,RC_SIGN_IN);
+            }
+        },2000);
+
 //        startActivityForResult(
 //                AuthUI.getInstance()
 //                .createSignInIntentBuilder().setAvailableProviders(provider)
@@ -122,7 +126,13 @@ public class SplashActivity extends AppCompatActivity {
 
             //The task returned from this call is always completed no need to attach a listener
            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+           try {
+               GoogleSignInAccount account = task.getResult(ApiException.class);
+               fireBaseGoogleAuth(account);
+           }catch (ApiException e){
+                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
+           }
+            //handleSignInResult(task);
         }
 
     }
@@ -155,7 +165,15 @@ public class SplashActivity extends AppCompatActivity {
             Toast.makeText(SplashActivity.this,"Signin Successful!",Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(account);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+                    startActivity(intent);
+                }
+            },4000);
+
             account = GoogleSignIn.getLastSignedInAccount(this);
             if(account != null){
                 String personName = account.getDisplayName();
@@ -200,7 +218,7 @@ public class SplashActivity extends AppCompatActivity {
                 });
 
             }
-            startActivity(intent);
+
         }catch (Exception e){
             //the ApiException status code indicates the detailed failure reason
             //Please refer to the googlesigninstatuscodes class reference for more info
@@ -217,10 +235,14 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    progressBar.setVisibility(View.INVISIBLE);
                     //Toast.makeText(SplashActivity.this,"Successful",Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
+                    Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                    startActivity(intent);
                     updateUI(user);
                 }else{
+                    progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(SplashActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
                     updateUI(null);
                 }
@@ -229,16 +251,12 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser firebaseUser){
-        signOutButton.setVisibility(View.VISIBLE);
-        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if(googleSignInAccount != null){
-            String personName = googleSignInAccount.getDisplayName();
-            String personGivenName = googleSignInAccount.getGivenName();
-            String personFamilyName = googleSignInAccount.getFamilyName();
-            String personEmail = googleSignInAccount.getEmail();
-            String personId = googleSignInAccount.getId();
-            Uri personPhoto = googleSignInAccount.getPhotoUrl();
-            Toast.makeText(SplashActivity.this, "\t"+personName + "\n" + personEmail,Toast.LENGTH_SHORT).show();
+        if(firebaseUser != null){
+            userApp.setUserEmail(firebaseUser.getEmail());
+            userApp.setUID(firebaseUser.getUid());
+        }else{
+            userApp.setUserEmail(null);
+            userApp.setUID(null);
         }
     }
 

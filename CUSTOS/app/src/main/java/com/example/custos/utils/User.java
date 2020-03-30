@@ -1,4 +1,4 @@
-package com.example.custos;
+package com.example.custos.utils;
 
 import java.util.HashMap;
 

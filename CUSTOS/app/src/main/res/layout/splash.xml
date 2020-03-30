@@ -6,36 +6,50 @@
     android:background="@drawable/background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:layout_width="145dp"
-        android:layout_height="64dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="133dp"
-        android:layout_marginEnd="132dp"
-        android:layout_marginBottom="114dp"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/signout_button"
-        android:layout_width="136dp"
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="489dp"
-        android:layout_marginEnd="130dp"
-        android:background="@drawable/sv_round"
-        android:text="Signout"
-        android:visibility="invisible"
-        android:textSize="17sp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="349dp"
+        android:layout_marginEnd="179dp"
+        android:layout_marginBottom="506dp" />
+
+    <Button
+        android:id="@+id/google_login"
+        android:layout_width="244dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="587dp"
+        android:layout_marginEnd="79dp"
+        android:width="100dp"
+        android:background="@drawable/sv_round_login"
+        android:drawableStart="@drawable/ic_google_logo"
+        android:drawableLeft="@drawable/ic_google_logo"
+        android:text="@string/login_with_google"
+        android:layout_centerHorizontal="true"/>
+
+    <!--    <LinearLayout-->
+<!--        android:layout_width="145dp"-->
+<!--        android:layout_height="64dp"-->
+<!--        android:layout_alignParentStart="true"-->
+<!--        android:layout_alignParentEnd="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginStart="133dp"-->
+<!--        android:layout_marginEnd="132dp"-->
+<!--        android:layout_marginBottom="114dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:visibility="visible">-->
+
+<!--        -->
+
+<!--&lt;!&ndash;        <com.google.android.gms.common.SignInButton&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/sign_in_button"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>&ndash;&gt;-->
+<!--    </LinearLayout>-->
 
 </RelativeLayout>
