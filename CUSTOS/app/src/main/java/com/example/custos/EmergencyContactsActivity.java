@@ -218,7 +218,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                 else
                 {
-
+                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
                     if (editing) {
 
 
@@ -226,14 +226,15 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                         datta3.addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String info = "";
+                            String number = "";
+                                for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
-                                for (DataSnapshot Users : dataSnapshot2.getChildren()) {
-
-                                    int nameequal = Users.toString().indexOf("name=");
+                            /*        int nameequal = Users.toString().indexOf("name=");
                                     int comma = Users.toString().indexOf(", phone_number");
                                     String contact = Users.toString().substring(nameequal + 5);
-//                                            contact = contact.substring(0,contact.indexOf(','));
+                                            contact = contact.substring(0,contact.indexOf(','));
                                     System.out.println(Users.toString());
                                     int keypos = Users.toString().indexOf("key =");
                                     int keystop = Users.toString().indexOf(", value");
@@ -248,14 +249,40 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                                     System.out.println("");
                                     if(contact.contains(titlename))
                                     {
-                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec).child(key).child("name");
+                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec).child(key);
 
-                                        datta3.setValue(input.getText().toString());
-                                        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec).child(key).child("phone_number");
-                                        datta3.setValue(str);
+                                        datta3.child("name").setValue(input.getText().toString());
+                                        datta3.child("phone_number").setValue(str);
                                         break;
-                                    }
+                                    }*/
 
+                                    int nameequal = dataSnapshot.toString().indexOf("name=");
+                                    int comma = dataSnapshot.toString().indexOf(", phone_number");
+
+
+                                    info = dataSnapshot.toString().substring(nameequal + 5, comma);
+
+
+
+                                    int phonenumberequala = dataSnapshot.toString().indexOf("phone_number=");
+                                    int end = dataSnapshot.toString().indexOf("} }");
+
+                                    number = dataSnapshot.toString().substring(phonenumberequala + 13, end);
+
+                                      System.out.println(dataSnapshot.toString());
+                                    System.out.println(info);
+                                    System.out.println(number);
+
+                                      System.out.println(dataSnapshot.toString());
+                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+                                    datta3.child("name").setValue(input.getText().toString());
+                                    datta3.child("phone_number").setValue(str);
+
+                                    /*
+                                       datta = FirebaseDatabase.getInstance().getReference("Users").child("userTest").child(ec);
+                                        datta.child("name").setValue(name.getText().toString());
+                                        datta.child("phone_number").setValue(phone.getText().toString());
+                                    */
 
                                 }
 
