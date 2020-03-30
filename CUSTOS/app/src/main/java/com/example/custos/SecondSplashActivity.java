@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class SecondSplashActivity extends AppCompatActivity {
     //DBHandler db = new DBHandler();
     private DatabaseReference databaseReference;
     FirebaseAuth mAuth;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -60,7 +62,8 @@ public class SecondSplashActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
-
+        progressBar = findViewById(R.id.progress_circular2);
+        progressBar.setVisibility(View.INVISIBLE);
         imageView =     findViewById(R.id.imageView);
         name =          findViewById(R.id.textName);
         email =         findViewById(R.id.textEmail);
@@ -82,10 +85,7 @@ public class SecondSplashActivity extends AppCompatActivity {
         signOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                switch (view.getId()){
-                    case R.id.signout_button:
-                        signOut();
-                }
+                signOut();
             }
         });
 
@@ -179,6 +179,8 @@ public class SecondSplashActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        signOut.setVisibility(View.INVISIBLE);
                         Toast.makeText(SecondSplashActivity.this,"Logging out...", Toast.LENGTH_LONG).show();
                         handler.postDelayed(new Runnable() {
                             @Override
