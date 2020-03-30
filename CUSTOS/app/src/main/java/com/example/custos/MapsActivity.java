@@ -104,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
         db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
-        db3 = FirebaseDatabase.getInstance().getReference("Home Location latlng");
+        db3 = FirebaseDatabase.getInstance().getReference("User Information");
         db4 = FirebaseDatabase.getInstance().getReference("userLocation");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -240,7 +240,7 @@ private LatLng eventlocation;
         if(mess.equals("Home Location")){
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            moveToCurrentLocation(eventlocation);
+          //  moveToCurrentLocation(eventlocation);
 
         }else
         if(eventlocation!=null) {
@@ -258,6 +258,27 @@ private LatLng eventlocation;
      * installed Google Play services and returned to the app.
      */
 
+    private void setHomeLoc(){
+
+        db3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(userID).child("User Address").exists()) {
+                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Longitude").getValue().toString());
+                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Latitude").getValue().toString());
+                    LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
+                    setEventsLocation(eventloc, "Home Location");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     private String userID="nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
     DatabaseReference user_information2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
@@ -266,7 +287,7 @@ private LatLng eventlocation;
     public void onMapReady(GoogleMap googleMap) {
 
 
-
+setHomeLoc();
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -297,20 +318,7 @@ private LatLng eventlocation;
 
             }
         });
-        db3.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                double  eventlonitude=Double.parseDouble(dataSnapshot.child("longtitude").getValue().toString());
-                double eventlatitude=Double.parseDouble(dataSnapshot.child("latitude").getValue().toString());
-                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
-                setEventsLocation(eventloc,"Home Location");
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         try {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()&&firebaseUser.getUid()!=null) {
@@ -450,6 +458,13 @@ private LatLng eventlocation;
                 handler.postDelayed(this, 10000);
             }
         }, 10000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               setHomeLoc();
+            }
+        }, 2000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
