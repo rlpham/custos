@@ -1,4 +1,4 @@
-package com.example.custos;
+package com.example.custos.utils;
 
 public class Event {
 
@@ -9,7 +9,7 @@ public class Event {
     private String longitude;
     private String date_time;
 
-    Event(String UID, String name, String description, String date_time) {
+    public Event(String UID, String name, String description, String date_time) {
         this.UID = UID;
         this.name = name;
         this.description = description;

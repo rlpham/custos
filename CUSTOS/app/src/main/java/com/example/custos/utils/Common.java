@@ -1,9 +1,5 @@
 package com.example.custos.utils;
 
-import com.example.custos.Event;
-import com.example.custos.User;
-import com.example.custos.UserLocation;
-
 public class Common {
     public static final String USER_INFORMATION = "User Information";
     public static final String USER_ADDRESS = "User Address";
