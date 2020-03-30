@@ -265,9 +265,15 @@ private LatLng eventlocation;
         db3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(userID).child("User Address").exists()) {
-                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Longitude").getValue().toString());
-                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Latitude").getValue().toString());
+                if(dataSnapshot.child(userID).child("User Address").child(Common.HOME_LOC).exists()) {
+                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
+                            .child(Common.USER_ADDRESS)
+                            .child("User Home Longitude")
+                            .getValue().toString());
+                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID)
+                            .child(Common.USER_ADDRESS)
+                            .child("User Home Latitude")
+                            .getValue().toString());
                     LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
                     setEventsLocation(eventloc, "Home Location");
                 }

@@ -76,6 +76,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                         .child(user.getUID())
                         .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
                         .setValue(user.getUserAddress())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -89,6 +90,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 });
                 FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                         .child(user.getUID())
+                        .child(Common.USER_ADDRESS)
                         .child(Common.USER_HOME_LAT)
                         .setValue(setHomeLocation.getLatitude())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -103,6 +105,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                         });
                 FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                         .child(user.getUID())
+                        .child(Common.USER_ADDRESS)
                         .child(Common.USER_HOME_LNG)
                         .setValue(setHomeLocation.getLongtitude())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -128,8 +131,13 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 user.setUID(firebaseUser.getUid());
-                if(dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS).exists()){
-                    String fullAddress = dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS).getValue().toString();
+                if(dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .exists()){
+                    String fullAddress = dataSnapshot.child(user.getUID())
+                            .child(Common.USER_ADDRESS)
+                            .child(Common.HOME_LOC)
+                            .getValue().toString();
                     address.setText(fullAddress);
                 }else {
                     address.setText("User have not set their home location");
