@@ -75,13 +75,6 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         });
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-                signOutButton.setVisibility(View.INVISIBLE);
-            }
-        });
 
         //.check() not working
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
