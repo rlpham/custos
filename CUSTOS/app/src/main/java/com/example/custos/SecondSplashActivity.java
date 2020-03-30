@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,11 +49,13 @@ public class SecondSplashActivity extends AppCompatActivity {
     List<Address> addresses=new ArrayList<>();
     Geocoder geocoder;
     SetHomeLocation setHomeLocation = new SetHomeLocation();
+    final Handler handler = new Handler();
     //DBHandler db = new DBHandler();
     private DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState){
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_splash_activity);
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
@@ -179,9 +182,15 @@ public class SecondSplashActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                        Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
-                        startActivity(intent);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(null);
+                                Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
+                                startActivity(intent);
+                            }
+                        },5000);
+
                     }
                 });
 
