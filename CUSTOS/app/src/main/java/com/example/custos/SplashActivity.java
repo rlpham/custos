@@ -36,7 +36,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 public class SplashActivity extends AppCompatActivity {
-    SignInButton signInButton;
+    Button signInButton;
     Button signOutButton;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN =0;
@@ -60,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.splash);
         progressBar = findViewById(R.id.progress_circular);
         progressBar.setVisibility(View.INVISIBLE);
-        signInButton = findViewById(R.id.sign_in_button);
+        signInButton = findViewById(R.id.google_login);
         mAuth = FirebaseAuth.getInstance();
         signOutButton = findViewById(R.id.signout_button);
         createRequest();
