@@ -12,11 +12,20 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class InviteGuestsActivity extends AppCompatActivity {
 
+    ListView listView;
+
+    String[] names = {"Ryan Pham", "Emile Heskey", "Saint Laurent", "Christian Dior",
+            "James Jebbia", "Madison Beer", "Kevin Pham", "Lan Le", "Plz work", "21321", "234232",
+            "dskdfjalkf", "Luca Italiano", "Ryan Nguyen", "Jeremy Blum", "Lionel Messi",
+            "George Washington", "Cristiano Ronaldo", "Derek Carr", "Kyler Murray"};
+
+    ArrayList<String> selected = new ArrayList<String>();
 
     class InviteGuestsAdapter extends BaseAdapter {
         String[] names;
@@ -57,10 +66,16 @@ public class InviteGuestsActivity extends AppCompatActivity {
                         value = "un-Checked";
                         ctv.setCheckMarkDrawable(0);
                         ctv.setChecked(false);
+                        if(selected.contains(ctv.getText().toString())) {
+                            selected.remove(ctv.getText().toString());
+                        }
                     } else {
                         value = "Checked";
                         ctv.setCheckMarkDrawable(R.drawable.checked);
                         ctv.setChecked(true);
+                        if(!selected.contains(ctv.getText().toString())) {
+                            selected.add(ctv.getText().toString());
+                        }
                     }
                 }
             });
@@ -76,28 +91,23 @@ public class InviteGuestsActivity extends AppCompatActivity {
         setContentView(R.layout.invite_guests);
         // TODO: Set up checkable text views in list, then pass them into intent and test
         // https://abhiandroid.com/ui/checkedtextview
-        ListView listView = findViewById(R.id.listView);
-        String[] names = {"Ryan Pham", "Emile Heskey", "Saint Laurent", "Christian Dior",
-                "James Jebbia", "Madison Beer", "Kevin Pham", "Lan Le", "Plz work", "21321", "234232",
-                "dskdfjalkf", "Luca Italiano", "Ryan Nguyen", "Jeremy Blum", "Lionel Messi",
-                "George Washington", "Cristiano Ronaldo", "Derek Carr", "Kyler Murray"};
+        listView = findViewById(R.id.listView);
+
         InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), names);
         listView.setAdapter(adapter);
 
         findViewById(R.id.invite_guests_done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
+                intent.putExtra("values", selected);
+                onActivityResult(18,18, intent);
+                setResult(18, intent);
+                finish();
             }
         });
         
     }
 
-    public void doneAddingGuests() {
-        Intent invGuestIntent = new Intent();
-        invGuestIntent.putExtra("Guests", "");
-        setResult(1, invGuestIntent);
-        finish();
-    }
 
 }

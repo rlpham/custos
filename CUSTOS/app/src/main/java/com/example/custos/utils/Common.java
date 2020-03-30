@@ -1,5 +1,6 @@
 package com.example.custos.utils;
 
+import com.example.custos.Event;
 import com.example.custos.User;
 import com.example.custos.UserLocation;
 
@@ -12,4 +13,5 @@ public class Common {
 
 
     public static UserLocation currentUser;
+    public static Event event;
 }

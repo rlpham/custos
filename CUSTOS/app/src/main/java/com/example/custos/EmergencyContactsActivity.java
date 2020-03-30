@@ -326,7 +326,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                         .setNeutralButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
-                                editButton(button,);
+                                //editButton(button,);
                                 
 
 //

@@ -93,15 +93,25 @@
         android:text="@string/event_create_event_placeholder"
         android:textSize="30sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/invited_guests"
+    <Button
+        android:id="@+id/create_event"
         android:layout_width="wrap_content"
-        android:layout_height="202dp"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="60dp" />
+        android:layout_alignParentBottom="false"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/create_event_button" />
+
+    <ListView
+        android:id="@+id/invited_list"
+        android:layout_width="match_parent"
+        android:layout_height="304dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp" />
 
 </RelativeLayout>

@@ -513,9 +513,7 @@ private LatLng eventlocation;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        requestCode = data.getIntExtra("dangervalue",0);
-        String criticallevel = data.getStringExtra("criticallevel");
-        String description = data.getStringExtra("dangerdescription");
+
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 
@@ -523,6 +521,9 @@ private LatLng eventlocation;
         //TODO: Fix default value
         if(requestCode==2)
         {
+            requestCode = data.getIntExtra("dangervalue",0);
+            String criticallevel = data.getStringExtra("criticallevel");
+            String description = data.getStringExtra("dangerdescription");
             //TODO: Add marker at current location
 
             LatLng stateCollege = new LatLng(40.7934,-77.86);
@@ -539,6 +540,9 @@ private LatLng eventlocation;
 
         //Medium Danger Value
         if (requestCode == 3){
+            requestCode = data.getIntExtra("dangervalue",0);
+            String criticallevel = data.getStringExtra("criticallevel");
+            String description = data.getStringExtra("dangerdescription");
             //TODO: Add marker at current location
 
             LatLng desmoines = new LatLng(41.619,-93.598);
@@ -552,6 +556,9 @@ private LatLng eventlocation;
 
         //Low Danger Value
         if (requestCode == 4){
+            requestCode = data.getIntExtra("dangervalue",0);
+            String criticallevel = data.getStringExtra("criticallevel");
+            String description = data.getStringExtra("dangerdescription");
             //TODO: Add marker at current location
 
             LatLng hershey = new LatLng(40.2859,-76.658);
