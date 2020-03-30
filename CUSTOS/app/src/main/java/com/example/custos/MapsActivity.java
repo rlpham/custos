@@ -104,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
         db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
-        db3 = FirebaseDatabase.getInstance().getReference("Home Location latlng");
+        db3 = FirebaseDatabase.getInstance().getReference("User Information");
         db4 = FirebaseDatabase.getInstance().getReference("userLocation");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -240,7 +240,7 @@ private LatLng eventlocation;
         if(mess.equals("Home Location")){
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-            moveToCurrentLocation(eventlocation);
+          //  moveToCurrentLocation(eventlocation);
 
         }else
         if(eventlocation!=null) {
@@ -258,14 +258,36 @@ private LatLng eventlocation;
      * installed Google Play services and returned to the app.
      */
 
+    public void setHomeLoc(){
+
+        db3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(userID).child("User Address").exists()) {
+                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Longitude").getValue().toString());
+                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Latitude").getValue().toString());
+                    LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
+                    setEventsLocation(eventloc, "Home Location");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     private String userID="nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
+    DatabaseReference user_information2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
 
-
+setHomeLoc();
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -296,20 +318,7 @@ private LatLng eventlocation;
 
             }
         });
-        db3.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                double  eventlonitude=Double.parseDouble(dataSnapshot.child("longtitude").getValue().toString());
-                double eventlatitude=Double.parseDouble(dataSnapshot.child("latitude").getValue().toString());
-                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
-                setEventsLocation(eventloc,"Home Location");
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         try {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()&&firebaseUser.getUid()!=null) {
@@ -344,12 +353,34 @@ private LatLng eventlocation;
                                                 userID=firebaseUser.getUid();
                                                 Common.currentUser = dataSnapshot.child(firebaseUser.getUid()).getValue(UserLocation.class);
                                             }
+
+
                                         }
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
                                     });
+                            user_information2.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.getValue() == null){
+                                        //uid not exist
+                                        if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
+                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
+                                            user_information2.child(Common.loggedUser.getUID())
+                                                    .setValue(Common.loggedUser);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
 
                             if (location != null) {
 
@@ -427,6 +458,13 @@ private LatLng eventlocation;
                 handler.postDelayed(this, 10000);
             }
         }, 10000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               setHomeLoc();
+            }
+        }, 2000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
@@ -518,7 +556,6 @@ private LatLng eventlocation;
         // check if the request code is same as what is passed  here it is 2
 
         //High Danger Marker Code
-        //TODO: Fix default value
         if(requestCode==2)
         {
             requestCode = data.getIntExtra("dangervalue",0);
@@ -533,8 +570,7 @@ private LatLng eventlocation;
             mMap.addMarker(dangerMarker);
             moveToCurrentLocation(stateCollege);
 
-            //TODO: Modify the marker imagery and implement current location
-            // https://stackoverflow.com/questions/17549372/how-to-get-click-event-of-the-marker-text
+
             System.out.println("This MAP ish workin");
         }
 

@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -74,13 +75,6 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }
         });
-        signOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-                signOutButton.setVisibility(View.INVISIBLE);
-            }
-        });
 
         //.check() not working
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -103,9 +97,16 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
     }
+    final Handler handler = new Handler();
     private void signIn(){
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent,RC_SIGN_IN);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent,RC_SIGN_IN);
+            }
+        },2000);
+
 //        startActivityForResult(
 //                AuthUI.getInstance()
 //                .createSignInIntentBuilder().setAvailableProviders(provider)
@@ -155,7 +156,15 @@ public class SplashActivity extends AppCompatActivity {
             Toast.makeText(SplashActivity.this,"Signin Successful!",Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(account);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+                    startActivity(intent);
+                }
+            },4000);
+
             account = GoogleSignIn.getLastSignedInAccount(this);
             if(account != null){
                 String personName = account.getDisplayName();
@@ -200,7 +209,7 @@ public class SplashActivity extends AppCompatActivity {
                 });
 
             }
-            startActivity(intent);
+
         }catch (Exception e){
             //the ApiException status code indicates the detailed failure reason
             //Please refer to the googlesigninstatuscodes class reference for more info

@@ -5,6 +5,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 //import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
+import com.example.custos.utils.Common;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,14 +49,16 @@ public class SecondSplashActivity extends AppCompatActivity {
     List<Address> addresses=new ArrayList<>();
     Geocoder geocoder;
     SetHomeLocation setHomeLocation = new SetHomeLocation();
+    final Handler handler = new Handler();
     //DBHandler db = new DBHandler();
     private DatabaseReference databaseReference;
     FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState){
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_splash_activity);
-        databaseReference = FirebaseDatabase.getInstance().getReference("User Information");
+        databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -109,8 +113,8 @@ public class SecondSplashActivity extends AppCompatActivity {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     User user = new User();
                     user.setUID(firebaseUser.getUid());
-                    if(dataSnapshot.child(user.getUID()).child("userAddress").exists()){
-                        String fullAddress = dataSnapshot.child(user.getUID()).child("userAddress").getValue().toString();
+                    if(dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_ADDRESS).exists()){
+                        String fullAddress = dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_ADDRESS).getValue().toString();
                         homeLocation.setText(fullAddress);
                     }else {
                         homeLocation.setText("Home address is not set");
@@ -178,9 +182,15 @@ public class SecondSplashActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                        Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
-                        startActivity(intent);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(null);
+                                Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
+                                startActivity(intent);
+                            }
+                        },5000);
+
                     }
                 });
 

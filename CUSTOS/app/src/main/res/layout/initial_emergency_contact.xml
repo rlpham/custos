@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#1D1D1D">
+
+    <TextView
+        android:id="@+id/contacttext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="0dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:fontFamily="sans-serif-thin"
+        android:gravity="center"
+        android:text="@string/ecintial"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:textSize="46sp" />
+
+    <Button
+        android:id="@+id/button33"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phone_input4"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginTop="91dp"
+        android:layout_marginEnd="1dp"
+        android:gravity="center"
+        android:text="@string/ecsubmit" />
+
+    <EditText
+        android:id="@+id/name_input4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contacttext"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="65dp"
+        android:ems="10"
+        android:hint="@string/emergency_contacts_name_placeholder"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite" />
+
+    <EditText
+        android:id="@+id/phone_input4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_input4"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="-3dp"
+        android:layout_marginTop="19dp"
+        android:ems="10"
+        android:hint="@string/emergency_contacts_phone_placeholder"
+        android:inputType="phone"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite" />
+
+</RelativeLayout>

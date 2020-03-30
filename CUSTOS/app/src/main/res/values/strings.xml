@@ -71,4 +71,6 @@
     <string name="ecedit">Edit</string>
     <string name="ecexit">Exit</string>
     <string name="create_event_button">Create</string>
+    <string name="ecintial">Add Emergency Contact</string>
+    <string name="ecsubmit">Submit</string>
 </resources>

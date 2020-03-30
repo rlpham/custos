@@ -87,7 +87,6 @@ public class ContactsActivity extends DialogFragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -110,13 +109,10 @@ public class ContactsActivity extends DialogFragment {
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();
-        view.setOnKeyListener( new View.OnKeyListener()
-        {
+        view.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            final public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP)
-                {
+            final public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
                     Intent intent = new Intent(v.getContext(), MapsActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -125,7 +121,7 @@ public class ContactsActivity extends DialogFragment {
                 }
                 return false;
             }
-        } );
+        });
 
 
         //////testing db
@@ -139,12 +135,10 @@ public class ContactsActivity extends DialogFragment {
                 if (deleting == false && editing == false) {
 
                     for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                            
+
                         int nameequal = Users.toString().indexOf("name=");
                         int comma = Users.toString().indexOf(", phone_number");
                         String contact = Users.toString().substring(nameequal + 5, comma);
-
-
 
 
                         if (!contact.equals("donotdeletethis")) {
@@ -152,7 +146,7 @@ public class ContactsActivity extends DialogFragment {
                         }
 
 
-                     //   System.out.println(contact);    //seeing output of names
+                        //   System.out.println(contact);    //seeing output of names
 
                         int phonenumberequala = Users.toString().indexOf("phone_number=");
                         int end = Users.toString().indexOf("} }");
@@ -164,7 +158,7 @@ public class ContactsActivity extends DialogFragment {
                         }
 
 
-                  //      System.out.println(number);     //seeing output of #s
+                        //      System.out.println(number);     //seeing output of #s
                     }
 
 
@@ -226,21 +220,14 @@ public class ContactsActivity extends DialogFragment {
 
                     addContactToLayout(button, layout);
 
-                }
-
-
-
-                else if(str.length() != 10)
-                {
+                } else if (str.length() != 10) {
 
                     Toast.makeText(getActivity(), "Enter only 10 digits", Toast.LENGTH_SHORT).show();
                     //  dialog.dismiss();
 
                     addContactToLayout(button, layout);
 
-                }
-
-                else {
+                } else {
 
                     dialog.dismiss();
 
@@ -265,16 +252,13 @@ public class ContactsActivity extends DialogFragment {
                     btnTag.setTextColor(Color.WHITE);
 
 
-
-
                     //TODO temporary username till we figure what to do
                     final String username = getRandomWord(20);
 
-                deleting = true;
-                editing = true;
+                    deleting = true;
+                    editing = true;
 
-                if(deleting && editing)
-                {
+                    if (deleting && editing) {
 
 
                         datta.addValueEventListener(new ValueEventListener() {
@@ -291,10 +275,10 @@ public class ContactsActivity extends DialogFragment {
                                     String contact = Users.toString().substring(nameequal + 5); //works cause firebase can't handle comma lmao
                                     //contact = contact.substring(0,input.getText().toString().length());
 
-                                   System.out.println("CONTACT: " + contact);
+                                    System.out.println("CONTACT: " + contact);
 
 
-                                    System.out.println("INPUT: " +  input.getText().toString());
+                                    System.out.println("INPUT: " + input.getText().toString());
 
 
 //                                    if(input.getText().toString().equals(contact))
@@ -311,8 +295,6 @@ public class ContactsActivity extends DialogFragment {
                                 }
 
 
-
-
                             }
 
                             @Override
@@ -321,31 +303,23 @@ public class ContactsActivity extends DialogFragment {
                             }
                         });
 
-                }
+                    }
 
 
-                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
+                    datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
 
-                        datta.child("name").setValue(input.getText().toString());
-                        datta.child("phone_number").setValue(str);
+                    datta.child("name").setValue(input.getText().toString());
+                    datta.child("phone_number").setValue(str);
 
-                        buttonAction(btnTag);
+                    buttonAction(btnTag);
 
-                        layout.addView(btnTag);
-
-
-
-
+                    layout.addView(btnTag);
 
 
                 }
-
-
-
 
 
             }
-
 
 
         });
@@ -355,19 +329,15 @@ public class ContactsActivity extends DialogFragment {
         builder.show();
 
 
-
     }
 
     String getRandomWord(int length) {
         String r = "";
-        for(int i = 0; i < length; i++) {
-            r += (char)(Math.random() * 26 + 97);
+        for (int i = 0; i < length; i++) {
+            r += (char) (Math.random() * 26 + 97);
         }
         return r;
     }
-
-
-
 
 
     public void generateButton(String title, LinearLayout layout) {
@@ -430,7 +400,6 @@ public class ContactsActivity extends DialogFragment {
                         });
 
 
-
                 builder.create();
                 builder.show();
 
@@ -458,7 +427,7 @@ public class ContactsActivity extends DialogFragment {
                                 String ph = button.getText().toString().replaceAll("[^\\d]", "");
                                 ph = ph.trim();
 
-                            startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
+                                startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", ph, null)));
                             }
                         })
                         .setNegativeButton("Text", new DialogInterface.OnClickListener() {
@@ -470,8 +439,8 @@ public class ContactsActivity extends DialogFragment {
 //                                startActivity(sendIntent);
 
                                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                                sendIntent.setData(Uri.parse("sms:"+ph));
-                                startActivityForResult(sendIntent , 0);
+                                sendIntent.setData(Uri.parse("sms:" + ph));
+                                startActivityForResult(sendIntent, 0);
 
                             }
 
@@ -481,7 +450,7 @@ public class ContactsActivity extends DialogFragment {
                 builder2.show();
 
 
-            return false;
+                return false;
             }
         });
 
@@ -525,8 +494,8 @@ public class ContactsActivity extends DialogFragment {
 
 //                                contact = contact.substring(0, delName.length());
                                 System.out.println("CONTACT: " + contact);
-                               System.out.println("WHAT I WANT TO DELETE: "+ delName);
-                                if (contact.contains(delName)){
+                                System.out.println("WHAT I WANT TO DELETE: " + delName);
+                                if (contact.contains(delName)) {
                                     Users.getRef().removeValue();
                                     break;
                                 }
@@ -570,10 +539,7 @@ public class ContactsActivity extends DialogFragment {
 //        }
 
 
-
-
     }
-
 
 
     public void editButton(final Button button, final String name) {
@@ -588,10 +554,10 @@ public class ContactsActivity extends DialogFragment {
         final EditText input2 = (EditText) viewInflated.findViewById(R.id.input2);
         builder.setView(viewInflated);
 
-        String titleph = name.substring(name.indexOf('+')+1);
+        String titleph = name.substring(name.indexOf('+') + 1);
 
 
-   //     System.out.println(titlename + " testing " + titleph);
+        //     System.out.println(titlename + " testing " + titleph);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
@@ -606,88 +572,68 @@ public class ContactsActivity extends DialogFragment {
                     editButton(button, name);
 
 
-                }
-
-
-
-                else if(str.length() != 10)
-                {
+                } else if (str.length() != 10) {
 
                     Toast.makeText(getActivity(), "Enter only 10 digits", Toast.LENGTH_SHORT).show();
                     //  dialog.dismiss();
 
                     editButton(button, name);
 
-                }
-
-
-                  else
-                {
+                } else {
 
                     if (editing) {
 
 
+                        datta.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
 
+                                for (DataSnapshot Users : dataSnapshot2.getChildren()) {
 
-                                datta.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
-
-                                        for (DataSnapshot Users : dataSnapshot2.getChildren()) {
-
-                                            int nameequal = Users.toString().indexOf("name=");
-                                            int comma = Users.toString().indexOf(", phone_number");
-                                            String contact = Users.toString().substring(nameequal + 5);
+                                    int nameequal = Users.toString().indexOf("name=");
+                                    int comma = Users.toString().indexOf(", phone_number");
+                                    String contact = Users.toString().substring(nameequal + 5);
 //                                            contact = contact.substring(0,contact.indexOf(','));
-                                            System.out.println(Users.toString());
-                                            int keypos = Users.toString().indexOf("key =");
-                                            int keystop = Users.toString().indexOf(", value");
-                                            String key = Users.toString().substring(keypos + 5,keystop);
-                                            key = key.trim();
-                                            System.out.println("KEY : " + key);
-                                            datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key);
-                                            String titlename = name.substring(0,name.indexOf(':'));
-                                            System.out.println("");
-                                            System.out.println(contact + ":" + titlename);
-                                            System.out.println("");
-                                            if(contact.contains(titlename))
-                                            {
-                                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
+                                    System.out.println(Users.toString());
+                                    int keypos = Users.toString().indexOf("key =");
+                                    int keystop = Users.toString().indexOf(", value");
+                                    String key = Users.toString().substring(keypos + 5, keystop);
+                                    key = key.trim();
+                                    System.out.println("KEY : " + key);
+                                    datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key);
+                                    String titlename = name.substring(0, name.indexOf(':'));
+                                    System.out.println("");
+                                    System.out.println(contact + ":" + titlename);
+                                    System.out.println("");
+                                    if (contact.contains(titlename)) {
+                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
 
-                                                datta.setValue(input.getText().toString());
-                                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
-                                                datta.setValue(str);
-                                                break;
-                                            }
-
-
-                                        }
-
-
+                                        datta.setValue(input.getText().toString());
+                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
+                                        datta.setValue(str);
+                                        break;
                                     }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    }
-                                });
+                                }
 
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
 
 
                     }
-
-
-
-
 
 
                     dialog.dismiss();
                     m_Text = input.getText().toString() + ": +" + input2.getText().toString();
                     button.setText(m_Text);
                 }
-
-
-
 
 
             }
