@@ -170,15 +170,28 @@ public class SetHomeLocationActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 user.setUID(firebaseUser.getUid());
-                if(dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS)
+                if((dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
                         .child(Common.HOME_LOC)
-                        .exists()){
+                        .exists())
+                        && !(dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .getValue()
+                        .toString().equals(" "))){
                     String fullAddress = dataSnapshot.child(user.getUID())
                             .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
                             .getValue().toString();
                     address.setText(fullAddress);
-                }else {
+                }else if(dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .getValue()
+                        .toString().equals(" ")){
+                    address.setText("Something went wrong try again later!");
+                }
+                else {
                     address.setText("User have not set their home location");
                 }
 

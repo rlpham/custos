@@ -110,15 +110,28 @@ public class SecondSplashActivity extends AppCompatActivity {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     User user = new User();
                     user.setUID(firebaseUser.getUid());
-                    if(dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_ADDRESS)
+                    if((dataSnapshot.child(firebaseUser.getUid())
+                            .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
-                            .exists()){
+                            .exists())
+                            && !(dataSnapshot.child(firebaseUser.getUid())
+                            .child(Common.USER_ADDRESS)
+                            .child(Common.HOME_LOC)
+                            .getValue()
+                            .toString().equals(" "))){
                         String fullAddress = dataSnapshot.child(firebaseUser.getUid())
                                 .child(Common.USER_ADDRESS)
                                 .child(Common.HOME_LOC)
                                 .getValue().toString();
                         homeLocation.setText(fullAddress);
-                    }else {
+                    }else if(dataSnapshot.child(firebaseUser.getUid())
+                            .child(Common.USER_ADDRESS)
+                            .child(Common.HOME_LOC)
+                            .getValue()
+                            .toString().equals(" ")){
+                        homeLocation.setText("Something went wrong try again later!");
+                    }
+                    else {
                         homeLocation.setText("Home address is not set");
                     }
 
