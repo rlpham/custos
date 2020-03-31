@@ -96,9 +96,11 @@ public class SecondSplashActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null){
+        if(account != null || firebaseUser != null){
+            String firebaseName = firebaseUser.getDisplayName();
+            String firebaseEmail = firebaseUser.getEmail();
             String personName = account.getDisplayName();
             String personEmail = account.getEmail();
             String personID = account.getId();
@@ -124,11 +126,14 @@ public class SecondSplashActivity extends AppCompatActivity {
                                 .child(Common.HOME_LOC)
                                 .getValue().toString();
                         homeLocation.setText(fullAddress);
-                    }else if(dataSnapshot.child(firebaseUser.getUid())
+                    }else if((dataSnapshot.child(firebaseUser.getUid())
+                            .child(Common.USER_ADDRESS)
+                            .child(Common.HOME_LOC)
+                            .exists()) && (dataSnapshot.child(firebaseUser.getUid())
                             .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
                             .getValue()
-                            .toString().equals(" ")){
+                            .toString().equals(" "))){
                         homeLocation.setText("Something went wrong try again later!");
                     }
                     else {
@@ -143,8 +148,8 @@ public class SecondSplashActivity extends AppCompatActivity {
                 }
             });
 
-            name.setText(personName);
-            email.setText(personEmail);
+            name.setText(firebaseName);
+            email.setText(firebaseEmail);
             id.setText(personID);
             Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }

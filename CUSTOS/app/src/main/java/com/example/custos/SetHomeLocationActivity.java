@@ -184,11 +184,14 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                             .child(Common.HOME_LOC)
                             .getValue().toString();
                     address.setText(fullAddress);
-                }else if(dataSnapshot.child(firebaseUser.getUid())
+                }else if((dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .exists()) && (dataSnapshot.child(firebaseUser.getUid())
                         .child(Common.USER_ADDRESS)
                         .child(Common.HOME_LOC)
                         .getValue()
-                        .toString().equals(" ")){
+                        .toString().equals(" "))){
                     address.setText("Something went wrong try again later!");
                 }
                 else {
@@ -255,7 +258,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
     private String getFullAddress(LatLng myCoordinates) {
         String fullAddress = " ";
-        Geocoder geocoder = new Geocoder(SetHomeLocationActivity.this,Locale.getDefault());
+        Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
         try {
             List<Address> addresses2 = geocoder.getFromLocation(myCoordinates.latitude,myCoordinates.longitude,1);
             fullAddress = addresses2.get(0).getAddressLine(0);

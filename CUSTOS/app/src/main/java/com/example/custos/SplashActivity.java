@@ -91,7 +91,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void createRequest() {
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
+                .Builder()
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
@@ -128,7 +129,9 @@ public class SplashActivity extends AppCompatActivity {
            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
            try {
                GoogleSignInAccount account = task.getResult(ApiException.class);
-               fireBaseGoogleAuth(account);
+               if(account != null){
+                   fireBaseGoogleAuth(account);
+               }
            }catch (ApiException e){
                 Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
            }
