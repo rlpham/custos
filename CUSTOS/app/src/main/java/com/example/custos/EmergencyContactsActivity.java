@@ -40,6 +40,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,6 +66,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
     final String ec = "emergency_contacts";
     int checkEC = 0;
 
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     Button exit;
 
 
@@ -101,8 +104,42 @@ public class EmergencyContactsActivity extends AppCompatActivity {
             }
         });
 
+        datta3 = FirebaseDatabase.getInstance().getReference("Users");
 
-        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11");
+
+//////////////////////////
+        datta3.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+
+                                datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+/////////////////
+
+        datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+
 
         if(editing == false)
         {
@@ -119,7 +156,8 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                 System.out.println(dataSnapshot.toString());
             if(!dataSnapshot.hasChild(ec))
             {
-            datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+                datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec);
+
             }
             else
             {
@@ -133,7 +171,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
 
                 int phonenumberequala = dataSnapshot.toString().indexOf("phone_number=");
-                int end = dataSnapshot.toString().indexOf("}}");
+                int end = dataSnapshot.toString().indexOf("},");
 
                 number = dataSnapshot.toString().substring(phonenumberequala + 13, end);
 
@@ -218,7 +256,10 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                 else
                 {
-                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec);
+
+
+                    //datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
                     if (editing) {
 
 
@@ -274,7 +315,10 @@ public class EmergencyContactsActivity extends AppCompatActivity {
                                     System.out.println(number);
 
                                       System.out.println(dataSnapshot.toString());
-                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+                                    //datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+
+
                                     datta3.child("name").setValue(input.getText().toString());
                                     datta3.child("phone_number").setValue(str);
 
@@ -317,7 +361,10 @@ public class EmergencyContactsActivity extends AppCompatActivity {
         });
 
         builder.show();
-        datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+        //datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
+        datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec);
+
+
     }
 
 
