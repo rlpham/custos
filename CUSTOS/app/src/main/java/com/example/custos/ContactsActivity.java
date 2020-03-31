@@ -501,12 +501,22 @@ public class ContactsActivity extends DialogFragment {
 
 
         String test = button.getText().toString();
+        System.out.println("DELETE button string: " + test);
         int colon = test.indexOf(":");
         test = test.substring(0, colon);
 
         System.out.println(test);
 
+        String test2 = button.getText().toString();
+        test2 = test2.substring(colon + 3,colon + 13);
+        System.out.println(test2);
+
+
+        final String delPh = test2;
         final String delName = test;
+
+
+
         deleting = true;
 
 
@@ -531,10 +541,14 @@ public class ContactsActivity extends DialogFragment {
 //                                contact = contact.substring(0, delName.length());
                                 System.out.println("CONTACT: " + contact);
                                 System.out.println("WHAT I WANT TO DELETE: " + delName);
-                                if (contact.contains(delName)) {
+                                if (contact.contains(delName) && contact.contains(delPh)) {
                                     Users.getRef().removeValue();
                                     break;
+
+
                                 }
+
+
 
 
                             }
