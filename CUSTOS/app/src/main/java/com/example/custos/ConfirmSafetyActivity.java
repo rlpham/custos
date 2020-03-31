@@ -140,34 +140,16 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
 
 
         datta =  FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
-        datta.addListenerForSingleValueEvent(new ValueEventListener() {
-            final String test = pinView.getText().toString();
 
+        datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = (String) dataSnapshot.getValue() + "";
-                System.out.println(value);
+                for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
-                System.out.println(test);
-
+                    System.out.println(dataSnapshot.toString());
 
 
-
-                if(test.equals(value))
-                {
-                    Toast.makeText(ConfirmSafetyActivity.this, "Success", Toast.LENGTH_SHORT).show();
-                    changePage(view);
                 }
-                else
-                {
-                    same = false;
-                    pinView.setVisibility(View.VISIBLE);
-                    pinmsg = "";
-                    pinView.setText(pinmsg);
-                    initialSafetyMessage.setText("Try again");
-                }
-
-
             }
 
             @Override
@@ -177,8 +159,41 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
         });
 
 
-
-
+//        datta.addListenerForSingleValueEvent(new ValueEventListener() {
+//            final String test = pinView.getText().toString();
+//
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String value = (String) dataSnapshot.getValue() + "";
+//                System.out.println(value);
+//
+//                System.out.println(test);
+//
+//
+//
+//
+//                if(test.equals(value))
+//                {
+//                    Toast.makeText(ConfirmSafetyActivity.this, "Success", Toast.LENGTH_SHORT).show();
+//                    changePage(view);
+//                }
+//                else
+//                {
+//                    same = false;
+//                    pinView.setVisibility(View.VISIBLE);
+//                    pinmsg = "";
+//                    pinView.setText(pinmsg);
+//                    initialSafetyMessage.setText("Try again");
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
     }

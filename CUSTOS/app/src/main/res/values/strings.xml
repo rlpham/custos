@@ -28,7 +28,7 @@
     <string name="delete">Delete</string>
     <string name="_0">0</string>
     <string name="enter_new_safety_pin">Enter new safety pin</string>
-<<<<<<< Updated upstream
+
     <string name="pinMessage" />
     <string name="contactpage">Contact </string>
     <string name="placeHolderForImage">Placeholder for image</string>
@@ -75,7 +75,6 @@
     <string name="ecintial">Add Emergency Contact</string>
     <string name="ecsubmit">Submit</string>
     <string name="login_with_google">LOGIN WITH GOOGLE</string>
-=======
 
->>>>>>> Stashed changes
+    
 </resources>
