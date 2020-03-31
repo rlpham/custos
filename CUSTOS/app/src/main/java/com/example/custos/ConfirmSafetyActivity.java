@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,7 +50,7 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
     String pinmsg2 = "";
     TextView pinView2;
     Button redo;
-
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
     DatabaseReference datta;
 
@@ -109,13 +111,41 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
         pinView.setVisibility(View.INVISIBLE);
         confirmButton.setVisibility(View.INVISIBLE);
 
-        datta =  FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("safetypin");
+
+
+        datta =  FirebaseDatabase.getInstance().getReference("Users");
+        datta.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+
+                                datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
+
+                            }
+                        }
+
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+        datta =  FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
         datta.addListenerForSingleValueEvent(new ValueEventListener() {
             final String test = pinView.getText().toString();
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = (String) dataSnapshot.getValue();
+                String value = (String) dataSnapshot.getValue() + "";
                 System.out.println(value);
 
                 System.out.println(test);
