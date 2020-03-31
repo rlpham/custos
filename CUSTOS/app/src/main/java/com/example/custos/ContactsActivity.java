@@ -37,6 +37,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.custos.utils.Common;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,10 +57,10 @@ public class ContactsActivity extends DialogFragment {
     boolean checkEdit = false;
     public SearchView searchView;
     final String ALPHABET = "123456789abcdefghjkmnpqrstuvwxyz";
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference datta;
 
-    DatabaseReference datta;
-
-    DatabaseReference datta2;
+    //DatabaseReference datta2;
     boolean deleting = false;
     boolean editing = false;
     boolean duplicate = false;
@@ -79,11 +82,44 @@ public class ContactsActivity extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        final String usernamed = getRandomWord(20);
 
         //temporary till someone can figure out how to get right user
-        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-        datta2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+        datta = FirebaseDatabase.getInstance().getReference("Users");
+
+        datta.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+
+                                datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(usernamed);
+                                datta.child("name").setValue("donotdeletethis");
+                                datta.child("phone_number").setValue("donotdeletethis");
+
+                            }
+                        }
+                        //if user available
+                        else {
+//                            userID=firebaseUser.getUid();
+//                            Common.currentUser = dataSnapshot.child(firebaseUser.getUid()).getValue(UserLocation.class);
+                        }
+
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+        //datta2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
     }
 
 
@@ -126,7 +162,7 @@ public class ContactsActivity extends DialogFragment {
 
         //////testing db
 
-
+        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
         final ArrayList<String> listShow = new ArrayList<String>();
         final ArrayList<String> listShow2 = new ArrayList<String>();
         datta.addValueEventListener(new ValueEventListener() {
@@ -264,9 +300,9 @@ public class ContactsActivity extends DialogFragment {
                         datta.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
 
-
-                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+//                                datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
 
                                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
 
@@ -306,8 +342,8 @@ public class ContactsActivity extends DialogFragment {
                     }
 
 
-                    datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
-
+                    //datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(username);
+                    datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(username);
                     datta.child("name").setValue(input.getText().toString());
                     datta.child("phone_number").setValue(str);
 
@@ -324,8 +360,8 @@ public class ContactsActivity extends DialogFragment {
 
         });
         duplicate = false;
-        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
-
+       // datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
         builder.show();
 
 
@@ -600,16 +636,19 @@ public class ContactsActivity extends DialogFragment {
                                     String key = Users.toString().substring(keypos + 5, keystop);
                                     key = key.trim();
                                     System.out.println("KEY : " + key);
-                                    datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key);
+                                    datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(key);
+                                    //datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key);
                                     String titlename = name.substring(0, name.indexOf(':'));
                                     System.out.println("");
                                     System.out.println(contact + ":" + titlename);
                                     System.out.println("");
                                     if (contact.contains(titlename)) {
-                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
 
+                                        //datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("name");
+                                        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(key).child("name");
                                         datta.setValue(input.getText().toString());
-                                        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
+                                        //datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts").child(key).child("phone_number");
+                                        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(key).child("phone_number");
                                         datta.setValue(str);
                                         break;
                                     }
@@ -640,7 +679,8 @@ public class ContactsActivity extends DialogFragment {
         });
 
         builder.show();
-        datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+        //datta = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("contacts");
+        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
     }
 }
 
