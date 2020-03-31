@@ -239,7 +239,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
-        if(mess.equals("Home Location")){
+        if((mess.equals("Home Location")) && !(mess.equals(" "))){
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
           //  moveToCurrentLocation(eventlocation);
@@ -266,7 +266,11 @@ private LatLng eventlocation;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if((dataSnapshot.child(userID).child("User Address").child(Common.HOME_LOC).exists())
-                        && !(dataSnapshot.child(userID).child(Common.USER_ADDRESS).child(Common.HOME_LOC).equals(" "))) {
+                        && !(dataSnapshot.child(userID).child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .getValue()
+                        .toString()
+                        .equals(" "))) {
                     double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
                             .child(Common.USER_ADDRESS)
                             .child("User Home Longitude")
@@ -277,6 +281,8 @@ private LatLng eventlocation;
                             .getValue().toString());
                     LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
                     setEventsLocation(eventloc, "Home Location");
+                }else{
+
                 }
             }
 
