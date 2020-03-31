@@ -316,7 +316,7 @@ public class EmergencyContactsActivity extends AppCompatActivity {
 
                                       System.out.println(dataSnapshot.toString());
                                     //datta3 = FirebaseDatabase.getInstance().getReference("Users").child("jdoe11").child(ec);
-                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
+                                    datta3 = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec);
 
 
                                     datta3.child("name").setValue(input.getText().toString());
