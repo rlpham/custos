@@ -26,6 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+<<<<<<< Updated upstream
         <activity android:name=".MainEventListActivity"
             android:exported="true"/>
         <activity
@@ -40,6 +41,9 @@
         <activity
             android:name=".SafetyPinActivity"
             android:exported="true" />
+=======
+        <activity android:name=".SafetyPinActivity"></activity>
+>>>>>>> Stashed changes
         <activity android:name=".SignupActivity" />
         <activity
             android:name=".LoginActivity"

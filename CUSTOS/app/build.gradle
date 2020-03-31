@@ -24,8 +24,13 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.android.libraries.places:places:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
+<<<<<<< Updated upstream
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+=======
+    implementation "com.google.android.gms:play-services-location:15.0.1"
+
+>>>>>>> Stashed changes
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.firebase:firebase-database:17.0.0'
