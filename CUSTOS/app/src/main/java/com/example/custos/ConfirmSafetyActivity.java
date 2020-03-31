@@ -21,11 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import org.w3c.dom.Text;
 
 public class ConfirmSafetyActivity extends AppCompatActivity {
 
@@ -56,10 +51,9 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.initial_safety_pin);
         bt1 = findViewById(R.id.btn1);
         bt2 = findViewById(R.id.btn2);
@@ -83,28 +77,24 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
 
     }
 
-    public void deleteNumber(View button)
-    {
+    public void deleteNumber(View button) {
         initialSafetyMessage.setText("Enter safety pin");
         confirmButton.setVisibility(View.INVISIBLE);
 
-        if(pinmsg.length() != 0)
-        {
+        if (pinmsg.length() != 0) {
             pinmsg = pinmsg.substring(0, pinmsg.length() - 1);
             pinView.setText(pinmsg);
 
         }
 
-        if(pinmsg2.length() != 0)
-        {
+        if (pinmsg2.length() != 0) {
             pinmsg2 = pinmsg2.substring(0, pinmsg2.length() - 1);
             pinView2.setText(pinmsg2);
         }
 
     }
 
-    public void confirm(final View view)
-    {
+    public void confirm(final View view) {
 
 
         initialSafetyMessage.setText("Enter safety pin");
@@ -112,8 +102,7 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
         confirmButton.setVisibility(View.INVISIBLE);
 
 
-
-        datta =  FirebaseDatabase.getInstance().getReference("Users");
+        datta = FirebaseDatabase.getInstance().getReference("Users");
         datta.orderByKey()
                 .equalTo(firebaseUser.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -132,6 +121,7 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
 
 
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -139,15 +129,28 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
                 });
 
 
-        datta =  FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
+        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
 
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
-
+                    final String test = pinView.getText().toString();
+                    String sp = dataSnapshot.toString();
+                    sp = sp.substring(sp.indexOf("safetypin=") + 10, sp.indexOf("safetypin=") + 14);
                     System.out.println(dataSnapshot.toString());
+                    System.out.println(sp);
+                    if (test.equals(sp)) {
+                        Toast.makeText(ConfirmSafetyActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                        changePage(view);
 
+                    } else {
+                        same = false;
+                        pinView.setVisibility(View.VISIBLE);
+                        pinmsg = "";
+                        pinView.setText(pinmsg);
+                        initialSafetyMessage.setText("Try again");
+                    }
 
                 }
             }
@@ -159,181 +162,121 @@ public class ConfirmSafetyActivity extends AppCompatActivity {
         });
 
 
-//        datta.addListenerForSingleValueEvent(new ValueEventListener() {
-//            final String test = pinView.getText().toString();
-//
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String value = (String) dataSnapshot.getValue() + "";
-//                System.out.println(value);
-//
-//                System.out.println(test);
-//
-//
-//
-//
-//                if(test.equals(value))
-//                {
-//                    Toast.makeText(ConfirmSafetyActivity.this, "Success", Toast.LENGTH_SHORT).show();
-//                    changePage(view);
-//                }
-//                else
-//                {
-//                    same = false;
-//                    pinView.setVisibility(View.VISIBLE);
-//                    pinmsg = "";
-//                    pinView.setText(pinmsg);
-//                    initialSafetyMessage.setText("Try again");
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
     }
 
-    public void doRedo(View view)
-    {
+    public void doRedo(View view) {
 
     }
 
 
-    public void changePage(View view)
-    {
+    public void changePage(View view) {
 
         Intent signupIntent = new Intent(view.getContext(), MapsActivity.class);
         startActivity(signupIntent);
     }
 
 
-
-    public void buttonClick(View button)
-    {
+    public void buttonClick(View button) {
 
 
-        if(pinmsg.length() == 3)
-        {
+        if (pinmsg.length() == 3) {
 
             confirmButton.setVisibility(View.VISIBLE);
         }
 
 
-
-            switch (button.getId())
-            {
-                case R.id.btn1:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-
-                    pinmsg += "1";
-                    pinView.setText(pinmsg);
+        switch (button.getId()) {
+            case R.id.btn1:
+                if (pinmsg.length() == 4) {
                     break;
+                }
 
-                case R.id.btn2:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "2";
-                    pinView.setText(pinmsg);
+                pinmsg += "1";
+                pinView.setText(pinmsg);
+                break;
+
+            case R.id.btn2:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "2";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn3:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "3";
-                    pinView.setText(pinmsg);
+            case R.id.btn3:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "3";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn4:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "4";
-                    pinView.setText(pinmsg);
+            case R.id.btn4:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "4";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn5:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "5";
-                    pinView.setText(pinmsg);
+            case R.id.btn5:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "5";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn6:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "6";
-                    pinView.setText(pinmsg);
+            case R.id.btn6:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "6";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn7:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "7";
-                    pinView.setText(pinmsg);
+            case R.id.btn7:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "7";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn8:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "8";
-                    pinView.setText(pinmsg);
+            case R.id.btn8:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "8";
+                pinView.setText(pinmsg);
+                break;
 
 
-                case R.id.btn9:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "9";
-                    pinView.setText(pinmsg);
+            case R.id.btn9:
+                if (pinmsg.length() == 4) {
                     break;
+                }
+                pinmsg += "9";
+                pinView.setText(pinmsg);
+                break;
 
-                case R.id.btn0:
-                    if (pinmsg.length() == 4)
-                    {
-                        break;
-                    }
-                    pinmsg += "0";
-                    pinView.setText(pinmsg);
+            case R.id.btn0:
+                if (pinmsg.length() == 4) {
                     break;
-
+                }
+                pinmsg += "0";
+                pinView.setText(pinmsg);
+                break;
 
 
         }
 
-        if(pinmsg.length() >= 1)
-        {
+        if (pinmsg.length() >= 1) {
             initialSafetyMessage.setText("Enter safety pin");
         }
 
 
     }
-
-
-
-
 
 
 }
