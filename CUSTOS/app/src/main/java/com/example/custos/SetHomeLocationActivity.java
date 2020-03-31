@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +47,12 @@ public class SetHomeLocationActivity extends AppCompatActivity {
     Geocoder geocoder;
     Button saveButton;
     Button backButton;
+    ProgressBar progressBar;
     List<Address> addresses = new ArrayList<>();
     User user = new User();
     SetHomeLocation setHomeLocation = new SetHomeLocation();
     DatabaseReference databaseReference;
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -56,6 +60,8 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         address = findViewById(R.id.home_address);
         saveButton = findViewById(R.id.save_button);
         backButton = findViewById(R.id.back_button);
+        progressBar = findViewById(R.id.progress_circular3);
+        progressBar.setVisibility(View.INVISIBLE);
         final String apiKey = "AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc";
         if(!Places.isInitialized()){
             Places.initialize(getApplicationContext(),apiKey);
@@ -119,9 +125,16 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                             }
                         });
 
+                progressBar.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.INVISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
+                        startActivity(intent);
+                    }
+                },2500);
 
-                Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
-                startActivity(intent);
             }
         });
         geocoder = new Geocoder(this,Locale.getDefault());
