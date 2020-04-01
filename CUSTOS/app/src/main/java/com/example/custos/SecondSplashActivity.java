@@ -70,6 +70,8 @@ public class SecondSplashActivity extends AppCompatActivity{
     FirebaseUser firebaseUser;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
+    User user = new User();
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
 
@@ -151,12 +153,11 @@ public class SecondSplashActivity extends AppCompatActivity{
             String personEmail = account.getEmail();
             String personID = account.getId();
             Uri personPhoto = account.getPhotoUrl();
-
+            databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    User user = new User();
                     user.setUID(firebaseUser.getUid());
                     if((dataSnapshot.child(firebaseUser.getUid())
                             .child(Common.USER_ADDRESS)
