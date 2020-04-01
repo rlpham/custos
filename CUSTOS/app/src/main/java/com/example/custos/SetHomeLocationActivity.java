@@ -44,7 +44,7 @@ import java.util.Locale;
 public class SetHomeLocationActivity extends AppCompatActivity {
 
     TextView address;
-    Geocoder geocoder;
+    //Geocoder geocoder;
     Button saveButton;
     Button backButton;
     ProgressBar progressBar;
@@ -163,7 +163,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
             }
         });
-        geocoder = new Geocoder(this,Locale.getDefault());
+        //geocoder = new Geocoder(this,Locale.getDefault());
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -228,7 +228,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
                 setHomeLocation.setLatitude(latLng.latitude);
                 setHomeLocation.setLongtitude(latLng.longitude);
-                final String fullAd = stringAddress(latLng.latitude,latLng.longitude);
+                //final String fullAd = stringAddress(latLng.latitude,latLng.longitude);
 
 
                 FirebaseDatabase.getInstance().getReference("Home Location latlng")
@@ -255,10 +255,10 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         });
 
     }
-
     private String getFullAddress(LatLng myCoordinates) {
         String fullAddress = " ";
-        Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
+        Geocoder geocoder;
+        geocoder = new Geocoder(SetHomeLocationActivity.this,Locale.getDefault());
         try {
             List<Address> addresses2 = geocoder.getFromLocation(myCoordinates.latitude,myCoordinates.longitude,1);
             fullAddress = addresses2.get(0).getAddressLine(0);
@@ -277,6 +277,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         String fullAddress="";
         if(!addresses.isEmpty()){
             try {
+                Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
                 addresses = geocoder.getFromLocation(latitude,longtitude,1);
                 if(addresses.size()>0){
                     String myAddress = addresses.get(0).getAddressLine(0);

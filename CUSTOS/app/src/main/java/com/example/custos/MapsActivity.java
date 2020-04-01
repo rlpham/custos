@@ -376,6 +376,7 @@ setHomeLoc();
 
                                         }
                                     });
+                            final String imgURL = "default";
                             user_information2.orderByKey()
                             .equalTo(firebaseUser.getUid())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -384,7 +385,7 @@ setHomeLoc();
                                     if(dataSnapshot.getValue() == null){
                                         //uid not exist
                                         if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
-                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
+                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName(),imgURL);
                                             user_information2.child(Common.loggedUser.getUID())
                                                     .setValue(Common.loggedUser);
                                         }

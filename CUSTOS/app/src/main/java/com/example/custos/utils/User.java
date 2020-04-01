@@ -9,6 +9,7 @@ public class User {
     private String userId;
     private String userAddress;
     private String UID;
+    private String imageURL;
     private HashMap<String,User> acceptList;
     public User(){
 
@@ -18,6 +19,21 @@ public class User {
         this.userEmail = email;
         this.userName = name;
         acceptList = new HashMap<>();
+    }
+    public User(String uid, String email,String name,String img){
+        this.UID =uid;
+        this.userEmail = email;
+        this.userName = name;
+        this.imageURL = img;
+        acceptList = new HashMap<>();
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getUserName(){

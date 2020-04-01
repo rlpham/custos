@@ -9,6 +9,8 @@ public class Common {
     public static User loggedUser;
     public static final String USER_UID_SAVE_KEY    = "SaveUid";
     public static final String TOKENS               = "Tokens";
+    public static final String IMAGE_UPLOAD         = "uploads";
+    public static final String IMAGE_URL            = "imageURL";
 
 
 
