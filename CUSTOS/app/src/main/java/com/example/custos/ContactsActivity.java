@@ -87,6 +87,7 @@ public class ContactsActivity extends DialogFragment {
         //temporary till someone can figure out how to get right user
         datta = FirebaseDatabase.getInstance().getReference("Users");
 
+        System.out.println("WHICH GOES FIRST");
         datta.orderByKey()
                 .equalTo(firebaseUser.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -100,7 +101,7 @@ public class ContactsActivity extends DialogFragment {
 
                                 datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(usernamed);
                                 datta.child("name").setValue("donotdeletethis");
-                                datta.child("phone_number").setValue("donotdeletethis");
+                                datta.child("phone_number").setValue("5554446565");
 
                             }
                         }
@@ -126,6 +127,7 @@ public class ContactsActivity extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        System.out.println("WHICH ONE GOES FIRST");
 
         View view = inflater.inflate(R.layout.contactpage, container, false);
 
@@ -189,7 +191,7 @@ public class ContactsActivity extends DialogFragment {
                         String number = Users.toString().substring(phonenumberequala + 13, end);
 
 
-                        if (!number.equals("donotdeletethis")) {
+                        if (!number.equals("5554446565")) {
                             listShow2.add(number);
                         }
 
