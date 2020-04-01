@@ -168,10 +168,10 @@ public class ContactsActivity extends DialogFragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getContext(),SplashActivity.class);
+                Intent intent = new Intent(getContext(),ContactsActivity.class);
                 startActivity(intent);
             }
-        },20000);
+        },5000);
         //////testing db
 
         datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
