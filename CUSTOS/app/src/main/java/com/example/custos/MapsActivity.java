@@ -303,7 +303,7 @@ private LatLng eventlocation;
     public void onMapReady(GoogleMap googleMap) {
 
 
-setHomeLoc();
+
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -510,7 +510,7 @@ setHomeLoc();
             public void run() {
                setHomeLoc();
             }
-        }, 2000);
+        }, 3000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
