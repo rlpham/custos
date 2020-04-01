@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -14,18 +15,24 @@ import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.util.ArrayUtils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class InviteGuestsActivity extends AppCompatActivity {
 
     ListView listView;
-
-    String[] names = {"Ryan Pham", "Emile Heskey", "Saint Laurent", "Christian Dior",
-            "James Jebbia", "Madison Beer", "Kevin Pham", "Lan Le", "Plz work", "21321", "234232",
-            "dskdfjalkf", "Luca Italiano", "Ryan Nguyen", "Jeremy Blum", "Lionel Messi",
-            "George Washington", "Cristiano Ronaldo", "Derek Carr", "Kyler Murray"};
+    CheckedTextView ctv;
 
     ArrayList<String> selected = new ArrayList<String>();
+    ArrayList<String> uids;
 
     class InviteGuestsAdapter extends BaseAdapter {
         String[] names;
@@ -55,28 +62,53 @@ public class InviteGuestsActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        public View getView(final int position, View view, ViewGroup parent) {
             view = inflater.inflate(R.layout.invite_guest_item, null);
-            final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
+            ctv = view.findViewById(R.id.checkedTextView);
+            uids = new ArrayList<String>();
             ctv.setText(names[position]);
             ctv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(ctv.isChecked()) {
-                        value = "un-Checked";
-                        ctv.setCheckMarkDrawable(0);
-                        ctv.setChecked(false);
-                        if(selected.contains(ctv.getText().toString())) {
-                            selected.remove(ctv.getText().toString());
+
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
+
+                    db.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            for(DataSnapshot element : dataSnapshot.getChildren()) {
+                                if(ctv.isChecked() && element.child("name").getValue().toString().equals(names[position])) {
+                                    value = "un-Checked";
+                                    ctv.setCheckMarkDrawable(0);
+                                    ctv.setChecked(false);
+                                    if(selected.contains(ctv.getText().toString())) {
+                                        selected.remove(ctv.getText().toString());
+                                        uids.remove(element.getKey());
+                                    }
+                                } else if (!ctv.isChecked() && element.child("name").getValue().toString().equals(names[position])) {
+                                    value = "Checked";
+                                    ctv.setCheckMarkDrawable(R.drawable.checked);
+                                    ctv.setChecked(true);
+                                    if(!selected.contains(ctv.getText().toString())) {
+                                        selected.add(ctv.getText().toString());
+                                        uids.add(element.getKey());
+                                    }
+                                }
+                            }
+
+                            for(int i = 0; i <uids.size(); i++) {
+                                System.out.println(uids.get(i));
+                            }
+
                         }
-                    } else {
-                        value = "Checked";
-                        ctv.setCheckMarkDrawable(R.drawable.checked);
-                        ctv.setChecked(true);
-                        if(!selected.contains(ctv.getText().toString())) {
-                            selected.add(ctv.getText().toString());
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
                         }
-                    }
+                    });
                 }
             });
 
@@ -93,14 +125,34 @@ public class InviteGuestsActivity extends AppCompatActivity {
         // https://abhiandroid.com/ui/checkedtextview
         listView = findViewById(R.id.listView);
 
-        InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), names);
-        listView.setAdapter(adapter);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
+        db.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String[] names = new String[(int)dataSnapshot.getChildrenCount()];
+                int i = 0;
+                for(DataSnapshot element : dataSnapshot.getChildren()) {
+                    names[i] = element.child("name").getValue().toString();
+                    i++;
+                }
+                InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), names);
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+
+
 
         findViewById(R.id.invite_guests_done).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
                 intent.putExtra("values", selected);
+                intent.putExtra("uids", uids);
                 onActivityResult(18,18, intent);
                 setResult(18, intent);
                 finish();

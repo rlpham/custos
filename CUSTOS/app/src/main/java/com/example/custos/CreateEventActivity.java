@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 public class CreateEventActivity extends AppCompatActivity {
     TextView event_name_text_view;
@@ -77,6 +78,13 @@ public class CreateEventActivity extends AppCompatActivity {
                 name = event_name_text_view.getText().toString();
                 description = event_description_text_view.getText().toString();
                 date_time = event_time_text_view.getText().toString();
+
+//                ListView invited_list = findViewById(R.id.invited_list);
+//                String[] guests = new String[invited_list.getCount()];
+//                for(int i = 0; i < invited_list.getCount(); i++) {
+//                    System.out.println(invited_list.getItemAtPosition(i).toString());
+//                    guests[i] = invited_list.getItemAtPosition(i).toString();
+//                }
 
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 user_information = FirebaseDatabase.getInstance().getReference("user_event");
