@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashActivity2">
+    tools:context=".SplashActivity2"
+    android:background="#000000">
     
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="wrap_content"

@@ -12,161 +12,171 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:background="#1D1D1D">
+            android:background="#212121">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"/>
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:layout_marginTop="50dp"
+                android:layout_marginLeft="10dp"
                 android:src="@mipmap/ic_launcher"/>
-
             <TextView
-                android:id="@+id/textName"
+                android:id="@+id/signout_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/imageView"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="Name"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="328dp"
+                android:drawableTop="@drawable/ic_directions_run_black_24dp"/>
+            <TextView
+                android:id="@+id/back_button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="300dp"
+                android:drawableTop="@drawable/ic_arrow_back_black_24dp"/>
+
+
+
+            <TextView
+                android:id="@+id/textEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="75dp"
+                android:text="Email"
+                android:layout_toRightOf="@+id/imageView"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:textCursorDrawable="@color/colorwhite"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/textName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="50dp"
+                android:text="Name"
+                android:layout_toRightOf="@+id/imageView"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:includeFontPadding="false"
+                android:textCursorDrawable="@color/colorwhite"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
-
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 
-
-
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="User Home Location"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="15sp" />
+        android:padding="30dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/homeLocation"
-        android:layout_width="362dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="1dp"
-        android:layout_marginLeft="25dp"
-        android:text="Home Location"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/setHomeLocation"
-        android:layout_width="195dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="105dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/sv_round"
-        android:text="Set Home Location"
-        android:textSize="17sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="35dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="User Email"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="15sp" />
-    <TextView
-        android:id="@+id/textEmail"
-        android:layout_width="259dp"
-        android:layout_height="53dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="1dp"
-        android:layout_marginLeft="30dp"
-        android:text="Email"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="20sp"/>
-
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ProgressBar
-        android:id="@+id/progress_circular2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="103dp" />
-
-    <Button
-        android:id="@+id/signout_button"
-        android:layout_width="126dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="120dp"
-        android:layout_marginTop="51dp"
-        android:layout_marginEnd="65dp"
-        android:background="@drawable/sv_round"
-        android:text="Signout"
-        android:textSize="17sp" />
-
-    <Button
-        android:id="@+id/back_button2"
-        android:layout_width="126dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="51dp"
-        android:layout_marginEnd="219dp"
-        android:background="@drawable/sv_round"
-        android:text="Cancel"
-        android:textSize="16sp" />
-
-</RelativeLayout>
+            <TextView
+                android:id="@+id/textName2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_account_circle_white_24dp"
+                android:drawablePadding="10dp"
+                android:layout_marginLeft="5dp"
+                android:text="Full Name"
+                android:textSize="18dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"/>
 
 
 
 
 
-    <TextView
-        android:id="@+id/textId"
-        android:layout_width="205dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="110dp"
-        android:text="Id" />
+            <TextView
+                android:id="@+id/textEmail2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_email_white_24dp"
+                android:drawablePadding="10dp"
+                android:paddingTop="30dp"
+                android:layout_marginLeft="5dp"
+                android:text="Email"
+                android:textSize="18dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"/>
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textPhoneNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone number"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:includeFontPadding="false"
+            android:textCursorDrawable="@color/colorwhite"
+            android:paddingTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_phone_android_white_24dp"
+                android:drawablePadding="10dp"/>
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/homeLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_edit_location_black_24dp"
+                android:drawablePadding="10dp"
+                android:paddingTop="22dp"
+                android:layout_marginLeft="5dp"
+                android:text="Home Location"
+                android:textSize="18dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"/>
+
+
+
+
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
 
 </LinearLayout>

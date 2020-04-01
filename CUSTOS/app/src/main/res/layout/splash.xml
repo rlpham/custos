@@ -6,17 +6,6 @@
     android:background="@drawable/background"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="349dp"
-        android:layout_marginEnd="179dp"
-        android:layout_marginBottom="506dp" />
-
     <Button
         android:id="@+id/google_login"
         android:layout_width="244dp"

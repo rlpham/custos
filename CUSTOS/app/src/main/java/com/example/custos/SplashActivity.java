@@ -10,10 +10,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.LoadingDialog;
 import com.example.custos.utils.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,12 +36,10 @@ import com.google.firebase.iid.InstanceIdResult;
 
 public class SplashActivity extends AppCompatActivity {
     Button signInButton;
-    Button signOutButton;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN =0;
     FirebaseAuth mAuth;
     User userApp = new User();
-    ProgressBar progressBar;
 
     @Override
     protected void onStart() {
@@ -57,11 +55,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
-        progressBar = findViewById(R.id.progress_circular);
-        progressBar.setVisibility(View.INVISIBLE);
         signInButton = findViewById(R.id.google_login);
         mAuth = FirebaseAuth.getInstance();
-        signOutButton = findViewById(R.id.signout_button);
         createRequest();
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +96,6 @@ public class SplashActivity extends AppCompatActivity {
 
     final Handler handler = new Handler();
     private void signIn(){
-        progressBar.setVisibility(View.VISIBLE);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -234,19 +228,21 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void fireBaseGoogleAuth(GoogleSignInAccount account) {
+        final LoadingDialog loadingDialog = new LoadingDialog(SplashActivity.this);
+        loadingDialog.startLoadingDialog();
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    progressBar.setVisibility(View.INVISIBLE);
                     //Toast.makeText(SplashActivity.this,"Successful",Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                     startActivity(intent);
+                    loadingDialog.dismissDialog();
                     updateUI(user);
                 }else{
-                    progressBar.setVisibility(View.INVISIBLE);
+                    loadingDialog.dismissDialog();
                     Toast.makeText(SplashActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
                     updateUI(null);
                 }

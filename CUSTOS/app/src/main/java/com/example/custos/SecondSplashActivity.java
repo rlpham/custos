@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,8 +56,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SecondSplashActivity extends AppCompatActivity{
     CircleImageView imageView;
-    TextView name, email, id, homeLocation;
-    Button signOut,setHomeButton,backButton;
+    TextView name,name2, email,email2,homeLocation,signOut,backButton;
+    TextInputLayout phoneNum;
     GoogleSignInClient googleSignInClient;
     List<Address> addresses=new ArrayList<>();
     Geocoder geocoder;
@@ -82,15 +84,15 @@ public class SecondSplashActivity extends AppCompatActivity{
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
-        progressBar = findViewById(R.id.progress_circular2);
-        progressBar.setVisibility(View.INVISIBLE);
         imageView =     findViewById(R.id.imageView);
         name =          findViewById(R.id.textName);
+        name2 =         findViewById(R.id.textName2);
         email =         findViewById(R.id.textEmail);
-        id =            findViewById(R.id.textId);
+        email2 =         findViewById(R.id.textEmail2);
+        phoneNum = findViewById(R.id.textPhoneNum);
         signOut =       findViewById(R.id.signout_button);
         homeLocation =  findViewById(R.id.homeLocation);
-        setHomeButton = findViewById(R.id.setHomeLocation);
+        //setHomeButton = findViewById(R.id.setHomeLocation);
         backButton =    findViewById(R.id.back_button2);
         storageReference = FirebaseStorage.getInstance().getReference(Common.IMAGE_UPLOAD);
 
@@ -137,7 +139,7 @@ public class SecondSplashActivity extends AppCompatActivity{
             }
         });
 
-        setHomeButton.setOnClickListener(new View.OnClickListener() {
+        homeLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SecondSplashActivity.this,SetHomeLocationActivity.class);
@@ -194,10 +196,10 @@ public class SecondSplashActivity extends AppCompatActivity{
 
                 }
             });
-
+            name2.setText(firebaseName);
+            email2.setText(firebaseEmail);
             name.setText(firebaseName);
             email.setText(firebaseEmail);
-            id.setText(personID);
             //Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }
     }
@@ -316,13 +318,14 @@ public class SecondSplashActivity extends AppCompatActivity{
     }
 
     private void signOut(){
+        final LoadingDialog loadingDialog = new LoadingDialog(SecondSplashActivity.this);
+
         FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        signOut.setVisibility(View.INVISIBLE);
+                        loadingDialog.startLoadingDialog();
                         Toast.makeText(SecondSplashActivity.this,"Logging out...", Toast.LENGTH_LONG).show();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -330,11 +333,13 @@ public class SecondSplashActivity extends AppCompatActivity{
                                 updateUI(null);
                                 Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
                                 startActivity(intent);
+                                loadingDialog.dismissDialog();
                             }
-                        },2500);
+                        },4000);
 
                     }
                 });
+
 
     }
 }
