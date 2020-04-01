@@ -516,7 +516,7 @@ private LatLng eventlocation;
             public void run() {
                setHomeLoc();
             }
-        }, 3000);
+        }, 5000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {

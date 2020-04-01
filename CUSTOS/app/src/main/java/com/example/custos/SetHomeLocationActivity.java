@@ -94,36 +94,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                                 }
                             }
                 });
-                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                        .child(user.getUID())
-                        .child(Common.USER_ADDRESS)
-                        .child(Common.USER_HOME_LAT)
-                        .setValue(setHomeLocation.getLatitude())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                        .child(user.getUID())
-                        .child(Common.USER_ADDRESS)
-                        .child(Common.USER_HOME_LNG)
-                        .setValue(setHomeLocation.getLongtitude())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+
 
 //                databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 //                databaseReference.addValueEventListener(new ValueEventListener() {
@@ -239,6 +210,36 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                         }
                     }
                 });
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(user.getUID())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.USER_HOME_LAT)
+                        .setValue(setHomeLocation.getLatitude())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(user.getUID())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.USER_HOME_LNG)
+                        .setValue(setHomeLocation.getLongtitude())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
                 System.out.println(setHomeLocation.getLatitude() + " " + setHomeLocation.getLongtitude());
 
