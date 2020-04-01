@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
@@ -87,6 +88,7 @@ public class ContactsActivity extends DialogFragment {
         //temporary till someone can figure out how to get right user
         datta = FirebaseDatabase.getInstance().getReference("Users");
 
+        System.out.println("WHICH GOES FIRST");
         datta.orderByKey()
                 .equalTo(firebaseUser.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -100,7 +102,8 @@ public class ContactsActivity extends DialogFragment {
 
                                 datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts").child(usernamed);
                                 datta.child("name").setValue("donotdeletethis");
-                                datta.child("phone_number").setValue("donotdeletethis");
+                                datta.child("phone_number").setValue("5554446565");
+                                System.out.println("race conditions");
 
                             }
                         }
@@ -125,7 +128,10 @@ public class ContactsActivity extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Handler handler = new Handler();
 
+
+        System.out.println("WHICH ONE GOES FIRST");
 
         View view = inflater.inflate(R.layout.contactpage, container, false);
 
@@ -159,7 +165,13 @@ public class ContactsActivity extends DialogFragment {
             }
         });
 
-
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getContext(),SplashActivity.class);
+                startActivity(intent);
+            }
+        },20000);
         //////testing db
 
         datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
@@ -174,7 +186,19 @@ public class ContactsActivity extends DialogFragment {
 
                         int nameequal = Users.toString().indexOf("name=");
                         int comma = Users.toString().indexOf(", phone_number");
-                        String contact = Users.toString().substring(nameequal + 5, comma);
+                        System.out.println("race conditionsssssssssssss");
+                        //System.out.println(Users.toString().substring(nameequal + 5));
+                        String contact = "";
+                        System.out.println("HELP: " + Users.toString());
+                        if(!Users.toString().contains("name=") || !Users.toString().contains(", phone_number"))
+                        {
+                            contact = "donotdeletethis";
+                        }
+                        else
+                        {
+                             contact = Users.toString().substring(nameequal + 5, comma);
+                        }
+
 
 
                         if (!contact.equals("donotdeletethis")) {
@@ -189,7 +213,7 @@ public class ContactsActivity extends DialogFragment {
                         String number = Users.toString().substring(phonenumberequala + 13, end);
 
 
-                        if (!number.equals("donotdeletethis")) {
+                        if (!number.equals("5554446565")) {
                             listShow2.add(number);
                         }
 
