@@ -266,37 +266,32 @@ private LatLng eventlocation;
      */
 
     public void setHomeLoc(){
-        handler.postDelayed(new Runnable() {
+        db3.addValueEventListener(new ValueEventListener() {
             @Override
-            public void run() {
-                db3.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        if((dataSnapshot.child(userID).child("User Address").child(Common.HOME_LOC).exists())
-                        ) {
-                            double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
-                                    .child(Common.USER_ADDRESS)
-                                    .child("User Home Longitude")
-                                    .getValue().toString());
-                            double eventlatitude = Double.parseDouble(dataSnapshot.child(userID)
-                                    .child(Common.USER_ADDRESS)
-                                    .child("User Home Latitude")
-                                    .getValue().toString());
-                            LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
-                            setEventsLocation(eventloc, "Home Location");
-                        }else{
+                if((dataSnapshot.child(userID).child("User Address").child(Common.HOME_LOC).exists())
+                ) {
+                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
+                            .child(Common.USER_ADDRESS)
+                            .child("User Home Longitude")
+                            .getValue().toString());
+                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID)
+                            .child(Common.USER_ADDRESS)
+                            .child("User Home Latitude")
+                            .getValue().toString());
+                    LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
+                    setEventsLocation(eventloc, "Home Location");
+                }else{
 
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                }
             }
-        },5000);
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -516,7 +511,7 @@ private LatLng eventlocation;
             public void run() {
                setHomeLoc();
             }
-        }, 5000);
+        }, 3000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
