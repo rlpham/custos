@@ -70,6 +70,8 @@
             android:exported="true"/>
         <activity android:name=".InitialEmergencyContactActivity"
             android:exported="true" />
+        <activity android:name=".SplashActivity2"
+            android:exported="true"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
