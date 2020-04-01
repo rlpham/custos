@@ -14,28 +14,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.telephony.SmsManager;
-import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.SearchView;
-
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -45,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,7 +39,7 @@ import org.w3c.dom.Text;
 
 public class SafetyPinActivity extends AppCompatActivity {
 
-
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         String pinmsg = "";
         Button bt1;
         Button bt2;
@@ -144,8 +124,35 @@ public class SafetyPinActivity extends AppCompatActivity {
        {
 
 
-          datta =  FirebaseDatabase.getInstance().getReference("Users").child("rlpham18");
+          datta =  FirebaseDatabase.getInstance().getReference("Users");
+           datta.orderByKey()
+                   .equalTo(firebaseUser.getUid())
+                   .addListenerForSingleValueEvent(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                           if (dataSnapshot.getValue() == null) {
+                               //uid not exist
+
+                               if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+
+                                   datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
+
+                               }
+                           }
+
+
+                       }
+                       @Override
+                       public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                       }
+                   });
+           datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("safetypin");
           datta.child("safetypin").setValue(pinmsg2);
+
+
+
 
            changePage(view);
        }

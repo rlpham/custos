@@ -75,6 +75,15 @@
         android:textCursorDrawable="@color/colorwhite"
         android:textSize="18sp" />
 
+    <ProgressBar
+        android:id="@+id/progress_circular3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="562dp"
+        android:layout_marginEnd="94dp" />
+
     <Button
         android:id="@+id/save_button"
         android:layout_width="137dp"

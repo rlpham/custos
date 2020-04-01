@@ -25,6 +25,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.User;
+import com.example.custos.utils.UserLocation;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -62,6 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FragmentTransaction transaction;
     private FusedLocationProviderClient fusedLocationClient;
     private final int ok = 0;
+    GoogleSignInClient googleSignInClient;
     //Testcode below
 
     int dangerZoneRequestCode = 0;
@@ -237,7 +244,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
-        if(mess.equals("Home Location")){
+        if((mess.equals("Home Location")) && !(mess.equals(" "))){
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory
                     .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
           //  moveToCurrentLocation(eventlocation);
@@ -259,15 +266,24 @@ private LatLng eventlocation;
      */
 
     public void setHomeLoc(){
-
         db3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(userID).child("User Address").exists()) {
-                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Longitude").getValue().toString());
-                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID).child("User Home Latitude").getValue().toString());
+
+                if((dataSnapshot.child(userID).child("User Address").child(Common.HOME_LOC).exists())
+                ) {
+                    double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
+                            .child(Common.USER_ADDRESS)
+                            .child("User Home Longitude")
+                            .getValue().toString());
+                    double eventlatitude = Double.parseDouble(dataSnapshot.child(userID)
+                            .child(Common.USER_ADDRESS)
+                            .child("User Home Latitude")
+                            .getValue().toString());
                     LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
                     setEventsLocation(eventloc, "Home Location");
+                }else{
+
                 }
             }
 
@@ -276,6 +292,7 @@ private LatLng eventlocation;
 
             }
         });
+
     }
 
 
@@ -287,7 +304,7 @@ private LatLng eventlocation;
     public void onMapReady(GoogleMap googleMap) {
 
 
-setHomeLoc();
+
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -323,6 +340,7 @@ setHomeLoc();
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (checkPermissions()&&firebaseUser.getUid()!=null) {
             googleMap.setMyLocationEnabled(true);
+
 
             mMap = googleMap;
             fusedLocationClient.getLastLocation()
@@ -361,6 +379,7 @@ setHomeLoc();
 
                                         }
                                     });
+                            final String imgURL = "default";
                             user_information2.orderByKey()
                             .equalTo(firebaseUser.getUid())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -372,6 +391,32 @@ setHomeLoc();
                                             Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
                                             user_information2.child(Common.loggedUser.getUID())
                                                     .setValue(Common.loggedUser);
+                                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                                    .child(firebaseUser.getUid())
+                                                    .child(Common.IMAGE_URL)
+                                                    .setValue(imgURL).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(getApplicationContext(),"successfully saved imgurl",Toast.LENGTH_SHORT).show();
+                                                    }else{
+                                                        Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                                    .child(firebaseUser.getUid())
+                                                    .child("userName")
+                                                    .setValue(firebaseUser.getDisplayName()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(getApplicationContext(),"successfully saved imgurl",Toast.LENGTH_SHORT).show();
+                                                    }else{
+                                                        Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 }
@@ -381,6 +426,8 @@ setHomeLoc();
 
                                 }
                             });
+
+
 
                             if (location != null) {
 
@@ -464,7 +511,7 @@ setHomeLoc();
             public void run() {
                setHomeLoc();
             }
-        }, 2000);
+        }, 3000);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {

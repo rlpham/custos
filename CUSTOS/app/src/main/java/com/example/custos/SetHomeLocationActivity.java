@@ -4,30 +4,26 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.custos.utils.Common;
+import com.example.custos.utils.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,9 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,13 +44,15 @@ import java.util.Locale;
 public class SetHomeLocationActivity extends AppCompatActivity {
 
     TextView address;
-    Geocoder geocoder;
+    //Geocoder geocoder;
     Button saveButton;
     Button backButton;
+    ProgressBar progressBar;
     List<Address> addresses = new ArrayList<>();
     User user = new User();
     SetHomeLocation setHomeLocation = new SetHomeLocation();
     DatabaseReference databaseReference;
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -65,6 +60,8 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         address = findViewById(R.id.home_address);
         saveButton = findViewById(R.id.save_button);
         backButton = findViewById(R.id.back_button);
+        progressBar = findViewById(R.id.progress_circular3);
+        progressBar.setVisibility(View.INVISIBLE);
         final String apiKey = "AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc";
         if(!Places.isInitialized()){
             Places.initialize(getApplicationContext(),apiKey);
@@ -85,6 +82,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                         .child(user.getUID())
                         .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
                         .setValue(user.getUserAddress())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -96,51 +94,75 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                                 }
                             }
                 });
-                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                        .child(user.getUID())
-                        .child(Common.USER_HOME_LAT)
-                        .setValue(setHomeLocation.getLatitude())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                        .child(user.getUID())
-                        .child(Common.USER_HOME_LNG)
-                        .setValue(setHomeLocation.getLongtitude())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
 
 
-                Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
-                startActivity(intent);
+//                databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+//                databaseReference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        if(!(dataSnapshot.child(firebaseUser.getUid())
+//                                .child(Common.USER_ADDRESS)
+//                                .child(Common.HOME_LOC)
+//                                .getValue()
+//                                .toString()
+//                                .equals(" "))){
+//
+//
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+
+
+
+                progressBar.setVisibility(View.VISIBLE);
+                saveButton.setVisibility(View.INVISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(SetHomeLocationActivity.this,SecondSplashActivity.class);
+                        startActivity(intent);
+                    }
+                },2500);
+
             }
         });
-        geocoder = new Geocoder(this,Locale.getDefault());
+        //geocoder = new Geocoder(this,Locale.getDefault());
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 user.setUID(firebaseUser.getUid());
-                if(dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS).exists()){
-                    String fullAddress = dataSnapshot.child(user.getUID()).child(Common.USER_ADDRESS).getValue().toString();
+                if((dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .exists())
+                        && !(dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .getValue()
+                        .toString().equals(" "))){
+                    String fullAddress = dataSnapshot.child(user.getUID())
+                            .child(Common.USER_ADDRESS)
+                            .child(Common.HOME_LOC)
+                            .getValue().toString();
                     address.setText(fullAddress);
-                }else {
+                }else if((dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .exists()) && (dataSnapshot.child(firebaseUser.getUid())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.HOME_LOC)
+                        .getValue()
+                        .toString().equals(" "))){
+                    address.setText("Something went wrong try again later!");
+                }
+                else {
                     address.setText("User have not set their home location");
                 }
 
@@ -174,7 +196,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
                 setHomeLocation.setLatitude(latLng.latitude);
                 setHomeLocation.setLongtitude(latLng.longitude);
-                final String fullAd = stringAddress(latLng.latitude,latLng.longitude);
+                //final String fullAd = stringAddress(latLng.latitude,latLng.longitude);
 
 
                 FirebaseDatabase.getInstance().getReference("Home Location latlng")
@@ -188,6 +210,36 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                         }
                     }
                 });
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(user.getUID())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.USER_HOME_LAT)
+                        .setValue(setHomeLocation.getLatitude())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                        .child(user.getUID())
+                        .child(Common.USER_ADDRESS)
+                        .child(Common.USER_HOME_LNG)
+                        .setValue(setHomeLocation.getLongtitude())
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(SetHomeLocationActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(SetHomeLocationActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
 
                 System.out.println(setHomeLocation.getLatitude() + " " + setHomeLocation.getLongtitude());
 
@@ -201,10 +253,10 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         });
 
     }
-
     private String getFullAddress(LatLng myCoordinates) {
         String fullAddress = " ";
-        Geocoder geocoder = new Geocoder(SetHomeLocationActivity.this,Locale.getDefault());
+        Geocoder geocoder;
+        geocoder = new Geocoder(SetHomeLocationActivity.this,Locale.getDefault());
         try {
             List<Address> addresses2 = geocoder.getFromLocation(myCoordinates.latitude,myCoordinates.longitude,1);
             fullAddress = addresses2.get(0).getAddressLine(0);
@@ -223,6 +275,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
         String fullAddress="";
         if(!addresses.isEmpty()){
             try {
+                Geocoder geocoder = new Geocoder(getApplicationContext(),Locale.getDefault());
                 addresses = geocoder.getFromLocation(latitude,longtitude,1);
                 if(addresses.size()>0){
                     String myAddress = addresses.get(0).getAddressLine(0);

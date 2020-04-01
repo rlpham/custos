@@ -38,6 +38,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,10 +53,11 @@ import org.json.JSONObject;
 public class InitialEmergencyContactActivity extends AppCompatActivity {
 
     DatabaseReference datta;
-
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     EditText name;
     EditText phone;
     Button submit;
+    final String ALPHABET = "123456789abcdefghjkmnpqrstuvwxyz";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +68,53 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
         final String ec = "emergency_contacts";
 
 
-        datta = FirebaseDatabase.getInstance().getReference("Users").child("userTest");
+        //////////////
+
+
+
+
+        InitialEmergencyContactActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        final String usernamed = getRandomWord(20);
+
+        //temporary till someone can figure out how to get right user
+        datta = FirebaseDatabase.getInstance().getReference("Users");
+
+        datta.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+
+                                datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec).child(usernamed);
+                                //datta.child("name").setValue("donotdeletethis");
+                                //datta.child("phone_number").setValue("donotdeletethis");
+
+                            }
+                        }
+
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                        ////////////
+        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec).child(usernamed);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(namecheck(name) && phonecheck(phone))
                 {
-                    datta = FirebaseDatabase.getInstance().getReference("Users").child("userTest").child(ec);
+                    //datta = FirebaseDatabase.getInstance().getReference("Users").child("userTest").child(ec);
+                    datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec);
                     datta.child("name").setValue(name.getText().toString());
                     datta.child("phone_number").setValue(phone.getText().toString());
                     Intent intent = new Intent(InitialEmergencyContactActivity.this, MapsActivity.class);
@@ -113,6 +156,14 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
         }
         return true;
     }
+
+                    String getRandomWord(int length) {
+                        String r = "";
+                        for (int i = 0; i < length; i++) {
+                            r += (char) (Math.random() * 26 + 97);
+                        }
+                        return r;
+                    }
 
 
 }
