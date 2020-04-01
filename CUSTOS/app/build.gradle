@@ -26,7 +26,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0-alpha10'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
-    implementation "com.google.android.gms:play-services-location:15.0.1"
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.google.android.gms:play-services-identity:17.0.0'
