@@ -195,7 +195,7 @@ public class SecondSplashActivity extends AppCompatActivity{
                 }
             });
 
-            name.setText(firebaseName);
+            name.setText(personName);
             email.setText(firebaseEmail);
             id.setText(personID);
             //Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);

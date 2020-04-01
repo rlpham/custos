@@ -27,6 +27,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.User;
 import com.example.custos.utils.UserLocation;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -64,6 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FragmentTransaction transaction;
     private FusedLocationProviderClient fusedLocationClient;
     private final int ok = 0;
+    GoogleSignInClient googleSignInClient;
     //Testcode below
 
     int dangerZoneRequestCode = 0;
@@ -335,6 +340,7 @@ setHomeLoc();
         if (checkPermissions()&&firebaseUser.getUid()!=null) {
             googleMap.setMyLocationEnabled(true);
 
+
             mMap = googleMap;
             fusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -381,9 +387,35 @@ setHomeLoc();
                                     if(dataSnapshot.getValue() == null){
                                         //uid not exist
                                         if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
-                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName(),imgURL);
+                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
                                             user_information2.child(Common.loggedUser.getUID())
                                                     .setValue(Common.loggedUser);
+                                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                                    .child(firebaseUser.getUid())
+                                                    .child(Common.IMAGE_URL)
+                                                    .setValue(imgURL).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(getApplicationContext(),"successfully saved imgurl",Toast.LENGTH_SHORT).show();
+                                                    }else{
+                                                        Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                                    .child(firebaseUser.getUid())
+                                                    .child("userName")
+                                                    .setValue(firebaseUser.getDisplayName()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(getApplicationContext(),"successfully saved imgurl",Toast.LENGTH_SHORT).show();
+                                                    }else{
+                                                        Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                         }
                                     }
                                 }
@@ -393,6 +425,8 @@ setHomeLoc();
 
                                 }
                             });
+
+
 
                             if (location != null) {
 

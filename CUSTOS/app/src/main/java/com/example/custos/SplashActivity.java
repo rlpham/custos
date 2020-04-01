@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.GoogleLoading;
+import com.example.custos.utils.LoadingDialog;
 import com.example.custos.utils.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -110,6 +112,8 @@ public class SplashActivity extends AppCompatActivity {
                 startActivityForResult(signInIntent,RC_SIGN_IN);
             }
         },2000);
+
+
 
 //        startActivityForResult(
 //                AuthUI.getInstance()
