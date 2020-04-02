@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SplashActivity2 extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
 
     Handler handler = new Handler();
     @Override
