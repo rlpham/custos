@@ -57,14 +57,13 @@ public class EditUserInformation extends AppCompatActivity {
     private Uri imageUri;
     StorageReference storageReference;
     private StorageTask uploadTask;
-    TextView editHomeLoc,backButton,changePicText;
-    List<Address> addresses=new ArrayList<>();
+    TextView editHomeLoc, backButton, changePicText;
+    List<Address> addresses = new ArrayList<>();
     Geocoder geocoder;
     Button saveButton;
     TextInputLayout editPhoneNumber;
-    TextInputLayout editPIN,editName;
+    TextInputLayout editPIN, editName;
     Handler handler = new Handler();
-
 
 
     @Override
@@ -72,7 +71,7 @@ public class EditUserInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_information);
         changePicText = findViewById(R.id.change_picture);
-        imageEdit =     findViewById(R.id.imageEdit);
+        imageEdit = findViewById(R.id.imageEdit);
         editHomeLoc = findViewById(R.id.editHomeLocation);
         saveButton = findViewById(R.id.saveUserInfo);
         editPhoneNumber = findViewById(R.id.textPhoneNum);
@@ -87,9 +86,9 @@ public class EditUserInformation extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if(user.getImageURL().equals("default")){
+                if (user.getImageURL().equals("default")) {
                     imageEdit.setImageResource(R.mipmap.ic_launcher);
-                }else{
+                } else {
                     Glide.with(getApplicationContext()).load(user.getImageURL()).into(imageEdit);
                 }
             }
@@ -100,13 +99,13 @@ public class EditUserInformation extends AppCompatActivity {
             }
         });
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser!= null){
+        if (firebaseUser != null) {
             databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    if((dataSnapshot.child(firebaseUser.getUid())
+                    if ((dataSnapshot.child(firebaseUser.getUid())
                             .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
                             .exists())
@@ -114,23 +113,22 @@ public class EditUserInformation extends AppCompatActivity {
                             .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
                             .getValue()
-                            .toString().equals(" "))){
+                            .toString().equals(" "))) {
                         String fullAddress = dataSnapshot.child(firebaseUser.getUid())
                                 .child(Common.USER_ADDRESS)
                                 .child(Common.HOME_LOC)
                                 .getValue().toString();
                         editHomeLoc.setText(fullAddress);
-                    }else if((dataSnapshot.child(firebaseUser.getUid())
+                    } else if ((dataSnapshot.child(firebaseUser.getUid())
                             .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
                             .exists()) && (dataSnapshot.child(firebaseUser.getUid())
                             .child(Common.USER_ADDRESS)
                             .child(Common.HOME_LOC)
                             .getValue()
-                            .toString().equals(" "))){
+                            .toString().equals(" "))) {
                         editHomeLoc.setText("Something went wrong try again later!");
-                    }
-                    else {
+                    } else {
                         editHomeLoc.setText("Home address is not set");
                     }
 
@@ -145,21 +143,21 @@ public class EditUserInformation extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(),SecondSplashActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SecondSplashActivity.class);
 
                 Pair[] pairs = new Pair[8];
-                pairs[0] = new Pair<View,String>(imageEdit,"profile_picture");
-                pairs[1] = new Pair<View,String>(backButton,"back");
-                pairs[2] = new Pair<View,String>(changePicText,"change_picture");
-                pairs[3] = new Pair<View,String>(editName,"full_name");
-                pairs[4] = new Pair<View,String>(editPhoneNumber,"phone_number");
-                pairs[5] = new Pair<View,String>(editPIN,"pin");
-                pairs[6] = new Pair<View,String>(editHomeLoc,"address");
-                pairs[7] = new Pair<View,String>(saveButton,"save_info");
+                pairs[0] = new Pair<View, String>(imageEdit, "profile_picture");
+                pairs[1] = new Pair<View, String>(backButton, "back");
+                pairs[2] = new Pair<View, String>(changePicText, "change_picture");
+                pairs[3] = new Pair<View, String>(editName, "full_name");
+                pairs[4] = new Pair<View, String>(editPhoneNumber, "phone_number");
+                pairs[5] = new Pair<View, String>(editPIN, "pin");
+                pairs[6] = new Pair<View, String>(editHomeLoc, "address");
+                pairs[7] = new Pair<View, String>(saveButton, "save_info");
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this,pairs);
-                    startActivity(intent,activityOptions.toBundle());
+                    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this, pairs);
+                    startActivity(intent, activityOptions.toBundle());
                 }
 
             }
@@ -167,86 +165,96 @@ public class EditUserInformation extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-                String phoneNumber = editPhoneNumber.getEditText().getText().toString();
-                String userFullName = editName.getEditText().getText().toString();
-                String userPIN = editPIN.getEditText().getText().toString();
+                if (validatePhoneNumber() || validatePIN() || validateName()) {
+                    final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                    String phoneNumber = editPhoneNumber.getEditText().getText().toString();
+                    String userFullName = editName.getEditText().getText().toString();
+                    String userPIN = editPIN.getEditText().getText().toString();
+                    if (!(phoneNumber.equals("") || phoneNumber.equals(" "))) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("phoneNumber", phoneNumber);
+                        FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                .child(fUser.getUid())
+                                .updateChildren(map)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(EditUserInformation.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(EditUserInformation.this, "Failed Save", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
 
 //                databaseReference.child(fUser.getUid()).setValue(phoneNumber);
-                if(!(phoneNumber.equals("") || phoneNumber.equals(" "))){
-                    HashMap<String,Object> map = new HashMap<>();
-                    map.put("phoneNumber",phoneNumber);
-                    FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                            .child(fUser.getUid())
-                            .updateChildren(map)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(EditUserInformation.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(EditUserInformation.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }if(!(userFullName.equals("") || userFullName.equals(" "))) {
-                    HashMap<String,Object> map = new HashMap<>();
-                    map.put("userName",userFullName);
-                    FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                            .child(fUser.getUid())
-                            .updateChildren(map)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(EditUserInformation.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(EditUserInformation.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }if(!(userPIN.equals("") || userPIN.equals(" "))) {
-                    HashMap<String,Object> map = new HashMap<>();
-                    map.put("userPIN",userPIN);
-                    FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                            .child(fUser.getUid())
-                            .updateChildren(map)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(EditUserInformation.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(EditUserInformation.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
-                final LoadingDialog loadingDialog = new LoadingDialog(EditUserInformation.this);
-                loadingDialog.startLoadingDialog();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(EditUserInformation.this,SecondSplashActivity.class);
-                        Pair[] pairs = new Pair[8];
-                        pairs[0] = new Pair<View,String>(imageEdit,"profile_picture");
-                        pairs[1] = new Pair<View,String>(backButton,"back");
-                        pairs[2] = new Pair<View,String>(changePicText,"change_picture");
-                        pairs[3] = new Pair<View,String>(editName,"full_name");
-                        pairs[4] = new Pair<View,String>(editPhoneNumber,"phone_number");
-                        pairs[5] = new Pair<View,String>(editPIN,"pin");
-                        pairs[6] = new Pair<View,String>(editHomeLoc,"address");
-                        pairs[7] = new Pair<View,String>(saveButton,"save_info");
 
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this,pairs);
-                            startActivity(intent,activityOptions.toBundle());
-                            loadingDialog.dismissDialog();
-                        }
+                    if (!(userFullName.equals("") || userFullName.equals(" "))) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("userName", userFullName);
+                        FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                .child(fUser.getUid())
+                                .updateChildren(map)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(EditUserInformation.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(EditUserInformation.this, "Failed Save", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                     }
-                },2500);
+
+                    if (!(userPIN.equals("") || userPIN.equals(" "))) {
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("userPIN", userPIN);
+                        FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                .child(fUser.getUid())
+                                .updateChildren(map)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(EditUserInformation.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(EditUserInformation.this, "Failed Save", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                    }
+
+
+                    final LoadingDialog loadingDialog = new LoadingDialog(EditUserInformation.this);
+                    loadingDialog.startLoadingDialog();
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(EditUserInformation.this, SecondSplashActivity.class);
+                            Pair[] pairs = new Pair[8];
+                            pairs[0] = new Pair<View, String>(imageEdit, "profile_picture");
+                            pairs[1] = new Pair<View, String>(backButton, "back");
+                            pairs[2] = new Pair<View, String>(changePicText, "change_picture");
+                            pairs[3] = new Pair<View, String>(editName, "full_name");
+                            pairs[4] = new Pair<View, String>(editPhoneNumber, "phone_number");
+                            pairs[5] = new Pair<View, String>(editPIN, "pin");
+                            pairs[6] = new Pair<View, String>(editHomeLoc, "address");
+                            pairs[7] = new Pair<View, String>(saveButton, "save_info");
+
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this, pairs);
+                                startActivity(intent, activityOptions.toBundle());
+                                loadingDialog.dismissDialog();
+                            }
+                        }
+                    }, 2500);
+                }
             }
+
+
         });
         imageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,34 +265,102 @@ public class EditUserInformation extends AppCompatActivity {
         editHomeLoc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EditUserInformation.this,SetHomeLocationActivity.class);
+                Intent intent = new Intent(EditUserInformation.this, SetHomeLocationActivity.class);
                 startActivity(intent);
             }
         });
 
     }
+
+    private Boolean validateName() {
+        String name = editName.getEditText().getText().toString();
+        String letterOnly = "^[\\p{L} .'-]+$";
+        if (!name.matches(letterOnly)) {
+            editName.setError("Letters only");
+            return false;
+        }else if(name.isEmpty()){
+            editName.setError(null);
+            editName.setErrorEnabled(false);
+            return true;
+        }
+        else {
+            editName.setError(null);
+            editName.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private Boolean validatePhoneNumber() {
+        String phoneNumber = editPhoneNumber.getEditText().getText().toString();
+        String numberOnly = "^[0-9]{10}$";
+        if(phoneNumber.isEmpty()){
+            editPhoneNumber.setError(null);
+            editPhoneNumber.setErrorEnabled(false);
+            return true;
+        } else if (phoneNumber.length() >= 11 || phoneNumber.length() < 10) {
+            editPhoneNumber.setError("Phone number must be 10 digit");
+            return false;
+        }
+        else if (phoneNumber.contains(" ")) {
+            editPhoneNumber.setError("White space are not allowed");
+            return false;
+        } else if (!phoneNumber.matches(numberOnly)) {
+            editPhoneNumber.setError("Must be number only");
+            return false;
+        }else{
+            editPhoneNumber.setError(null);
+            editPhoneNumber.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private Boolean validatePIN() {
+        String PIN = editPIN.getEditText().getText().toString();
+        String numberOnly = "^[0-9]{4}$";
+        if(PIN.isEmpty()){
+            editPIN.setError(null);
+            editPIN.setErrorEnabled(false);
+            return true;
+        } else if (PIN.length() >= 5 || PIN.length() < 4) {
+            editPIN.setError("PIN must be 4 digit");
+            return false;
+        } else if (PIN.contains(" ")) {
+            editPIN.setError("White space are not allowed");
+            return false;
+        } else if (!PIN.matches(numberOnly)) {
+            editPIN.setError("Must be number only");
+            return false;
+        }else {
+            editPIN.setError(null);
+            editPIN.setErrorEnabled(false);
+            return true;
+        }
+
+    }
+
     private void openImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent,IMAGE_REQUEST);
+        startActivityForResult(intent, IMAGE_REQUEST);
     }
 
-    private String getFileExtension(Uri uri){
+    private String getFileExtension(Uri uri) {
         ContentResolver contentResolver = getApplicationContext().getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
-    private void uploadImage(){
+
+    private void uploadImage() {
         final LoadingDialog loadingDialog = new LoadingDialog(EditUserInformation.this);
         loadingDialog.startLoadingDialog();
-        if(imageUri != null){
+        if (imageUri != null) {
             final StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
             uploadTask = fileRef.putFile(imageUri);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if(!task.isSuccessful()){
+                    if (!task.isSuccessful()) {
                         throw task.getException();
                     }
                     return fileRef.getDownloadUrl();
@@ -292,30 +368,30 @@ public class EditUserInformation extends AppCompatActivity {
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         String uri = downloadUri.toString();
 
                         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(firebaseUser.getUid());
-                        HashMap<String,Object> hashMap = new HashMap<>();
-                        hashMap.put(Common.IMAGE_URL,uri);
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put(Common.IMAGE_URL, uri);
                         databaseReference.updateChildren(hashMap);
 
                         loadingDialog.dismissDialog();
-                    }else{
-                        Toast.makeText(getApplicationContext(),"Failed",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
                         loadingDialog.dismissDialog();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     loadingDialog.dismissDialog();
                 }
             });
-        }else{
-            Toast.makeText(getApplicationContext(),"No image selected",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -323,12 +399,12 @@ public class EditUserInformation extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK
-                && data!=null && data.getData()!=null){
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             imageUri = data.getData();
-            if(uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getApplicationContext(),"Upload in progress...",Toast.LENGTH_SHORT).show();
-            }else {
+            if (uploadTask != null && uploadTask.isInProgress()) {
+                Toast.makeText(getApplicationContext(), "Upload in progress...", Toast.LENGTH_SHORT).show();
+            } else {
                 uploadImage();
             }
         }

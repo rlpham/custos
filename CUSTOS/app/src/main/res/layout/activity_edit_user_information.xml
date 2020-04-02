@@ -1,183 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditUserInformation"
-    android:orientation="vertical"
     android:background="#1D1D1D"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:context=".EditUserInformation">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:background="#212121">
-            <TextView
-                android:id="@+id/back_button_editUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10dp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:layout_marginLeft="10dp"
-                android:transitionName="back"
-                android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"/>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageEdit"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:src="@mipmap/ic_launcher"
-                android:transitionName="profile_picture"/>
-
-
-
-            <TextView
-                android:id="@+id/change_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Change Profile Picture"
-                android:textStyle="bold"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@+id/imageEdit"
-                android:layout_centerHorizontal="true"
-                android:textColor="#fece2f"
-                android:textColorHighlight="#FFFFFF"
-                android:textColorHint="#FFFFFF"
-                android:textCursorDrawable="@color/colorwhite"
-                android:textSize="14sp"
-                android:transitionName="change_picture"/>
-
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="30dp"
         android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textUserName"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Change name"
-            android:textColor="#FFFFFF"
-            app:hintAnimationEnabled="false"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:includeFontPadding="false"
-            android:textCursorDrawable="@color/colorwhite"
-            android:paddingTop="10dp"
-            android:transitionName="full_name">
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_account_circle_yellow_24dp"
-            android:drawablePadding="10dp"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textPhoneNum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Change phone number"
-            android:textColor="#FFFFFF"
-            app:hintAnimationEnabled="false"
-            app:counterMaxLength="10"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:includeFontPadding="false"
-            android:textCursorDrawable="@color/colorwhite"
-            android:paddingTop="10dp"
-            android:transitionName="phone_number">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textPhoneNumDisplay"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_phone_android_yellow_24dp"
-                android:drawablePadding="10dp"
-                android:textColor="#FFFFFF"
-                android:textColorHighlight="#FFFFFF"
-                android:textColorHint="#FFFFFF"/>
+                android:background="#212121"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/back_button_editUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10dp"
+                    android:textStyle="bold"
+                    android:transitionName="back" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imageEdit"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:transitionName="profile_picture" />
 
 
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:id="@+id/change_picture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageEdit"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:text="Change Profile Picture"
+                    android:textColor="#fece2f"
+                    android:textColorHighlight="#FFFFFF"
+                    android:textColorHint="#FFFFFF"
+                    android:textCursorDrawable="@color/colorwhite"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:transitionName="change_picture" />
 
-            android:id="@+id/textPinNumber"
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Change PIN"
-            android:textColor="#FFFFFF"
-            app:hintAnimationEnabled="false"
-            app:counterMaxLength="4"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:includeFontPadding="false"
-            android:textCursorDrawable="@color/colorwhite"
-            android:paddingTop="10dp"
-            android:transitionName="pin"
-            >
+            android:orientation="vertical"
+            android:padding="30dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_fiber_pin_yellow_24dp"
-                android:drawablePadding="10dp"
+                android:hint="Change name"
+                android:includeFontPadding="false"
+                android:paddingTop="10dp"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
-                android:textColorHint="#FFFFFF"/>
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:transitionName="full_name"
+                app:hintAnimationEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_account_circle_yellow_24dp"
+                    android:drawablePadding="10dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHighlight="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textPhoneNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Change phone number"
+                android:includeFontPadding="false"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:transitionName="phone_number"
+                app:counterMaxLength="10"
+                app:hintAnimationEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textPhoneNumDisplay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_phone_android_yellow_24dp"
+                    android:drawablePadding="10dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHighlight="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
 
 
-        </com.google.android.material.textfield.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+
+                android:id="@+id/textPinNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Change PIN"
+                android:includeFontPadding="false"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:transitionName="pin"
+                app:counterMaxLength="4"
+                app:hintAnimationEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_fiber_pin_yellow_24dp"
+                    android:drawablePadding="10dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHighlight="#FFFFFF"
+                    android:textColorHint="#FFFFFF" />
 
 
-        <TextView
-            android:id="@+id/editHomeLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_location_on_yellow_24dp"
-            android:drawablePadding="10dp"
-            android:paddingTop="25dp"
-            android:layout_marginLeft="5dp"
-            android:text="Change home location"
-            android:textSize="18dp"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textCursorDrawable="@color/colorwhite"
-            android:transitionName="address"/>
-
-        <Button
-            android:id="@+id/saveUserInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SAVE"
-            android:background="#fece2f"
-            android:textStyle="bold"
-            android:textSize="19dp"
-            android:layout_marginTop="180dp"
-            android:transitionName="save_info"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
+            <TextView
+                android:id="@+id/editHomeLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:drawableLeft="@drawable/ic_location_on_yellow_24dp"
+                android:drawablePadding="10dp"
+                android:paddingTop="25dp"
+                android:text="Change home location"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:textSize="18dp"
+                android:transitionName="address" />
 
 
+            <Button
+                android:id="@+id/saveUserInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="180dp"
+                android:background="#fece2f"
+                android:text="SAVE"
+                android:textSize="19dp"
+                android:textStyle="bold"
+                android:transitionName="save_info" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
-</LinearLayout>
+</ScrollView>
