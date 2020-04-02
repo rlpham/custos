@@ -1,7 +1,7 @@
 # Custos
 
 <p align="center">
-  <img src="https://i.imgur.com/MYQLH3o.png">
+  <img src="https://i.imgur.com/5wjqpsc.png">
 </p>
 
 
