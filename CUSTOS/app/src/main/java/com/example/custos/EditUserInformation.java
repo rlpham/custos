@@ -57,7 +57,7 @@ public class EditUserInformation extends AppCompatActivity {
     private Uri imageUri;
     StorageReference storageReference;
     private StorageTask uploadTask;
-    TextView editHomeLoc, backButton, changePicText;
+    TextView editHomeLoc, backButton, changePicText, editEmergencyContact;
     List<Address> addresses = new ArrayList<>();
     Geocoder geocoder;
     Button saveButton;
@@ -78,6 +78,7 @@ public class EditUserInformation extends AppCompatActivity {
         editPIN = findViewById(R.id.textPinNumber);
         editName = findViewById(R.id.textUserName);
         backButton = findViewById(R.id.back_button_editUser);
+        editEmergencyContact = findViewById(R.id.editEmergencyContact);
         storageReference = FirebaseStorage.getInstance().getReference(Common.IMAGE_UPLOAD);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -98,48 +99,48 @@ public class EditUserInformation extends AppCompatActivity {
 
             }
         });
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    if ((dataSnapshot.child(firebaseUser.getUid())
-                            .child(Common.USER_ADDRESS)
-                            .child(Common.HOME_LOC)
-                            .exists())
-                            && !(dataSnapshot.child(firebaseUser.getUid())
-                            .child(Common.USER_ADDRESS)
-                            .child(Common.HOME_LOC)
-                            .getValue()
-                            .toString().equals(" "))) {
-                        String fullAddress = dataSnapshot.child(firebaseUser.getUid())
-                                .child(Common.USER_ADDRESS)
-                                .child(Common.HOME_LOC)
-                                .getValue().toString();
-                        editHomeLoc.setText(fullAddress);
-                    } else if ((dataSnapshot.child(firebaseUser.getUid())
-                            .child(Common.USER_ADDRESS)
-                            .child(Common.HOME_LOC)
-                            .exists()) && (dataSnapshot.child(firebaseUser.getUid())
-                            .child(Common.USER_ADDRESS)
-                            .child(Common.HOME_LOC)
-                            .getValue()
-                            .toString().equals(" "))) {
-                        editHomeLoc.setText("Something went wrong try again later!");
-                    } else {
-                        editHomeLoc.setText("Home address is not set");
-                    }
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
+//        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if (firebaseUser != null) {
+//            databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+//            databaseReference.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//                    if ((dataSnapshot.child(firebaseUser.getUid())
+//                            .child(Common.USER_ADDRESS)
+//                            .child(Common.HOME_LOC)
+//                            .exists())
+//                            && !(dataSnapshot.child(firebaseUser.getUid())
+//                            .child(Common.USER_ADDRESS)
+//                            .child(Common.HOME_LOC)
+//                            .getValue()
+//                            .toString().equals(" "))) {
+//                        String fullAddress = dataSnapshot.child(firebaseUser.getUid())
+//                                .child(Common.USER_ADDRESS)
+//                                .child(Common.HOME_LOC)
+//                                .getValue().toString();
+//                        editHomeLoc.setText(fullAddress);
+//                    } else if ((dataSnapshot.child(firebaseUser.getUid())
+//                            .child(Common.USER_ADDRESS)
+//                            .child(Common.HOME_LOC)
+//                            .exists()) && (dataSnapshot.child(firebaseUser.getUid())
+//                            .child(Common.USER_ADDRESS)
+//                            .child(Common.HOME_LOC)
+//                            .getValue()
+//                            .toString().equals(" "))) {
+//                        editHomeLoc.setText("Something went wrong try again later!");
+//                    } else {
+//                        editHomeLoc.setText("Home address is not set");
+//                    }
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,7 +174,7 @@ public class EditUserInformation extends AppCompatActivity {
                 if (validatePhoneNumber()) {
                     if (!(phoneNumber.equals("") || phoneNumber.equals(" "))) {
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put("phoneNumber", phoneNumber);
+                        map.put(Common.USER_PHONE, phoneNumber);
                         FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                                 .child(fUser.getUid())
                                 .updateChildren(map)
@@ -196,7 +197,7 @@ public class EditUserInformation extends AppCompatActivity {
                 if(validateName()){
                     if (!(userFullName.equals("") || userFullName.equals(" "))) {
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put("userName", userFullName);
+                        map.put(Common.USER_NAME, userFullName);
                         FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                                 .child(fUser.getUid())
                                 .updateChildren(map)
@@ -219,7 +220,7 @@ public class EditUserInformation extends AppCompatActivity {
                 if(validatePIN()){
                     if (!(userPIN.equals("") || userPIN.equals(" "))) {
                         HashMap<String, Object> map = new HashMap<>();
-                        map.put("userPIN", userPIN);
+                        map.put(Common.USER_PIN, userPIN);
                         FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                                 .child(fUser.getUid())
                                 .updateChildren(map)
@@ -279,6 +280,13 @@ public class EditUserInformation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditUserInformation.this, SetHomeLocationActivity.class);
+                startActivity(intent);
+            }
+        });
+        editEmergencyContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),InitialEmergencyContactActivity.class);
                 startActivity(intent);
             }
         });

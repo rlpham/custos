@@ -60,7 +60,7 @@ public class SecondSplashActivity extends AppCompatActivity{
     CircleImageView imageView;
     TextView name,name2, email,email2,homeLocation,signOut,backButton;
     TextInputLayout phoneNum;
-    TextView displayPhoneNumber,displayPIN;
+    TextView displayPhoneNumber,displayPIN,displayEmergencyContact;
     Button editUserInfo;
     GoogleSignInClient googleSignInClient;
     List<Address> addresses=new ArrayList<>();
@@ -100,6 +100,8 @@ public class SecondSplashActivity extends AppCompatActivity{
         displayPIN = findViewById(R.id.textPINdisplay);
         signOut =       findViewById(R.id.signout_button);
         homeLocation =  findViewById(R.id.homeLocation);
+        displayEmergencyContact = findViewById(R.id.emergencyContactDisplay);
+
         //setHomeButton = findViewById(R.id.setHomeLocation);
         backButton =    findViewById(R.id.back_button2);
         storageReference = FirebaseStorage.getInstance().getReference(Common.IMAGE_UPLOAD);
@@ -227,26 +229,39 @@ public class SecondSplashActivity extends AppCompatActivity{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    if((dataSnapshot.child(firebaseUser.getUid()).child("phoneNumber").exists())
-                        && !(dataSnapshot.child(firebaseUser.getUid()).child("phoneNumber").getValue().toString().equals(""))){
-                        String phoneNumber = dataSnapshot.child(firebaseUser.getUid()).child("phoneNumber").getValue().toString();
+                    if((dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_PHONE).exists())
+                        && !(dataSnapshot.child(firebaseUser.getUid())
+                            .child(Common.USER_PHONE).getValue().toString().equals(""))){
+                        String phoneNumber = dataSnapshot.child(firebaseUser.getUid())
+                                .child(Common.USER_PHONE).getValue().toString();
                         displayPhoneNumber.setText(phoneNumber);
                     }else{
                         displayPhoneNumber.setText("Phone number have not set");
                     }
-                    if(dataSnapshot.child(firebaseUser.getUid()).child("userName").exists()){
-                        String userName = dataSnapshot.child(firebaseUser.getUid()).child("userName").getValue().toString();
+                    if(dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_NAME).exists()){
+                        String userName = dataSnapshot.child(firebaseUser.getUid())
+                                .child(Common.USER_NAME).getValue().toString();
                         name2.setText(userName);
                         name.setText(userName);
                     }
-                    if(dataSnapshot.child(firebaseUser.getUid()).child("userPIN").exists()
-                            && !(dataSnapshot.child(firebaseUser.getUid()).child("userPIN").getValue().toString().equals(""))){
-                        String pin =  dataSnapshot.child(firebaseUser.getUid()).child("userPIN").getValue().toString();
+                    if(dataSnapshot.child(firebaseUser.getUid()).child(Common.USER_PIN).exists()
+                            && !(dataSnapshot.child(firebaseUser.getUid())
+                                .child(Common.USER_PIN).getValue().toString().equals(""))){
+                        String pin =  dataSnapshot.child(firebaseUser.getUid())
+                                .child(Common.USER_PIN).getValue().toString();
                         displayPIN.setText(pin);
                     }else{
                         displayPIN.setText("Please set your PIN");
                     }
-
+                    if(dataSnapshot.child(firebaseUser.getUid()).child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).exists()
+                            && !(dataSnapshot.child(firebaseUser.getUid())
+                                .child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).getValue().toString().equals(""))){
+                        String emergencyName = dataSnapshot.child(firebaseUser.getUid())
+                                .child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).getValue().toString();
+                        displayEmergencyContact.setText(emergencyName);
+                    }else{
+                        displayEmergencyContact.setText("Please set your Emergency Contact");
+                    }
                 }
 
                 @Override
@@ -254,6 +269,7 @@ public class SecondSplashActivity extends AppCompatActivity{
 
                 }
             });
+
 
             email2.setText(firebaseEmail);
             email.setText(firebaseEmail);

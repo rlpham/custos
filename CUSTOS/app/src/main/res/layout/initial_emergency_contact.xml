@@ -1,72 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#1D1D1D">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1D1D1D"
+    android:orientation="vertical"
+    android:padding="8dp">
 
-    <TextView
-        android:id="@+id/contacttext"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="137dp"
+            android:background="#212121"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/back_button_emergency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"
+                android:textColor="#FFFFFF"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:transitionName="back" />
+
+
+            <TextView
+                android:id="@+id/add_emergency_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageEdit"
+                android:layout_centerHorizontal="true"
+                android:drawableTop="@drawable/ic_person_add_black_24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Add Emergency Contact"
+                android:textColor="#fece2f"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:transitionName="change_picture" />
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="0dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="@string/ecintial"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="46sp" />
+        android:orientation="vertical"
+        android:padding="30dp">
 
-    <Button
-        android:id="@+id/button33"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/phone_input4"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="-1dp"
-        android:layout_marginTop="91dp"
-        android:layout_marginEnd="1dp"
-        android:gravity="center"
-        android:text="@string/ecsubmit" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emergency_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:includeFontPadding="false"
+            android:paddingTop="10dp"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"
+            android:transitionName="full_name"
+            app:hintAnimationEnabled="false">
 
-    <EditText
-        android:id="@+id/name_input4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/contacttext"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="65dp"
-        android:ems="10"
-        android:hint="@string/emergency_contacts_name_placeholder"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_account_circle_yellow_24dp"
+                android:drawablePadding="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/phone_input4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/name_input4"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="-3dp"
-        android:layout_marginTop="19dp"
-        android:ems="10"
-        android:hint="@string/emergency_contacts_phone_placeholder"
-        android:inputType="phone"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emergency_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number"
+            android:includeFontPadding="false"
+            android:paddingTop="10dp"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"
+            android:transitionName="full_name"
+            app:hintAnimationEnabled="false">
 
-</RelativeLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_phone_android_yellow_24dp"
+                android:drawablePadding="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/emergency_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="300dp"
+            android:background="#fece2f"
+            android:text="SAVE"
+            android:textSize="19dp"
+            android:textStyle="bold"
+            android:transitionName="save_info" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

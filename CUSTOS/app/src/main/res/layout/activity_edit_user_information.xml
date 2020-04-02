@@ -62,6 +62,7 @@
                     android:textStyle="bold"
                     android:transitionName="change_picture" />
 
+
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
@@ -160,7 +161,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:drawableLeft="@drawable/ic_location_on_yellow_24dp"
+                android:drawableLeft="@drawable/ic_home_yellow_24dp"
                 android:drawablePadding="10dp"
                 android:paddingTop="25dp"
                 android:text="Change home location"
@@ -170,13 +171,28 @@
                 android:textCursorDrawable="@color/colorwhite"
                 android:textSize="18dp"
                 android:transitionName="address" />
+            <TextView
+                android:id="@+id/editEmergencyContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_contact_phone_yellow_24dp"
+                android:drawablePadding="10dp"
+                android:paddingTop="35dp"
+                android:layout_marginLeft="5dp"
+                android:text="Change emergency contact"
+                android:textSize="18dp"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:transitionName="address"/>
 
 
             <Button
                 android:id="@+id/saveUserInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="170dp"
+                android:layout_marginTop="110dp"
                 android:background="#fece2f"
                 android:text="SAVE"
                 android:textSize="19dp"

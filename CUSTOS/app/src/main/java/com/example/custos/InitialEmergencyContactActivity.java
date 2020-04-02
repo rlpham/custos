@@ -1,4 +1,5 @@
 package com.example.custos;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,15 +16,18 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
@@ -36,8 +40,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.custos.utils.Common;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -52,118 +62,120 @@ import org.json.JSONObject;
 
 public class InitialEmergencyContactActivity extends AppCompatActivity {
 
-    DatabaseReference datta;
-    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    EditText name;
-    EditText phone;
-    Button submit;
-    final String ALPHABET = "123456789abcdefghjkmnpqrstuvwxyz";
+    DatabaseReference databaseReference;
+    FirebaseUser firebaseUser;
+    TextInputLayout name;
+    TextInputLayout phone;
+    TextView backButton;
+    Button saveButton;
+    Handler handler = new Handler();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.initial_emergency_contact);
-        name = findViewById(R.id.name_input4);
-        phone = findViewById(R.id.phone_input4);
-        submit = findViewById(R.id.button33);
-        final String ec = "emergency_contacts";
+        name = findViewById(R.id.emergency_name);
+        phone = findViewById(R.id.emergency_phone);
+        saveButton = findViewById(R.id.emergency_save);
+        backButton = findViewById(R.id.back_button_emergency);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-
-        //////////////
-
-
-
-
-        InitialEmergencyContactActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        final String usernamed = getRandomWord(20);
-
-        //temporary till someone can figure out how to get right user
-        datta = FirebaseDatabase.getInstance().getReference("Users");
-
-        datta.orderByKey()
-                .equalTo(firebaseUser.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String emergency_name = name.getEditText().getText().toString();
+                final String emergency_phone = phone.getEditText().getText().toString();
+                firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+                databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.getValue() == null) {
-                            //uid not exist
 
-                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
-
-
-                                datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec).child(usernamed);
-                                //datta.child("name").setValue("donotdeletethis");
-                                //datta.child("phone_number").setValue("donotdeletethis");
-
-                            }
+                        if(!validateName() || !validatePhoneNumber()){
+                            return;
                         }
-
-
+                        if (!((emergency_name.equals("") || emergency_name.equals(" "))
+                                && (emergency_phone.equals("") || emergency_phone.equals(" ")))) {
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put(Common.EMERGENCY_NAME, emergency_name);
+                            map.put(Common.EMERGENCY_PHONE, emergency_phone);
+                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                    .child(firebaseUser.getUid())
+                                    .child(Common.EMERGENCY_CONTACT)
+                                    .updateChildren(map)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Toast.makeText(InitialEmergencyContactActivity.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(InitialEmergencyContactActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                        }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
-
-
-                        ////////////
-        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec).child(usernamed);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(namecheck(name) && phonecheck(phone))
-                {
-                    //datta = FirebaseDatabase.getInstance().getReference("Users").child("userTest").child(ec);
-                    datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child(ec);
-                    datta.child("name").setValue(name.getText().toString());
-                    datta.child("phone_number").setValue(phone.getText().toString());
-                    Intent intent = new Intent(InitialEmergencyContactActivity.this, MapsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    InitialEmergencyContactActivity.this.finish();
-                }
-                else
-                {
-                    Toast.makeText(InitialEmergencyContactActivity.this , "Please enter valid inputs", Toast.LENGTH_LONG).show();
-                }
+                saveButton.setVisibility(View.INVISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(InitialEmergencyContactActivity.this,EditUserInformation.class);
+                        startActivity(intent);
+                    }
+                },2500);
             }
         });
 
 
     }
-
-
-    public boolean namecheck(EditText name)
-    {
-       String n = name.getText().toString();
-
-
-       if(n.trim().length() <= 3)
-       {
-           return false;
-       }
-        return true;
-
-    }
-
-
-    public boolean phonecheck(EditText phone)
-    {
-        String p = phone.getText().toString();
-        if(p.length() != 10)
-        {
+    private Boolean validateName() {
+        String emergencyName = name.getEditText().getText().toString();
+        String letterOnly = "^[\\p{L} .'-]+$";
+        if (emergencyName.isEmpty()) {
+            name.setError("Please add a name");
             return false;
+        }else if (!emergencyName.matches(letterOnly)) {
+            name.setError("Letters only");
+            return false;
+        }else {
+            name.setError(null);
+            name.setErrorEnabled(false);
+            return true;
         }
-        return true;
+    }
+    private Boolean validatePhoneNumber() {
+        String phoneNumber = phone.getEditText().getText().toString();
+        String numberOnly = "^[0-9]{10}$";
+        if (phoneNumber.isEmpty()) {
+            phone.setError("Please add a phone number");
+            return false;
+        } else if (phoneNumber.length() >= 11 || phoneNumber.length() < 10) {
+            phone.setError("Phone number must be 10 digit");
+            return false;
+        } else if (phoneNumber.contains(" ")) {
+            phone.setError("White space are not allowed");
+            return false;
+        } else if (!phoneNumber.matches(numberOnly)) {
+            phone.setError("Must be number only");
+            return false;
+        } else {
+            phone.setError(null);
+            phone.setErrorEnabled(false);
+            return true;
+        }
     }
 
-                    String getRandomWord(int length) {
-                        String r = "";
-                        for (int i = 0; i < length; i++) {
-                            r += (char) (Math.random() * 26 + 97);
-                        }
-                        return r;
-                    }
 
 
 }

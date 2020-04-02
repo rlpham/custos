@@ -8,8 +8,8 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="113dp"
+        android:layout_width="396dp"
+        android:layout_height="124dp"
         android:background="#212121"
         android:padding="8dp">
 
@@ -31,15 +31,16 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="15dp"
             android:layout_toRightOf="@+id/imageView"
+            android:drawableTop="@drawable/ic_home_yellow_60dp"
             android:includeFontPadding="false"
             android:text="Set Home Location"
             android:textColor="#FECE2F"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textCursorDrawable="@color/colorwhite"
-            android:textSize="30sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:transitionName="display_name" />
     </RelativeLayout>
@@ -86,8 +87,8 @@
 
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="116dp"
-        android:layout_marginBottom="222dp"
+        android:layout_marginEnd="114dp"
+        android:layout_marginBottom="48dp"
         android:indeterminateDrawable="@drawable/custom_dialog_1"
         android:indeterminateDuration="@android:integer/config_longAnimTime" />
 
@@ -113,9 +114,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="117dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="154dp"
+        android:layout_marginEnd="53dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/sv_round"
         android:orientation="horizontal"

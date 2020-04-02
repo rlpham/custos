@@ -11,6 +11,12 @@ public class Common {
     public static final String TOKENS               = "Tokens";
     public static final String IMAGE_UPLOAD         = "uploads";
     public static final String IMAGE_URL            = "imageURL";
+    public static final String USER_PHONE           = "phoneNumber";
+    public static final String USER_PIN             = "userPIN";
+    public static final String USER_NAME            = "userName";
+    public static final String EMERGENCY_CONTACT    = "Emergency Contact";
+    public static final String EMERGENCY_NAME       = "Name";
+    public static final String EMERGENCY_PHONE      = "Phone number";
 
 
 
