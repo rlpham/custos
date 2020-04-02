@@ -380,6 +380,7 @@ private LatLng eventlocation;
                                         }
                                     });
                             final String imgURL = "default";
+                            final String userName = "Custos";
                             user_information2.orderByKey()
                             .equalTo(firebaseUser.getUid())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -388,26 +389,15 @@ private LatLng eventlocation;
                                     if(dataSnapshot.getValue() == null){
                                         //uid not exist
                                         if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
-                                            Common.loggedUser = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getDisplayName());
+                                            Common.loggedUser = new User(userName,
+                                                    firebaseUser.getUid(),
+                                                    firebaseUser.getEmail());
                                             user_information2.child(Common.loggedUser.getUID())
                                                     .setValue(Common.loggedUser);
                                             FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                                                     .child(firebaseUser.getUid())
                                                     .child(Common.IMAGE_URL)
                                                     .setValue(imgURL).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful()){
-                                                        Toast.makeText(getApplicationContext(),"successfully saved imgurl",Toast.LENGTH_SHORT).show();
-                                                    }else{
-                                                        Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-                                            });
-                                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                                                    .child(firebaseUser.getUid())
-                                                    .child("userName")
-                                                    .setValue(firebaseUser.getDisplayName()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
                                                     if(task.isSuccessful()){
