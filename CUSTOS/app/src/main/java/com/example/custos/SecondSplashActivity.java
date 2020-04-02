@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import android.app.ActivityOptions;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.location.Address;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -58,6 +60,8 @@ public class SecondSplashActivity extends AppCompatActivity{
     CircleImageView imageView;
     TextView name,name2, email,email2,homeLocation,signOut,backButton;
     TextInputLayout phoneNum;
+    TextView displayPhoneNumber,displayPIN;
+    Button editUserInfo;
     GoogleSignInClient googleSignInClient;
     List<Address> addresses=new ArrayList<>();
     Geocoder geocoder;
@@ -70,6 +74,7 @@ public class SecondSplashActivity extends AppCompatActivity{
     //DBHandler db = new DBHandler();
     private DatabaseReference databaseReference;
     FirebaseUser firebaseUser;
+    FirebaseDatabase fdatabase;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
     User user = new User();
@@ -84,12 +89,15 @@ public class SecondSplashActivity extends AppCompatActivity{
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+        editUserInfo = findViewById(R.id.editUserinfo);
         imageView =     findViewById(R.id.imageView);
         name =          findViewById(R.id.textName);
         name2 =         findViewById(R.id.textName2);
         email =         findViewById(R.id.textEmail);
         email2 =         findViewById(R.id.textEmail2);
         phoneNum = findViewById(R.id.textPhoneNum);
+        displayPhoneNumber = findViewById(R.id.textPhoneNumDisplay);
+        displayPIN = findViewById(R.id.textPINdisplay);
         signOut =       findViewById(R.id.signout_button);
         homeLocation =  findViewById(R.id.homeLocation);
         //setHomeButton = findViewById(R.id.setHomeLocation);
@@ -116,14 +124,38 @@ public class SecondSplashActivity extends AppCompatActivity{
         });
 
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openImage();
-            }
-        });
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                openImage();
+//            }
+//        });
         stringAddress(setHomeLocation.getLatitude(),setHomeLocation.getLongtitude());
 
+        editUserInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),EditUserInformation.class);
+                Pair[] pairs = new Pair[11];
+                pairs[0] = new Pair<View,String>(imageView,"profile_picture");
+                pairs[1] = new Pair<View,String>(backButton,"back");
+                pairs[2] = new Pair<View,String>(signOut,"logout");
+                pairs[3] = new Pair<View,String>(name,"display_name");
+                pairs[4] = new Pair<View,String>(email,"display_email");
+                pairs[5] = new Pair<View,String>(name2,"full_name");
+                pairs[6] = new Pair<View,String>(email2,"email");
+                pairs[7] = new Pair<View,String>(displayPhoneNumber,"phone_number");
+                pairs[8] = new Pair<View,String>(displayPIN,"pin");
+                pairs[9] = new Pair<View,String>(homeLocation,"address");
+                pairs[10] = new Pair<View,String>(editUserInfo,"edit_info");
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(SecondSplashActivity.this,pairs);
+                    startActivity(intent,activityOptions.toBundle());
+                }
+
+            }
+        });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,13 +171,7 @@ public class SecondSplashActivity extends AppCompatActivity{
             }
         });
 
-        homeLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SecondSplashActivity.this,SetHomeLocationActivity.class);
-                startActivity(intent);
-            }
-        });
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account != null || firebaseUser != null){
@@ -196,9 +222,40 @@ public class SecondSplashActivity extends AppCompatActivity{
 
                 }
             });
-            name2.setText(firebaseName);
+            databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if((dataSnapshot.child(firebaseUser.getUid()).child("phoneNumber").exists())
+                        && !(dataSnapshot.child(firebaseUser.getUid()).child("phoneNumber").getValue().toString().equals(""))){
+                        String phoneNumber = dataSnapshot.child(firebaseUser.getUid()).child("phoneNumber").getValue().toString();
+                        displayPhoneNumber.setText(phoneNumber);
+                    }else{
+                        displayPhoneNumber.setText("Phone number have not set");
+                    }
+                    if(dataSnapshot.child(firebaseUser.getUid()).child("userName").exists()){
+                        String userName = dataSnapshot.child(firebaseUser.getUid()).child("userName").getValue().toString();
+                        name2.setText(userName);
+                        name.setText(userName);
+                    }
+                    if(dataSnapshot.child(firebaseUser.getUid()).child("userPIN").exists()
+                            && !(dataSnapshot.child(firebaseUser.getUid()).child("userPIN").getValue().toString().equals(""))){
+                        String pin =  dataSnapshot.child(firebaseUser.getUid()).child("userPIN").getValue().toString();
+                        displayPIN.setText(pin);
+                    }else{
+                        displayPIN.setText("Please set your PIN");
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
             email2.setText(firebaseEmail);
-            name.setText(firebaseName);
             email.setText(firebaseEmail);
             //Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }
@@ -237,7 +294,8 @@ public class SecondSplashActivity extends AppCompatActivity{
                         Uri downloadUri = task.getResult();
                         String uri = downloadUri.toString();
 
-                        databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(firebaseUser.getUid());
+                        databaseReference = FirebaseDatabase.getInstance()
+                                .getReference(Common.USER_INFORMATION).child(firebaseUser.getUid());
                         HashMap<String,Object> hashMap = new HashMap<>();
                         hashMap.put(Common.IMAGE_URL,uri);
                         databaseReference.updateChildren(hashMap);

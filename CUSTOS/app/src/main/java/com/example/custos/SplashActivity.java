@@ -239,12 +239,13 @@ public class SplashActivity extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                     startActivity(intent);
-                    loadingDialog.dismissDialog();
                     updateUI(user);
-                }else{
                     loadingDialog.dismissDialog();
+                }else{
+
                     Toast.makeText(SplashActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
                     updateUI(null);
+                    loadingDialog.dismissDialog();
                 }
             }
         });
