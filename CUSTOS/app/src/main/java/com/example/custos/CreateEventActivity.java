@@ -38,6 +38,9 @@ public class CreateEventActivity extends AppCompatActivity {
     String name;
     String description;
     String date_time;
+    ArrayList<String> uids;
+
+    FirebaseUser firebaseUser;
     private DatabaseReference user_information;
 
     @Override
@@ -79,14 +82,34 @@ public class CreateEventActivity extends AppCompatActivity {
                 description = event_description_text_view.getText().toString();
                 date_time = event_time_text_view.getText().toString();
 
-//                ListView invited_list = findViewById(R.id.invited_list);
-//                String[] guests = new String[invited_list.getCount()];
-//                for(int i = 0; i < invited_list.getCount(); i++) {
-//                    System.out.println(invited_list.getItemAtPosition(i).toString());
-//                    guests[i] = invited_list.getItemAtPosition(i).toString();
-//                }
+                final ListView invited_list = findViewById(R.id.invited_list);
+                uids = new ArrayList<String>();
 
-                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
+
+                db.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(int i = 0; i < invited_list.getCount(); i++) {
+//                            System.out.println(invited_list.getItemAtPosition(i).toString());
+//                            guests.add(invited_list.getItemAtPosition(i).toString());
+                            for(DataSnapshot element : dataSnapshot.getChildren()) {
+                                if(invited_list.getItemAtPosition(i).equals(element.child(element.getKey()).child("name").getValue().toString())) {
+                                    uids.add(element.getKey());
+                                }
+                            }
+                        }
+                    }
+
+                    //TEST IF UIDS SELECTED UIDS POP UP
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 user_information = FirebaseDatabase.getInstance().getReference("user_event");
                 user_information.orderByKey()
                         .equalTo(firebaseUser.getUid())
