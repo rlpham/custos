@@ -175,7 +175,7 @@
                 android:id="@+id/saveUserInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="180dp"
+                android:layout_marginTop="170dp"
                 android:background="#fece2f"
                 android:text="SAVE"
                 android:textSize="19dp"

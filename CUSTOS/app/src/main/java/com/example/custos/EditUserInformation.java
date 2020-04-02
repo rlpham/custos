@@ -165,11 +165,12 @@ public class EditUserInformation extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validatePhoneNumber() || validatePIN() || validateName()) {
-                    final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-                    String phoneNumber = editPhoneNumber.getEditText().getText().toString();
-                    String userFullName = editName.getEditText().getText().toString();
-                    String userPIN = editPIN.getEditText().getText().toString();
+
+                final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                String phoneNumber = editPhoneNumber.getEditText().getText().toString();
+                String userFullName = editName.getEditText().getText().toString();
+                String userPIN = editPIN.getEditText().getText().toString();
+                if (validatePhoneNumber()) {
                     if (!(phoneNumber.equals("") || phoneNumber.equals(" "))) {
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("phoneNumber", phoneNumber);
@@ -187,9 +188,12 @@ public class EditUserInformation extends AppCompatActivity {
                                     }
                                 });
                     }
+                }else{
+                    return;
+                }
 
 //                databaseReference.child(fUser.getUid()).setValue(phoneNumber);
-
+                if(validateName()){
                     if (!(userFullName.equals("") || userFullName.equals(" "))) {
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("userName", userFullName);
@@ -207,7 +211,12 @@ public class EditUserInformation extends AppCompatActivity {
                                     }
                                 });
                     }
+                }else{
+                    return;
+                }
 
+
+                if(validatePIN()){
                     if (!(userPIN.equals("") || userPIN.equals(" "))) {
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("userPIN", userPIN);
@@ -225,33 +234,37 @@ public class EditUserInformation extends AppCompatActivity {
                                     }
                                 });
                     }
-
-
-                    final LoadingDialog loadingDialog = new LoadingDialog(EditUserInformation.this);
-                    loadingDialog.startLoadingDialog();
-
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(EditUserInformation.this, SecondSplashActivity.class);
-                            Pair[] pairs = new Pair[8];
-                            pairs[0] = new Pair<View, String>(imageEdit, "profile_picture");
-                            pairs[1] = new Pair<View, String>(backButton, "back");
-                            pairs[2] = new Pair<View, String>(changePicText, "change_picture");
-                            pairs[3] = new Pair<View, String>(editName, "full_name");
-                            pairs[4] = new Pair<View, String>(editPhoneNumber, "phone_number");
-                            pairs[5] = new Pair<View, String>(editPIN, "pin");
-                            pairs[6] = new Pair<View, String>(editHomeLoc, "address");
-                            pairs[7] = new Pair<View, String>(saveButton, "save_info");
-
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                                ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this, pairs);
-                                startActivity(intent, activityOptions.toBundle());
-                                loadingDialog.dismissDialog();
-                            }
-                        }
-                    }, 2500);
+                }else{
+                    return;
                 }
+
+
+
+                final LoadingDialog loadingDialog = new LoadingDialog(EditUserInformation.this);
+                loadingDialog.startLoadingDialog();
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(EditUserInformation.this, SecondSplashActivity.class);
+                        Pair[] pairs = new Pair[8];
+                        pairs[0] = new Pair<View, String>(imageEdit, "profile_picture");
+                        pairs[1] = new Pair<View, String>(backButton, "back");
+                        pairs[2] = new Pair<View, String>(changePicText, "change_picture");
+                        pairs[3] = new Pair<View, String>(editName, "full_name");
+                        pairs[4] = new Pair<View, String>(editPhoneNumber, "phone_number");
+                        pairs[5] = new Pair<View, String>(editPIN, "pin");
+                        pairs[6] = new Pair<View, String>(editHomeLoc, "address");
+                        pairs[7] = new Pair<View, String>(saveButton, "save_info");
+
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this, pairs);
+                            startActivity(intent, activityOptions.toBundle());
+                            loadingDialog.dismissDialog();
+                        }
+                    }
+                }, 2500);
+
             }
 
 
@@ -275,15 +288,14 @@ public class EditUserInformation extends AppCompatActivity {
     private Boolean validateName() {
         String name = editName.getEditText().getText().toString();
         String letterOnly = "^[\\p{L} .'-]+$";
-        if (!name.matches(letterOnly)) {
-            editName.setError("Letters only");
-            return false;
-        }else if(name.isEmpty()){
+        if (name.isEmpty()) {
             editName.setError(null);
             editName.setErrorEnabled(false);
             return true;
-        }
-        else {
+        }else if (!name.matches(letterOnly)) {
+            editName.setError("Letters only");
+            return false;
+        }else {
             editName.setError(null);
             editName.setErrorEnabled(false);
             return true;
@@ -293,21 +305,20 @@ public class EditUserInformation extends AppCompatActivity {
     private Boolean validatePhoneNumber() {
         String phoneNumber = editPhoneNumber.getEditText().getText().toString();
         String numberOnly = "^[0-9]{10}$";
-        if(phoneNumber.isEmpty()){
+        if (phoneNumber.isEmpty()) {
             editPhoneNumber.setError(null);
             editPhoneNumber.setErrorEnabled(false);
             return true;
         } else if (phoneNumber.length() >= 11 || phoneNumber.length() < 10) {
             editPhoneNumber.setError("Phone number must be 10 digit");
             return false;
-        }
-        else if (phoneNumber.contains(" ")) {
+        } else if (phoneNumber.contains(" ")) {
             editPhoneNumber.setError("White space are not allowed");
             return false;
         } else if (!phoneNumber.matches(numberOnly)) {
             editPhoneNumber.setError("Must be number only");
             return false;
-        }else{
+        } else {
             editPhoneNumber.setError(null);
             editPhoneNumber.setErrorEnabled(false);
             return true;
@@ -317,7 +328,7 @@ public class EditUserInformation extends AppCompatActivity {
     private Boolean validatePIN() {
         String PIN = editPIN.getEditText().getText().toString();
         String numberOnly = "^[0-9]{4}$";
-        if(PIN.isEmpty()){
+        if (PIN.isEmpty()) {
             editPIN.setError(null);
             editPIN.setErrorEnabled(false);
             return true;
@@ -330,7 +341,7 @@ public class EditUserInformation extends AppCompatActivity {
         } else if (!PIN.matches(numberOnly)) {
             editPIN.setError("Must be number only");
             return false;
-        }else {
+        } else {
             editPIN.setError(null);
             editPIN.setErrorEnabled(false);
             return true;

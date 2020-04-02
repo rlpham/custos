@@ -1,27 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#1D1D1D">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1D1D1D"
+    android:padding="8dp">
 
 
-    <TextView
-        android:id="@+id/notificationHeader"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="0dp"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="@string/sethomeloc"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="35sp" />
+        android:layout_height="113dp"
+        android:background="#212121"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"
+            android:textColor="#FFFFFF"
+            android:textSize="10dp"
+            android:textStyle="bold"
+            android:transitionName="back" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="35dp"
+            android:layout_toRightOf="@+id/imageView"
+            android:includeFontPadding="false"
+            android:text="Set Home Location"
+            android:textColor="#FECE2F"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:transitionName="display_name" />
+    </RelativeLayout>
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,93 +51,71 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="315dp"
-        android:layout_marginEnd="141dp"
+        android:layout_marginTop="263dp"
+        android:layout_marginEnd="218dp"
         android:fontFamily="sans-serif-thin"
         android:text="Current Address"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textCursorDrawable="@color/colorwhite"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/home_address"
-        android:layout_width="303dp"
-        android:layout_height="76dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="63dp"
-        android:layout_marginTop="341dp"
-        android:layout_marginEnd="45dp"
-        android:text="Address"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="20sp" />
-
-    <TextView
-
-        android:layout_width="match_parent"
+        android:layout_width="346dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="151dp"
-        android:layout_marginEnd="0dp"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="@string/setaddress"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="270dp"
+        android:drawableLeft="@drawable/ic_location_on_yellow_24dp"
+        android:drawablePadding="10dp"
+        android:paddingTop="30dp"
+        android:text="Home Location"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textCursorDrawable="@color/colorwhite"
-        android:textSize="18sp" />
+        android:textSize="18dp" />
 
     <ProgressBar
         android:id="@+id/progress_circular3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="167dp"
+        android:layout_height="37dp"
+
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="562dp"
-        android:layout_marginEnd="94dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="116dp"
+        android:layout_marginBottom="222dp"
+        android:indeterminateDrawable="@drawable/custom_dialog_1"
+        android:indeterminateDuration="@android:integer/config_longAnimTime" />
 
     <Button
         android:id="@+id/save_button"
-        android:layout_width="137dp"
+        android:layout_width="352dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="560dp"
-        android:layout_marginEnd="49dp"
-        android:background="@drawable/sv_round"
-        android:text="Save"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="137dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="560dp"
-        android:layout_marginEnd="204dp"
-        android:background="@drawable/sv_round"
-        android:text="Cancel"
-        android:textSize="16sp" />
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="630dp"
+        android:layout_marginEnd="28dp"
+        android:background="#fece2f"
+        android:text="SAVE"
+        android:textSize="19dp"
+        android:textStyle="bold"
+        android:transitionName="save_info" />
 
     <LinearLayout
         android:layout_width="336dp"
         android:layout_height="53dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="186dp"
-        android:layout_marginEnd="29dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="117dp"
+        android:layout_marginEnd="45dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/sv_round"
         android:orientation="horizontal"

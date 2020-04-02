@@ -46,7 +46,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
     TextView address;
     //Geocoder geocoder;
     Button saveButton;
-    Button backButton;
+    TextView backButton;
     ProgressBar progressBar;
     List<Address> addresses = new ArrayList<>();
     User user = new User();
