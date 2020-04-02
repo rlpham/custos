@@ -29,7 +29,6 @@ import java.util.ArrayList;
 public class InviteGuestsActivity extends AppCompatActivity {
 
     ListView listView;
-    CheckedTextView ctv;
 
     ArrayList<String> selected = new ArrayList<String>();
     ArrayList<String> uids;
@@ -64,57 +63,30 @@ public class InviteGuestsActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
             view = inflater.inflate(R.layout.invite_guest_item, null);
-            ctv = view.findViewById(R.id.checkedTextView);
-            uids = new ArrayList<String>();
+            final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
             ctv.setText(names[position]);
             ctv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                    DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
-
-                    db.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            for(DataSnapshot element : dataSnapshot.getChildren()) {
-                                if(ctv.isChecked() && element.child("name").getValue().toString().equals(names[position])) {
-                                    value = "un-Checked";
-                                    ctv.setCheckMarkDrawable(0);
-                                    ctv.setChecked(false);
-                                    if(selected.contains(ctv.getText().toString())) {
-                                        selected.remove(ctv.getText().toString());
-                                        uids.remove(element.getKey());
-                                    }
-                                } else if (!ctv.isChecked() && element.child("name").getValue().toString().equals(names[position])) {
-                                    value = "Checked";
-                                    ctv.setCheckMarkDrawable(R.drawable.checked);
-                                    ctv.setChecked(true);
-                                    if(!selected.contains(ctv.getText().toString())) {
-                                        selected.add(ctv.getText().toString());
-                                        uids.add(element.getKey());
-                                    }
-                                }
-                            }
-
-                            for(int i = 0; i <uids.size(); i++) {
-                                System.out.println(uids.get(i));
-                            }
-
+                    if(ctv.isChecked()) {
+                        value = "un-Checked";
+                        ctv.setCheckMarkDrawable(0);
+                        ctv.setChecked(false);
+                        if(selected.contains(ctv.getText().toString())) {
+                            selected.remove(ctv.getText().toString());
                         }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    } else if (!ctv.isChecked()) {
+                        value = "Checked";
+                        ctv.setCheckMarkDrawable(R.drawable.checked);
+                        ctv.setChecked(true);
+                        if(!selected.contains(ctv.getText().toString())) {
+                            selected.add(ctv.getText().toString());
                         }
-                    });
+                    }
                 }
             });
-
             return view;
         }
-
     }
 
     @Override
@@ -152,7 +124,6 @@ public class InviteGuestsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
                 intent.putExtra("values", selected);
-                intent.putExtra("uids", uids);
                 onActivityResult(18,18, intent);
                 setResult(18, intent);
                 finish();
