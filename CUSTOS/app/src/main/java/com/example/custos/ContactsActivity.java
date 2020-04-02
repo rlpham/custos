@@ -82,7 +82,6 @@ public class ContactsActivity extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         final String usernamed = getRandomWord(20);
 
         //temporary till someone can figure out how to get right user
@@ -168,8 +167,7 @@ public class ContactsActivity extends DialogFragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getContext(),ContactsActivity.class);
-                startActivity(intent);
+
             }
         },5000);
         //////testing db
