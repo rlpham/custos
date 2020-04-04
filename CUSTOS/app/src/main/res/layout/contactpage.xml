@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#1D1D1D"
     android:orientation="vertical"
     android:padding="10dp"
@@ -18,16 +18,6 @@
             android:background="#212121"
             android:padding="8dp">
 
-            <TextView
-                android:id="@+id/back_button_editUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"
-                android:textColor="#FFFFFF"
-                android:textSize="10dp"
-                android:textStyle="bold" />
-
 
             <TextView
                 android:id="@+id/user_list"
@@ -35,16 +25,16 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageEdit"
                 android:layout_centerHorizontal="true"
-                android:drawableTop="@drawable/ic_person_add_black_24dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
+                android:drawableTop="@drawable/ic_person_add_black_24dp"
                 android:text="Search and Add Friend"
                 android:textColor="#fece2f"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:textCursorDrawable="@color/colorwhite"
                 android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
 
         </RelativeLayout>
@@ -52,33 +42,33 @@
     </androidx.cardview.widget.CardView>
 
 
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginBottom="60dp" />
 
     </RelativeLayout>
-        android:id="@+id/listContact"
+    android:id="@+id/listContact"
+    android:layout_width="match_parent"
+    android:layout_height="504dp"
+    android:layout_below="@+id/button33"
+    android:layout_alignParentBottom="true"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="50dp">
+
+    <LinearLayout
+        android:id="@+id/contactscroller"
         android:layout_width="match_parent"
-        android:layout_height="504dp"
-        android:layout_below="@+id/button33"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="50dp">
-
-        <LinearLayout
-            android:id="@+id/contactscroller"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
-        </LinearLayout>
+    </LinearLayout>
 
 
     <!--
@@ -109,4 +99,4 @@
             android:inputType="numberDecimal" />-->
 
 
-    </LinearLayout>
+</LinearLayout>

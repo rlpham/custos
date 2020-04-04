@@ -47,12 +47,12 @@ public class UserFragment extends Fragment {
         recylerView = view.findViewById(R.id.recycler_view);
         recylerView.setHasFixedSize(true);
         recylerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         userList = new ArrayList<>();
         readUsers();
         
         return view;
     }
+
 
     private void readUsers() {
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();

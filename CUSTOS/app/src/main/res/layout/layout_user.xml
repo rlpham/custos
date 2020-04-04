@@ -22,8 +22,9 @@
         android:layout_toEndOf="@+id/imageList"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
+        android:textColor="#FFFFFF"
         android:text="my email here"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
