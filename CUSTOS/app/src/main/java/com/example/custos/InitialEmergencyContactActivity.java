@@ -145,7 +145,11 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
         if (emergencyName.isEmpty()) {
             name.setError("Please add a name");
             return false;
-        }else if (!emergencyName.matches(letterOnly)) {
+        }else if(emergencyName.length() > 14){
+            name.setError("Name must be less than 14 characters");
+            return false;
+        }
+        else if (!emergencyName.matches(letterOnly)) {
             name.setError("Letters only");
             return false;
         }else {

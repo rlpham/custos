@@ -300,7 +300,11 @@ public class EditUserInformation extends AppCompatActivity {
             editName.setError(null);
             editName.setErrorEnabled(false);
             return true;
-        }else if (!name.matches(letterOnly)) {
+        }else if(name.length() > 14){
+            editName.setError("Name must be less than 14 characters");
+            return false;
+        }
+        else if (!name.matches(letterOnly)) {
             editName.setError("Letters only");
             return false;
         }else {
