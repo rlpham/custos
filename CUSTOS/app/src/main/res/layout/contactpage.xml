@@ -53,12 +53,16 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginEnd="185dp"
-            android:layout_marginBottom="543dp"
-            android:drawableLeft="@drawable/ic_search_yellow_35dp" />
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="544dp"
+            android:drawableRight="@drawable/ic_search_yellow_29dp"
+            android:text="Search  "
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold" />
 
         <EditText
-            android:layout_width="300dp"
+            android:layout_width="335dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:layout_centerHorizontal="true"
@@ -67,6 +71,8 @@
             android:textColorHint="@color/white"
             android:textColor="@color/white"
             android:textStyle="bold"
+            android:paddingRight="10dp"
+            android:drawableRight="@drawable/ic_search_yellow_29dp"
             android:background="@drawable/sv_round_search"
             android:id="@+id/search_friend"/>
 
