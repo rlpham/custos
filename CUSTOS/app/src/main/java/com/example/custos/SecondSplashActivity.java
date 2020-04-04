@@ -407,6 +407,7 @@ public class SecondSplashActivity extends AppCompatActivity{
                                 updateUI(null);
                                 Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
                                 startActivity(intent);
+                                finish();
                                 loadingDialog.dismissDialog();
                             }
                         },4000);

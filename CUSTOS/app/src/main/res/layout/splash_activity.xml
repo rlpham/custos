@@ -10,7 +10,7 @@
     <pl.droidsonroids.gif.GifImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/splash"
+        android:src="@drawable/splash2"
         tools:ignore="MissingConstraints">
 
     </pl.droidsonroids.gif.GifImageView>
