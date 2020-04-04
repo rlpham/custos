@@ -1,34 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="#1D1D1D"
-    >
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".UserFragment">
 
-
-
-    <TextView
-        android:id="@+id/contacttext"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="0dp"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="@string/contactpage"
-        android:textColor="#FFFFFF"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="46sp" />
+        android:layout_height="wrap_content">
 
-    <ScrollView
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#212121"
+            android:padding="8dp">
 
+            <TextView
+                android:id="@+id/back_button_editUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"
+                android:textColor="#FFFFFF"
+                android:textSize="10dp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/user_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageEdit"
+                android:layout_centerHorizontal="true"
+                android:drawableTop="@drawable/ic_person_add_black_24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Search and Add Friend"
+                android:textColor="#fece2f"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
         android:id="@+id/listContact"
         android:layout_width="match_parent"
         android:layout_height="504dp"
@@ -45,19 +79,8 @@
 
 
         </LinearLayout>
-    </ScrollView>
 
-    <Button
-        android:id="@+id/button33"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/contacttext"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="0dp"
-        android:gravity="center"
-        android:text="@string/addContact" />
+
     <!--
 
         <AutoCompleteTextView
@@ -86,4 +109,4 @@
             android:inputType="numberDecimal" />-->
 
 
-    </RelativeLayout>
+    </LinearLayout>

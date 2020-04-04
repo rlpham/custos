@@ -52,7 +52,7 @@
             android:name=".SplashActivity"
             android:exported="true" />
         <activity
-            android:name=".ContactsActivity"
+            android:name=".UserFragment"
             android:exported="true" />
         <activity
             android:name=".SetHomeLocationActivity"
