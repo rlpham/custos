@@ -67,9 +67,6 @@
             android:name=".ConfirmSafetyActivity"
             android:exported="true" />
         <activity
-            android:name=".FindFriendsActivity"
-            android:exported="true" />
-        <activity
             android:name=".InitialEmergencyContactActivity"
             android:exported="true" />
         <activity
