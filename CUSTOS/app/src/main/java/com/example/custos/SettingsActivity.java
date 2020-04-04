@@ -48,9 +48,6 @@ public class SettingsActivity extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(view.getContext(), SecondSplashActivity.class);
                 startActivity(intent);
-                getActivity().finish();
-
-
             }
         });
         // Inflate the layout for this fragment
