@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.custos.utils.Common;
-import com.example.custos.utils.LoadingDialog;
+import com.example.custos.utils.SignInDialog;
 import com.example.custos.utils.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -96,11 +96,14 @@ public class SplashActivity extends AppCompatActivity {
 
     final Handler handler = new Handler();
     private void signIn(){
+        final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
+        signInDialog.startDialog();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent,RC_SIGN_IN);
+                signInDialog.dismissDialog();
             }
         },2000);
 
@@ -119,12 +122,14 @@ public class SplashActivity extends AppCompatActivity {
 
         //Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if(requestCode == RC_SIGN_IN){
-
+            final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
+            signInDialog.startDialog();
             //The task returned from this call is always completed no need to attach a listener
            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
            try {
                GoogleSignInAccount account = task.getResult(ApiException.class);
                if(account != null){
+                   signInDialog.dismissDialog();
                    fireBaseGoogleAuth(account);
                }
            }catch (ApiException e){
@@ -228,8 +233,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void fireBaseGoogleAuth(GoogleSignInAccount account) {
-        final LoadingDialog loadingDialog = new LoadingDialog(SplashActivity.this);
-        loadingDialog.startLoadingDialog();
+        final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
+        signInDialog.startDialog();
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -240,12 +245,12 @@ public class SplashActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                     startActivity(intent);
                     updateUI(user);
-                    loadingDialog.dismissDialog();
+                    signInDialog.dismissDialog();
                 }else{
 
                     Toast.makeText(SplashActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
                     updateUI(null);
-                    loadingDialog.dismissDialog();
+                    signInDialog.dismissDialog();
                 }
             }
         });

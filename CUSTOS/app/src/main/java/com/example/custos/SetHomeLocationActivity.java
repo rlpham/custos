@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.SavingDialog;
 import com.example.custos.utils.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -147,15 +148,15 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 //                    }
 //                });
 
-
-
-                progressBar.setVisibility(View.VISIBLE);
+                final SavingDialog savingDialog = new SavingDialog(SetHomeLocationActivity.this);
+                savingDialog.startDialog();
                 saveButton.setVisibility(View.INVISIBLE);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Intent intent = new Intent(SetHomeLocationActivity.this,EditUserInformation.class);
                         startActivity(intent);
+                        savingDialog.dismissDialog();
                     }
                 },2500);
 

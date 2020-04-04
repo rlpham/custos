@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.LoadingDialog;
+import com.example.custos.utils.LogoutDialog;
 import com.example.custos.utils.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -392,14 +393,14 @@ public class SecondSplashActivity extends AppCompatActivity{
     }
 
     private void signOut(){
-        final LoadingDialog loadingDialog = new LoadingDialog(SecondSplashActivity.this);
+        final LogoutDialog logoutDialog = new LogoutDialog(SecondSplashActivity.this);
 
         FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        loadingDialog.startLoadingDialog();
+                        logoutDialog.startDialog();
                         Toast.makeText(SecondSplashActivity.this,"Logging out...", Toast.LENGTH_LONG).show();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -408,7 +409,7 @@ public class SecondSplashActivity extends AppCompatActivity{
                                 Intent intent = new Intent(SecondSplashActivity.this,SplashActivity.class);
                                 startActivity(intent);
                                 finish();
-                                loadingDialog.dismissDialog();
+                                logoutDialog.dismissDialog();
                             }
                         },4000);
 

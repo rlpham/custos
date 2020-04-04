@@ -6,17 +6,17 @@ import android.view.LayoutInflater;
 
 import com.example.custos.R;
 
-public class LoadingDialog {
+public class SavingDialog {
     private Activity activity;
     private AlertDialog alertDialog;
 
-    public LoadingDialog(Activity activity){
+    public SavingDialog(Activity activity){
         this.activity = activity;
     }
-    public void startLoadingDialog(){
+    public void startDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater layoutInflater = activity.getLayoutInflater();
-        builder.setView(layoutInflater.inflate(R.layout.custom_dialog,null));
+        builder.setView(layoutInflater.inflate(R.layout.custom_dialog_saving,null));
         builder.setCancelable(false);
 
         alertDialog = builder.create();

@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.LoadingDialog;
+import com.example.custos.utils.SavingDialog;
 import com.example.custos.utils.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -241,8 +242,8 @@ public class EditUserInformation extends AppCompatActivity {
 
 
 
-                final LoadingDialog loadingDialog = new LoadingDialog(EditUserInformation.this);
-                loadingDialog.startLoadingDialog();
+                final SavingDialog savingDialog = new SavingDialog(EditUserInformation.this);
+                savingDialog.startDialog();
 
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -261,7 +262,7 @@ public class EditUserInformation extends AppCompatActivity {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                             ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this, pairs);
                             startActivity(intent, activityOptions.toBundle());
-                            loadingDialog.dismissDialog();
+                            savingDialog.dismissDialog();
                         }
                     }
                 }, 2500);

@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.SavingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -126,12 +127,15 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
 
                     }
                 });
+                final SavingDialog savingDialog = new SavingDialog(InitialEmergencyContactActivity.this);
+                savingDialog.startDialog();
                 saveButton.setVisibility(View.INVISIBLE);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         Intent intent = new Intent(InitialEmergencyContactActivity.this,EditUserInformation.class);
                         startActivity(intent);
+                        savingDialog.dismissDialog();
                     }
                 },2500);
             }

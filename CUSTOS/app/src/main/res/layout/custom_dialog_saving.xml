@@ -13,7 +13,7 @@
     >
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarSaving"
         style="?android:attr/progressBarStyle"
         android:layout_width="167dp"
         android:layout_height="37dp"
@@ -26,15 +26,15 @@
         android:layout_marginBottom="25dp"/>
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/textViewSaving"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Loading... just chill!"
+        android:text="Saving... please chill"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        app:layout_constraintTop_toBottomOf="@+id/progressBarSaving"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
