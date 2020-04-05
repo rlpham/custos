@@ -27,9 +27,7 @@ public class ReportActivity extends AppCompatActivity {
     TextView mem;
     Button share;
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    int eventCounter = 0;
-    int contactCounter = 0;
-    String allText;
+    String allText = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,15 +41,21 @@ public class ReportActivity extends AppCompatActivity {
 
         DatabaseReference datta;
 
+
+
+
         datta = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
 
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                    //System.out.println(Users.toString());
-                    incrementEvent();
+                        count -=- 1;
                 }
+                eve.setText("Number of Events: " + count);
+
+                allText = eve.getText().toString();
             }
 
             @Override
@@ -65,10 +69,13 @@ public class ReportActivity extends AppCompatActivity {
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                    //System.out.println(Users.toString());
-                    incrementContact();
+                    count -=- 1;
                 }
+                con.setText("Number of Contacts: " + count);
+
+                allText +=  "\n" + con.getText().toString();
             }
 
             @Override
@@ -77,7 +84,10 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-        getAll();
+
+        //TODO try to get more ideas for report or try to figure out how long theyve been using Custos
+        allText += "\n" + mem.getText().toString();
+
 
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,31 +100,14 @@ public class ReportActivity extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_TEXT, allText);
 
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
-                finish();
+                //finish();
             }
         });
 
 
 
-    }
 
 
-    public void incrementEvent()
-    {
-        eventCounter -=- 1;
-        eve.setText("Number of Events: " + eventCounter);
-    }
-
-    public void incrementContact()
-    {
-        contactCounter -=- 1;
-        con.setText("Number of Contacts: " + contactCounter);
-    }
-
-    public void getAll()
-    {
-        //temporarily
-        allText = "Number of Events: " + eventCounter + "\nNumber of Contacts: " + contactCounter + "\n" +mem.getText().toString();
     }
 
 
