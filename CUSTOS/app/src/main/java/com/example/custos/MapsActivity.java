@@ -244,8 +244,10 @@ private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
         if((mess.equals("Home Location")) && !(mess.equals(" "))){
-            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory
-                    .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_home_black_18)));
+
+
+
           //  moveToCurrentLocation(eventlocation);
 
         }else
