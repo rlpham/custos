@@ -608,6 +608,7 @@ private LatLng eventlocation;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        //TODO: Add in the lat and latitude coordinates as well as description into the database
 
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
