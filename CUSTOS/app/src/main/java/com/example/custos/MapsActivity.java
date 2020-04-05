@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.FirstTimeLoginDialog;
 import com.example.custos.utils.User;
 import com.example.custos.utils.UserLocation;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -321,7 +322,6 @@ private void setcontactslocation(){
                   String name=snapshot.getValue()+"";
                   LatLng ll=new LatLng(ul.getLat(),ul.getLon());
                   setEventsLocationwithoutzooming(ll,name);
-                System.out.println("its getting here");
 
             }}
 
@@ -476,6 +476,7 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                                     if(dataSnapshot.getValue() == null){
                                         //uid not exist
                                         if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
+                                            displayDialog();
                                             Common.loggedUser = new User(userName,
                                                     firebaseUser.getUid(),
                                                     firebaseUser.getEmail());
@@ -529,6 +530,11 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         //Dale Code
         mMap.setOnMarkerClickListener(this);
 
+    }
+
+    private void displayDialog() {
+        FirstTimeLoginDialog firstTimeLoginDialog = new FirstTimeLoginDialog();
+        firstTimeLoginDialog.show(getSupportFragmentManager(),"first login");
     }
 
     private void updateTokens(final FirebaseUser firebaseUser) {
