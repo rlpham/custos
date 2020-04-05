@@ -35,6 +35,8 @@
         android:background="@drawable/circlebutton"
         android:text="@string/empty" />
 
+
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -120,7 +122,18 @@
 <!--        android:background="@android:drawable/ic_menu_search" />-->
 
 
-
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifinmaps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/quantum_black_100"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/splash2"
+        >
+    </pl.droidsonroids.gif.GifImageView>
 
 </RelativeLayout>
 

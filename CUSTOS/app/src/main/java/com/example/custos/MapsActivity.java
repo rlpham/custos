@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -61,6 +62,8 @@ import com.google.firebase.iid.InstanceIdResult;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import pl.droidsonroids.gif.GifImageView;
 
 //import com.google.android.libraries.places.api.Places;
 //import com.google.android.libraries.places.api.model.TypeFilter;
@@ -596,7 +599,14 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                setHomeLoc();
                 setcontactslocation();
             }
-        }, 3000);
+        }, 2000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                GifImageView gifimg=findViewById(R.id.gifinmaps);
+                gifimg.setVisibility(View.GONE);
+            }
+        }, 2500);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
