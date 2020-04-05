@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,8 +99,8 @@ public class MainEventListActivity extends Fragment {
             try {
                 holder.eventTitle.setText(data.getJSONObject(position).getString("name"));
                 holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
-                holder.eventDate.setText(data.getJSONObject(position).getString("date_time"));
-                holder.eventTime.setText(data.getJSONObject(position).getString("date_time"));
+                holder.eventDate.setText(data.getJSONObject(position).getString("date"));
+                holder.eventTime.setText(data.getJSONObject(position).getString("time"));
             } catch(JSONException e) {
                 System.out.println(e);
             }
@@ -114,6 +115,26 @@ public class MainEventListActivity extends Fragment {
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
         }
+    }
+
+    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int verticalSpaceHeight;
+
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                                   RecyclerView.State state) {
+            outRect.bottom = verticalSpaceHeight;
+            if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+                outRect.bottom = verticalSpaceHeight;
+            }
+        }
+
+
     }
 
 
@@ -168,8 +189,9 @@ public class MainEventListActivity extends Fragment {
                     JSONObject obj = new JSONObject();
                     try {
                         obj.put("name", element.getKey());
-                        obj.put("location", element.child("location").child("latitude").getValue() + ", " + element.child("location").child("longitude").getValue());
-                        obj.put("date_time", element.child("date_time").getValue());
+                        obj.put("location", element.child("area").getValue());
+                        obj.put("date", element.child("date").getValue());
+                        obj.put("time", element.child("time").getValue());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -180,7 +202,9 @@ public class MainEventListActivity extends Fragment {
                 RecyclerView.Adapter adapter = new EventListAdapter(data2);
                 rv.setHasFixedSize(true);
                 rv.setLayoutManager(llm);
+                rv.addItemDecoration(new VerticalSpaceItemDecoration(75));
                 rv.setAdapter(adapter);
+
             }
 
             @Override

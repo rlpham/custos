@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1D1D1D"
+    >
 
     <EditText
         android:id="@+id/event_name_input"
@@ -9,12 +12,14 @@
         android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="75dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="15dp"
-        android:layout_marginEnd="75dp"
+        android:layout_marginEnd="45dp"
         android:ems="10"
         android:hint="@string/event_name_placeholder"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <EditText
         android:id="@+id/event_description_input"
@@ -23,49 +28,38 @@
         android:layout_below="@+id/event_name_input"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="75dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="75dp"
+        android:layout_marginEnd="45dp"
         android:ems="10"
         android:hint="@string/event_description_placeholder"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
     <fragment
-        android:id="@+id/autocomplete_fragment"
+        android:id="@+id/event_location"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_below="@+id/date_time_input"
+        android:layout_below="@+id/date_input"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="75dp"
+        android:layout_marginStart="45dp"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="75dp" />
-
-    <EditText
-        android:id="@+id/date_time_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/event_description_input"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="75dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="75dp"
-        android:ems="10"
-        android:hint="@string/event_date_time_placeholder"
-        android:inputType="date" />
+        android:layout_marginEnd="45dp" />
 
     <Button
         android:id="@+id/invite_guests_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/autocomplete_fragment"
+        android:layout_below="@+id/event_location"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="75dp"
+        android:layout_marginStart="120dp"
         android:layout_marginTop="25dp"
-        android:layout_marginEnd="75dp"
+        android:layout_marginEnd="120dp"
+        android:background="#fece2f"
         android:onClick="inviteGuests"
         android:text="@string/event_invite_users_button_placeholder" />
 
@@ -80,17 +74,20 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="76dp"
         android:text="Invited"
+        android:textColor="#FFFFFF"
         android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="362dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        android:background="#1D1D1D"
         android:text="@string/event_create_event_placeholder"
+        android:textColor="#FFFFFF"
         android:textSize="30sp" />
 
     <Button
@@ -100,9 +97,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="false"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
-        android:text="@string/create_event_button" />
+        android:background="#fece2f"
+        android:text="@string/create_event_button"
+        android:textColor="@color/colorAccent" />
 
     <ListView
         android:id="@+id/invited_list"
@@ -112,6 +111,37 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="0dp" />
+        android:layout_marginEnd="0dp"
+        android:background="#212121" />
+
+    <EditText
+        android:id="@+id/date_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_description_input"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/time_input"
+        android:ems="10"
+        android:hint="@string/event_date_placeholder"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
+
+    <EditText
+        android:id="@+id/time_input"
+        android:layout_width="158dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_description_input"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="45dp"
+        android:ems="10"
+        android:hint="@string/time_input_placeholder"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF" />
 
 </RelativeLayout>

@@ -2,14 +2,22 @@ package com.example.custos;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Event;
@@ -26,20 +34,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import org.json.JSONObject;
-
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class CreateEventActivity extends AppCompatActivity {
@@ -53,6 +57,11 @@ public class CreateEventActivity extends AppCompatActivity {
     ArrayList<String> uids = new ArrayList<String>();
     double lat;
     double lon;
+    EditText date;
+    EditText time;
+    DatePickerDialog datePickerDialog;
+    TimePickerDialog timePickerDialog;
+
 
     FirebaseUser firebaseUser;
     private DatabaseReference user_information;
@@ -63,14 +72,68 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
 
+        date = findViewById(R.id.date_input);
+        date.setInputType(InputType.TYPE_NULL);
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(CreateEventActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                date.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
+
+        time = findViewById(R.id.time_input);
+        time.setInputType(InputType.TYPE_NULL);
+
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(CreateEventActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String am_pm = "";
+                        if(selectedHour > 11) {
+                            selectedHour = selectedHour - 12;
+                            am_pm = "PM";
+                        } else {
+                            am_pm = "AM";
+                        }
+                        time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                    }
+                }, hour, minute, false);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
+
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         //PlacesClient placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+                getSupportFragmentManager().findFragmentById(R.id.event_location);
 
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
         //autocompleteFragment.setLocationRestriction(RectangularBounds.newInstance(new LatLng(40.263680,-76.890739), new LatLng(40.285519,-76.650589)));
 
         // Set up a PlaceSelectionListener to handle the response.
@@ -78,7 +141,8 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
-                System.out.println("hello");
+                lat = latLng.latitude;
+                lon = latLng.longitude;
             }
 
             @Override
@@ -93,13 +157,14 @@ public class CreateEventActivity extends AppCompatActivity {
                 //POST DATA HERE
                 event_name_text_view = findViewById(R.id.event_name_input);
                 event_description_text_view = findViewById(R.id.event_description_input);
-                event_time_text_view = findViewById(R.id.date_time_input);
+                event_time_text_view = findViewById(R.id.date_input);
                 name = event_name_text_view.getText().toString();
                 description = event_description_text_view.getText().toString();
                 date_time = event_time_text_view.getText().toString();
                 final ListView invited_list = findViewById(R.id.invited_list);
                 firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
+                date = findViewById(R.id.date_input);
+                time = findViewById(R.id.time_input);
                 //create event to database -> DB/user_event/<uid>/<event_name>
                 user_information = FirebaseDatabase.getInstance().getReference("user_event");
                 user_information.orderByKey()
@@ -109,8 +174,10 @@ public class CreateEventActivity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     Common.event = new Event(firebaseUser.getUid(), name, description, date_time);
                                     DatabaseReference db = user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
-                                    db.child("date_time").setValue(Common.event.getDate_time());
+                                    db.child("date").setValue(date.getText().toString());
+                                    db.child("time").setValue(time.getText().toString());
                                     db.child("description").setValue(Common.event.getDescription());
+                                    db.child("area").setValue(getLocationText(lat, lon));
                                     db.child("location").child("latitude").setValue(lat);
                                     user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
                             }
@@ -175,6 +242,7 @@ public class CreateEventActivity extends AppCompatActivity {
             ArrayList<String> selected = data.getStringArrayListExtra("values");
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selected);
             lv = findViewById(R.id.invited_list);
+            
             lv.setAdapter(adapter);
         }
 
@@ -195,6 +263,23 @@ public class CreateEventActivity extends AppCompatActivity {
             number += String.valueOf(new Random().nextInt(10));
         }
         return number;
+    }
+
+    private String getLocationText(double latitude, double longitude) {
+        String locationText = "";
+        Geocoder geocoder;
+        geocoder = new Geocoder(CreateEventActivity.this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude,1);
+            locationText = addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea();
+            Log.d("mylog","complete address: " + addresses.toString());
+            Log.d("mylog","address: " + locationText);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return locationText;
     }
 
 }

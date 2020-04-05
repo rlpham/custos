@@ -58,7 +58,7 @@
     </string-array>
     <string name="event_name_placeholder">Name</string>
     <string name="event_description_placeholder">Description</string>
-    <string name="event_date_time_placeholder">Date/Time</string>
+    <string name="event_date_placeholder">Date</string>
     <string name="event_invite_users_button_placeholder">Invite Guests +</string>
     <string name="event_create_event_placeholder">Create Event</string>
     <string name="invite_guests_label_placeholder">Invite Guests</string>
@@ -78,4 +78,5 @@
     <string name="eventsviewname">Events:</string>
     <string name="membersincename">Member Since:</string>
     <string name="reportsNameXML">Reports</string>
+    <string name="time_input_placeholder">Time</string>
 </resources>
