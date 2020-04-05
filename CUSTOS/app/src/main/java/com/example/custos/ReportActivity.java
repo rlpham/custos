@@ -1,7 +1,11 @@
 package com.example.custos;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,9 +25,11 @@ public class ReportActivity extends AppCompatActivity {
     TextView eve;
     TextView con;
     TextView mem;
+    Button share;
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     int eventCounter = 0;
     int contactCounter = 0;
+    String allText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +39,7 @@ public class ReportActivity extends AppCompatActivity {
         eve = findViewById(R.id.eventViewNumber);
         con = findViewById(R.id.contactViewNumber);
         mem = findViewById(R.id.memberViewNumber);
-
+        share = findViewById(R.id.shareReport);
 
         DatabaseReference datta;
 
@@ -71,6 +77,24 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
+        getAll();
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/plain");
+                //emailIntent.putExtra(Intent.EXTRA_EMAIL, address);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Custos Report");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, allText);
+
+                startActivity(Intent.createChooser(emailIntent, "Send email..."));
+                finish();
+            }
+        });
+
+
 
     }
 
@@ -85,6 +109,12 @@ public class ReportActivity extends AppCompatActivity {
     {
         contactCounter -=- 1;
         con.setText("Number of Contacts: " + contactCounter);
+    }
+
+    public void getAll()
+    {
+        //temporarily
+        allText = "Number of Events: " + eventCounter + "\nNumber of Contacts: " + contactCounter + "\n" +mem.getText().toString();
     }
 
 

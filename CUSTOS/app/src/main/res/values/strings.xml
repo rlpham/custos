@@ -79,4 +79,5 @@
     <string name="membersincename">Member Since:</string>
     <string name="reportsNameXML">Reports</string>
     <string name="contactsrReport">Number of Contacts:</string>
+    <string name="sharetextforbutton">Share</string>
 </resources>

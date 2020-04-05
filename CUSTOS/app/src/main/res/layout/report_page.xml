@@ -34,12 +34,12 @@
 
     <LinearLayout
         android:id="@+id/linearlayoutReport"
-        android:layout_width="411dp"
-        android:layout_height="232dp"
+        android:layout_width="413dp"
+        android:layout_height="348dp"
         android:layout_below="@+id/cardViewReport"
         android:layout_alignParentStart="true"
         android:layout_marginStart="-2dp"
-        android:layout_marginTop="139dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:orientation="vertical"
         android:weightSum="3">
@@ -81,7 +81,21 @@
             android:textColorHint="#FFFFFF"
             android:textSize="24sp" />
 
+
     </LinearLayout>
 
+    <Button
+        android:id="@+id/shareReport"
+        android:layout_width="322dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/linearlayoutReport"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="#fece2f"
+        android:gravity="center"
+        android:text="@string/sharetextforbutton"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
