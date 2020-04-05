@@ -162,7 +162,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Rahul TestCode below
 
-
+        final Button switchbutton= findViewById(R.id.switchmap);
+        switcherbuttoncode(switchbutton);
 
         final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
@@ -185,21 +186,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (item.getItemId()) {
                     case R.id.navigation_events:
                         dangerzonebutton.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
                         dangerzonebutton.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
                       openFragment(UserFragment.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
 //                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
@@ -207,6 +212,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     case R.id.navigation_maps:
                         dangerzonebutton.setVisibility(View.VISIBLE);
+                        switchbutton.setVisibility(View.VISIBLE);
                         searchView.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
                         startActivity(intent);
@@ -221,27 +227,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //rahul end
 
 
-        //rahul new
 
 
-//        db.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String eventaddress=dataSnapshot.child("address").getValue().toString();
-//                System.out.println(eventaddress);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+    }
+    private boolean swticher=false;
+    private void switcherbuttoncode(final Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               if(swticher==false){
 
-
-        //rahul new end
-
-
-
+                   swticher=true;
+                   setmaptoretro(button);
+               }else{
+                   swticher=false;
+                   setmaptonight(button);
+               }
+            }
+        });
     }
 
 private LatLng eventlocation;
@@ -265,7 +267,7 @@ private LatLng eventlocation;
     public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_black_24)));
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18)));
 
     }
     /**
@@ -369,6 +371,15 @@ private void setcontactslocation(){
 
     }
 
+    private void setmaptoretro(Button btn){
+btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
+        boolean success = mMap.setMapStyle(null);
+    }
+    private void setmaptonight(Button btn){
+        btn.setBackgroundResource(R.drawable.baseline_wb_sunny_white_48);
+        boolean success = mMap.setMapStyle(new MapStyleOptions(getResources()
+                .getString(R.string.style_json)));
+    }
 
     private String userID="nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
@@ -376,8 +387,7 @@ private void setcontactslocation(){
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        boolean success = googleMap.setMapStyle(new MapStyleOptions(getResources()
-                .getString(R.string.style_json)));
+
 
 
         db.addValueEventListener(new ValueEventListener() {
