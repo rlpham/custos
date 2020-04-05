@@ -1,7 +1,5 @@
 package com.example.custos;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.custos.utils.AddFriendDialog;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.User;
 import com.google.firebase.auth.FirebaseAuth;

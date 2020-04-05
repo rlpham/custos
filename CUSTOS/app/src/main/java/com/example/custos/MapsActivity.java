@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.FirstTimeLoginDialog;
 import com.example.custos.utils.User;
 import com.example.custos.utils.UserLocation;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -150,6 +151,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+
         mapFragment.getMapAsync(this);
         //end
         // bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -259,7 +261,7 @@ private LatLng eventlocation;
         }else
         if(eventlocation!=null) {
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
-            moveToCurrentLocation(eventlocation);
+           // moveToCurrentLocation(eventlocation);
         }
     }
 
@@ -320,7 +322,6 @@ private void setcontactslocation(){
                   String name=snapshot.getValue()+"";
                   LatLng ll=new LatLng(ul.getLat(),ul.getLon());
                   setEventsLocationwithoutzooming(ll,name);
-                System.out.println("its getting here");
 
             }}
 
@@ -436,6 +437,7 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
                                     .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE )));
+                            moveToCurrentLocation(sydney);
                             user_information.orderByKey()
                                     .equalTo(firebaseUser.getUid())
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -474,6 +476,7 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                                     if(dataSnapshot.getValue() == null){
                                         //uid not exist
                                         if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
+                                            displayDialog();
                                             Common.loggedUser = new User(userName,
                                                     firebaseUser.getUid(),
                                                     firebaseUser.getEmail());
@@ -527,6 +530,11 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         //Dale Code
         mMap.setOnMarkerClickListener(this);
 
+    }
+
+    private void displayDialog() {
+        FirstTimeLoginDialog firstTimeLoginDialog = new FirstTimeLoginDialog();
+        firstTimeLoginDialog.show(getSupportFragmentManager(),"first login");
     }
 
     private void updateTokens(final FirebaseUser firebaseUser) {
@@ -592,11 +600,11 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
 
     }
