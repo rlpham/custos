@@ -20,6 +20,12 @@ public class UserLocation {
     public double getLon(){
         return longitude;
     }
+    public void setLat(double lat){
+        latitude=lat;
+    }
+    public void setLon(double lon){
+        longitude=lon;
+    }
     public String getUID(){
         return userAddress;
     }

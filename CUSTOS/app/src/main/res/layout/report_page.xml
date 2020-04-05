@@ -34,15 +34,15 @@
 
     <LinearLayout
         android:id="@+id/linearlayoutReport"
-        android:layout_width="411dp"
-        android:layout_height="115dp"
+        android:layout_width="match_parent"
+        android:layout_height="346dp"
         android:layout_below="@+id/cardViewReport"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginTop="139dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
         android:orientation="vertical"
-        android:weightSum="2">
+        android:weightSum="4">
 
         <TextView
             android:id="@+id/eventViewNumber"
@@ -54,10 +54,23 @@
             android:textColor="#FFFFFF"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/contactViewNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/contactsrReport"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/memberViewNumber"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -66,9 +79,35 @@
             android:textColor="#FFFFFF"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/userViewNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/numberOfUsers"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="18sp" />
+
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/shareReport"
+        android:layout_width="322dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/linearlayoutReport"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:background="#fece2f"
+        android:gravity="center"
+        android:text="@string/sharetextforbutton"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

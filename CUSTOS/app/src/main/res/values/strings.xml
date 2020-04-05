@@ -1,6 +1,7 @@
 <resources>
     //there are multiple dupilcates, control f before adding!
     <string name="app_name">Custos</string>
+
     <string name="empty"></string>
     <string name="event_add">+</string>
     <string name="title_activity_maps">Map</string>
@@ -75,8 +76,11 @@
     <string name="ecintial">Add Emergency Contact</string>
     <string name="ecsubmit">Submit</string>
     <string name="login_with_google">LOGIN WITH GOOGLE</string>
-    <string name="eventsviewname">Events:</string>
-    <string name="membersincename">Member Since:</string>
+    <string name="eventsviewname">Number of Events:</string>
+    <string name="membersincename">Installed on:</string>
     <string name="reportsNameXML">Reports</string>
     <string name="time_input_placeholder">Time</string>
+    <string name="contactsrReport">Number of Contacts:</string>
+    <string name="sharetextforbutton">Share</string>
+    <string name="numberOfUsers">Number of Users: </string>
 </resources>

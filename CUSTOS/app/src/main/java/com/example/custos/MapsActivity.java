@@ -39,6 +39,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,6 +58,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 //import com.google.android.libraries.places.api.Places;
@@ -110,7 +112,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Dale's Code
         //mMap.setOnMarkerClickListener(this);
         //
-
+        userList = new ArrayList<>();
         db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
         db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
         db3 = FirebaseDatabase.getInstance().getReference("User Information");
@@ -160,6 +162,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Rahul TestCode below
 
+        final Button switchbutton= findViewById(R.id.switchmap);
+        switcherbuttoncode(switchbutton);
+
         final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -181,21 +186,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (item.getItemId()) {
                     case R.id.navigation_events:
                         dangerzonebutton.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
                         dangerzonebutton.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
                       openFragment(UserFragment.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
+                        switchbutton.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
 //                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
@@ -203,6 +212,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     case R.id.navigation_maps:
                         dangerzonebutton.setVisibility(View.VISIBLE);
+                        switchbutton.setVisibility(View.VISIBLE);
                         searchView.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
                         startActivity(intent);
@@ -217,27 +227,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //rahul end
 
 
-        //rahul new
 
 
-//        db.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String eventaddress=dataSnapshot.child("address").getValue().toString();
-//                System.out.println(eventaddress);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+    }
+    private boolean swticher=false;
+    private void switcherbuttoncode(final Button button){
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+               if(swticher==false){
 
-
-        //rahul new end
-
-
-
+                   swticher=true;
+                   setmaptoretro(button);
+               }else{
+                   swticher=false;
+                   setmaptonight(button);
+               }
+            }
+        });
     }
 
 private LatLng eventlocation;
@@ -256,6 +262,14 @@ private LatLng eventlocation;
             moveToCurrentLocation(eventlocation);
         }
     }
+
+
+    public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
+
+
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18)));
+
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -265,6 +279,67 @@ private LatLng eventlocation;
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    private List<UserLocation> userList;
+
+    private void readUsers() {
+
+        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("userLocation");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    userList.clear();
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        UserLocation user = snapshot.getValue(UserLocation.class);
+                        assert user != null;
+                        assert fUser != null;
+                        if(!user.getUID().equals(fUser.getUid())){
+                            userList.add(user);
+                        }
+                    }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+private void setcontactslocation(){
+
+    for (final UserLocation ul: userList) {
+
+        user_information2.orderByKey()
+                .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(ul.getUID()).exists()) {
+                DataSnapshot snapshot = dataSnapshot.child(ul.getUID()).child("userName");
+                  String name=snapshot.getValue()+"";
+                  LatLng ll=new LatLng(ul.getLat(),ul.getLon());
+                  setEventsLocationwithoutzooming(ll,name);
+                System.out.println("its getting here");
+
+            }}
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+}
+
+
+
+
+
+
 
     public void setHomeLoc(){
         db3.addValueEventListener(new ValueEventListener() {
@@ -296,6 +371,15 @@ private LatLng eventlocation;
 
     }
 
+    private void setmaptoretro(Button btn){
+btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
+        boolean success = mMap.setMapStyle(null);
+    }
+    private void setmaptonight(Button btn){
+        btn.setBackgroundResource(R.drawable.baseline_wb_sunny_white_48);
+        boolean success = mMap.setMapStyle(new MapStyleOptions(getResources()
+                .getString(R.string.style_json)));
+    }
 
     private String userID="nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
@@ -507,7 +591,7 @@ private LatLng eventlocation;
     }
     final Handler handler = new Handler();
     private void setlocationeveryfeesec(final GoogleMap googleMap){
-
+        readUsers();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -520,6 +604,7 @@ private LatLng eventlocation;
             @Override
             public void run() {
                setHomeLoc();
+                setcontactslocation();
             }
         }, 3000);
     }
@@ -608,6 +693,7 @@ private LatLng eventlocation;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        //TODO: Add in the lat and latitude coordinates as well as description into the database
 
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
