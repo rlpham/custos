@@ -18,6 +18,10 @@ public class Common {
     public static final String EMERGENCY_CONTACT    = "Emergency Contact";
     public static final String EMERGENCY_NAME       = "Name";
     public static final String EMERGENCY_PHONE      = "Phone number";
+    public static final String FROM_NAME            = "FromName";
+    public static final String TO_NAME              = "ToName";
+    public static final String TO_UID               = "ToUid";
+    public static final String FROM_UID             = "FromUid";
 
 
 
