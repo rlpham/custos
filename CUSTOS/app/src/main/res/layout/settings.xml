@@ -2,53 +2,210 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#1D1D1D">
-    <TextView
-        android:id="@+id/settinsheader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="0dp"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="@string/settings"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="46sp" />
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/cardViewReport"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
+        android:background="#212121"
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/imageReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:drawableTop="@drawable/ic_phone_android_white_24dp"
+            android:gravity="center"
+            android:text="@string/settingXML"
+            android:textColor="@color/white"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+<!--
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="346dp"
+        android:layout_below="@+id/mapMode"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="128dp"
-        android:layout_marginEnd="-1dp">
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="61dp"
+        android:layout_marginEnd="1dp"
+        android:weightSum="6">
 
         <LinearLayout
             android:id="@+id/settingscontainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/SettingReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/Report" />
+                android:layout_weight="1"
+                android:background="#fece2f"
+                android:gravity="center"
+                android:text="@string/Report"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/invisibleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#fece2f"
+                android:gravity="center"
+                android:text="@string/Report"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
 
             <Button
                 android:id="@+id/settingsSignOut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/userinfo" />
+                android:layout_weight="1"
+                android:background="#fece2f"
+                android:gravity="center"
+                android:text="@string/userinfo"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+
+            <Button
+                android:id="@+id/invisibleBtn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#fece2f"
+                android:gravity="center"
+                android:text="@string/Report"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+
+
+            <Button
+                android:id="@+id/mapMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#fece2f"
+                android:gravity="center"
+                android:text="Light & Dark Mode"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+
         </LinearLayout>
     </ScrollView>
+
+    -->
+    <LinearLayout
+        android:id="@+id/linearlayoutReport"
+        android:layout_width="match_parent"
+        android:layout_height="346dp"
+        android:layout_below="@+id/cardViewReport"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:weightSum="5">
+
+        <Button
+            android:id="@+id/SettingReport"
+            android:layout_width="317dp"
+            android:layout_height="84dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/sv_round_login"
+            android:gravity="center"
+            android:text="@string/Report"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/invisibleBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:gravity="center"
+            android:text="@string/Report"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+
+        <Button
+            android:id="@+id/settingsSignOut"
+            android:layout_width="317dp"
+            android:layout_height="84dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/sv_round_login"
+
+            android:gravity="center"
+            android:text="@string/userinfo"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/invisibleBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:gravity="center"
+            android:text="@string/Report"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/mapMode"
+            android:layout_width="317dp"
+            android:layout_height="84dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/sv_round_login"
+            android:gravity="center"
+            android:text="@string/themeSetting"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
+    <!--   <Button
+           android:id="@+id/shareReport"
+           android:layout_width="322dp"
+           android:layout_height="60dp"
+           android:layout_below="@+id/linearlayoutReport"
+           android:layout_centerHorizontal="true"
+           android:layout_marginTop="25dp"
+           android:background="#fece2f"
+           android:gravity="center"
+           android:text="@string/sharetextforbutton"
+           android:textSize="24sp"
+           android:textStyle="bold" />-->
+
 
 </RelativeLayout>

@@ -42,7 +42,7 @@ public class SettingsActivity extends Fragment {
                              Bundle savedInstanceState) {
 
         final View view=inflater.inflate(R.layout.settings, container, false);
-        LinearLayout layout = (LinearLayout) view.findViewById(R.id.settingscontainer);
+//        LinearLayout layout = (LinearLayout) view.findViewById(R.id.settingscontainer);
         Button Signout=view.findViewById(R.id.settingsSignOut);
         Signout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -58,6 +58,17 @@ public class SettingsActivity extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+        Button lightNDark = view.findViewById(R.id.mapMode);
+        lightNDark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //for light and dark mode
+            }
+        });
+
+
 
         // Inflate the layout for this fragment
         return view;

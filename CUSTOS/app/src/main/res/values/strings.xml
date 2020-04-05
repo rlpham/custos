@@ -83,4 +83,6 @@
     <string name="contactsrReport">Number of Contacts:</string>
     <string name="sharetextforbutton">Share</string>
     <string name="numberOfUsers">Number of Users: </string>
+    <string name="settingXML">Settings</string>
+    <string name="themeSetting">Theme</string>
 </resources>
