@@ -1,4 +1,4 @@
-package com.example.custos;
+package com.example.custos.utils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.example.custos.R;
+
 public class AddFriendDialog extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(),R.style.Chill);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity(), R.style.Chill);
         alertDialog.setTitle("Request Friend");
         alertDialog.setMessage("chill Kenny its not done");
         alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
