@@ -1,9 +1,13 @@
 package com.example.custos;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReportActivity extends AppCompatActivity {
 
@@ -40,6 +48,51 @@ public class ReportActivity extends AppCompatActivity {
         share = findViewById(R.id.shareReport);
 
         DatabaseReference datta;
+
+//        PackageManager pm = ReportActivity.this.getPackageManager();
+//        try {
+//            ApplicationInfo appInfo = pm.getApplicationInfo("com.example.custos", 0);
+//            String appFile = appInfo.sourceDir;
+//            long installed = new File(appFile).lastModified();
+//            System.out.println(installed);
+//        }
+//        catch (Exception E)
+//        {
+//
+//        }
+
+
+        PackageManager pm = ReportActivity.this.getPackageManager();
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = pm.getPackageInfo("com.example.custos", PackageManager.GET_PERMISSIONS);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Date installTime = new Date( packageInfo.firstInstallTime );
+        //System.out.println( "Installed: " + installTime.toString());
+
+        Date updateTime = new Date( packageInfo.lastUpdateTime );
+        //System.out.println("Updated: " + updateTime.toString());
+
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+       // SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+
+        ////op code
+        String installTimed = dateFormat.format( new Date( packageInfo.firstInstallTime ) );
+        System.out.println( "Installed: " + installTimed);
+        String initialDay = "Member Since: " + installTimed;
+        ////
+
+
+        String updateTimed = dateFormat.format( new Date( packageInfo.lastUpdateTime ) );
+        System.out.println("Updated: " + updateTimed);
+
+
 
 
 
@@ -84,9 +137,10 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
 
-
+        mem.setText(initialDay);
+//        System.out.println(mem.getText().toString() + "TESTINGdlfksodjfodsf");
         //TODO try to get more ideas for report or try to figure out how long theyve been using Custos
-        allText += "\n" + mem.getText().toString();
+        allText += "\n" + initialDay;
 
 
         share.setOnClickListener(new View.OnClickListener() {
