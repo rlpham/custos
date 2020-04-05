@@ -204,11 +204,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_maps:
                         dangerzonebutton.setVisibility(View.VISIBLE);
                         searchView.setVisibility(View.VISIBLE);
-                        FragmentManager fm = MapsActivity.this.getSupportFragmentManager();
-
-                        while(fm.getBackStackEntryCount() >= 1) {
-                            fm.popBackStackImmediate();
-                        }
+                        Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
+                        startActivity(intent);
 
                         return true;
 
