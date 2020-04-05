@@ -53,6 +53,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
 import java.util.List;
@@ -409,6 +411,7 @@ private LatLng eventlocation;
                                             });
                                         }
                                     }
+                                    updateTokens(firebaseUser);
                                 }
 
                                 @Override
@@ -441,6 +444,24 @@ private LatLng eventlocation;
         //Dale Code
         mMap.setOnMarkerClickListener(this);
 
+    }
+
+    private void updateTokens(final FirebaseUser firebaseUser) {
+        final DatabaseReference tokens = FirebaseDatabase.getInstance()
+                .getReference(Common.TOKENS);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                    @Override
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+                        tokens.child(firebaseUser.getUid())
+                                .setValue(instanceIdResult.getToken());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MapsActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getcurrentlocation(GoogleMap googleMap){
