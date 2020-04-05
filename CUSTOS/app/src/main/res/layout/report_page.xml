@@ -3,24 +3,32 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#1D1D1D">
 
-    <TextView
-        android:id="@+id/reportHeader"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="0dp"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center"
-        android:text="@string/Report"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textCursorDrawable="@color/colorwhite"
-        android:textSize="46sp" />
+        android:background="#212121"
+        android:padding="8dp">
+
+
+        <TextView
+            android:id="@+id/user_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageEdit"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:drawableTop="@drawable/ic_person_add_black_24dp"
+            android:text="Search and Add Friend"
+            android:textColor="#fece2f"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textCursorDrawable="@color/colorwhite"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/eventViewNumber"
@@ -30,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="156dp"
         android:gravity="center"
-        android:text="@string/events"
+        android:text="@string/eventsviewname"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
@@ -44,7 +52,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="68dp"
         android:gravity="center"
-        android:text="@string/member_since"
+        android:text="@string/membersincename"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
         android:textColorHint="#FFFFFF"
