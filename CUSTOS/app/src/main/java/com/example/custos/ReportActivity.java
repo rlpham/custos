@@ -1,13 +1,12 @@
 package com.example.custos;
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
+
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -72,31 +71,27 @@ public class ReportActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Date installTime = new Date( packageInfo.firstInstallTime );
+        Date installTime = new Date(packageInfo.firstInstallTime);
         //System.out.println( "Installed: " + installTime.toString());
 
-        Date updateTime = new Date( packageInfo.lastUpdateTime );
+        Date updateTime = new Date(packageInfo.lastUpdateTime);
         //System.out.println("Updated: " + updateTime.toString());
 
         // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-       // SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
 
         ////op code
-        String installTimed = dateFormat.format( new Date( packageInfo.firstInstallTime ) );
-        System.out.println( "Installed: " + installTimed);
-        String initialDay = "Member Since: " + installTimed;
+        String installTimed = dateFormat.format(new Date(packageInfo.firstInstallTime));
+        System.out.println("Installed: " + installTimed);
+        String initialDay = "Installed on: " + installTimed;
         ////
 
 
-        String updateTimed = dateFormat.format( new Date( packageInfo.lastUpdateTime ) );
+        String updateTimed = dateFormat.format(new Date(packageInfo.lastUpdateTime));
         System.out.println("Updated: " + updateTimed);
-
-
-
-
 
 
         datta = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
@@ -106,11 +101,11 @@ public class ReportActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = 0;
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                        count -=- 1;
+                    count -= -1;
                 }
                 eve.setText("Number of Events: " + count);
 
-                allText += eve.getText().toString();
+                allText += "\n" + eve.getText().toString();
             }
 
             @Override
@@ -126,11 +121,11 @@ public class ReportActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = 0;
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                    count -=- 1;
+                    count -= -1;
                 }
                 con.setText("Number of Contacts: " + count);
 
-                allText +=  "\n" + con.getText().toString();
+                allText += "\n" + con.getText().toString();
             }
 
             @Override
@@ -140,26 +135,22 @@ public class ReportActivity extends AppCompatActivity {
         });
 
         mem.setText(initialDay);
-//        System.out.println(mem.getText().toString() + "TESTINGdlfksodjfodsf");
-        //TODO try to get more ideas for report or try to figure out how long theyve been using Custos
+
         allText += "\n" + initialDay;
 
 
-
-
-
-          datta = FirebaseDatabase.getInstance().getReference("User Information");
+        datta = FirebaseDatabase.getInstance().getReference("User Information");
 
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = 0;
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                        count -=- 1;
+                    count -= -1;
                 }
                 use.setText("Number of Users: " + count);
 
-                allText += use.getText().toString();
+                allText += "\n" + use.getText().toString();
             }
 
             @Override
@@ -167,11 +158,6 @@ public class ReportActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
 
 
         share.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +174,6 @@ public class ReportActivity extends AppCompatActivity {
                 //finish();
             }
         });
-
-
-
 
 
     }

@@ -208,7 +208,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
 
 //        placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+                getSupportFragmentManager().findFragmentById(R.id.event_location);
 
 
 // Specify the types of place data to return.

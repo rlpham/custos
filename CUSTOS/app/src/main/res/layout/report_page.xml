@@ -45,31 +45,6 @@
         android:weightSum="4">
 
         <TextView
-            android:id="@+id/eventViewNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/eventsviewname"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/contactViewNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/contactsrReport"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="18sp" />
-
-
-        <TextView
             android:id="@+id/memberViewNumber"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -81,6 +56,7 @@
             android:textColorHint="#FFFFFF"
             android:textSize="18sp" />
 
+
         <TextView
             android:id="@+id/userViewNumber"
             android:layout_width="wrap_content"
@@ -88,6 +64,34 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/numberOfUsers"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/eventViewNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/eventsviewname"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="18sp" />
+
+
+
+
+        <TextView
+            android:id="@+id/contactViewNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/contactsrReport"
             android:textColor="#FFFFFF"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"

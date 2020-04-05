@@ -230,7 +230,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
-    private boolean swticher=false;
+    private boolean swticher=true;
     private void switcherbuttoncode(final Button button){
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -556,27 +556,9 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                         @Override
                         public void onSuccess(final Location location) {
                             FirebaseDatabase.getInstance().getReference("userLocation").child(userID).child("lat")
-                                    .setValue(location.getLatitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                                    .setValue(location.getLatitude());
                             FirebaseDatabase.getInstance().getReference("userLocation").child(userID).child("lon")
-                                    .setValue(location.getLongitude()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
-                                    }else{
-                                        Toast.makeText(MapsActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                                    .setValue(location.getLongitude());
                         }
 
 
