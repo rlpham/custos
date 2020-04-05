@@ -2,6 +2,7 @@ package com.example.custos.adapters;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.custos.OtherUserActivity;
 import com.example.custos.R;
 import com.example.custos.utils.User;
 
@@ -32,13 +34,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = users.get(position);
+        final User user = users.get(position);
         holder.userEmail.setText(user.getUserEmail());
         if(user.getImageURL().equals("default")){
             holder.userImage.setImageResource(R.mipmap.ic_launcher);
         }else{
             Glide.with(context).load(user.getImageURL()).into(holder.userImage);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, OtherUserActivity.class);
+                intent.putExtra("userid",user.getUID());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
