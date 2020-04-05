@@ -2,6 +2,7 @@ package com.example.custos;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,8 +33,12 @@ import com.google.gson.JsonParser;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
@@ -46,6 +51,8 @@ public class CreateEventActivity extends AppCompatActivity {
     String description;
     String date_time;
     ArrayList<String> uids = new ArrayList<String>();
+    double lat;
+    double lon;
 
     FirebaseUser firebaseUser;
     private DatabaseReference user_information;
@@ -71,6 +78,7 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 final LatLng latLng = place.getLatLng();
+                System.out.println("hello");
             }
 
             @Override
@@ -103,8 +111,8 @@ public class CreateEventActivity extends AppCompatActivity {
                                     DatabaseReference db = user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
                                     db.child("date_time").setValue(Common.event.getDate_time());
                                     db.child("description").setValue(Common.event.getDescription());
-                                    db.child("location").child("latitude").setValue("33.7206");
-                                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue("-116.2156");
+                                    db.child("location").child("latitude").setValue(lat);
+                                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -117,12 +125,20 @@ public class CreateEventActivity extends AppCompatActivity {
                 userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String id = "E" + generateNumber();
+                        Date date = Calendar.getInstance().getTime();
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                        String strDate = dateFormat.format(date);
                         for(int i = 0; i < invited_list.getCount(); i++) {
                             for(DataSnapshot element : dataSnapshot.getChildren()) {
                                 String invited_name = invited_list.getItemAtPosition(i).toString();
                                 String current_name = getNameFromValue(element.getValue().toString());
                                 if(invited_name.equals(current_name)) {
-                                    uids.add(element.getKey());
+                                    //use element.getKey() to write into DB/user/<UID>/notifications/eventInvite
+                                    DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(id);
+                                    notification.child("message").setValue("<SENDER UID> has invited you to an event <EVENT NAME>");
+                                    notification.child("timestamp").setValue(strDate);
+                                    notification.child("sender").setValue(firebaseUser.getUid());
                                 }
                             }
                         }
@@ -133,24 +149,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
                     }
                 });
-
-                //Add notification to invited user(s)'s notification list
-                for(final String uid : uids) {
-                    final String id = "E" + generateNumber();
-                    userReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            DatabaseReference notification = userReference.child(uid).child("notifications").child("eventInvite").child(id);
-                            notification.child("message").setValue("<ENTER SENDER USERNAME HERE> has invited you to an event");
-                            notification.child("sender").setValue("<ENTER SENDER USERNAME HERE>");
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                }
 
                 Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                 onActivityResult(1,1,intent);
