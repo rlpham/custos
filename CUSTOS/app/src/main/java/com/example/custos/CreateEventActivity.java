@@ -25,10 +25,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Random;
 
 public class CreateEventActivity extends AppCompatActivity {
     TextView event_name_text_view;
@@ -38,10 +45,12 @@ public class CreateEventActivity extends AppCompatActivity {
     String name;
     String description;
     String date_time;
-    ArrayList<String> uids;
+    ArrayList<String> uids = new ArrayList<String>();
+
 
     FirebaseUser firebaseUser;
     private DatabaseReference user_information;
+    private DatabaseReference userReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,35 +90,10 @@ public class CreateEventActivity extends AppCompatActivity {
                 name = event_name_text_view.getText().toString();
                 description = event_description_text_view.getText().toString();
                 date_time = event_time_text_view.getText().toString();
-
                 final ListView invited_list = findViewById(R.id.invited_list);
-                uids = new ArrayList<String>();
-
                 firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
 
-                db.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(int i = 0; i < invited_list.getCount(); i++) {
-//                            System.out.println(invited_list.getItemAtPosition(i).toString());
-//                            guests.add(invited_list.getItemAtPosition(i).toString());
-                            for(DataSnapshot element : dataSnapshot.getChildren()) {
-                                if(invited_list.getItemAtPosition(i).equals(element.child(element.getKey()).child("name").getValue().toString())) {
-                                    uids.add(element.getKey());
-                                }
-                            }
-                        }
-                    }
-
-                    //TEST IF UIDS SELECTED UIDS POP UP
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
+                //create event to database -> DB/user_event/<uid>/<event_name>
                 user_information = FirebaseDatabase.getInstance().getReference("user_event");
                 user_information.orderByKey()
                         .equalTo(firebaseUser.getUid())
@@ -128,6 +112,47 @@ public class CreateEventActivity extends AppCompatActivity {
 
                             }
                         });
+
+                //Gather list uids of invited guests
+                userReference = FirebaseDatabase.getInstance().getReference("Users");
+                userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(int i = 0; i < invited_list.getCount(); i++) {
+                            for(DataSnapshot element : dataSnapshot.getChildren()) {
+                                String invited_name = invited_list.getItemAtPosition(i).toString();
+                                String current_name = getNameFromValue(element.getValue().toString());
+                                if(invited_name.equals(current_name)) {
+                                    uids.add(element.getKey());
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                //Add notification to invited user(s)'s notification list
+                for(final String uid : uids) {
+                    final String id = "E" + generateNumber();
+                    userReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            DatabaseReference notification = userReference.child(uid).child("notifications").child("eventInvite").child(id);
+                            notification.child("message").setValue("<ENTER SENDER USERNAME HERE> has invited you to an event");
+                            notification.child("sender").setValue("<ENTER SENDER USERNAME HERE>");
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+
                 Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                 onActivityResult(1,1,intent);
                 setResult(1, intent);
@@ -157,6 +182,22 @@ public class CreateEventActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private String getNameFromValue(String d) {
+        //"{number=12324234, name=Madison Beer}"
+        int initialIndex = d.indexOf("name=") + 5;
+        int lastIndex = d.indexOf("}");
+        String name = d.substring(initialIndex, lastIndex);
+        return name;
+    }
+
+    private String generateNumber() {
+        String number = "";
+        for(int i = 0; i < 4; i++) {
+            number += String.valueOf(new Random().nextInt(10));
+        }
+        return number;
     }
 
 }
