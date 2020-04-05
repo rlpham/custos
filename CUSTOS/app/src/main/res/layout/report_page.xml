@@ -12,16 +12,15 @@
 
 
         <TextView
-            android:id="@+id/user_list"
+            android:id="@+id/imageReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageEdit"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:drawableTop="@drawable/ic_assignment_black_24dp"
             android:gravity="center"
-            android:text="Reports"
+            android:text="@string/reportsNameXML"
             android:textColor="#fece2f"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
@@ -32,36 +31,44 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/eventViewNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/linearlayoutReport"
+        android:layout_width="411dp"
+        android:layout_height="115dp"
         android:layout_below="@+id/cardViewReport"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="156dp"
-        android:gravity="center"
-        android:text="@string/eventsviewname"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textSize="24sp" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="-2dp"
+        android:layout_marginTop="139dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical"
+        android:weightSum="2">
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/eventViewNumber"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="68dp"
-        android:gravity="center"
-        android:text="@string/membersincename"
-        android:textColor="#FFFFFF"
-        android:textColorHighlight="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/eventViewNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/eventsviewname"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="24sp" />
 
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/membersincename"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="24sp" />
 
-
+    </LinearLayout>
 
 
 </RelativeLayout>

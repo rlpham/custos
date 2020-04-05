@@ -50,6 +50,15 @@ public class SettingsActivity extends Fragment {
                 startActivity(intent);
             }
         });
+        Button Report = view.findViewById(R.id.SettingReport);
+        Report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ReportActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Inflate the layout for this fragment
         return view;
     }
