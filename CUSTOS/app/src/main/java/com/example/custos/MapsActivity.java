@@ -150,6 +150,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+
         mapFragment.getMapAsync(this);
         //end
         // bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -259,7 +260,7 @@ private LatLng eventlocation;
         }else
         if(eventlocation!=null) {
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
-            moveToCurrentLocation(eventlocation);
+           // moveToCurrentLocation(eventlocation);
         }
     }
 
@@ -436,6 +437,7 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
                                     .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE )));
+                            moveToCurrentLocation(sydney);
                             user_information.orderByKey()
                                     .equalTo(firebaseUser.getUid())
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -592,11 +594,11 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
 
     }
