@@ -7,7 +7,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.custos.utils.DangerZone;
 import com.google.android.libraries.places.api.Places;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -50,47 +54,59 @@ public class DangerZoneActivity extends AppCompatActivity {
                 Intent dangerIntent = new Intent(DangerZoneActivity.this, MapsActivity.class);
 
                 userInputDangerLevel = riskLevelSpinner.getSelectedItem().toString();
-                System.out.println(userInputDangerLevel);
-
                 userInputDescription = descriptionFillIn.getText().toString();
 
-                if (userInputDangerLevel.equals("High")) {
-                    System.out.println(userInputDangerLevel);
+                DatabaseReference dangerZonedb = FirebaseDatabase.getInstance().getReference("Danger Zone Markers");
+                DangerZone createdDangerZone = new DangerZone(userInputDangerLevel,1.1,1.1,userInputDescription);
 
-                    dangerIntent.putExtra("dangervalue",2);
-                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
-                    dangerIntent.putExtra("dangerdescription",userInputDescription);
-                    System.out.println("It worked");
 
-                    onActivityResult(2,2,dangerIntent);
-                    setResult(2,dangerIntent);
-                    finish();
-                }
-                else if (userInputDangerLevel.equals("Medium")) {
-                    System.out.println(userInputDangerLevel);
+                dangerZonedb.child("123").child("risk_level").setValue(createdDangerZone.getCriticalLevel());
+                dangerZonedb.child("123").child("description").setValue(createdDangerZone.getDescription());
+                System.out.println(userInputDangerLevel);
 
-                    dangerIntent.putExtra("dangervalue",3);
-                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
-                    dangerIntent.putExtra("dangerdescription",userInputDescription);
-                    System.out.println("It worked");
 
-                    onActivityResult(3,3,dangerIntent);
-                    setResult(3,dangerIntent);
-                    finish();
-                }
-                else if (userInputDangerLevel.equals("Low")) {
 
-                    System.out.println(userInputDangerLevel);
+                onActivityResult(2,2,dangerIntent);
+                setResult(2,dangerIntent);
+                finish();
 
-                    dangerIntent.putExtra("dangervalue",4);
-                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
-                    dangerIntent.putExtra("dangerdescription",userInputDescription);
-                    System.out.println("It worked");
-
-                    onActivityResult(4,4,dangerIntent);
-                    setResult(4,dangerIntent);
-                    finish();
-                }
+//                if (userInputDangerLevel.equals("High")) {
+//                    System.out.println(userInputDangerLevel);
+//
+//                    dangerIntent.putExtra("dangervalue",2);
+//                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
+//                    dangerIntent.putExtra("dangerdescription",userInputDescription);
+//                    System.out.println("It worked");
+//
+//                    onActivityResult(2,2,dangerIntent);
+//                    setResult(2,dangerIntent);
+//                    finish();
+//                }
+//                else if (userInputDangerLevel.equals("Medium")) {
+//                    System.out.println(userInputDangerLevel);
+//
+//                    dangerIntent.putExtra("dangervalue",3);
+//                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
+//                    dangerIntent.putExtra("dangerdescription",userInputDescription);
+//                    System.out.println("It worked");
+//
+//                    onActivityResult(3,3,dangerIntent);
+//                    setResult(3,dangerIntent);
+//                    finish();
+//                }
+//                else if (userInputDangerLevel.equals("Low")) {
+//
+//                    System.out.println(userInputDangerLevel);
+//
+//                    dangerIntent.putExtra("dangervalue",4);
+//                    dangerIntent.putExtra("criticallevel",userInputDangerLevel);
+//                    dangerIntent.putExtra("dangerdescription",userInputDescription);
+//                    System.out.println("It worked");
+//
+//                    onActivityResult(4,4,dangerIntent);
+//                    setResult(4,dangerIntent);
+//                    finish();
+//                }
 
             }
         });

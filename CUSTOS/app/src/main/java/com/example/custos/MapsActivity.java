@@ -683,51 +683,51 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         //High Danger Marker Code
         if(requestCode==2)
         {
-            requestCode = data.getIntExtra("dangervalue",0);
-            String criticallevel = data.getStringExtra("criticallevel");
-            String description = data.getStringExtra("dangerdescription");
-            //TODO: Add marker at current location
-
-            LatLng stateCollege = new LatLng(40.7934,-77.86);
-            MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
-            dangerMarker.snippet(description);
-
-            mMap.addMarker(dangerMarker);
-            moveToCurrentLocation(stateCollege);
-
-
-            System.out.println("This MAP ish workin");
+//            requestCode = data.getIntExtra("dangervalue",0);
+//            String criticallevel = data.getStringExtra("criticallevel");
+//            String description = data.getStringExtra("dangerdescription");
+//            //TODO: Add marker at current location
+//
+//            LatLng stateCollege = new LatLng(40.7934,-77.86);
+//            MarkerOptions dangerMarker = new MarkerOptions().position(stateCollege).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
+//            dangerMarker.snippet(description);
+//
+//            mMap.addMarker(dangerMarker);
+//            moveToCurrentLocation(stateCollege);
+//
+//
+//            System.out.println("This MAP ish workin");
         }
 
         //Medium Danger Value
         if (requestCode == 3){
-            requestCode = data.getIntExtra("dangervalue",0);
-            String criticallevel = data.getStringExtra("criticallevel");
-            String description = data.getStringExtra("dangerdescription");
-            //TODO: Add marker at current location
-
-            LatLng desmoines = new LatLng(41.619,-93.598);
-            MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
-            dangerMarker.snippet(description);
-
-            mMap.addMarker(dangerMarker);
-            moveToCurrentLocation(desmoines);
+//            requestCode = data.getIntExtra("dangervalue",0);
+//            String criticallevel = data.getStringExtra("criticallevel");
+//            String description = data.getStringExtra("dangerdescription");
+//            //TODO: Add marker at current location
+//
+//            LatLng desmoines = new LatLng(41.619,-93.598);
+//            MarkerOptions dangerMarker = new MarkerOptions().position(desmoines).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+//            dangerMarker.snippet(description);
+//
+//            mMap.addMarker(dangerMarker);
+//            moveToCurrentLocation(desmoines);
 
         }
 
         //Low Danger Value
         if (requestCode == 4){
-            requestCode = data.getIntExtra("dangervalue",0);
-            String criticallevel = data.getStringExtra("criticallevel");
-            String description = data.getStringExtra("dangerdescription");
-            //TODO: Add marker at current location
-
-            LatLng hershey = new LatLng(40.2859,-76.658);
-            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
-            dangerMarker.snippet(description);
-
-            mMap.addMarker(dangerMarker);
-            moveToCurrentLocation(hershey);
+//            requestCode = data.getIntExtra("dangervalue",0);
+//            String criticallevel = data.getStringExtra("criticallevel");
+//            String description = data.getStringExtra("dangerdescription");
+//            //TODO: Add marker at current location
+//
+//            LatLng hershey = new LatLng(40.2859,-76.658);
+//            MarkerOptions dangerMarker = new MarkerOptions().position(hershey).title(criticallevel).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
+//            dangerMarker.snippet(description);
+//
+//            mMap.addMarker(dangerMarker);
+//            moveToCurrentLocation(hershey);
 
         }
 
