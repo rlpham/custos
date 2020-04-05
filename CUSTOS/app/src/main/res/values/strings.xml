@@ -75,7 +75,8 @@
     <string name="ecintial">Add Emergency Contact</string>
     <string name="ecsubmit">Submit</string>
     <string name="login_with_google">LOGIN WITH GOOGLE</string>
-    <string name="eventsviewname">Events:</string>
+    <string name="eventsviewname">Number of Events:</string>
     <string name="membersincename">Member Since:</string>
     <string name="reportsNameXML">Reports</string>
+    <string name="contactsrReport">Number of Contacts:</string>
 </resources>
