@@ -46,8 +46,7 @@ public class CreateEventActivity extends AppCompatActivity {
     String description;
     String date_time;
     ArrayList<String> uids = new ArrayList<String>();
-
-
+    
     FirebaseUser firebaseUser;
     private DatabaseReference user_information;
     private DatabaseReference userReference;
