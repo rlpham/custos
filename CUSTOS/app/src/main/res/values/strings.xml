@@ -77,8 +77,9 @@
     <string name="ecsubmit">Submit</string>
     <string name="login_with_google">LOGIN WITH GOOGLE</string>
     <string name="eventsviewname">Number of Events:</string>
-    <string name="membersincename">Member Since:</string>
+    <string name="membersincename">Installed on:</string>
     <string name="reportsNameXML">Reports</string>
     <string name="contactsrReport">Number of Contacts:</string>
     <string name="sharetextforbutton">Share</string>
+    <string name="numberOfUsers">Number of Users: </string>
 </resources>

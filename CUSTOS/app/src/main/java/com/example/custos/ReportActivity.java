@@ -33,6 +33,7 @@ public class ReportActivity extends AppCompatActivity {
     TextView eve;
     TextView con;
     TextView mem;
+    TextView use;
     Button share;
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     String allText = "";
@@ -45,6 +46,7 @@ public class ReportActivity extends AppCompatActivity {
         eve = findViewById(R.id.eventViewNumber);
         con = findViewById(R.id.contactViewNumber);
         mem = findViewById(R.id.memberViewNumber);
+        use = findViewById(R.id.userViewNumber);
         share = findViewById(R.id.shareReport);
 
         DatabaseReference datta;
@@ -108,7 +110,7 @@ public class ReportActivity extends AppCompatActivity {
                 }
                 eve.setText("Number of Events: " + count);
 
-                allText = eve.getText().toString();
+                allText += eve.getText().toString();
             }
 
             @Override
@@ -141,6 +143,35 @@ public class ReportActivity extends AppCompatActivity {
 //        System.out.println(mem.getText().toString() + "TESTINGdlfksodjfodsf");
         //TODO try to get more ideas for report or try to figure out how long theyve been using Custos
         allText += "\n" + initialDay;
+
+
+
+
+
+          datta = FirebaseDatabase.getInstance().getReference("User Information");
+
+        datta.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
+                for (DataSnapshot Users : dataSnapshot.getChildren()) {
+                        count -=- 1;
+                }
+                use.setText("Number of Users: " + count);
+
+                allText += use.getText().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
 
 
         share.setOnClickListener(new View.OnClickListener() {
