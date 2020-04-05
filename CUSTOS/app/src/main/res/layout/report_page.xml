@@ -4,6 +4,7 @@
     android:background="#1D1D1D">
 
     <RelativeLayout
+        android:id="@+id/cardViewReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#212121"
@@ -18,13 +19,14 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:drawableTop="@drawable/ic_person_add_black_24dp"
-            android:text="Search and Add Friend"
+            android:drawableTop="@drawable/ic_assignment_black_24dp"
+            android:gravity="center"
+            android:text="Reports"
             android:textColor="#fece2f"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textCursorDrawable="@color/colorwhite"
-            android:textSize="15sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
 
@@ -34,7 +36,7 @@
         android:id="@+id/eventViewNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/reportHeader"
+        android:layout_below="@+id/cardViewReport"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="156dp"
         android:gravity="center"
