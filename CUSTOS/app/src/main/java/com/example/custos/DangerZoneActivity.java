@@ -15,6 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Random;
+
 public class DangerZoneActivity extends AppCompatActivity {
 
     int highdangerzone = 2;
@@ -51,6 +53,8 @@ public class DangerZoneActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Add in handler code here
                 int requestCode = 0;
+                String generatedId = generateDangerZoneId();
+
                 Intent dangerIntent = new Intent(DangerZoneActivity.this, MapsActivity.class);
 
                 userInputDangerLevel = riskLevelSpinner.getSelectedItem().toString();
@@ -60,8 +64,8 @@ public class DangerZoneActivity extends AppCompatActivity {
                 DangerZone createdDangerZone = new DangerZone(userInputDangerLevel,1.1,1.1,userInputDescription);
 
 
-                dangerZonedb.child("123").child("risk_level").setValue(createdDangerZone.getCriticalLevel());
-                dangerZonedb.child("123").child("description").setValue(createdDangerZone.getDescription());
+                dangerZonedb.child(generatedId).child("risk_level").setValue(createdDangerZone.getCriticalLevel());
+                dangerZonedb.child(generatedId).child("description").setValue(createdDangerZone.getDescription());
                 System.out.println(userInputDangerLevel);
 
 
@@ -110,5 +114,21 @@ public class DangerZoneActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    /**
+     * generate random id for database
+     * @return
+     */
+    public String generateDangerZoneId(){
+        String generatedId = "dz";
+        Random r = new Random();
+        int low = 0;
+        int high = 9;
+        for(int i = 0; i < 4; i++) {
+            int generatedNumber = r.nextInt(high - low) + low;
+            generatedId = generatedId + String.valueOf(generatedNumber);
+        }
+        return generatedId;
     }
 }
