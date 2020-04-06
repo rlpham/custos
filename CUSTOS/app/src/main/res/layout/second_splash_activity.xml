@@ -187,7 +187,7 @@
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textCursorDrawable="@color/colorwhite"
-            android:transitionName="address"/>
+            android:transitionName="emerContact"/>
 
         <Button
             android:id="@+id/editUserinfo"

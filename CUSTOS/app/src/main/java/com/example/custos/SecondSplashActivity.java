@@ -1,7 +1,9 @@
 package com.example.custos;
 
 import android.app.ActivityOptions;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
@@ -139,7 +141,7 @@ public class SecondSplashActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(),EditUserInformation.class);
-                Pair[] pairs = new Pair[11];
+                Pair[] pairs = new Pair[12];
                 pairs[0] = new Pair<View,String>(imageView,"profile_picture");
                 pairs[1] = new Pair<View,String>(backButton,"back");
                 pairs[2] = new Pair<View,String>(signOut,"logout");
@@ -151,6 +153,7 @@ public class SecondSplashActivity extends AppCompatActivity{
                 pairs[8] = new Pair<View,String>(displayPIN,"pin");
                 pairs[9] = new Pair<View,String>(homeLocation,"address");
                 pairs[10] = new Pair<View,String>(editUserInfo,"edit_info");
+                pairs[11] = new Pair<View,String>(displayEmergencyContact,"emerContact");
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(SecondSplashActivity.this,pairs);
@@ -393,8 +396,8 @@ public class SecondSplashActivity extends AppCompatActivity{
     }
 
     private void signOut(){
-        final LogoutDialog logoutDialog = new LogoutDialog(SecondSplashActivity.this);
 
+        final LogoutDialog logoutDialog = new LogoutDialog(SecondSplashActivity.this);
         FirebaseAuth.getInstance().signOut();
         googleSignInClient.signOut()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
@@ -418,4 +421,5 @@ public class SecondSplashActivity extends AppCompatActivity{
 
 
     }
+
 }

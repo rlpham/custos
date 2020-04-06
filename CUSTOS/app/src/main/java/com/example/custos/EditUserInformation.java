@@ -147,7 +147,7 @@ public class EditUserInformation extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SecondSplashActivity.class);
 
-                Pair[] pairs = new Pair[8];
+                Pair[] pairs = new Pair[9];
                 pairs[0] = new Pair<View, String>(imageEdit, "profile_picture");
                 pairs[1] = new Pair<View, String>(backButton, "back");
                 pairs[2] = new Pair<View, String>(changePicText, "change_picture");
@@ -156,6 +156,7 @@ public class EditUserInformation extends AppCompatActivity {
                 pairs[5] = new Pair<View, String>(editPIN, "pin");
                 pairs[6] = new Pair<View, String>(editHomeLoc, "address");
                 pairs[7] = new Pair<View, String>(saveButton, "save_info");
+                pairs[8] = new Pair<View, String>(editEmergencyContact, "emerContact");
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(EditUserInformation.this, pairs);

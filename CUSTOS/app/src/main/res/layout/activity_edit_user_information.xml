@@ -185,7 +185,7 @@
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:textCursorDrawable="@color/colorwhite"
-                android:transitionName="address"/>
+                android:transitionName="emerContact"/>
 
 
             <Button
@@ -197,7 +197,7 @@
                 android:text="SAVE"
                 android:textSize="19dp"
                 android:textStyle="bold"
-                android:transitionName="save_info" />
+                android:transitionName="edit_info" />
 
 
         </LinearLayout>

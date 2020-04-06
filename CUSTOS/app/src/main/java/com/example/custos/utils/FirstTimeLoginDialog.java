@@ -21,7 +21,7 @@ public class FirstTimeLoginDialog extends AppCompatDialogFragment {
         alertDialog.setTitle("Important!");
         alertDialog.setMessage("Please set your PIN, address, and others in User Information");
         alertDialog.setIcon(R.drawable.ic_error_yellow_24dp);
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("Later", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
