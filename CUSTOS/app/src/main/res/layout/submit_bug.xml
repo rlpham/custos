@@ -18,7 +18,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-     
+            android:drawableTop="@drawable/ic_bug_report_yellow_48dp"
             android:gravity="center"
             android:text="@string/submit_a_bug"
             android:textColor="#fece2f"
@@ -27,96 +27,56 @@
             android:textCursorDrawable="@color/colorwhite"
             android:textSize="24sp"
             android:textStyle="bold"
-            
-            
+
+
             />
         <!--   android:drawableTop="@drawable/ic_assignment_black_24dp"-->
 
+
+
     </RelativeLayout>
 
-
-    <LinearLayout
-        android:id="@+id/linearlayoutSubmitBug"
-        android:layout_width="match_parent"
-        android:layout_height="346dp"
-        android:layout_below="@+id/cardViewSubmitBug"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="2">
-
-        <EditText
-            android:id="@+id/hintViewSubmit"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_date_range_yellow_24dp"
-            android:text=""
-            android:autofillHints="Enter topic"
-            android:hint="Topic"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="18sp" />
-
-        <!--
-           <EditText
-        android:id="@+id/emailMainPage"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:autofillHints="email"
-        android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fantasyFanaticsText"
-        tools:targetApi="o" />
-        -->
-
-        <TextView
-            android:id="@+id/memberViewNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingLeft="10dp"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/ic_date_range_yellow_24dp"
-            android:text="I will change it later lol"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textSize="18sp" />
-
-   
-
-
-
-
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/shareReport"
         android:layout_width="322dp"
         android:layout_height="60dp"
-        android:layout_below="@+id/linearlayoutSubmitBug"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginTop="78dp"
         android:background="#fece2f"
         android:gravity="center"
         android:text="@string/ecsubmit"
         android:textSize="24sp"
         android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="320dp"
+        android:layout_height="221dp"
+        android:layout_below="@+id/cardViewSubmitBug"
+        android:gravity="top|left"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="87dp"
+        android:autofillHints="Enter here"
+        android:background="@drawable/textbox"
+        android:ems="10"
+        android:hint="@string/type_whole_incident_here"
+        android:inputType="textPersonName"
+        android:text=""
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+    <TextView
+        android:id="@+id/charactersLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="45dp"
+        android:text="@string/_120_characters_left"
+        android:textColor="@color/white" />
 </RelativeLayout>
