@@ -99,11 +99,8 @@ public class DangerZoneActivity extends AppCompatActivity {
 
                 String userID = "Nope";
 
-
-
-                onActivityResult(2,2,dangerIntent);
-                setResult(2,dangerIntent);
-                finish();
+                Intent intent = new Intent(DangerZoneActivity.this,MapsActivity.class);
+                startActivity(intent);
 
 //                if (userInputDangerLevel.equals("High")) {
 //                    System.out.println(userInputDangerLevel);
