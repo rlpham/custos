@@ -13,6 +13,37 @@
 <!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
 <!--        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
 
+    <EditText
+        android:id="@+id/namefillin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="192dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite" />
+
+    <TextView
+        android:id="@+id/nameheader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="71dp"
+        android:layout_marginTop="156dp"
+        android:fontFamily="sans-serif-thin"
+        android:text="Name"
+        android:textColor="#FFFFFF"
+        android:textColorHighlight="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textCursorDrawable="@color/colorwhite"
+        android:textSize="20dp" />
+
     <TextView
         android:id="@+id/dangerzoneheader"
         android:layout_width="wrap_content"
@@ -36,7 +67,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="71dp"
-        android:layout_marginTop="169dp"
+        android:layout_marginTop="250dp"
         android:fontFamily="sans-serif-thin"
         android:text="@string/risklevelheader"
         android:textColor="#FFFFFF"
@@ -53,7 +84,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="97dp"
-        android:layout_marginTop="243dp"
+        android:layout_marginTop="300dp"
         android:background="@drawable/back"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#FFFFFF"
@@ -67,7 +98,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="71dp"
-        android:layout_marginTop="276dp"
+        android:layout_marginTop="350dp"
         android:fontFamily="sans-serif-thin"
         android:text="@string/descriptionHeader"
         android:textColor="#FFFFFF"
@@ -82,8 +113,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="97dp"
-        android:layout_marginTop="328dp"
+        android:layout_marginStart="94dp"
+        android:layout_marginTop="411dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
@@ -97,8 +128,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="124dp"
-        android:layout_marginBottom="201dp"
+        android:layout_marginStart="129dp"
+        android:layout_marginBottom="168dp"
         android:text="@string/submitdangerzone"
         android:visibility="visible" />
 

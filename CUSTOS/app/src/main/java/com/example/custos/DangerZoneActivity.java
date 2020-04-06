@@ -19,8 +19,6 @@ import java.util.Random;
 
 public class DangerZoneActivity extends AppCompatActivity {
 
-    int highdangerzone = 2;
-    int mediumdangerzone = 3;
     String userInputDangerLevel;
     String userInputDescription;
 
