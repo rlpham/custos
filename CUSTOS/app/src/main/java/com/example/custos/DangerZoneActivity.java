@@ -1,6 +1,11 @@
 package com.example.custos;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import java.util.Random;
 
@@ -32,7 +38,7 @@ public class DangerZoneActivity extends AppCompatActivity {
          * Risk Level Spinner Code
          */
         final Spinner riskLevelSpinner = findViewById(R.id.risklevelspinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.criticallevelarray, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.criticallevelarray, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         riskLevelSpinner.setAdapter(adapter);
 
@@ -43,6 +49,26 @@ public class DangerZoneActivity extends AppCompatActivity {
         final EditText descriptionFillIn = findViewById(R.id.descriptionfillin);
         final EditText nameFillIn = findViewById(R.id.namefillin);
 
+        /**
+         * Retrieve long and lat
+         */
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            return;
+        }
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        final double longitude = location.getLongitude();
+        final double latitude = location.getLatitude();
+
+        System.out.println("check");
 
         /**
          * Adding in action listener to submit button
@@ -62,12 +88,16 @@ public class DangerZoneActivity extends AppCompatActivity {
                 userInputDescription = descriptionFillIn.getText().toString();
 
                 DatabaseReference dangerZonedb = FirebaseDatabase.getInstance().getReference("Danger Zone Markers");
-                DangerZone createdDangerZone = new DangerZone(userInputDangerZoneName,userInputDangerLevel,1.1,1.1,userInputDescription);
+                DangerZone createdDangerZone = new DangerZone(userInputDangerZoneName,userInputDangerLevel,latitude,longitude,userInputDescription);
 
                 dangerZonedb.child(generatedId).child("zone_name").setValue(createdDangerZone.getDangerZoneName());
                 dangerZonedb.child(generatedId).child("risk_level").setValue(createdDangerZone.getCriticalLevel());
                 dangerZonedb.child(generatedId).child("description").setValue(createdDangerZone.getDescription());
+                dangerZonedb.child(generatedId).child("lat").setValue(createdDangerZone.getLatitude());
+                dangerZonedb.child(generatedId).child("long").setValue(createdDangerZone.getLongititude());
                 System.out.println(userInputDangerLevel);
+
+                String userID = "Nope";
 
 
 
@@ -132,4 +162,6 @@ public class DangerZoneActivity extends AppCompatActivity {
         }
         return generatedId;
     }
+
+
 }
