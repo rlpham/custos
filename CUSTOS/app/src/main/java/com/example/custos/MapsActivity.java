@@ -819,11 +819,27 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         double longitudeNumericVal = Double.valueOf(longitude);
 
         LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
+        System.out.println("RISK LEVELS ARE: " + risk_level);
+        if(risk_level.contains("Low")){
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
+            dangerMarker.snippet(description);
 
-        MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
-        dangerMarker.snippet(description);
+            mMap.addMarker(dangerMarker);
+        }
 
-        mMap.addMarker(dangerMarker);
+        if (risk_level.contains("Medium")) {
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+            dangerMarker.snippet(description);
+
+            mMap.addMarker(dangerMarker);
+        }
+
+        if(risk_level.contains("High")) {
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
+            dangerMarker.snippet(description);
+
+            mMap.addMarker(dangerMarker);
+        }
 
     }
 }
