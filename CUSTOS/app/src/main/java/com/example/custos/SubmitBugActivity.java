@@ -7,6 +7,8 @@ import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +35,10 @@ public class SubmitBugActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String total = et.getText().toString();
-                submitBug(total);
+
+                sendMail(total);
+
+//                submitBug(total);
             }
         });
 
@@ -71,8 +76,6 @@ public class SubmitBugActivity extends AppCompatActivity {
 
 
 
-
-
     }
 
     public void checkBox()
@@ -85,8 +88,29 @@ public class SubmitBugActivity extends AppCompatActivity {
         cLeft.setText(total + " Characters Left");
     }
 
+    private void sendMail(String total) {
+
+        
+        //TODO get user email and fix this
+        String mail = "karoshikid@gmail.com";
+        String message = "hello";
+        String subject = "Bug Report";
+
+        //Send Mail
+        JavaMailAPI javaMailAPI = new JavaMailAPI(this,mail,subject,total);
+
+        javaMailAPI.execute();
+
+    }
+
+
+
     public void submitBug(String total)
     {
+
+
+
+        /*
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setData(Uri.parse("mailto:"));
         emailIntent.setType("text/plain");
@@ -96,6 +120,7 @@ public class SubmitBugActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Submit Bug");
         emailIntent.putExtra(Intent.EXTRA_TEXT, total);
         startActivity(Intent.createChooser(emailIntent, "Send email..."));
+         */
     }
 
 
