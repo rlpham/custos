@@ -304,6 +304,9 @@ public class EditUserInformation extends AppCompatActivity {
         }else if(name.length() > 14){
             editName.setError("Name must be less than 14 characters");
             return false;
+        }else if (name.contains("  ") || name.contains("   ")) {
+            editName.setError("Too many white spaces are not allowed");
+            return false;
         }
         else if (!name.matches(letterOnly)) {
             editName.setError("Letters only");
