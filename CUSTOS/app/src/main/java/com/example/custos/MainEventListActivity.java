@@ -3,18 +3,30 @@ package com.example.custos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,6 +73,7 @@ public class MainEventListActivity extends Fragment {
 
     class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
         JSONArray data;
+
         class ViewHolder extends RecyclerView.ViewHolder {
             CardView cardView;
             TextView eventTitle;
@@ -68,6 +81,7 @@ public class MainEventListActivity extends Fragment {
             TextView eventDate;
             TextView eventTime;
             ImageView img;
+
             ViewHolder(View v) {
                 super(v);
                 cardView = v.findViewById(R.id.cv);
@@ -84,7 +98,7 @@ public class MainEventListActivity extends Fragment {
 
         @Override
         public EventListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
+                                                              int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.event_list_card, parent, false);
 
@@ -101,7 +115,7 @@ public class MainEventListActivity extends Fragment {
                 holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
                 holder.eventDate.setText(data.getJSONObject(position).getString("date"));
                 holder.eventTime.setText(data.getJSONObject(position).getString("time"));
-            } catch(JSONException e) {
+            } catch (JSONException e) {
                 System.out.println(e);
             }
         }
@@ -128,7 +142,6 @@ public class MainEventListActivity extends Fragment {
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                    RecyclerView.State state) {
-            outRect.bottom = verticalSpaceHeight;
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
                 outRect.bottom = verticalSpaceHeight;
             }
@@ -143,6 +156,29 @@ public class MainEventListActivity extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.main_event, container, false);
+
+        //Modifys the view to go on top of navigation rather than on top
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager()
+                .getDefaultDisplay()
+                .getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        //420 DPI -> 210
+        //560 DPI -> 330
+        int dpiOffset = 0;
+
+        switch(displayMetrics.densityDpi) {
+            case 420:
+                dpiOffset = 210;
+                break;
+            case 560:
+                dpiOffset = 330;
+                break;
+            default:
+                dpiOffset = 210;
+                break;
+        }
+        view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height-dpiOffset));
 
         view.findViewById(R.id.add_event).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,8 +238,9 @@ public class MainEventListActivity extends Fragment {
                 RecyclerView.Adapter adapter = new EventListAdapter(data2);
                 rv.setHasFixedSize(true);
                 rv.setLayoutManager(llm);
-                rv.addItemDecoration(new VerticalSpaceItemDecoration(75));
+                //rv.addItemDecoration(new VerticalSpaceItemDecoration(75));
                 rv.setAdapter(adapter);
+
 
             }
 

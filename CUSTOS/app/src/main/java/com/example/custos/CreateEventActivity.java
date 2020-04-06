@@ -118,7 +118,13 @@ public class CreateEventActivity extends AppCompatActivity {
                         } else {
                             am_pm = "AM";
                         }
-                        time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+
+                        if(selectedMinute < 10) {
+                            time.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                        } else {
+                            time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                        }
+
                     }
                 }, hour, minute, false);
                 mTimePicker.setTitle("Select Time");
@@ -167,25 +173,14 @@ public class CreateEventActivity extends AppCompatActivity {
                 time = findViewById(R.id.time_input);
                 //create event to database -> DB/user_event/<uid>/<event_name>
                 user_information = FirebaseDatabase.getInstance().getReference("user_event");
-                user_information.orderByKey()
-                        .equalTo(firebaseUser.getUid())
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    Common.event = new Event(firebaseUser.getUid(), name, description, date_time);
-                                    DatabaseReference db = user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
-                                    db.child("date").setValue(date.getText().toString());
-                                    db.child("time").setValue(time.getText().toString());
-                                    db.child("description").setValue(Common.event.getDescription());
-                                    db.child("area").setValue(getLocationText(lat, lon));
-                                    db.child("location").child("latitude").setValue(lat);
-                                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                Common.event = new Event(firebaseUser.getUid(), name, description, date_time);
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("date").setValue(date.getText().toString());
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("time").setValue(time.getText().toString());
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("description").setValue(Common.event.getDescription());
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("area").setValue(getLocationText(lat, lon));
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("location").child("latitude").setValue(lat);
+                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
 
                 //Gather list uids of invited guests
                 userReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -242,11 +237,8 @@ public class CreateEventActivity extends AppCompatActivity {
             ArrayList<String> selected = data.getStringArrayListExtra("values");
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selected);
             lv = findViewById(R.id.invited_list);
-            
             lv.setAdapter(adapter);
         }
-
-
     }
 
     private String getNameFromValue(String d) {
