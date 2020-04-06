@@ -26,13 +26,7 @@
             android:textColorHint="#FFFFFF"
             android:textCursorDrawable="@color/colorwhite"
             android:textSize="24sp"
-            android:textStyle="bold"
-
-
-            />
-        <!--   android:drawableTop="@drawable/ic_assignment_black_24dp"-->
-
-
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -41,7 +35,7 @@
         android:id="@+id/shareReport"
         android:layout_width="322dp"
         android:layout_height="60dp"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/textBoxBug"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="43dp"
@@ -53,7 +47,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/textBoxBug"
         android:layout_width="320dp"
         android:layout_height="221dp"
         android:layout_below="@+id/cardViewSubmitBug"
@@ -64,19 +58,21 @@
         android:background="@drawable/textbox"
         android:ems="10"
         android:hint="@string/type_whole_incident_here"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:maxLength="280"
         android:text=""
         android:textColor="@color/white"
         android:textColorHint="@color/white" />
-
     <TextView
         android:id="@+id/charactersLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/textBoxBug"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="45dp"
         android:text="@string/_120_characters_left"
         android:textColor="@color/white" />
+
+
 </RelativeLayout>

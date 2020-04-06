@@ -87,8 +87,8 @@
     <string name="themeSetting">Theme</string>
     <string name="reportsSetting">Reports</string>
     <string name="light_dark_mode">DARK MODE</string>
-    <string name="submit_a_bug">Submit a Bug</string>
+    <string name="submit_a_bug">Submit Bug</string>
     <string name="information">Information</string>
-    <string name="_120_characters_left">120 Characters Left</string>
+    <string name="_120_characters_left">280 Characters Left</string>
     <string name="type_whole_incident_here">Type incident here</string>
 </resources>
