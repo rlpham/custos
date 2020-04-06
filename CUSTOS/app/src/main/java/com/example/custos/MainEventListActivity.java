@@ -3,15 +3,21 @@ package com.example.custos;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -67,6 +73,7 @@ public class MainEventListActivity extends Fragment {
 
     class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
         JSONArray data;
+
         class ViewHolder extends RecyclerView.ViewHolder {
             CardView cardView;
             TextView eventTitle;
@@ -74,6 +81,7 @@ public class MainEventListActivity extends Fragment {
             TextView eventDate;
             TextView eventTime;
             ImageView img;
+
             ViewHolder(View v) {
                 super(v);
                 cardView = v.findViewById(R.id.cv);
@@ -90,7 +98,7 @@ public class MainEventListActivity extends Fragment {
 
         @Override
         public EventListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                         int viewType) {
+                                                              int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.event_list_card, parent, false);
 
@@ -107,7 +115,7 @@ public class MainEventListActivity extends Fragment {
                 holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
                 holder.eventDate.setText(data.getJSONObject(position).getString("date"));
                 holder.eventTime.setText(data.getJSONObject(position).getString("time"));
-            } catch(JSONException e) {
+            } catch (JSONException e) {
                 System.out.println(e);
             }
         }
