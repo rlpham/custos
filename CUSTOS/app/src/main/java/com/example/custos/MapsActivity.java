@@ -782,6 +782,9 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         return false;
     }
 
+    /**
+     * Getting all the markers in the DB and running the placeMarker method
+     */
     public void generateMarkers(){
         FirebaseDatabase.getInstance().getReference().child("Danger Zone Markers")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -803,11 +806,20 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
                 });
     }
 
+    /**
+     * Actually placing the marker on the map based on what's in the DB
+     * @param zone_name
+     * @param risk_level
+     * @param latitude
+     * @param longitude
+     * @param description
+     */
     public void placeMarker(String zone_name,String risk_level, String latitude, String longitude,String description){
         double latitudeNumericVal = Double.valueOf(latitude);
         double longitudeNumericVal = Double.valueOf(longitude);
 
         LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
+
         MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
         dangerMarker.snippet(description);
 
