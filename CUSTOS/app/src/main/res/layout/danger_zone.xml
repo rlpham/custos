@@ -128,8 +128,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="129dp"
-        android:layout_marginBottom="168dp"
+        android:layout_marginStart="131dp"
+        android:layout_marginBottom="152dp"
         android:text="@string/submitdangerzone"
         android:visibility="visible" />
 

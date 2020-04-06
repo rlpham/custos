@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class DangerZoneActivity extends AppCompatActivity {
 
+    String userInputDangerZoneName;
     String userInputDangerLevel;
     String userInputDescription;
 
@@ -37,9 +38,10 @@ public class DangerZoneActivity extends AppCompatActivity {
 
 
         /**
-         * Description Text Box Code
+         * Name TextBox and Description TextBox Code
          */
         final EditText descriptionFillIn = findViewById(R.id.descriptionfillin);
+        final EditText nameFillIn = findViewById(R.id.namefillin);
 
 
         /**
@@ -55,13 +57,14 @@ public class DangerZoneActivity extends AppCompatActivity {
 
                 Intent dangerIntent = new Intent(DangerZoneActivity.this, MapsActivity.class);
 
+                userInputDangerZoneName = nameFillIn.getText().toString();
                 userInputDangerLevel = riskLevelSpinner.getSelectedItem().toString();
                 userInputDescription = descriptionFillIn.getText().toString();
 
                 DatabaseReference dangerZonedb = FirebaseDatabase.getInstance().getReference("Danger Zone Markers");
-                DangerZone createdDangerZone = new DangerZone(userInputDangerLevel,1.1,1.1,userInputDescription);
+                DangerZone createdDangerZone = new DangerZone(userInputDangerZoneName,userInputDangerLevel,1.1,1.1,userInputDescription);
 
-
+                dangerZonedb.child(generatedId).child("zone_name").setValue(createdDangerZone.getDangerZoneName());
                 dangerZonedb.child(generatedId).child("risk_level").setValue(createdDangerZone.getCriticalLevel());
                 dangerZonedb.child(generatedId).child("description").setValue(createdDangerZone.getDescription());
                 System.out.println(userInputDangerLevel);
