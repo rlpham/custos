@@ -6,8 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import org.json.JSONArray;
@@ -60,13 +63,34 @@ public class SettingsActivity extends Fragment {
         });
 
 
-        Button lightNDark = view.findViewById(R.id.mapMode);
-        lightNDark.setOnClickListener(new View.OnClickListener() {
+        //placeholder atm
+        Switch sw = view.findViewById(R.id.darkMode);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                //for light and dark mode
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                {
+               //     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                }
+                else
+                {
+                 //   AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+                }
+
+
+
             }
         });
+
+
+//        Button lightNDark = view.findViewById(R.id.mapMode);
+//        lightNDark.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //for light and dark mode
+//            }
+//        });
 
 
 

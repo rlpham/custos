@@ -20,7 +20,7 @@
             android:layout_marginBottom="10dp"
             android:drawableTop="@drawable/ic_assignment_black_24dp"
             android:gravity="center"
-            android:text="@string/reportsNameXML"
+            android:text="@string/information"
             android:textColor="#fece2f"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"

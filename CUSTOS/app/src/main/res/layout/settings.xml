@@ -26,6 +26,7 @@
             android:textColorHint="#FFFFFF"
             android:textCursorDrawable="@color/colorwhite"
             android:textSize="24sp"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
             android:textStyle="bold" />
 
 
@@ -118,7 +119,7 @@
     <LinearLayout
         android:id="@+id/linearlayoutReport"
         android:layout_width="match_parent"
-        android:layout_height="346dp"
+        android:layout_height="375dp"
         android:layout_below="@+id/cardViewReport"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
@@ -126,19 +127,20 @@
         android:layout_marginBottom="30dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:weightSum="5">
+        android:weightSum="7">
+
 
         <Button
-            android:id="@+id/SettingReport"
-            android:layout_width="317dp"
-            android:layout_height="84dp"
-
+            android:id="@+id/settingsSignOut"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
             android:layout_weight="1"
             android:background="@drawable/sv_round_login"
             android:gravity="center"
-            android:text="@string/Report"
+            android:text="@string/userinfo"
             android:textSize="24sp"
             android:textStyle="bold" />
+
 
         <Button
             android:id="@+id/invisibleBtn2"
@@ -151,20 +153,18 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:visibility="invisible" />
-
-
         <Button
-            android:id="@+id/settingsSignOut"
-            android:layout_width="317dp"
-            android:layout_height="84dp"
+            android:id="@+id/SettingReport"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
             android:layout_weight="1"
-
             android:background="@drawable/sv_round_login"
-
             android:gravity="center"
-            android:text="@string/userinfo"
+            android:text="@string/information"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+
 
         <Button
             android:id="@+id/invisibleBtn"
@@ -179,17 +179,55 @@
             android:visibility="invisible" />
 
         <Button
-            android:id="@+id/mapMode"
-            android:layout_width="317dp"
-            android:layout_height="84dp"
+            android:id="@+id/reportBug"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
             android:layout_weight="1"
+            android:background="@drawable/sv_round_login"
+            android:gravity="center"
+            android:text="@string/submit_a_bug"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
+
+
+        <Button
+            android:id="@+id/invisibleBtn3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:gravity="center"
+            android:text="@string/Report"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:visibility="invisible" />
+
+
+
+        <Switch
+            android:id="@+id/darkMode"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
+            android:background="@drawable/sv_round_login"
+            android:gravity="center"
+
+            android:text="@string/light_dark_mode"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+        <!--  <Button
+            android:id="@+id/mapMode"
+            android:layout_width="250dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
             android:background="@drawable/sv_round_login"
             android:gravity="center"
             android:text="@string/themeSetting"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
     </LinearLayout>
+
 
 
 

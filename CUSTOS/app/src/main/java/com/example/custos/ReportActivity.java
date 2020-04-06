@@ -167,7 +167,7 @@ public class ReportActivity extends AppCompatActivity {
                 emailIntent.setData(Uri.parse("mailto:"));
                 emailIntent.setType("text/plain");
                 //emailIntent.putExtra(Intent.EXTRA_EMAIL, address);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Custos Report");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Custos Information");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, allText);
 
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));

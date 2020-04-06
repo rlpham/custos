@@ -85,4 +85,8 @@
     <string name="numberOfUsers">Number of Users: </string>
     <string name="settingXML">Settings</string>
     <string name="themeSetting">Theme</string>
+    <string name="reportsSetting">Reports</string>
+    <string name="light_dark_mode">DARK MODE</string>
+    <string name="submit_a_bug">Submit a Bug</string>
+    <string name="information">Information</string>
 </resources>
