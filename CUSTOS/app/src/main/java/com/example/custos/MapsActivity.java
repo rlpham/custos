@@ -530,6 +530,11 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         setlocationeveryfeesec(googleMap);
         // Add a marker in Sydney and move the camera
 
+        /**
+         * Generate markers
+         */
+        generateMarkers();
+
         //Dale Code
         mMap.setOnMarkerClickListener(this);
 
@@ -775,5 +780,38 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
             dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
         }
         return false;
+    }
+
+    public void generateMarkers(){
+        FirebaseDatabase.getInstance().getReference().child("Danger Zone Markers")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String zone_name = snapshot.child("zone_name").toString();
+                            String risk_level = snapshot.child("risk_level").toString();
+                            String lat = snapshot.child("lat").getValue().toString();
+                            String longitude = snapshot.child("long").getValue().toString();
+                            String description = snapshot.child("description").getValue().toString();
+                            placeMarker(zone_name,risk_level,lat,longitude,description);
+                            System.out.println(lat);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+    }
+
+    public void placeMarker(String zone_name,String risk_level, String latitude, String longitude,String description){
+        double latitudeNumericVal = Double.valueOf(latitude);
+        double longitudeNumericVal = Double.valueOf(longitude);
+
+        LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
+        MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
+        dangerMarker.snippet(description);
+
+        mMap.addMarker(dangerMarker);
+
     }
 }
