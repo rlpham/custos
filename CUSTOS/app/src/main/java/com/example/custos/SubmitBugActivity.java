@@ -1,5 +1,7 @@
 package com.example.custos;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.Editable;
@@ -30,7 +32,8 @@ public class SubmitBugActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitBug();
+                String total = et.getText().toString();
+                submitBug(total);
             }
         });
 
@@ -82,9 +85,17 @@ public class SubmitBugActivity extends AppCompatActivity {
         cLeft.setText(total + " Characters Left");
     }
 
-    public void submitBug()
+    public void submitBug(String total)
     {
-        //TODO have it send it without sending user to gmail
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        String psu = "PSUCustos@Gmail.com";
+        String[] address = {psu};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, address);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Submit Bug");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, total);
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
 
