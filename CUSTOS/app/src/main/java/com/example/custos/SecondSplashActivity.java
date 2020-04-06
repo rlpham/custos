@@ -173,7 +173,24 @@ public class SecondSplashActivity extends AppCompatActivity{
         signOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                signOut();
+                AlertDialog.Builder logoutDialog = new AlertDialog.Builder(SecondSplashActivity.this,R.style.Chill);
+                logoutDialog.setTitle("Logout?");
+                logoutDialog.setMessage("Are you sure you want to logout?");
+                logoutDialog.setIcon(R.drawable.ic_directions_run_yellow_24dp);
+                logoutDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+
+                });
+                logoutDialog.setPositiveButton("Ye", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        signOut();
+                    }
+                });
+                logoutDialog.show();
             }
         });
 
@@ -280,6 +297,7 @@ public class SecondSplashActivity extends AppCompatActivity{
             //Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }
     }
+
 
     private void openImage() {
         Intent intent = new Intent();
