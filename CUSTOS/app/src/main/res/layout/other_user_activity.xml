@@ -143,9 +143,18 @@
             android:id="@+id/sendRequest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="225dp"
+            android:layout_marginTop="195dp"
             android:background="#fece2f"
             android:text="Add friend"
+            android:textSize="19dp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/declineRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#85081b"
+            android:text="Decline"
             android:textSize="19dp"
             android:textStyle="bold" />
 

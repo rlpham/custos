@@ -154,9 +154,10 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        savingDialog.dismissDialog();
                         Intent intent = new Intent(SetHomeLocationActivity.this,EditUserInformation.class);
                         startActivity(intent);
-                        savingDialog.dismissDialog();
+
                     }
                 },2500);
 
