@@ -167,8 +167,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //Rahul TestCode below
 
-        final Button switchbutton= findViewById(R.id.switchmap);
-        switcherbuttoncode(switchbutton);
+
 
         final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
@@ -191,34 +190,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 switch (item.getItemId()) {
                     case R.id.navigation_events:
                         dangerzonebutton.setVisibility(View.GONE);
-                        switchbutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
                         dangerzonebutton.setVisibility(View.GONE);
-                        switchbutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
-                        switchbutton.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
                       openFragment(UserFragment.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
-                        switchbutton.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
 //                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
 //                        startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
-                        dangerzonebutton.setVisibility(View.VISIBLE);
-                        switchbutton.setVisibility(View.VISIBLE);
-                        searchView.setVisibility(View.VISIBLE);
+                       // dangerzonebutton.setVisibility(View.VISIBLE);
+                      //  switchbutton.setVisibility(View.VISIBLE);
+                    //    searchView.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
                         startActivity(intent);
 
@@ -235,21 +230,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
-    private boolean swticher=true;
-    private void switcherbuttoncode(final Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-               if(swticher==false){
 
-                   swticher=true;
-                   setmaptoretro(button);
-               }else{
-                   swticher=false;
-                   setmaptonight(button);
-               }
-            }
-        });
-    }
 
 private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
@@ -375,12 +356,10 @@ private void setcontactslocation(){
 
     }
 
-    private void setmaptoretro(Button btn){
-btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
+    private void setmaptoretro(){
         boolean success = mMap.setMapStyle(null);
     }
-    private void setmaptonight(Button btn){
-        btn.setBackgroundResource(R.drawable.baseline_wb_sunny_white_48);
+    private void setmaptonight(){
         boolean success = mMap.setMapStyle(new MapStyleOptions(getResources()
                 .getString(R.string.style_json)));
     }
@@ -391,7 +370,6 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
 
 
         db.addValueEventListener(new ValueEventListener() {
@@ -528,6 +506,7 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
         }
 
         setlocationeveryfeesec(googleMap);
+        darkModeChecker();
         // Add a marker in Sydney and move the camera
 
         /**
@@ -562,7 +541,44 @@ btn.setBackgroundResource(R.drawable.baseline_nights_stay_black_48);
             }
         });
     }
+private void darkModeChecker(){
+    final DatabaseReference darkLight = FirebaseDatabase.getInstance().getReference("userSettings");
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    darkLight.orderByKey()
+            .equalTo(firebaseUser.getUid())
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.getValue() == null) {
+                        //uid not exist
+                        if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
 
+                            darkLight.child(firebaseUser.getUid()).child("darkmode").setValue("true");
+                            setmaptonight();
+
+                        }
+                    }
+                    //if user available
+                    else {
+                        String darklightval=  dataSnapshot.child(firebaseUser.getUid()).child("darkmode").getValue().toString();
+                        if(darklightval.equals("true")){
+                            setmaptonight();
+                        }else {
+                            setmaptoretro();
+                        }
+                    }
+
+
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+}
     private void getcurrentlocation(GoogleMap googleMap){
         if (checkPermissions()&&!userID.equals("nope")) {
 

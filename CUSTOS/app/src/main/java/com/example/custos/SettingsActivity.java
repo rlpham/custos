@@ -10,8 +10,19 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+
+import com.example.custos.utils.Common;
+import com.example.custos.utils.UserLocation;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +75,7 @@ public class SettingsActivity extends Fragment {
 
 
 
+
         Button bug = view.findViewById(R.id.reportBug);
         bug.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,18 +86,62 @@ public class SettingsActivity extends Fragment {
         });
 
 
+
+        final DatabaseReference darkLight = FirebaseDatabase.getInstance().getReference("userSettings");
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         //placeholder atm
-        Switch sw = view.findViewById(R.id.darkMode);
+        final Switch sw = view.findViewById(R.id.darkMode);
+        darkLight.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                      String darklightval=  dataSnapshot.child(firebaseUser.getUid()).child("darkmode").getValue().toString();
+                      if(darklightval.equals("true")){
+                          sw.setChecked(true);
+                      }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b)
                 {
-               //     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    darkLight.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        darkLight.child(firebaseUser.getUid()).child("darkmode").setValue("true");
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                 }
                 else
                 {
-                 //   AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    darkLight.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        darkLight.child(firebaseUser.getUid()).child("darkmode").setValue("false");
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
 
                 }
 
