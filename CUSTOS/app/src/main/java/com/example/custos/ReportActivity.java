@@ -30,6 +30,7 @@ import java.util.Date;
 public class ReportActivity extends AppCompatActivity {
 
     TextView eve;
+    TextView bud;
     TextView con;
     TextView mem;
     TextView use;
@@ -43,6 +44,7 @@ public class ReportActivity extends AppCompatActivity {
         setContentView(R.layout.report_page);
 
         eve = findViewById(R.id.eventViewNumber);
+        bud = findViewById(R.id.buildView);
         con = findViewById(R.id.contactViewNumber);
         mem = findViewById(R.id.memberViewNumber);
         use = findViewById(R.id.userViewNumber);
@@ -94,6 +96,9 @@ public class ReportActivity extends AppCompatActivity {
         System.out.println("Updated: " + updateTimed);
 
 
+        String version = packageInfo.versionName;
+        bud.setText("Build Version: " + version);
+
         datta = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
 
         datta.addValueEventListener(new ValueEventListener() {
@@ -137,6 +142,8 @@ public class ReportActivity extends AppCompatActivity {
         mem.setText(initialDay);
 
         allText += "\n" + initialDay;
+
+        allText += "\n" + bud.getText().toString();
 
 
         datta = FirebaseDatabase.getInstance().getReference("User Information");

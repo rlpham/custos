@@ -46,6 +46,7 @@ public class SubmitBugActivity extends AppCompatActivity {
     DatabaseReference datta;
     int counter = 0;
     ProgressDialog mProgressDialog;
+    String userEmail = "";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +54,16 @@ public class SubmitBugActivity extends AppCompatActivity {
 
 
 
-        datta = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(firebaseUser.getUid()).child("userEmail");
+        datta = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(firebaseUser.getUid());
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String b = "";
+
                 for (DataSnapshot Users : dataSnapshot.getChildren()) {
                     System.out.println(Users.toString());
+
+                    setUserEmail(Users);
+
                 }
 
             }
@@ -113,7 +117,7 @@ public class SubmitBugActivity extends AppCompatActivity {
                     counter++;
                 }
 
-                final String tot = "Custos version: " + version + "\n" + submitTime + "\n" + total;
+                final String tot = "Custos version: " + version + "\n" + userEmail + "\n" + submitTime + "\n" + total;
                 AlertDialog.Builder builder = new AlertDialog.Builder(SubmitBugActivity.this);
                 builder.setCancelable(false);
                 builder.setMessage("Thank you for your report");
@@ -172,6 +176,20 @@ public class SubmitBugActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void setUserEmail(DataSnapshot Users)
+    {
+        if(Users.toString().contains("gmail"))
+        {
+            userEmail = Users.toString().substring(Users.toString().indexOf("userEmail,"));
+            userEmail = userEmail.replaceAll("userEmail,", "");
+            userEmail = userEmail.replaceAll("value =", "");
+            userEmail = userEmail.replaceAll("\\}", "");
+            userEmail = userEmail.trim();
+        }
+
+        System.out.println("EMAIL:\t\t" + userEmail);
     }
 
     public void checkBox()
