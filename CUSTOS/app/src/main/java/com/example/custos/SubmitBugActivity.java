@@ -47,6 +47,7 @@ public class SubmitBugActivity extends AppCompatActivity {
     int counter = 0;
     ProgressDialog mProgressDialog;
     String userEmail = "";
+    String uid = "";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +118,8 @@ public class SubmitBugActivity extends AppCompatActivity {
                     counter++;
                 }
 
-                final String tot = "Custos version: " + version + "\n" + userEmail + "\n" + submitTime + "\n" + total;
+
+                final String tot = "Version: " + version + "\n" + "Email: " + userEmail + "\n" + "UID: "+ uid + "\n" + "Date: " + submitTime + "\n" + "Message: " + total;
                 AlertDialog.Builder builder = new AlertDialog.Builder(SubmitBugActivity.this);
                 builder.setCancelable(false);
                 builder.setMessage("Thank you for your report");
@@ -189,7 +191,17 @@ public class SubmitBugActivity extends AppCompatActivity {
             userEmail = userEmail.trim();
         }
 
+        if(Users.toString().contains("uid"))
+        {
+            uid = Users.toString().substring(Users.toString().indexOf("uid,"));
+            uid = uid.replaceAll("uid,", "");
+            uid = uid.replaceAll("value =", "");
+            uid = uid.replaceAll("\\}", "");
+            uid = uid.trim();
+        }
+
         System.out.println("EMAIL:\t\t" + userEmail);
+        System.out.println("UID:\t\t" + uid);
     }
 
     public void checkBox()
