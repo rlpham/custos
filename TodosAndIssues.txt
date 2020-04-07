@@ -1,0 +1,54 @@
+```
+Events:
+1. Need to validate that user pick a valid date.
+2. Need to validate that there is a name before creating an event.
+3. Need to validate that there is an address before creating an event.
+4. Need to validate that there is a time before creating an event.
+5. Adding a guest to an event and going back to invite guest to add other people, will deselect the inital added guest
+
+
+Notification:
+1. Needs an update in general
+
+
+Maps:
+1. Going from a different fragment to Maps will cause (Light and Dark Mode button & Danger zone button to apeear before splash plays
+2. Maps Activity can't remember which mode (light/dark) it was previous on when changed going back to map fragment
+3. Need a way to find destination
+
+
+DangerZone:
+1. Need to hide snapshot output when clicking on marker
+2. Need to validate that user gave a name
+3. Need a light color variant of the dangerzone button when user changes to dark mode
+4. Need to figure out how to delete old markers\
+
+
+Contacts:
+1. Needs to allow current user to add, and delete friend
+
+
+Settings:
+1. Not sure if rahul wants his dark mode button to be a switch here
+2. Change buttons cause it's too fat
+3. Get submit button link correctly
+
+
+User Account:
+1. Clicking top left yellow button will send user to map activity instead of setting page
+2. Changing home location will save before actually pressing save button
+3. Don't need save button for home location if going to have another save
+4. BIG PROBLEM (if u set home location to something new, then move back 1 fragment, and set it back to old home location)... it gets confuse and keeps setting it to both every other time)
+5. BIG PROBLEM (if u set emergency to something new, then move back 1 fragment, and put a different emergency contact... it gets confuse and keeps setting it to both every other time)
+
+
+Information:
+1. Needs to get correct contacts
+2. Needs to add more information
+
+
+Submit Bug:
+1. Get user email
+2. Get user password
+3. Hash custos password
+4. Get submit function to work in background correctly
