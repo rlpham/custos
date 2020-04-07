@@ -23,7 +23,7 @@ public class SubmitBugActivity extends AppCompatActivity {
     Button submit;
     TextView cLeft;
 
-
+    int counter = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,13 +92,13 @@ public class SubmitBugActivity extends AppCompatActivity {
 
         
         //TODO get user email and fix this
-        String mail = "karoshikid@gmail.com";
-        String message = "hello";
+        String mail = "psucustos@gmail.com";
         String subject = "Bug Report";
+
+
 
         //Send Mail
         JavaMailAPI javaMailAPI = new JavaMailAPI(this,mail,subject,total);
-
         javaMailAPI.execute();
 
     }

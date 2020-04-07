@@ -5,6 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -22,10 +33,11 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
     //Variables
     private Context mContext;
     private Session mSession;
-
+     String b = "";
     private String mEmail;
     private String mSubject;
     private String mMessage;
+    int counter = 0;
 
     private ProgressDialog mProgressDialog;
 
@@ -42,17 +54,33 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
     protected void onPreExecute() {
         super.onPreExecute();
         //Show progress dialog while sending email
-        mProgressDialog = ProgressDialog.show(mContext,"Sending message", "Please wait...",false,false);
+
+            mProgressDialog = ProgressDialog.show(mContext,"Sending message", "Please wait...",false,false);
+
+
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         //Dismiss progress dialog when message successfully send
-        mProgressDialog.dismiss();
+
+            mProgressDialog.dismiss();
+            Toast.makeText(mContext,"Message Sent",Toast.LENGTH_SHORT).show();
+
+
 
         //Show success toast
-        Toast.makeText(mContext,"Message Sent",Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    public void setP(DataSnapshot Users)
+    {
+
+        b = Users.toString().substring(Users.toString().indexOf("value ="));
+        b = b.replaceAll("value =", "");
+        b = b.replaceAll("\\}","");
     }
 
     @Override
@@ -73,7 +101,31 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
                 new javax.mail.Authenticator() {
                     //Authenticating the password
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Utils.EMAIL, Utils.PASSWORD);
+                        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        DatabaseReference datta;
+                        datta = FirebaseDatabase.getInstance().getReference("ReportBug");
+
+                        datta.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot Users : dataSnapshot.getChildren()) {
+
+                               setP(Users);
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+
+                        });
+
+
+                        return new PasswordAuthentication(Utils.EMAIL, b);
                     }
                 });
 
@@ -90,27 +142,10 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
             //Adding message
             mm.setText(mMessage);
             //Sending email
-            Transport.send(mm);
+            System.out.println("done????");
+                Transport.send(mm);
+            System.out.println("don????");
 
-//            BodyPart messageBodyPart = new MimeBodyPart();
-//
-//            messageBodyPart.setText(message);
-//
-//            Multipart multipart = new MimeMultipart();
-//
-//            multipart.addBodyPart(messageBodyPart);
-//
-//            messageBodyPart = new MimeBodyPart();
-//
-//            DataSource source = new FileDataSource(filePath);
-//
-//            messageBodyPart.setDataHandler(new DataHandler(source));
-//
-//            messageBodyPart.setFileName(filePath);
-//
-//            multipart.addBodyPart(messageBodyPart);
-
-//            mm.setContent(multipart);
 
         } catch (MessagingException e) {
             e.printStackTrace();
