@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.custos.utils.Common;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,19 +34,47 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class SubmitBugActivity extends AppCompatActivity {
 
     EditText et;
     Button submit;
     TextView cLeft;
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference datta;
     int counter = 0;
     ProgressDialog mProgressDialog;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.submit_bug);
-        DatabaseReference datta;
+
+
+
+        datta = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(firebaseUser.getUid()).child("userEmail");
+        datta.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String b = "";
+                for (DataSnapshot Users : dataSnapshot.getChildren()) {
+                    System.out.println(Users.toString());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+
+
+
+
         submit = findViewById(R.id.shareReport);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,8 +84,28 @@ public class SubmitBugActivity extends AppCompatActivity {
 
 
 
+
+
+
+
                 String total = et.getText().toString();
 
+                PackageManager pm = SubmitBugActivity.this.getPackageManager();
+                PackageInfo packageInfo = null;
+                try {
+                    packageInfo = pm.getPackageInfo("com.example.custos", PackageManager.GET_PERMISSIONS);
+                } catch (PackageManager.NameNotFoundException e) {
+
+                    e.printStackTrace();
+                }
+
+
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
+                Date updateTime = new Date(packageInfo.lastUpdateTime);
+                String submitTime = updateTime.toString();
+
+                String version = packageInfo.versionName;
                 if(counter == 0)
                 {
 
@@ -62,7 +113,7 @@ public class SubmitBugActivity extends AppCompatActivity {
                     counter++;
                 }
 
-                final String tot = total;
+                final String tot = "Custos version: " + version + "\n" + submitTime + "\n" + total;
                 AlertDialog.Builder builder = new AlertDialog.Builder(SubmitBugActivity.this);
                 builder.setCancelable(false);
                 builder.setMessage("Thank you for your report");
@@ -118,29 +169,6 @@ public class SubmitBugActivity extends AppCompatActivity {
             }
         });
 
-
-        datta = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid()).child("userEmail");
-        datta.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String b = "";
-                for (DataSnapshot Users : dataSnapshot.getChildren()) {
-                    System.out.println(Users.toString());
-                    System.out.println(Users.toString());
-                    System.out.println(Users.toString());
-                    System.out.println(Users.toString());
-                    System.out.println(Users.toString());
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
 
 
 

@@ -63,6 +63,17 @@ public class SettingsActivity extends Fragment {
         });
 
 
+
+        Button bug = view.findViewById(R.id.reportBug);
+        bug.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), SubmitBugActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         //placeholder atm
         Switch sw = view.findViewById(R.id.darkMode);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
