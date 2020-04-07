@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -287,6 +288,38 @@ public class OtherUserActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
         saveCurrentDate = currentDate.format(calendar.getTime());
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String email = dataSnapshot.child(otherUserId)
+                        .child(Common.USER_EMAIL).getValue().toString();
+                String imgURL = dataSnapshot.child(otherUserId).child(Common.IMAGE_URL).getValue().toString();
+                acceptFriends.child(currentUID).child(otherUserId).child(Common.USER_EMAIL).setValue(email);
+                acceptFriends.child(currentUID).child(otherUserId).child(Common.IMAGE_URL).setValue(imgURL);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String email = dataSnapshot.child(currentUID)
+                        .child(Common.USER_EMAIL).getValue().toString();
+                acceptFriends.child(otherUserId).child(currentUID).child(Common.USER_EMAIL).setValue(email);
+                String imgURL = dataSnapshot.child(currentUID).child(Common.IMAGE_URL).getValue().toString();
+                acceptFriends.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(imgURL);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         acceptFriends.child(currentUID).child(otherUserId).child("date").setValue(saveCurrentDate)
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
