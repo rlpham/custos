@@ -34,6 +34,8 @@ public class InviteGuestsActivity extends AppCompatActivity {
     ArrayList<String> selected = new ArrayList<String>();
     ArrayList<String> uids;
 
+    Intent intent2;
+
     class InviteGuestsAdapter extends BaseAdapter {
         String[] names;
         Context context;
@@ -63,8 +65,18 @@ public class InviteGuestsActivity extends AppCompatActivity {
 
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
+
+            ArrayList<String> idk = intent2.getStringArrayListExtra("selected");
             view = inflater.inflate(R.layout.invite_guest_item, null);
             final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
+
+            for(String element : idk) {
+                if(element.equals(names[position])) {
+                    ctv.setCheckMarkDrawable(R.drawable.checked);
+                    ctv.setChecked(true);
+                    selected.add(element);
+                }
+            }
             ctv.setTextColor(Color.parseColor("#FFFFFF"));
             ctv.setText(names[position]);
             ctv.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +110,8 @@ public class InviteGuestsActivity extends AppCompatActivity {
         // TODO: Set up checkable text views in list, then pass them into intent and test
         // https://abhiandroid.com/ui/checkedtextview
         listView = findViewById(R.id.listView);
+
+        intent2 = getIntent();
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");

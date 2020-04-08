@@ -204,7 +204,12 @@ public class EventDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                ArrayList<String> selected = new ArrayList<String>();
+                for(int i = 0; i < event_detail_invite_list.getCount(); i++) {
+                    selected.add(event_detail_invite_list.getItemAtPosition(i).toString());
+                }
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
+                intent.putStringArrayListExtra("selected", selected);
                 startActivityForResult(intent, 18);
             }
         });

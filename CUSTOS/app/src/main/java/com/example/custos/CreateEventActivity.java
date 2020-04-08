@@ -63,6 +63,8 @@ public class CreateEventActivity extends AppCompatActivity {
     TimePickerDialog timePickerDialog;
     Place place;
 
+    ArrayList<String> selected;
+
 
     FirebaseUser firebaseUser;
     private DatabaseReference user_information;
@@ -72,6 +74,8 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
+
+        lv = findViewById(R.id.event_detail_invite_list);
 
         event_date_text_view = findViewById(R.id.event_detail_date);
         event_date_text_view.setInputType(InputType.TYPE_NULL);
@@ -240,7 +244,12 @@ public class CreateEventActivity extends AppCompatActivity {
         findViewById(R.id.event_detail_edit_guests).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<String> selected = new ArrayList<String>();
+                for(int i = 0; i < lv.getCount(); i++) {
+                    selected.add(lv.getItemAtPosition(i).toString());
+                }
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
+                intent.putStringArrayListExtra("selected", selected);
                 startActivityForResult(intent, 18);
             }
         });
@@ -252,7 +261,7 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 18) {
-            ArrayList<String> selected = data.getStringArrayListExtra("values");
+            selected = data.getStringArrayListExtra("values");
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected);
             lv = findViewById(R.id.event_detail_invite_list);
             lv.setAdapter(adapter);
@@ -260,7 +269,6 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private String getNameFromValue(String d) {
-        //"{number=12324234, name=Madison Beer}"
         int initialIndex = d.indexOf("name=") + 5;
         int lastIndex = d.indexOf("}");
         String name = d.substring(initialIndex, lastIndex);

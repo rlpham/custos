@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv"
@@ -27,15 +29,14 @@
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="match_parent"
-                android:layout_height="189dp"
+                android:layout_height="150dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginEnd="0dp"
                 android:scaleType="centerCrop"
                 android:visibility="visible"
-                app:srcCompat="@color/quantum_amber500"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                app:srcCompat="@color/colorcautionred" />
 
             <TextView
                 android:id="@+id/event_title"
@@ -45,10 +46,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="100dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="100dp"
                 android:gravity="center"
-                android:text="Sample Title"
+                android:text="EVENT_NAME"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 
@@ -60,32 +61,32 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="125dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="125dp"
                 android:gravity="center"
-                android:text="123 test location testtown PA 12345"
-                android:textSize="10sp" />
+                android:text="CITY, STATE"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/event_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView4"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="05/21/2020"
+                android:layout_marginStart="35dp"
+                android:layout_marginTop="90dp"
+                android:text="DATE"
                 android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/event_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/imageView4"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="7:00 PM"
+                android:layout_marginTop="90dp"
+                android:layout_marginEnd="35dp"
+                android:text="TIME"
                 android:textSize="12sp" />
 
         </RelativeLayout>
