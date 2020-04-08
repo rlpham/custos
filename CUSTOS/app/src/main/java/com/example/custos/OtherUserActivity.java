@@ -295,6 +295,9 @@ public class OtherUserActivity extends AppCompatActivity {
                 String email = dataSnapshot.child(otherUserId)
                         .child(Common.USER_EMAIL).getValue().toString();
                 acceptFriends.child(currentUID).child(otherUserId).child(Common.USER_EMAIL).setValue(email);
+                String img = dataSnapshot.child(otherUserId)
+                        .child(Common.IMAGE_URL).getValue().toString();
+                acceptFriends.child(currentUID).child(otherUserId).child(Common.IMAGE_URL).setValue(img);
             }
 
             @Override
@@ -308,6 +311,9 @@ public class OtherUserActivity extends AppCompatActivity {
                 String email = dataSnapshot.child(currentUID)
                         .child(Common.USER_EMAIL).getValue().toString();
                 acceptFriends.child(otherUserId).child(currentUID).child(Common.USER_EMAIL).setValue(email);
+                String img = dataSnapshot.child(currentUID)
+                        .child(Common.IMAGE_URL).getValue().toString();
+                acceptFriends.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
             }
 
             @Override

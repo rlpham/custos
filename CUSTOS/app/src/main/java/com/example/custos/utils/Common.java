@@ -6,6 +6,7 @@ public class Common {
     public static final String USER_HOME_LAT        = "User Home Latitude";
     public static final String USER_HOME_LNG        = "User Home Longitude";
     public static final String HOME_LOC             = "Home Location";
+    public static final String FRIENDS              = "Friends";
     public static User loggedUser;
     public static final String USER_UID_SAVE_KEY    = "SaveUid";
     public static final String TOKENS               = "Tokens";
