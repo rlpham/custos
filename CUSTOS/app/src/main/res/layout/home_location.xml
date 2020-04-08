@@ -128,7 +128,7 @@
 
 
         <fragment
-            android:id="@+id/event_detail_location"
+            android:id="@+id/home_location"
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

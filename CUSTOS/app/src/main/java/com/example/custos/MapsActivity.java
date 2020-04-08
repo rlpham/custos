@@ -201,7 +201,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
-                      openFragment(UserFragment.newInstance());
+                      openFragment(FriendsFragment.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
