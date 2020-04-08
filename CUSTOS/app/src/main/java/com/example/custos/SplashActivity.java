@@ -3,6 +3,8 @@ package com.example.custos;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ public class SplashActivity extends AppCompatActivity {
     private int RC_SIGN_IN =0;
     FirebaseAuth mAuth;
     User userApp = new User();
+    private SharedPreference sharedPreferenceObj;
 
     @Override
     protected void onStart() {
@@ -55,6 +58,40 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+        sharedPreferenceObj=new SharedPreference(SplashActivity.this);
+        System.out.println("LENNY");
+        if(sharedPreferenceObj.getApp_runFirst().equals("FIRST"))
+        {
+            System.out.println("PENNY");
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(SplashActivity.this, R.style.Chill);
+            alertDialog.setTitle("Important!");
+            alertDialog.setCancelable(false);
+            alertDialog.setMessage("You can't sue us okay?");
+            alertDialog.setIcon(R.drawable.ic_error_yellow_24dp);
+            alertDialog.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                   // dialogInterface.dismiss();
+                }
+            });
+            alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                   // dialogInterface.dismiss();
+                    sharedPreferenceObj.setApp_runFirst("NO");
+                }
+            });
+            alertDialog.create();
+            alertDialog.show();
+
+        }
+        else
+        {
+            System.out.println("KENNY");
+            // App is not First Time Launch
+        }
         signInButton = findViewById(R.id.google_login);
         mAuth = FirebaseAuth.getInstance();
         createRequest();
