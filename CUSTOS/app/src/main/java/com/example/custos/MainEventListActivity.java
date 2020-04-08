@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,14 +26,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainEventListActivity extends Fragment {
 
@@ -122,6 +121,16 @@ public class MainEventListActivity extends Fragment {
 
                         }
 
+                    }
+                });
+
+                holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        //TODO: display modal, confirming deleting
+                        Toast toast = Toast.makeText(v.getContext(), "LONG HOLD", Toast.LENGTH_SHORT);
+                        toast.show();
+                        return true;
                     }
                 });
             } catch (JSONException e) {

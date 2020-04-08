@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -16,8 +17,17 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class EventDetailsActivity extends AppCompatActivity {
@@ -34,7 +44,8 @@ public class EventDetailsActivity extends AppCompatActivity {
     EditText event_detail_date_input;
     EditText event_detail_time_input;
     DatePickerDialog datePickerDialog;
-
+    Place place;
+    AutocompleteSupportFragment autocompleteFragment;
     boolean isEditMode = false;
 
     @Override
@@ -79,6 +90,22 @@ public class EventDetailsActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, invited_users);
         event_detail_invite_list.setAdapter(adapter);
 
+        Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
+        autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.event_detail_location);
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place pl) {
+                final LatLng latLng = pl.getLatLng();
+                place = pl;
+            }
+            @Override
+            public void onError(@NonNull Status status) {
+            }
+        });
+
 
         edit_event_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,30 +133,42 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                     edit_event_guests_button.setVisibility(View.VISIBLE);
 
+
                     event_detail_title_input.requestFocus();
                 } else {
-                    isEditMode = false;
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
-                    edit_event_button.setText(R.string.event_edit_button_label);
 
-                    event_detail_title_input.setVisibility(View.INVISIBLE);
-                    event_detail_description_input.setVisibility(View.INVISIBLE);
-                    event_detail_date_input.setVisibility(View.INVISIBLE);
-                    event_detail_time_input.setVisibility(View.INVISIBLE);
+                    if(!isInputValid(event_detail_title_input, event_detail_date_input, event_detail_time_input)) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                        Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        isEditMode = false;
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                        edit_event_button.setText(R.string.event_edit_button_label);
 
-                    event_detail_title.setVisibility(View.VISIBLE);
-                    event_detail_description.setVisibility(View.VISIBLE);
-                    event_detail_date.setVisibility(View.VISIBLE);
-                    event_detail_time.setVisibility(View.VISIBLE);
+                        event_detail_title_input.setVisibility(View.INVISIBLE);
+                        event_detail_description_input.setVisibility(View.INVISIBLE);
+                        event_detail_date_input.setVisibility(View.INVISIBLE);
+                        event_detail_time_input.setVisibility(View.INVISIBLE);
 
-                    event_detail_title.setText(event_detail_title_input.getText().toString());
-                    event_detail_description.setText(event_detail_description_input.getText().toString());
-                    event_detail_date.setText(event_detail_date_input.getText().toString());
-                    event_detail_time.setText(event_detail_time_input.getText().toString());
+                        event_detail_title.setVisibility(View.VISIBLE);
+                        event_detail_description.setVisibility(View.VISIBLE);
+                        event_detail_date.setVisibility(View.VISIBLE);
+                        event_detail_time.setVisibility(View.VISIBLE);
 
-                    edit_event_guests_button.setVisibility(View.INVISIBLE);
+                        event_detail_title.setText(event_detail_title_input.getText().toString());
+                        event_detail_description.setText(event_detail_description_input.getText().toString());
+                        event_detail_date.setText(event_detail_date_input.getText().toString());
+                        event_detail_time.setText(event_detail_time_input.getText().toString());
 
+                        edit_event_guests_button.setVisibility(View.INVISIBLE);
+
+                        //TODO: Update event path with new credentials (name, description, date, time, location, invited_guests)
+
+
+                    }
 
                 }
 
@@ -199,6 +238,29 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
+        Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
+        //PlacesClient placesClient = Places.createClient(this);
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.event_detail_location);
+
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
+        //autocompleteFragment.setLocationRestriction(RectangularBounds.newInstance(new LatLng(40.263680,-76.890739), new LatLng(40.285519,-76.650589)));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place pl) {
+                final LatLng latLng = pl.getLatLng();
+                place = pl;
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+            }
+        });
+
         edit_event_guests_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,6 +285,15 @@ public class EventDetailsActivity extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected);
             event_detail_invite_list = findViewById(R.id.event_detail_invite_list);
             event_detail_invite_list.setAdapter(adapter);
+        }
+    }
+
+    private boolean isInputValid(TextView name, TextView date, TextView time) {
+
+        if((!name.getText().toString().equals("")) &&  (!date.getText().toString().equals("")) && (!time.getText().toString().equals(""))) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
