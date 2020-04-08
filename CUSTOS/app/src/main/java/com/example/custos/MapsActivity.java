@@ -236,7 +236,7 @@ private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
         if((mess.equals("Home Location")) && !(mess.equals(" "))){
-            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_home_black_18)));
+            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3)));
 
 
 
@@ -259,7 +259,7 @@ private LatLng eventlocation;
     public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess,String desc) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_watch_later_white_18))).setSnippet(desc);
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.event3))).setSnippet(desc);
 
     }
     /**
