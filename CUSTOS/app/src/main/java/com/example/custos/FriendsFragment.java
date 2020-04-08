@@ -16,9 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.custos.adapters.FriendsAdapter;
-import com.example.custos.adapters.UserAdapter;
 import com.example.custos.utils.Common;
-import com.example.custos.utils.Friends;
 import com.example.custos.utils.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
