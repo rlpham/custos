@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Event;
@@ -49,18 +50,17 @@ import java.util.Random;
 public class CreateEventActivity extends AppCompatActivity {
     TextView event_name_text_view;
     TextView event_description_text_view;
+    TextView event_date_text_view;
     TextView event_time_text_view;
     ListView lv;
     String name;
     String description;
-    String date_time;
     ArrayList<String> uids = new ArrayList<String>();
     double lat;
     double lon;
-    EditText date;
-    EditText time;
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
+    Place place;
 
 
     FirebaseUser firebaseUser;
@@ -72,10 +72,10 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
 
-        date = findViewById(R.id.date_input);
-        date.setInputType(InputType.TYPE_NULL);
+        event_date_text_view = findViewById(R.id.date_input);
+        event_date_text_view.setInputType(InputType.TYPE_NULL);
 
-        date.setOnClickListener(new View.OnClickListener() {
+        event_date_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
@@ -90,7 +90,7 @@ public class CreateEventActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                date.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                event_date_text_view.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
 
                             }
                         }, mYear, mMonth, mDay);
@@ -98,10 +98,10 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        time = findViewById(R.id.time_input);
-        time.setInputType(InputType.TYPE_NULL);
+        event_time_text_view = findViewById(R.id.time_input);
+        event_time_text_view.setInputType(InputType.TYPE_NULL);
 
-        time.setOnClickListener(new View.OnClickListener() {
+        event_time_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar mcurrentTime = Calendar.getInstance();
@@ -120,9 +120,9 @@ public class CreateEventActivity extends AppCompatActivity {
                         }
 
                         if(selectedMinute < 10) {
-                            time.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                            event_time_text_view.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
                         } else {
-                            time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                            event_time_text_view.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
                         }
 
                     }
@@ -145,8 +145,9 @@ public class CreateEventActivity extends AppCompatActivity {
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                final LatLng latLng = place.getLatLng();
+            public void onPlaceSelected(@NonNull Place pl) {
+                final LatLng latLng = pl.getLatLng();
+                place = pl;
                 lat = latLng.latitude;
                 lon = latLng.longitude;
             }
@@ -160,62 +161,76 @@ public class CreateEventActivity extends AppCompatActivity {
         findViewById(R.id.create_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //POST DATA HERE
                 event_name_text_view = findViewById(R.id.event_name_input);
                 event_description_text_view = findViewById(R.id.event_description_input);
-                event_time_text_view = findViewById(R.id.date_input);
-                name = event_name_text_view.getText().toString();
-                description = event_description_text_view.getText().toString();
-                date_time = event_time_text_view.getText().toString();
+                event_date_text_view = findViewById(R.id.event_date);
+                event_time_text_view = findViewById(R.id.time_input);
                 final ListView invited_list = findViewById(R.id.invited_list);
-                firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                date = findViewById(R.id.date_input);
-                time = findViewById(R.id.time_input);
-                //create event to database -> DB/user_event/<uid>/<event_name>
-                user_information = FirebaseDatabase.getInstance().getReference("user_event");
-                Common.event = new Event(firebaseUser.getUid(), name, description, date_time);
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("date").setValue(date.getText().toString());
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("time").setValue(time.getText().toString());
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("description").setValue(Common.event.getDescription());
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("area").setValue(getLocationText(lat, lon));
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("location").child("latitude").setValue(lat);
-                user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
 
-                //Gather list uids of invited guests
-                userReference = FirebaseDatabase.getInstance().getReference("Users");
-                userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String id = "E" + generateNumber();
-                        Date date = Calendar.getInstance().getTime();
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
-                        String strDate = dateFormat.format(date);
-                        for(int i = 0; i < invited_list.getCount(); i++) {
-                            for(DataSnapshot element : dataSnapshot.getChildren()) {
-                                String invited_name = invited_list.getItemAtPosition(i).toString();
-                                String current_name = getNameFromValue(element.getValue().toString());
-                                if(invited_name.equals(current_name)) {
-                                    //use element.getKey() to write into DB/user/<UID>/notifications/eventInvite
-                                    DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(id);
-                                    notification.child("message").setValue("<SENDER UID> has invited you to an event <EVENT NAME>");
-                                    notification.child("timestamp").setValue(strDate);
-                                    notification.child("sender").setValue(firebaseUser.getUid());
+                event_date_text_view = findViewById(R.id.date_input);
+                event_time_text_view = findViewById(R.id.time_input);
+
+                if(!isInputValid(event_name_text_view, event_date_text_view, event_time_text_view, place)) {
+                    Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+
+                    name = event_name_text_view.getText().toString();
+                    description = event_description_text_view.getText().toString();
+
+                    firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+                    //create event to database -> DB/user_event/<uid>/<event_name>
+                    user_information = FirebaseDatabase.getInstance().getReference("user_event");
+                    Common.event = new Event(firebaseUser.getUid(), name, description, event_time_text_view.getText().toString());
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("date").setValue(event_date_text_view.getText().toString());
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("time").setValue(event_time_text_view.getText().toString());
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("description").setValue(Common.event.getDescription());
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("area").setValue(getLocationText(lat, lon));
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("location").child("latitude").setValue(lat);
+                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
+
+                    //Gather list uids of invited guests
+                    userReference = FirebaseDatabase.getInstance().getReference("Users");
+                    userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String id = "E" + generateNumber();
+                            String strDate = getCurrentTime();
+                            for(int i = 0; i < invited_list.getCount(); i++) {
+                                for(DataSnapshot element : dataSnapshot.getChildren()) {
+                                    String invited_name = invited_list.getItemAtPosition(i).toString();
+                                    String current_name = getNameFromValue(element.getValue().toString());
+                                    if(invited_name.equals(current_name)) {
+                                        //use element.getKey() to write into DB/user/<UID>/notifications/eventInvite
+                                        DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(id);
+                                        notification.child("message").setValue("<SENDER UID> has invited you to an event <EVENT NAME>");
+                                        notification.child("timestamp").setValue(strDate);
+                                        notification.child("sender").setValue(firebaseUser.getUid());
+                                        user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
 
-                Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
-                onActivityResult(1,1,intent);
-                setResult(1, intent);
-                finish();
+                    Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
+                    onActivityResult(1,1,intent);
+                    setResult(1, intent);
+                    finish();
+
+                }
+
+
+
             }
         });
 
@@ -272,6 +287,22 @@ public class CreateEventActivity extends AppCompatActivity {
         }
 
         return locationText;
+    }
+
+    private boolean isInputValid(TextView name, TextView date, TextView time, Place place) {
+
+        if((!name.getText().toString().equals("")) &&  (!date.getText().toString().equals("")) && (!time.getText().toString().equals("")) && (place != null)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private String getCurrentTime() {
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String strDate = dateFormat.format(date);
+        return strDate;
     }
 
 }

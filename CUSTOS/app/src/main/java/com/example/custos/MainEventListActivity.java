@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +43,8 @@ import org.checkerframework.checker.linear.qual.Linear;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class MainEventListActivity extends Fragment {
 
@@ -115,6 +118,12 @@ public class MainEventListActivity extends Fragment {
                 holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
                 holder.eventDate.setText(data.getJSONObject(position).getString("date"));
                 holder.eventTime.setText(data.getJSONObject(position).getString("time"));
+                holder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //START HERE
+                    }
+                });
             } catch (JSONException e) {
                 System.out.println(e);
             }
