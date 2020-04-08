@@ -108,17 +108,7 @@ public class SplashActivity extends AppCompatActivity {
             updateUI(firebaseUser);
             userApp.setUID(mAuth.getCurrentUser().getUid());
         }
-        FirebaseDatabase.getInstance().getReference("User Account by Email").child("UID")
-                .setValue(userApp.getUID()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        
     }
 
     private void createRequest() {
