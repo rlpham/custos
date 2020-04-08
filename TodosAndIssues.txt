@@ -1,16 +1,14 @@
 ```
-April 7, 2020
+April 8, 2020
 _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
 Events:
-1. Need to validate that user pick a valid date.
-2. Need to validate that there is a name before creating an event.
-3. Need to validate that there is an address before creating an event.
-4. Need to validate that there is a time before creating an event.
-5. Adding a guest to an event and going back to invite guest to add other people, will deselect the inital added guest
-6. Need to prevent user from entering special characters/emojis/etc into date and time slot
+1. Need to validate that user pick a valid date (Like today is 4/8/2020 and user pick 3/21/2020
+2. Need a limit on name
+3. Need a limit on description
+4. this line is causing a lot of problems (e.g crashes app when creating events, won't let me view events after creating it, won't let me press back on invite guest) (obj.put("invited_users", getInvitedUsers(element.child("invited_users").getValue().toString()));)
 
 Notification:
 1. Needs an update in general						NOT STARTED
@@ -30,7 +28,7 @@ Contacts:
 2. Search bar gets smush on my screen size 			NOT IMPORTANT
 
 Settings:	
-1. Change buttons cause it's looks BAD
+1. Change buttons
 
 User Account:										DONE FOR NOW
 1. Clicking top left yellow button will send user to map activity instead of setting page
