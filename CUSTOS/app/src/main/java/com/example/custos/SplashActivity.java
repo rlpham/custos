@@ -9,9 +9,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.custos.utils.Common;
@@ -36,6 +41,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import afu.org.checkerframework.checker.igj.qual.I;
+
 public class SplashActivity extends AppCompatActivity {
     Button signInButton;
     GoogleSignInClient googleSignInClient;
@@ -43,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     User userApp = new User();
     private SharedPreference sharedPreferenceObj;
+    TextView termsNService;
 
     @Override
     protected void onStart() {
@@ -52,44 +60,66 @@ public class SplashActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
             startActivity(intent);
         }
+
+
+
+
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+        termsNService = findViewById(R.id.termNSer);
+        termsNService.setVisibility(View.INVISIBLE);
+//        termsNService.setText(Html.fromHtml("Do you agree to the <a href=\'https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf\'>Terms and Service</a>"));
+//        termsNService.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
+
+
+
+        ////////////////////
+
         sharedPreferenceObj=new SharedPreference(SplashActivity.this);
-        System.out.println("LENNY");
         if(sharedPreferenceObj.getApp_runFirst().equals("FIRST"))
         {
-            System.out.println("PENNY");
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(SplashActivity.this, R.style.Chill);
-            alertDialog.setTitle("Important!");
-            alertDialog.setCancelable(false);
-            alertDialog.setMessage("You can't sue us okay?");
-            alertDialog.setIcon(R.drawable.ic_error_yellow_24dp);
-            alertDialog.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                   // dialogInterface.dismiss();
-                }
-            });
-            alertDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+            final SpannableString s = new SpannableString("https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf"); // msg should have url to enable clicking
+            Linkify.addLinks(s, Linkify.ALL);
 
-                   // dialogInterface.dismiss();
-                    sharedPreferenceObj.setApp_runFirst("NO");
-                }
-            });
-            alertDialog.create();
-            alertDialog.show();
+            final AlertDialog d = new AlertDialog.Builder(SplashActivity.this,R.style.Chill)
+                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            // dialogInterface.dismiss();
+                            sharedPreferenceObj.setApp_runFirst("NO");
+                        }
+                    })
+                    .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                            // dialogInterface.dismiss();
+                        }
+                    })
+                    .setIcon(R.drawable.ic_error_yellow_24dp)
+                    .setTitle("Do you agree to the Terms and Services below?")
+                    .setMessage( s )
+                    .create();
+
+            d.show();
+            ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+
+
 
         }
         else
         {
-            System.out.println("KENNY");
+
+            
             // App is not First Time Launch
         }
         signInButton = findViewById(R.id.google_login);

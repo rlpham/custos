@@ -21,6 +21,16 @@
         android:drawableLeft="@drawable/ic_google_logo"
         android:text="@string/login_with_google" />
 
+    <TextView
+        android:id="@+id/termNSer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/terms_of_use" />
+
     <!--    <LinearLayout-->
 <!--        android:layout_width="145dp"-->
 <!--        android:layout_height="64dp"-->
