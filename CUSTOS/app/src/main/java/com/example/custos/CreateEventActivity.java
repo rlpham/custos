@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -72,7 +71,7 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
 
-        event_date_text_view = findViewById(R.id.date_input);
+        event_date_text_view = findViewById(R.id.event_detail_date);
         event_date_text_view.setInputType(InputType.TYPE_NULL);
 
         event_date_text_view.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +97,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        event_time_text_view = findViewById(R.id.time_input);
+        event_time_text_view = findViewById(R.id.event_detail_time);
         event_time_text_view.setInputType(InputType.TYPE_NULL);
 
         event_time_text_view.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +134,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         //PlacesClient placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.event_location);
+                getSupportFragmentManager().findFragmentById(R.id.event_detail_location);
 
 
         // Specify the types of place data to return.
@@ -163,14 +162,14 @@ public class CreateEventActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //POST DATA HERE
-                event_name_text_view = findViewById(R.id.event_name_input);
-                event_description_text_view = findViewById(R.id.event_description_input);
+                event_name_text_view = findViewById(R.id.event_detail_name);
+                event_description_text_view = findViewById(R.id.event_detail_description);
                 event_date_text_view = findViewById(R.id.event_date);
-                event_time_text_view = findViewById(R.id.time_input);
-                final ListView invited_list = findViewById(R.id.invited_list);
+                event_time_text_view = findViewById(R.id.event_detail_time);
+                final ListView invited_list = findViewById(R.id.event_detail_invite_list);
 
-                event_date_text_view = findViewById(R.id.date_input);
-                event_time_text_view = findViewById(R.id.time_input);
+                event_date_text_view = findViewById(R.id.event_detail_date);
+                event_time_text_view = findViewById(R.id.event_detail_time);
 
                 if(!isInputValid(event_name_text_view, event_date_text_view, event_time_text_view, place)) {
                     Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
@@ -234,7 +233,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.invite_guests_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.event_detail_edit_guests).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
@@ -251,7 +250,7 @@ public class CreateEventActivity extends AppCompatActivity {
         if(requestCode == 18) {
             ArrayList<String> selected = data.getStringArrayListExtra("values");
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selected);
-            lv = findViewById(R.id.invited_list);
+            lv = findViewById(R.id.event_detail_invite_list);
             lv.setAdapter(adapter);
         }
     }

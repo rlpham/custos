@@ -5,27 +5,11 @@
     android:background="#1D1D1D"
     >
 
-    <EditText
-        android:id="@+id/event_detail_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/event_detail_title"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="45dp"
-        android:ems="10"
-        android:hint="@string/event_name_placeholder"
-        android:inputType="textPersonName"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
-
-    <EditText
+    <TextView
         android:id="@+id/event_detail_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_detail_name"
+        android:layout_below="@+id/event_detail_title"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="45dp"
@@ -49,29 +33,15 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp" />
 
-    <Button
-        android:id="@+id/event_detail_edit_guests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/event_detail_location"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="120dp"
-        android:background="#fece2f"
-        android:onClick="inviteGuests"
-        android:text="@string/event_invite_users_button_placeholder" />
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="306dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_detail_edit_guests"
+        android:layout_below="@+id/event_detail_location"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="76dp"
         android:text="Invited"
         android:textColor="#FFFFFF"
@@ -86,23 +56,10 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
         android:background="#1D1D1D"
+        android:gravity="center"
         android:text="@string/event_create_event_placeholder"
         android:textColor="#FFFFFF"
         android:textSize="30sp" />
-
-    <Button
-        android:id="@+id/create_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="20dp"
-        android:background="#fece2f"
-        android:text="@string/create_event_button"
-        android:textColor="@color/colorAccent"
-        android:visibility="visible" />
 
     <ListView
         android:id="@+id/event_detail_invite_list"
@@ -115,7 +72,7 @@
         android:layout_marginEnd="0dp"
         android:background="#212121" />
 
-    <EditText
+    <TextView
         android:id="@+id/event_detail_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -131,7 +88,7 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF" />
 
-    <EditText
+    <TextView
         android:id="@+id/event_detail_time"
         android:layout_width="158dp"
         android:layout_height="wrap_content"

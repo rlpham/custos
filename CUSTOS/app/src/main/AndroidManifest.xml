@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.custos">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -21,7 +20,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/logo"
@@ -29,8 +28,7 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-
-
+        <activity android:name=".EventDetailsActivity"></activity>
         <activity
             android:name=".EditUserInformation"
             android:exported="true" />
@@ -77,13 +75,15 @@
         <activity
             android:name=".MapsActivity"
             android:exported="true" />
-        <activity android:name=".ReportActivity"
+        <activity
+            android:name=".ReportActivity"
             android:exported="true" />
-        <activity android:name=".OtherUserActivity"
+        <activity
+            android:name=".OtherUserActivity"
             android:exported="true" />
-        <activity android:name=".SubmitBugActivity"
+        <activity
+            android:name=".SubmitBugActivity"
             android:exported="true" />
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

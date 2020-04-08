@@ -1,50 +1,38 @@
 package com.example.custos;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.graphics.Rect;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonObject;
 
-import org.checkerframework.checker.linear.qual.Linear;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainEventListActivity extends Fragment {
 
@@ -71,11 +59,11 @@ public class MainEventListActivity extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHandler = new DBHandler();
-
     }
 
     class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
         JSONArray data;
+        ArrayList<String> invited_users;
 
         class ViewHolder extends RecyclerView.ViewHolder {
             CardView cardView;
@@ -89,7 +77,7 @@ public class MainEventListActivity extends Fragment {
                 super(v);
                 cardView = v.findViewById(R.id.cv);
                 eventTitle = v.findViewById(R.id.event_title);
-                eventLocation = v.findViewById(R.id.event_location);
+                eventLocation = v.findViewById(R.id.event_detail_location);
                 eventDate = v.findViewById(R.id.event_date);
                 eventTime = v.findViewById(R.id.event_time);
             }
@@ -110,7 +98,7 @@ public class MainEventListActivity extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(ViewHolder holder, final int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
             try {
@@ -122,6 +110,18 @@ public class MainEventListActivity extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //START HERE
+                        try {
+                            Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                            intent.putExtra("event_name", data.getJSONObject(position).getString("name"));
+                            intent.putExtra("event_desc", data.getJSONObject(position).getString("description"));
+                            intent.putExtra("event_date", data.getJSONObject(position).getString("date"));
+                            intent.putExtra("event_time", data.getJSONObject(position).getString("time"));
+                            intent.putExtra("invited_users", data.getJSONObject(position).getString("invited_users"));
+                            startActivity(intent);
+                        } catch(JSONException e) {
+
+                        }
+
                     }
                 });
             } catch (JSONException e) {
@@ -215,7 +215,6 @@ public class MainEventListActivity extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1) {
-
             System.out.println("DONE");
         }
 
@@ -237,11 +236,15 @@ public class MainEventListActivity extends Fragment {
                         obj.put("location", element.child("area").getValue());
                         obj.put("date", element.child("date").getValue());
                         obj.put("time", element.child("time").getValue());
+                        obj.put("description", element.child("description").getValue());
+                        obj.put("invited_users",  getInvitedUsers(element.child("invited_users").getValue().toString()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     data2.put(obj);
                 }
+
+
                 rv = view.findViewById(R.id.recycler);
                 llm = new LinearLayoutManager(getContext());
                 RecyclerView.Adapter adapter = new EventListAdapter(data2);
@@ -252,7 +255,6 @@ public class MainEventListActivity extends Fragment {
 
 
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -260,5 +262,31 @@ public class MainEventListActivity extends Fragment {
         });
 
     }
+    //Creates list of names based off raw string value of datasnapshot
+    private String getInvitedUsers(String data)  {
+        //I/System.out: {a={name=Madison Beer}, b={name=Blake Lively}, c={name=Alex Morgan}}
+        //ArrayList<String> invited_users = new ArrayList<String>();
+        String invited_users = "";
+
+        if(data == "none") {
+            return "none";
+        } else {
+            for(int i = 0; i < data.length(); i++) {
+                if (i + 5 < data.length()) {
+                    if (data.substring(i, i + 5).equals("name=")) {
+                        int index = i + 5;
+                        for (int j = index; j < data.length(); j++) {
+                            if (data.charAt(j) == '}') {
+                                invited_users += (data.substring(index, j) + ',');
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return invited_users;
+        }
+    }
+
 
 }

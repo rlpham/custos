@@ -53,7 +53,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/event_location"
+                android:id="@+id/event_detail_location"
                 android:layout_width="85dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/event_title"
