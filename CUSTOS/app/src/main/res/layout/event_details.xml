@@ -15,11 +15,33 @@
         android:layout_marginStart="45dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
+        android:ellipsize="end"
         android:ems="10"
         android:hint="@string/event_description_placeholder"
         android:inputType="textPersonName"
+        android:lines="4"
+        android:maxLines="4"
         android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/event_detail_description_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_title"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="45dp"
+        android:ems="10"
+        android:hint="@string/event_description_placeholder"
+        android:inputType="textMultiLine"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textSize="12sp"
+        android:visibility="invisible" />
 
     <fragment
         android:id="@+id/event_detail_location"
@@ -55,11 +77,34 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="30dp"
         android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/edit_event_button"
         android:background="#1D1D1D"
-        android:gravity="center"
-        android:text="@string/event_create_event_placeholder"
+        android:ellipsize="end"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:text="@string/event_name_placeholder"
         android:textColor="#FFFFFF"
         android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/event_detail_title_input"
+        android:layout_width="362dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/edit_event_button"
+        android:background="#1D1D1D"
+        android:inputType="text"
+        android:maxLength="30"
+        android:maxLines="1"
+        android:text="@string/event_name_placeholder"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:visibility="invisible" />
 
     <ListView
         android:id="@+id/event_detail_invite_list"
@@ -86,7 +131,26 @@
         android:hint="@string/event_date_placeholder"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/event_detail_date_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_description"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/event_detail_time"
+        android:ems="10"
+        android:hint="@string/event_date_placeholder"
+        android:inputType="none"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:visibility="invisible"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/event_detail_time"
@@ -100,6 +164,50 @@
         android:hint="@string/time_input_placeholder"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/event_detail_time_input"
+        android:layout_width="158dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_description"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="45dp"
+        android:ems="10"
+        android:hint="@string/time_input_placeholder"
+        android:inputType="none"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:visibility="invisible"
+        android:focusableInTouchMode="false"/>
+
+
+    <Button
+        android:id="@+id/edit_event_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:background="#fece2f"
+        android:text="@string/ecedit" />
+
+    <Button
+        android:id="@+id/event_detail_invite_guests"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_above="@+id/event_detail_invite_list"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="0dp"
+        android:background="#1D1D1D"
+        android:gravity="center"
+        android:text="+"
+        android:textColor="#fece2f"
+        android:textSize="30sp"
+        android:visibility="invisible" />
 
 </RelativeLayout>

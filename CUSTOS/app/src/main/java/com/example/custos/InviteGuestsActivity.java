@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
         public View getView(final int position, View view, ViewGroup parent) {
             view = inflater.inflate(R.layout.invite_guest_item, null);
             final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
+            ctv.setTextColor(Color.parseColor("#FFFFFF"));
             ctv.setText(names[position]);
             ctv.setOnClickListener(new View.OnClickListener() {
                 @Override

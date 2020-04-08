@@ -92,4 +92,6 @@
     <string name="_120_characters_left">280 Characters Left</string>
     <string name="type_whole_incident_here">Type incident here</string>
     <string name="build_version">Build Version:</string>
+    <string name="event_edit_button_label">Edit</string>
+    <string name="event_details_title_placeholder">Event Name</string>
 </resources>
