@@ -117,8 +117,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //mMap.setOnMarkerClickListener(this);
         //
         userList = new ArrayList<>();
-        db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
-        db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
+     //   db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
+       // db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
         db3 = FirebaseDatabase.getInstance().getReference("User Information");
         db4 = FirebaseDatabase.getInstance().getReference("userLocation");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -256,6 +256,12 @@ private LatLng eventlocation;
         mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18)));
 
     }
+    public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess,String desc) {
+
+
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_watch_later_white_18))).setSnippet(desc);
+
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -372,36 +378,36 @@ private void setcontactslocation(){
     public void onMapReady(GoogleMap googleMap) {
 
 
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-               double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
-                double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
-                String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
-                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
-                setEventsLocation(eventloc,mess);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        db2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
-                double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
-                String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
-                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
-                setEventsLocation(eventloc,mess);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        db.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//               double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
+//                double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
+//                String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
+//                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
+//                setEventsLocation(eventloc,mess);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//        db2.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                double  eventlonitude=Double.parseDouble(dataSnapshot.child("address").child("longitude").getValue().toString());
+//                double eventlatitude=Double.parseDouble(dataSnapshot.child("address").child("latitude").getValue().toString());
+//                String mess=dataSnapshot.child("message").getValue().toString()+", on "+dataSnapshot.child("date").getValue().toString();
+//                LatLng eventloc=new LatLng(eventlatitude,eventlonitude);
+//                setEventsLocation(eventloc,mess);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         try {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -507,6 +513,7 @@ private void setcontactslocation(){
 
         setlocationeveryfeesec(googleMap);
         darkModeChecker();
+        eventLocationAdder();
         // Add a marker in Sydney and move the camera
 
         /**
@@ -541,6 +548,51 @@ private void setcontactslocation(){
             }
         });
     }
+
+    private void eventLocationAdder(){
+
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("user_event");
+        eventRef.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+                            }
+                        }
+                        //if user available
+                        else {
+                            for(DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()){
+                                String name="",desc="",date="",time="";
+                                double lat=0,lon=0;
+                                if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()) {
+                                    name=snapshot.getKey();
+                                    lat = Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
+                                    lon = Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
+                                    desc=snapshot.child("description").getValue().toString();
+                                    date=snapshot.child("date").getValue().toString();
+                                    time=snapshot.child("time").getValue().toString();
+                                    setEventsLocationwithoutzoomingwithdesc(new LatLng(lat,lon),name,desc +" at "+ time + " , "+date);
+                                }
+
+                            }
+                        }
+
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
+
 private void darkModeChecker(){
     final DatabaseReference darkLight = FirebaseDatabase.getInstance().getReference("userSettings");
     final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -575,8 +627,6 @@ private void darkModeChecker(){
 
                 }
             });
-
-
 
 }
     private void getcurrentlocation(GoogleMap googleMap){
