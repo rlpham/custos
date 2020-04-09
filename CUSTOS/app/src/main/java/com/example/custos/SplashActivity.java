@@ -47,11 +47,11 @@ public class SplashActivity extends AppCompatActivity {
     Button signInButton;
     GoogleSignInClient googleSignInClient;
     private int RC_SIGN_IN = 0;
+    TextView termsNService;
     FirebaseAuth mAuth;
     User userApp = new User();
     private SharedPreference sharedPreferenceObj;
-    TextView termsNService;
-    int count = 0;
+
 
     @Override
     protected void onStart() {
@@ -82,8 +82,8 @@ public class SplashActivity extends AppCompatActivity {
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            increment();
-                            // dialogInterface.dismiss();
+                            sharedPreferenceObj.setApp_runFirst("NO");
+
 
                         }
                     })
@@ -91,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             finish();
-                            // dialogInterface.dismiss();
+
                         }
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
@@ -110,30 +110,23 @@ public class SplashActivity extends AppCompatActivity {
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            increment();
-                            // dialogInterface.dismiss();
-                            //   sharedPreferenceObj.setApp_runFirst("NO");
+                            sharedPreferenceObj.setApp_runFirst("NO");
+
                         }
                     })
                     .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             finish();
-                            // dialogInterface.dismiss();
                         }
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
-                    .setTitle("Do you agree to the Privacy Policy Below?")
+                    .setTitle("Do you agree to the Privacy Policy below?")
                     .setMessage(st)
                     .create();
 
             dd.show();
             ((TextView) dd.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-
-
-            if (count >= 2) {
-                sharedPreferenceObj.setApp_runFirst("NO");
-            }
 
 
         } else {
@@ -343,9 +336,6 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    public void increment() {
-        count++;
-    }
 
 //TODO: saved last signed in google account
 //    @Override
