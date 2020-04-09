@@ -51,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
     User userApp = new User();
     private SharedPreference sharedPreferenceObj;
     TextView termsNService;
-
+    int count = 0;
     @Override
     protected void onStart() {
         super.onStart();
@@ -81,21 +81,23 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-        ////////////////////
+
+
+        ////////////////////https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf
 
         sharedPreferenceObj=new SharedPreference(SplashActivity.this);
         if(sharedPreferenceObj.getApp_runFirst().equals("FIRST"))
         {
-            final SpannableString s = new SpannableString("https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf"); // msg should have url to enable clicking
+            final SpannableString s = new SpannableString("https://github.com/rlpham/Custos/blob/master/TermsAndServices.pdf"); // msg should have url to enable clicking
             Linkify.addLinks(s, Linkify.ALL);
 
             final AlertDialog d = new AlertDialog.Builder(SplashActivity.this,R.style.Chill)
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            increment();
                             // dialogInterface.dismiss();
-                            sharedPreferenceObj.setApp_runFirst("NO");
+
                         }
                     })
                     .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
@@ -113,6 +115,40 @@ public class SplashActivity extends AppCompatActivity {
             d.show();
             ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
+
+
+            final SpannableString st = new SpannableString("https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf\n"); // msg should have url to enable clicking
+            Linkify.addLinks(st, Linkify.ALL);
+
+            final AlertDialog dd = new AlertDialog.Builder(SplashActivity.this,R.style.Chill)
+                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            increment();
+                            // dialogInterface.dismiss();
+                            //   sharedPreferenceObj.setApp_runFirst("NO");
+                        }
+                    })
+                    .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                            // dialogInterface.dismiss();
+                        }
+                    })
+                    .setIcon(R.drawable.ic_error_yellow_24dp)
+                    .setTitle("Do you agree to the Privacy Policy Below?")
+                    .setMessage( st )
+                    .create();
+
+            dd.show();
+            ((TextView)dd.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+
+
+            if(count >= 2)
+            {
+                sharedPreferenceObj.setApp_runFirst("NO");
+            }
 
 
         }
@@ -138,7 +174,7 @@ public class SplashActivity extends AppCompatActivity {
             updateUI(firebaseUser);
             userApp.setUID(mAuth.getCurrentUser().getUid());
         }
-        
+
     }
 
     private void createRequest() {
@@ -321,6 +357,11 @@ public class SplashActivity extends AppCompatActivity {
             userApp.setUserEmail(null);
             userApp.setUID(null);
         }
+    }
+
+    public void increment()
+    {
+        count++;
     }
 
 //TODO: saved last signed in google account
