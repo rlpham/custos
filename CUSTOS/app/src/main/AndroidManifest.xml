@@ -55,7 +55,7 @@
             android:name=".SplashActivity"
             android:exported="true" />
         <activity
-            android:name=".UserFragment"
+            android:name=".UserListActivity"
             android:exported="true" />
         <activity
             android:name=".SetHomeLocationActivity"

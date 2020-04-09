@@ -6,7 +6,7 @@
     android:background="#1D1D1D"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".UserFragment">
+    tools:context=".UserListActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -17,7 +17,16 @@
             android:layout_height="wrap_content"
             android:background="#212121"
             android:padding="8dp">
-
+            <TextView
+                android:id="@+id/add_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="328dp"
+                android:transitionName="logout"
+                android:drawableTop="@drawable/ic_person_add_yellow_26dp"/>
 
             <TextView
                 android:id="@+id/imageFriendsReport"
@@ -26,9 +35,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:drawableTop="@drawable/ic_person_add_black_24dp"
-                android:text="Search and Add Friend"
-                android:textColor="#fece2f"
+                android:drawableTop="@drawable/ic_people_yellow_60dp"
+                android:text="Friend List"
+                android:textColor="#FFFFFf"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:textCursorDrawable="@color/colorwhite"

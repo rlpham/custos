@@ -6,7 +6,7 @@
     android:background="#1D1D1D"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".UserFragment">
+    tools:context=".UserListActivity">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -20,6 +20,16 @@
 
 
             <TextView
+                android:id="@+id/back_button_users"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:layout_marginLeft="10dp"
+                android:transitionName="back"
+                android:drawableTop="@drawable/ic_arrow_back_yellow_24dp"/>
+            <TextView
                 android:id="@+id/imageReport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -29,7 +39,7 @@
                 android:layout_marginBottom="10dp"
                 android:drawableTop="@drawable/ic_person_add_black_24dp"
                 android:text="Search and Add Friend"
-                android:textColor="#fece2f"
+                android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:textCursorDrawable="@color/colorwhite"
@@ -78,19 +88,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
+            android:layout_width="391dp"
+            android:layout_height="525dp"
             android:layout_below="@+id/search_friend"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="60dp" />
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp" />
 
     </RelativeLayout>
-    android:id="@+id/listContact"
-    android:layout_width="match_parent"
-    android:layout_height="504dp"
-    android:layout_below="@+id/button33"
-    android:layout_alignParentBottom="true"
-    android:layout_marginTop="5dp"
-    android:layout_marginBottom="50dp">
 
     <LinearLayout
         android:id="@+id/contactscroller"

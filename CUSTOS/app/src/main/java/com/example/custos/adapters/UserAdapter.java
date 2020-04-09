@@ -36,6 +36,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final User user = users.get(position);
         holder.userEmail.setText(user.getUserEmail());
+        holder.userName.setText(user.getUserName());
         if(user.getImageURL().equals("default")){
             holder.userImage.setImageResource(R.mipmap.ic_launcher);
         }else{
@@ -45,6 +46,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, OtherUserActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("userid",user.getUID());
                 context.startActivity(intent);
             }
@@ -59,11 +61,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>  {
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView userEmail;
         public ImageView userImage;
+        public TextView userName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userEmail = itemView.findViewById(R.id.txt_user_email);
             userImage = itemView.findViewById(R.id.imageList);
+            userName = itemView.findViewById(R.id.txt_user_name);
 
         }
     }

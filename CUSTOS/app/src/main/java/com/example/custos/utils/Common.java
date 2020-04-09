@@ -7,6 +7,10 @@ public class Common {
     public static final String USER_HOME_LNG        = "User Home Longitude";
     public static final String HOME_LOC             = "Home Location";
     public static final String FRIENDS              = "Friends";
+    public static final String FRIEND_EMAIL         = "friendEmail";
+    public static final String FRIEND_NAME          = "friendName";
+    public static final String FRIEND_DATE          = "date";
+    public static final String UID                  = "uid";
     public static User loggedUser;
     public static final String USER_UID_SAVE_KEY    = "SaveUid";
     public static final String TOKENS               = "Tokens";

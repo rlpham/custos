@@ -294,10 +294,16 @@ public class OtherUserActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String email = dataSnapshot.child(otherUserId)
                         .child(Common.USER_EMAIL).getValue().toString();
-                acceptFriends.child(currentUID).child(otherUserId).child(Common.USER_EMAIL).setValue(email);
+                acceptFriends.child(currentUID).child(otherUserId).child(Common.FRIEND_EMAIL).setValue(email);
                 String img = dataSnapshot.child(otherUserId)
                         .child(Common.IMAGE_URL).getValue().toString();
                 acceptFriends.child(currentUID).child(otherUserId).child(Common.IMAGE_URL).setValue(img);
+                String name = dataSnapshot.child(otherUserId)
+                        .child(Common.USER_NAME).getValue().toString();
+                acceptFriends.child(currentUID).child(otherUserId).child(Common.FRIEND_NAME).setValue(name);
+                String uid = dataSnapshot.child(otherUserId)
+                        .child(Common.UID).getValue().toString();
+                acceptFriends.child(currentUID).child(otherUserId).child(Common.UID).setValue(uid);
             }
 
             @Override
@@ -310,10 +316,16 @@ public class OtherUserActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String email = dataSnapshot.child(currentUID)
                         .child(Common.USER_EMAIL).getValue().toString();
-                acceptFriends.child(otherUserId).child(currentUID).child(Common.USER_EMAIL).setValue(email);
+                acceptFriends.child(otherUserId).child(currentUID).child(Common.FRIEND_EMAIL).setValue(email);
                 String img = dataSnapshot.child(currentUID)
                         .child(Common.IMAGE_URL).getValue().toString();
                 acceptFriends.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                String name = dataSnapshot.child(currentUID)
+                        .child(Common.USER_NAME).getValue().toString();
+                acceptFriends.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(name);
+                String uid = dataSnapshot.child(currentUID)
+                        .child(Common.UID).getValue().toString();
+                acceptFriends.child(otherUserId).child(currentUID).child(Common.UID).setValue(uid);
             }
 
             @Override
@@ -322,12 +334,12 @@ public class OtherUserActivity extends AppCompatActivity {
             }
         });
 
-        acceptFriends.child(currentUID).child(otherUserId).child("date").setValue(saveCurrentDate)
+        acceptFriends.child(currentUID).child(otherUserId).child(Common.FRIEND_DATE).setValue(saveCurrentDate)
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()){
-                        acceptFriends.child(otherUserId).child(currentUID).child("date").setValue(saveCurrentDate)
+                        acceptFriends.child(otherUserId).child(currentUID).child(Common.FRIEND_DATE).setValue(saveCurrentDate)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

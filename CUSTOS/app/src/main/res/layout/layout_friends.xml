@@ -7,24 +7,34 @@
     android:padding="8dp">
 
 
-<!--    <de.hdodenhof.circleimageview.CircleImageView-->
-<!--        android:id="@+id/imageFriendList"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:src="@mipmap/ic_launcher" />-->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageFriendList"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@mipmap/ic_launcher" />
 
 
     <TextView
-        android:id="@+id/txt_friends_email"
+        android:id="@+id/txt_friend_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/imageFriendList"
         android:layout_toEndOf="@+id/imageFriendList"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="4dp"
         android:layout_marginLeft="10dp"
         android:textColor="#FFFFFF"
         android:text="my email here"
         android:textSize="15sp"
         android:textStyle="bold" />
+    <TextView
+        android:id="@+id/txt_friends_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/imageFriendList"
+        android:layout_below="@+id/txt_friend_name"
+        android:layout_marginLeft="10dp"
+        android:textColor="#FFFFFF"
+        android:text="my email here"
+        android:textSize="15sp" />
 
 </RelativeLayout>

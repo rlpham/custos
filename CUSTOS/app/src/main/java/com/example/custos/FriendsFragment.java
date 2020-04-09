@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.custos.adapters.FriendsAdapter;
 import com.example.custos.utils.Common;
+import com.example.custos.utils.Friends;
 import com.example.custos.utils.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,10 +35,11 @@ import java.util.List;
 public class FriendsFragment extends Fragment {
     private RecyclerView recylerView;
     private FriendsAdapter userAdapter;
-    private List<User> userList;
+    private List<Friends> friendsList;
     private TextView searchUser;
     private TextView searchIcon;
     private EditText searchSpace;
+    private TextView addFriend;
     public static Fragment newInstance() {
         FriendsFragment fragment = new FriendsFragment();
         return fragment;
@@ -45,18 +48,26 @@ public class FriendsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.contactpage,container,false);
-        recylerView = view.findViewById(R.id.recycler_view);
-        searchIcon = view.findViewById(R.id.search_icon);
-        searchSpace = view.findViewById(R.id.search_friend);
+        View view = inflater.inflate(R.layout.friends_fragment,container,false);
+        recylerView = view.findViewById(R.id.recycler_view_friends);
+        searchIcon = view.findViewById(R.id.search_friends_icon);
+        searchSpace = view.findViewById(R.id.search_friends);
+        addFriend = view.findViewById(R.id.add_friend);
         searchIcon.setVisibility(View.VISIBLE);
         searchSpace.setVisibility(View.INVISIBLE);
 
         recylerView.setHasFixedSize(true);
         recylerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        userList = new ArrayList<>();
+        friendsList = new ArrayList<>();
         readUsers();
 
+        addFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(),UserListActivity.class);
+                startActivity(intent);
+            }
+        });
         searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +76,7 @@ public class FriendsFragment extends Fragment {
             }
         });
 
-        searchUser = view.findViewById(R.id.search_friend);
+        searchUser = view.findViewById(R.id.search_friends);
         searchUser.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -95,17 +106,17 @@ public class FriendsFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                userList.clear();
+                friendsList.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    User user = snapshot.getValue(User.class);
+                    Friends friends = snapshot.getValue(Friends.class);
 
-                    assert user != null;
+                    assert friends != null;
                     assert fUser != null;
-                    if(!user.getUID().equals(fUser.getUid())){
-                        userList.add(user);
+                    if(!friends.getUID().equals(fUser.getUid())){
+                        friendsList.add(friends);
                     }
                 }
-                userAdapter = new FriendsAdapter(getContext(),userList);
+                userAdapter = new FriendsAdapter(getContext(), friendsList);
                 recylerView.setAdapter(userAdapter);
             }
 
@@ -127,15 +138,15 @@ public class FriendsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(searchUser.getText().toString().equals("")){
-                    userList.clear();
+                    friendsList.clear();
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        User user = snapshot.getValue(User.class);
-                        assert user != null;
+                        Friends friends = snapshot.getValue(Friends.class);
+                        assert friends != null;
                         assert fUser != null;
-                        userList.add(user);
+                        friendsList.add(friends);
 
                     }
-                    userAdapter = new FriendsAdapter(getContext(),userList);
+                    userAdapter = new FriendsAdapter(getContext(), friendsList);
                     recylerView.setAdapter(userAdapter);
                 }
 
