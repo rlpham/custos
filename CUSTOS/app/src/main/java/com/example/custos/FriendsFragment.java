@@ -39,7 +39,7 @@ public class FriendsFragment extends Fragment {
     private TextView searchUser;
     private TextView searchIcon;
     private EditText searchSpace;
-    private TextView addFriend;
+    private TextView addFriend,noFriends;
     public static Fragment newInstance() {
         FriendsFragment fragment = new FriendsFragment();
         return fragment;
@@ -53,8 +53,11 @@ public class FriendsFragment extends Fragment {
         searchIcon = view.findViewById(R.id.search_friends_icon);
         searchSpace = view.findViewById(R.id.search_friends);
         addFriend = view.findViewById(R.id.add_friend);
+        noFriends = view.findViewById(R.id.no_friends);
+        noFriends.setVisibility(View.INVISIBLE);
         searchIcon.setVisibility(View.VISIBLE);
         searchSpace.setVisibility(View.INVISIBLE);
+
 
         recylerView.setHasFixedSize(true);
         recylerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -112,6 +115,7 @@ public class FriendsFragment extends Fragment {
 
                     assert friends != null;
                     assert fUser != null;
+
                     if(!friends.getUID().equals(fUser.getUid())){
                         friendsList.add(friends);
                     }
@@ -133,7 +137,6 @@ public class FriendsFragment extends Fragment {
     private void readUsers() {
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.FRIENDS).child(fUser.getUid());
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -151,6 +154,20 @@ public class FriendsFragment extends Fragment {
                 }
 
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Common.FRIENDS);
+        friendRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.child(fUser.getUid()).exists()){
+                    noFriends.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

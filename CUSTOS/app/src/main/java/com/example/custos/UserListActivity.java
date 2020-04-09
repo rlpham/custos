@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.custos.utils.Common;
+import com.example.custos.utils.Friends;
 import com.example.custos.utils.User;
 
 import java.util.ArrayList;
@@ -122,8 +123,10 @@ public class UserListActivity extends AppCompatActivity {
 
 
     private void readUsers() {
+        final List<Friends> friendsList = new ArrayList<>();
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+        final DatabaseReference friendReference = FirebaseDatabase.getInstance().getReference(Common.FRIENDS);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -137,25 +140,6 @@ public class UserListActivity extends AppCompatActivity {
                         if(!user.getUID().equals(fUser.getUid())){
                             userList.add(user);
                         }
-                        DatabaseReference db = FirebaseDatabase.getInstance().getReference(Common.FRIENDS).child(fUser.getUid());
-                        db.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                    User user = snapshot1.getValue(User.class);
-                                    assert user != null;
-                                    assert fUser != null;
-                                    if(dataSnapshot.exists()){
-                                        userList.remove(user);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
                     }
                     userAdapter = new UserAdapter(getApplicationContext(),userList);
                     recylerView.setAdapter(userAdapter);
@@ -169,5 +153,27 @@ public class UserListActivity extends AppCompatActivity {
 
             }
         });
+//        friendReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(searchUser.getText().toString().equals("")){
+//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                        Friends friends = snapshot.getValue(Friends.class);
+//                        assert friends!=null;
+//                        if(dataSnapshot.child(fUser.getUid()).child(friends.getUID()).exists()){
+//                            userList.remove(friends);
+//                        }
+//                    }
+//                    userAdapter = new UserAdapter(getApplicationContext(),userList);
+//                    recylerView.setAdapter(userAdapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
     }
 }
