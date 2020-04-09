@@ -46,25 +46,21 @@ import afu.org.checkerframework.checker.igj.qual.I;
 public class SplashActivity extends AppCompatActivity {
     Button signInButton;
     GoogleSignInClient googleSignInClient;
-    private int RC_SIGN_IN =0;
+    private int RC_SIGN_IN = 0;
     FirebaseAuth mAuth;
     User userApp = new User();
     private SharedPreference sharedPreferenceObj;
     TextView termsNService;
     int count = 0;
+
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        if(firebaseUser != null){
-            Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+        if (firebaseUser != null) {
+            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
             startActivity(intent);
         }
-
-
-
-
-
     }
 
     @Override
@@ -75,23 +71,14 @@ public class SplashActivity extends AppCompatActivity {
         termsNService.setVisibility(View.INVISIBLE);
 //        termsNService.setText(Html.fromHtml("Do you agree to the <a href=\'https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf\'>Terms and Service</a>"));
 //        termsNService.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-
-
-
-
-
-
         ////////////////////https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf
 
-        sharedPreferenceObj=new SharedPreference(SplashActivity.this);
-        if(sharedPreferenceObj.getApp_runFirst().equals("FIRST"))
-        {
+        sharedPreferenceObj = new SharedPreference(SplashActivity.this);
+        if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
             final SpannableString s = new SpannableString("https://github.com/rlpham/Custos/blob/master/TermsAndServices.pdf"); // msg should have url to enable clicking
             Linkify.addLinks(s, Linkify.ALL);
 
-            final AlertDialog d = new AlertDialog.Builder(SplashActivity.this,R.style.Chill)
+            final AlertDialog d = new AlertDialog.Builder(SplashActivity.this, R.style.Chill)
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -109,18 +96,17 @@ public class SplashActivity extends AppCompatActivity {
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
                     .setTitle("Do you agree to the Terms and Services below?")
-                    .setMessage( s )
+                    .setMessage(s)
                     .create();
 
             d.show();
-            ((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-
+            ((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
 
             final SpannableString st = new SpannableString("https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf\n"); // msg should have url to enable clicking
             Linkify.addLinks(st, Linkify.ALL);
 
-            final AlertDialog dd = new AlertDialog.Builder(SplashActivity.this,R.style.Chill)
+            final AlertDialog dd = new AlertDialog.Builder(SplashActivity.this, R.style.Chill)
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -138,24 +124,21 @@ public class SplashActivity extends AppCompatActivity {
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
                     .setTitle("Do you agree to the Privacy Policy Below?")
-                    .setMessage( st )
+                    .setMessage(st)
                     .create();
 
             dd.show();
-            ((TextView)dd.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
+            ((TextView) dd.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
 
-            if(count >= 2)
-            {
+            if (count >= 2) {
                 sharedPreferenceObj.setApp_runFirst("NO");
             }
 
 
-        }
-        else
-        {
+        } else {
 
-            
+
             // App is not First Time Launch
         }
         signInButton = findViewById(R.id.google_login);
@@ -169,8 +152,8 @@ public class SplashActivity extends AppCompatActivity {
         });
         //.check() not working
 
-        if(mAuth.getCurrentUser()!= null){
-            FirebaseUser firebaseUser =mAuth.getCurrentUser();
+        if (mAuth.getCurrentUser() != null) {
+            FirebaseUser firebaseUser = mAuth.getCurrentUser();
             updateUI(firebaseUser);
             userApp.setUID(mAuth.getCurrentUser().getUid());
         }
@@ -183,23 +166,23 @@ public class SplashActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        googleSignInClient = GoogleSignIn.getClient(this,googleSignInOptions);
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
     }
 
 
     final Handler handler = new Handler();
-    private void signIn(){
+
+    private void signIn() {
         final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
         signInDialog.startDialog();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent signInIntent = googleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent,RC_SIGN_IN);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
                 signInDialog.dismissDialog();
             }
-        },2000);
-
+        }, 2000);
 
 
 //        startActivityForResult(
@@ -210,24 +193,24 @@ public class SplashActivity extends AppCompatActivity {
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         //Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if(requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
             signInDialog.startDialog();
             //The task returned from this call is always completed no need to attach a listener
-           Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-           try {
-               GoogleSignInAccount account = task.getResult(ApiException.class);
-               if(account != null){
-                   signInDialog.dismissDialog();
-                   fireBaseGoogleAuth(account);
-               }
-           }catch (ApiException e){
-                Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
-           }
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    signInDialog.dismissDialog();
+                    fireBaseGoogleAuth(account);
+                }
+            } catch (ApiException e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
             //handleSignInResult(task);
         }
 
@@ -246,32 +229,33 @@ public class SplashActivity extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SplashActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(SplashActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private void setupUI(){
-        startActivity(new Intent(SplashActivity.this,MapsActivity.class));
+
+    private void setupUI() {
+        startActivity(new Intent(SplashActivity.this, MapsActivity.class));
         finish();
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask){
-        try{
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            Toast.makeText(SplashActivity.this,"Signin Successful!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SplashActivity.this, "Signin Successful!", Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(account);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(SplashActivity.this,MapsActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, MapsActivity.class);
                     startActivity(intent);
                 }
-            },4000);
+            }, 4000);
 
             account = GoogleSignIn.getLastSignedInAccount(this);
-            if(account != null){
+            if (account != null) {
                 String personName = account.getDisplayName();
                 String personEmail = account.getEmail();
                 String personID = account.getId();
@@ -283,10 +267,10 @@ public class SplashActivity extends AppCompatActivity {
                         .setValue(userApp.getUserName()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SplashActivity.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SplashActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -294,10 +278,10 @@ public class SplashActivity extends AppCompatActivity {
                         .setValue(userApp.getUserEmail()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SplashActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -305,21 +289,21 @@ public class SplashActivity extends AppCompatActivity {
                         .setValue(userApp.getUserId()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             //Toast.makeText(SplashActivity.this,"Successful Saved", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(SplashActivity.this,"Failed Save", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SplashActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             //the ApiException status code indicates the detailed failure reason
             //Please refer to the googlesigninstatuscodes class reference for more info
             //Log.w("Error", "signInResult:failed code =" + e.getStatusCode());
-            Toast.makeText(SplashActivity.this,"Signin Failed!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SplashActivity.this, "Signin Failed!", Toast.LENGTH_SHORT).show();
             fireBaseGoogleAuth(null);
             Log.getStackTraceString(e);
         }
@@ -328,20 +312,20 @@ public class SplashActivity extends AppCompatActivity {
     private void fireBaseGoogleAuth(GoogleSignInAccount account) {
         final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
         signInDialog.startDialog();
-        AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(),null);
+        AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     //Toast.makeText(SplashActivity.this,"Successful",Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
-                    Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                     startActivity(intent);
                     updateUI(user);
                     signInDialog.dismissDialog();
-                }else{
+                } else {
 
-                    Toast.makeText(SplashActivity.this,"Failed!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SplashActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                     updateUI(null);
                     signInDialog.dismissDialog();
                 }
@@ -349,18 +333,17 @@ public class SplashActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUI(FirebaseUser firebaseUser){
-        if(firebaseUser != null){
+    private void updateUI(FirebaseUser firebaseUser) {
+        if (firebaseUser != null) {
             userApp.setUserEmail(firebaseUser.getEmail());
             userApp.setUID(firebaseUser.getUid());
-        }else{
+        } else {
             userApp.setUserEmail(null);
             userApp.setUID(null);
         }
     }
 
-    public void increment()
-    {
+    public void increment() {
         count++;
     }
 
