@@ -45,9 +45,9 @@ public class OtherUserActivity extends AppCompatActivity {
             otherEmergencyName,
             otherPhone,
             backButton;
-    Button addFriend,declineRequest;
-    String currentUID,otherUserId,saveCurrentDate;
-
+    Button addFriend, declineRequest;
+    String currentUID, otherUserId, saveCurrentDate;
+    String timeSent;
     FirebaseUser firebaseUser;
     DatabaseReference friendRequestReference;
     DatabaseReference databaseReference;
@@ -89,13 +89,13 @@ public class OtherUserActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(otherUserId);
         friendRequestReference = FirebaseDatabase.getInstance().getReference("FriendRequests");
         acceptFriends = FirebaseDatabase.getInstance().getReference("Friends");
-        if(!currentUID.equals(otherUserId)){
+        if (!currentUID.equals(otherUserId)) {
             addFriend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final AlertDialog.Builder alertDialog = new AlertDialog.Builder(OtherUserActivity.this, R.style.Chill);
                     addFriend.setEnabled(false);
-                    if(CURRENT_STATE.equals("not_friends")){
+                    if (CURRENT_STATE.equals("not_friends")) {
                         alertDialog.setTitle("Request Friend");
                         alertDialog.setMessage("Add this user as friend?");
                         alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
@@ -116,13 +116,13 @@ public class OtherUserActivity extends AppCompatActivity {
                                     public void run() {
                                         loadingDialog.dismissDialog();
                                     }
-                                },1500);
+                                }, 1500);
                             }
                         });
                         alertDialog.show();
 
                     }
-                    if(CURRENT_STATE.equals("request_sent")){
+                    if (CURRENT_STATE.equals("request_sent")) {
                         alertDialog.setTitle("Cancel Request");
                         alertDialog.setMessage("Cancel adding friend?");
                         alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
@@ -143,12 +143,13 @@ public class OtherUserActivity extends AppCompatActivity {
                                     public void run() {
                                         loadingDialog.dismissDialog();
                                     }
-                                },1500);
+                                }, 1500);
                             }
                         });
                         alertDialog.show();
 
-                    }if(CURRENT_STATE.equals("request_received")){
+                    }
+                    if (CURRENT_STATE.equals("request_received")) {
                         acceptRequest();
                         final LoadingDialog loadingDialog = new LoadingDialog(OtherUserActivity.this);
                         loadingDialog.startLoadingDialog();
@@ -157,9 +158,9 @@ public class OtherUserActivity extends AppCompatActivity {
                             public void run() {
                                 loadingDialog.dismissDialog();
                             }
-                        },1500);
+                        }, 1500);
                     }
-                    if(CURRENT_STATE.equals("friends")){
+                    if (CURRENT_STATE.equals("friends")) {
                         alertDialog.setTitle("Unfriend");
                         alertDialog.setMessage("Are you sure you want to unfriend this person?");
                         alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
@@ -180,7 +181,7 @@ public class OtherUserActivity extends AppCompatActivity {
                                     public void run() {
                                         loadingDialog.dismissDialog();
                                     }
-                                },1000);
+                                }, 1000);
                             }
                         });
                         alertDialog.show();
@@ -188,7 +189,7 @@ public class OtherUserActivity extends AppCompatActivity {
 
                 }
             });
-        }else{
+        } else {
             addFriend.setVisibility(View.INVISIBLE);
         }
         maintainButtonText();
@@ -197,51 +198,51 @@ public class OtherUserActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                if(user.getImageURL().equals("default")){
+                if (user.getImageURL().equals("default")) {
                     otherUserImage.setImageResource(R.mipmap.ic_launcher);
-                }else{
+                } else {
                     Glide.with(getApplicationContext()).load(user.getImageURL()).into(otherUserImage);
                 }
-                if(dataSnapshot.child(Common.USER_NAME).exists()
-                        && !dataSnapshot.child(Common.USER_NAME).getValue().toString().equals("")){
+                if (dataSnapshot.child(Common.USER_NAME).exists()
+                        && !dataSnapshot.child(Common.USER_NAME).getValue().toString().equals("")) {
                     String name = dataSnapshot.child(Common.USER_NAME).getValue().toString();
                     otherName.setText(name);
-                }else{
+                } else {
                     otherName.setText("User didnt set name");
                 }
-                if(dataSnapshot.child(Common.USER_NAME).exists()
-                        && !dataSnapshot.child(Common.USER_NAME).getValue().toString().equals("")){
+                if (dataSnapshot.child(Common.USER_NAME).exists()
+                        && !dataSnapshot.child(Common.USER_NAME).getValue().toString().equals("")) {
                     String name2 = dataSnapshot.child(Common.USER_NAME).getValue().toString();
                     otherName2.setText(name2);
-                }else{
+                } else {
                     otherName2.setText("User didnt set name");
                 }
-                if(dataSnapshot.child(Common.USER_EMAIL).exists()
-                        && !dataSnapshot.child(Common.USER_EMAIL).getValue().toString().equals("")){
+                if (dataSnapshot.child(Common.USER_EMAIL).exists()
+                        && !dataSnapshot.child(Common.USER_EMAIL).getValue().toString().equals("")) {
                     String email = dataSnapshot.child(Common.USER_EMAIL).getValue().toString();
                     otherEmail.setText(email);
-                }else{
+                } else {
                     otherEmail.setText("Error");
                 }
-                if(dataSnapshot.child(Common.USER_EMAIL).exists()
-                        && !dataSnapshot.child(Common.USER_EMAIL).getValue().toString().equals("")){
+                if (dataSnapshot.child(Common.USER_EMAIL).exists()
+                        && !dataSnapshot.child(Common.USER_EMAIL).getValue().toString().equals("")) {
                     String email2 = dataSnapshot.child(Common.USER_EMAIL).getValue().toString();
                     otherEmail2.setText(email2);
-                }else{
+                } else {
                     otherEmail2.setText("Error");
                 }
-                if(dataSnapshot.child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).exists()
-                        && !dataSnapshot.child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).getValue().toString().equals("")){
+                if (dataSnapshot.child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).exists()
+                        && !dataSnapshot.child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).getValue().toString().equals("")) {
                     String emerName = dataSnapshot.child(Common.EMERGENCY_CONTACT).child(Common.EMERGENCY_NAME).getValue().toString();
                     otherEmergencyName.setText(emerName);
-                }else{
+                } else {
                     otherEmergencyName.setText("Emergency have not set");
                 }
-                if((dataSnapshot.child(Common.USER_PHONE).exists())
-                        && !(dataSnapshot.child(Common.USER_PHONE).getValue().toString().equals(""))){
+                if ((dataSnapshot.child(Common.USER_PHONE).exists())
+                        && !(dataSnapshot.child(Common.USER_PHONE).getValue().toString().equals(""))) {
                     String phoneNumber = dataSnapshot.child(Common.USER_PHONE).getValue().toString();
                     otherPhone.setText(phoneNumber);
-                }else{
+                } else {
                     otherPhone.setText("Phone number have not set");
                 }
 
@@ -255,7 +256,6 @@ public class OtherUserActivity extends AppCompatActivity {
         });
 
 
-
     }
 
     private void unfriend() {
@@ -264,13 +264,13 @@ public class OtherUserActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             acceptFriends.child(otherUserId).child(currentUID)
                                     .removeValue()
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
+                                            if (task.isSuccessful()) {
                                                 addFriend.setEnabled(true);
                                                 CURRENT_STATE = "not_friends";
                                                 addFriend.setText("Add Friend");
@@ -335,45 +335,45 @@ public class OtherUserActivity extends AppCompatActivity {
         });
 
         acceptFriends.child(currentUID).child(otherUserId).child(Common.FRIEND_DATE).setValue(saveCurrentDate)
-            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        acceptFriends.child(otherUserId).child(currentUID).child(Common.FRIEND_DATE).setValue(saveCurrentDate)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()){
-                                            friendRequestReference.child(currentUID).child(otherUserId)
-                                                    .removeValue()
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if(task.isSuccessful()){
-                                                                friendRequestReference.child(otherUserId).child(currentUID)
-                                                                        .removeValue()
-                                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                            @Override
-                                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                                if(task.isSuccessful()){
-                                                                                    addFriend.setEnabled(true);
-                                                                                    CURRENT_STATE = "friends";
-                                                                                    addFriend.setText("Unfriend");
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            acceptFriends.child(otherUserId).child(currentUID).child(Common.FRIEND_DATE).setValue(saveCurrentDate)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                friendRequestReference.child(currentUID).child(otherUserId)
+                                                        .removeValue()
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    friendRequestReference.child(otherUserId).child(currentUID)
+                                                                            .removeValue()
+                                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                @Override
+                                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                                    if (task.isSuccessful()) {
+                                                                                        addFriend.setEnabled(true);
+                                                                                        CURRENT_STATE = "friends";
+                                                                                        addFriend.setText("Unfriend");
 
-                                                                                    declineRequest.setVisibility(View.INVISIBLE);
-                                                                                    declineRequest.setEnabled(false);
+                                                                                        declineRequest.setVisibility(View.INVISIBLE);
+                                                                                        declineRequest.setEnabled(false);
+                                                                                    }
                                                                                 }
-                                                                            }
-                                                                        });
+                                                                            });
+                                                                }
                                                             }
-                                                        }
-                                                    });
+                                                        });
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }
                     }
-                }
-            });
+                });
 
     }
 
@@ -383,13 +383,13 @@ public class OtherUserActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             friendRequestReference.child(otherUserId).child(currentUID)
                                     .removeValue()
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
+                                            if (task.isSuccessful()) {
                                                 addFriend.setEnabled(true);
                                                 CURRENT_STATE = "not_friends";
                                                 addFriend.setText("Add Friend");
@@ -408,15 +408,15 @@ public class OtherUserActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.child(otherUserId).child("request_type").exists()){
+                        if (dataSnapshot.child(otherUserId).child("request_type").exists()) {
                             String request_type = dataSnapshot.child(otherUserId).child("request_type").getValue().toString();
-                            if(request_type.equals("sent")){
+                            if (request_type.equals("sent")) {
                                 CURRENT_STATE = "request_sent";
                                 addFriend.setText("Cancel Friend Request");
                                 declineRequest.setVisibility(View.INVISIBLE);
                                 declineRequest.setEnabled(false);
                             }
-                            if(request_type.equals("received")){
+                            if (request_type.equals("received")) {
                                 CURRENT_STATE = "request_received";
                                 addFriend.setText("Accept");
 
@@ -443,7 +443,7 @@ public class OtherUserActivity extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.child(otherUserId).exists()){
+                        if (dataSnapshot.child(otherUserId).exists()) {
                             CURRENT_STATE = "friends";
                             addFriend.setText("Unfriend");
                             declineRequest.setVisibility(View.INVISIBLE);
@@ -459,18 +459,26 @@ public class OtherUserActivity extends AppCompatActivity {
     }
 
     private void sendFriendRequest() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm:ss.SSS");
+        timeSent = currentDate.format(calendar.getTime());
+
+
+        friendRequestReference.child(currentUID).child(otherUserId).child("request_time").setValue(timeSent);
+        friendRequestReference.child(otherUserId).child(currentUID).child("request_time").setValue(timeSent);
+
         friendRequestReference.child(currentUID).child(otherUserId)
                 .child("request_type").setValue("sent")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             friendRequestReference.child(otherUserId).child(currentUID)
                                     .child("request_type").setValue("received")
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
+                                            if (task.isSuccessful()) {
                                                 addFriend.setEnabled(true);
                                                 CURRENT_STATE = "request_sent";
                                                 addFriend.setText("Cancel Friend Request");
@@ -488,7 +496,7 @@ public class OtherUserActivity extends AppCompatActivity {
 
     private void displayDialog() {
         AddFriendDialog addFriendDialog = new AddFriendDialog();
-        addFriendDialog.show(getSupportFragmentManager(),"add friend");
+        addFriendDialog.show(getSupportFragmentManager(), "add friend");
     }
 
 
