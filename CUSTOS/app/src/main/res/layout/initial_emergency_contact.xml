@@ -39,7 +39,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:text="Add Emergency Contact"
-                android:textColor="#fece2f"
+                android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
                 android:textCursorDrawable="@color/colorwhite"

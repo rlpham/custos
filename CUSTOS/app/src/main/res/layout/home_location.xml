@@ -36,7 +36,7 @@
             android:drawableTop="@drawable/ic_home_yellow_60dp"
             android:includeFontPadding="false"
             android:text="Set Home Location"
-            android:textColor="#FECE2F"
+            android:textColor="#FFFFFF"
             android:textColorHighlight="#FFFFFF"
             android:textColorHint="#FFFFFF"
             android:textCursorDrawable="@color/colorwhite"
@@ -109,14 +109,14 @@
         android:transitionName="save_info" />
 
     <LinearLayout
-        android:layout_width="336dp"
+        android:layout_width="359dp"
         android:layout_height="53dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="154dp"
-        android:layout_marginEnd="53dp"
+        android:layout_marginEnd="22dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/sv_round"
         android:orientation="horizontal"
