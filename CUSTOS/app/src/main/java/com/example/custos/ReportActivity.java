@@ -1,12 +1,10 @@
 package com.example.custos;
 
 import android.content.Intent;
-
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,11 +82,11 @@ public class ReportActivity extends AppCompatActivity {
         // SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy");
 
-        ////op code
+
         String installTimed = dateFormat.format(new Date(packageInfo.firstInstallTime));
         System.out.println("Installed: " + installTimed);
         String initialDay = "Installed on: " + installTimed;
-        ////
+
 
 
         String updateTimed = dateFormat.format(new Date(packageInfo.lastUpdateTime));
@@ -120,7 +117,7 @@ public class ReportActivity extends AppCompatActivity {
         });
 
 
-        datta = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
+        datta = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
         datta.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -140,9 +137,7 @@ public class ReportActivity extends AppCompatActivity {
         });
 
         mem.setText(initialDay);
-
         allText += "\n" + initialDay;
-
         allText += "\n" + bud.getText().toString();
 
 
@@ -176,9 +171,7 @@ public class ReportActivity extends AppCompatActivity {
                 //emailIntent.putExtra(Intent.EXTRA_EMAIL, address);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Custos Information");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, allText);
-
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
-                //finish();
             }
         });
 
