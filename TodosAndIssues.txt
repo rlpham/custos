@@ -1,41 +1,43 @@
 ```
-April 8, 2020
+April 10, 2020
 _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
+Nav Bar / Every Fragment:
+1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map
+
 Events:
 1. Need to validate that user pick a valid date (Like today is 4/8/2020 and user pick 3/21/2020
-2. Need a limit on name
-3. Need a limit on description
-4. this line is causing a lot of problems (e.g crashes app when creating events, won't let me view events after creating it, won't let me press back on invite guest) (obj.put("invited_users", getInvitedUsers(element.child("invited_users").getValue().toString()));)
+2. Need a limit on name & description
+3. this line is causing a lot of problems (e.g crashes app when creating events, won't let me view events after creating it, won't let me press back on invite guest) (obj.put("invited_users", getInvitedUsers(element.child("invited_users").getValue().toString()));)
 
 Notification:
-1. Needs an update in general						NOT STARTED
-2. Need a way to accept or reject friend request	NOT STARTED
+1. Needs to be able to see and accept/reject invited events and friend request
 
 Maps:
-1. Need a way to find destination					NOT STARTED
+1. Need a way to find destination
 
 DangerZone:
-1. Need to hide snapshot output when clicking on marker
+1. Need to hide Datasnapshot output when clicking on marker ex: (Datasnapshot = { key = zone_name, value =....}
 2. Need to validate that user gave a name
 3. Need a light color variant of the dangerzone button when user changes to dark mode
 4. Need to figure out how to delete old markers
 
 Contacts:
-1. Needs to show who is their current friends		NOT STARTED
-2. Search bar gets smush on my screen size 			NOT IMPORTANT
+1. Needs to show who is their current friends
+2. A bunch of since null will show up if u type in searchview and clear it
+3. "You have no friends" message will stay on screen even after searching
 
 Settings:	
 1. Change buttons
 
-User Account:										DONE FOR NOW
+User Account:										
 1. Clicking top left yellow button will send user to map activity instead of setting page
 2. Changing home location will save before actually pressing save button 
-3. Don't need save button for home location if going to have another save
-4. BIG PROBLEM (if u set home location to something new, then move back 1 fragment, and set it back to old home location... it gets confuse and keeps setting it to both every other time)
-5. BIG PROBLEM (if u set emergency to something new, then move back 1 fragment, and put a different emergency contact... it gets confuse and keeps setting it to both every other time)
+3. Have save home location and emergency contact save only after they click the 1 save
+4. Save button shows loading dialog even though if there were no changes
+
 
 Information:
 1. Needs to get correct contacts
