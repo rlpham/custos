@@ -337,15 +337,15 @@ private void setcontactslocation(){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if((dataSnapshot.child(userID).child("User Address").child(Common.HOME_LOC).exists())
+                if((dataSnapshot.child(userID).child(Common.USER_ADDRESS).child(Common.HOME_LOC).exists())
                 ) {
                     double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
                             .child(Common.USER_ADDRESS)
-                            .child("User Home Longitude")
+                            .child(Common.USER_HOME_LNG)
                             .getValue().toString());
                     double eventlatitude = Double.parseDouble(dataSnapshot.child(userID)
                             .child(Common.USER_ADDRESS)
-                            .child("User Home Latitude")
+                            .child(Common.USER_HOME_LAT)
                             .getValue().toString());
                     LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
                     setEventsLocation(eventloc, "Home Location");

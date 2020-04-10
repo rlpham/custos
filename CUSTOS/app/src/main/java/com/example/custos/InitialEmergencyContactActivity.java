@@ -93,13 +93,14 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
                 final String emergency_phone = phone.getEditText().getText().toString();
                 firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
-                databaseReference.addValueEventListener(new ValueEventListener() {
+                if(!validateName() || !validatePhoneNumber()){
+                    return;
+                }
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        if(!validateName() || !validatePhoneNumber()){
-                            return;
-                        }
+
                         if (!((emergency_name.equals("") || emergency_name.equals(" "))
                                 && (emergency_phone.equals("") || emergency_phone.equals(" ")))) {
                             HashMap<String, Object> map = new HashMap<>();
@@ -113,7 +114,7 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                Toast.makeText(InitialEmergencyContactActivity.this, "Successful Saved", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(InitialEmergencyContactActivity.this, "Updated", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Toast.makeText(InitialEmergencyContactActivity.this, "Failed Save", Toast.LENGTH_SHORT).show();
                                             }
@@ -129,15 +130,14 @@ public class InitialEmergencyContactActivity extends AppCompatActivity {
                 });
                 final SavingDialog savingDialog = new SavingDialog(InitialEmergencyContactActivity.this);
                 savingDialog.startDialog();
-                saveButton.setVisibility(View.INVISIBLE);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        savingDialog.dismissDialog();
                         Intent intent = new Intent(InitialEmergencyContactActivity.this,EditUserInformation.class);
                         startActivity(intent);
-                        savingDialog.dismissDialog();
                     }
-                },2500);
+                },4000);
             }
         });
 

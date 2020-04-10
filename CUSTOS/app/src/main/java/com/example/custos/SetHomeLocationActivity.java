@@ -96,7 +96,7 @@ public class SetHomeLocationActivity extends AppCompatActivity {
                 }
                 final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
-                databaseReference.addValueEventListener(new ValueEventListener() {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
