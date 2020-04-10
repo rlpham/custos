@@ -25,9 +25,7 @@ DangerZone:
 4. Need to figure out how to delete old markers
 
 Contacts:
-1. Needs to show who is their current friends
-2. A bunch of since null will show up if u type in searchview and clear it
-3. "You have no friends" message will stay on screen even after searching
+1. Needs to show who is their current friends (not sure if it works)
 
 Settings:	
 1. Change buttons
