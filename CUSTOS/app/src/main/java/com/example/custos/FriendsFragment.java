@@ -102,8 +102,9 @@ public class FriendsFragment extends Fragment {
     private void search(String user) {
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
         Query query = FirebaseDatabase.getInstance()
-                .getReference(Common.USER_INFORMATION)
-                .orderByChild(Common.USER_EMAIL)
+                .getReference(Common.FRIENDS)
+                .child(fUser.getUid())
+                .orderByChild(Common.FRIEND_NAME)
                 .startAt(user)
                 .endAt(user+"\uf8ff");
         query.addValueEventListener(new ValueEventListener() {
