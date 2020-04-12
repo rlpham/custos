@@ -853,17 +853,17 @@ private void darkModeChecker(){
          * Dale's danger zone markers
          */
 
-        if(marker.getSnippet().contains("Danger")) {
-            String criticalLevel = marker.getTitle();
-            String description = marker.getSnippet();
-            DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
-            Bundle args = new Bundle();
-            //Set arguments in the bundle
-            args.putString("criticallevel", "Danger: " + criticalLevel);
-            args.putString("description", description);
-            dangerZoneDialogue.setArguments(args);
-            dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
-        }
+//        if(marker.getSnippet().contains("Danger")) {
+//            String criticalLevel = marker.getTitle();
+//            String description = marker.getSnippet();
+//            DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
+//            Bundle args = new Bundle();
+//            //Set arguments in the bundle
+//            args.putString("criticallevel", "Danger: " + criticalLevel);
+//            args.putString("description", description);
+//            dangerZoneDialogue.setArguments(args);
+//            dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
+//        }
         return false;
     }
 
