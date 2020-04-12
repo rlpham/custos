@@ -32,4 +32,8 @@ public class Common {
 
     public static UserLocation currentUser;
     public static Event event;
+
+    public static final String PASSWORD = "";
+    public static final String EMAIL = "psucustos@gmail.com";
+
 }

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.custos.utils.Common;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -125,7 +126,7 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
                         });
 
 
-                        return new PasswordAuthentication(Utils.EMAIL, b);
+                        return new PasswordAuthentication(Common.EMAIL, b);
                     }
                 });
 
@@ -134,7 +135,7 @@ public class JavaMailAPI extends AsyncTask<Void,Void,Void>  {
             MimeMessage mm = new MimeMessage(mSession);
 
             //Setting sender address
-            mm.setFrom(new InternetAddress(Utils.EMAIL));
+            mm.setFrom(new InternetAddress(Common.EMAIL));
             //Adding receiver
             mm.addRecipient(Message.RecipientType.TO, new InternetAddress(mEmail));
             //Adding subject
