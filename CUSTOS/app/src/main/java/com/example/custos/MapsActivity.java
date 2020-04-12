@@ -868,17 +868,17 @@ private void darkModeChecker(){
          * Dale's danger zone markers
          */
 
-//        if(marker.getSnippet().contains("Danger")) {
-//            String criticalLevel = marker.getTitle();
-//            String description = marker.getSnippet();
-//            DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
-//            Bundle args = new Bundle();
-//            //Set arguments in the bundle
-//            args.putString("criticallevel", "Danger: " + criticalLevel);
-//            args.putString("description", description);
-//            dangerZoneDialogue.setArguments(args);
-//            dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
-//        }
+        if((marker.getTitle().equals("High")) || (marker.getTitle().equals("Medium")) || (marker.getTitle().equals("Low")) ){
+            String criticalLevel = marker.getTitle();
+            String description = marker.getSnippet();
+            DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
+            Bundle args = new Bundle();
+            //Set arguments in the bundle
+            args.putString("criticallevel", "Danger: " + criticalLevel);
+            args.putString("description", description);
+            dangerZoneDialogue.setArguments(args);
+            dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
+        }
         return false;
     }
 
@@ -886,19 +886,23 @@ private void darkModeChecker(){
      * Getting all the markers in the DB and running the placeMarker method
      */
     public void generateMarkers(){
+
         FirebaseDatabase.getInstance().getReference().child("Danger Zone Markers")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        int numberOfMarkers = 0;
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String zone_name = snapshot.child("zone_name").toString();
-                            String risk_level = snapshot.child("risk_level").toString();
+                            numberOfMarkers++;
+                            String zone_name = snapshot.child("zone_name").getValue().toString();
+                            String risk_level = snapshot.child("risk_level").getValue().toString();
                             String lat = snapshot.child("lat").getValue().toString();
                             String longitude = snapshot.child("long").getValue().toString();
                             String description = snapshot.child("description").getValue().toString();
                             placeMarker(zone_name,risk_level,lat,longitude,description);
                             System.out.println(lat);
                         }
+                        System.out.println("NUMBER OF MARKERS" + numberOfMarkers);
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
@@ -924,7 +928,7 @@ private void darkModeChecker(){
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
             dangerMarker.snippet(description);
 
-
+            mMap.addMarker(dangerMarker);
         }
 
         if (risk_level.contains("Medium")) {
