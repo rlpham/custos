@@ -868,13 +868,13 @@ private void darkModeChecker(){
          * Dale's danger zone markers
          */
 
-        if((marker.getTitle().equals("High")) || (marker.getTitle().equals("Medium")) || (marker.getTitle().equals("Low")) ){
+        if(marker.getSnippet().contains("Danger")){
             String criticalLevel = marker.getTitle();
             String description = marker.getSnippet();
             DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
             Bundle args = new Bundle();
             //Set arguments in the bundle
-            args.putString("criticallevel", "Danger: " + criticalLevel);
+            args.putString("criticallevel", criticalLevel);
             args.putString("description", description);
             dangerZoneDialogue.setArguments(args);
             dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
@@ -926,21 +926,21 @@ private void darkModeChecker(){
         System.out.println("RISK LEVELS ARE: " + risk_level);
         if(risk_level.contains("Low")){
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
-            dangerMarker.snippet(description);
+            dangerMarker.snippet("Low Danger: " + description);
 
             mMap.addMarker(dangerMarker);
         }
 
         if (risk_level.contains("Medium")) {
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
-            dangerMarker.snippet(description);
+            dangerMarker.snippet("Medium Danger: " + description);
 
             mMap.addMarker(dangerMarker);
         }
 
         if(risk_level.contains("High")) {
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
-            dangerMarker.snippet(description);
+            dangerMarker.snippet("High Danger: " + description);
 
             mMap.addMarker(dangerMarker);
         }
