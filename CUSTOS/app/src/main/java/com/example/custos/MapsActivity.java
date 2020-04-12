@@ -709,6 +709,8 @@ private void darkModeChecker(){
             public void run() {
                 GifImageView gifimg=findViewById(R.id.gifinmaps);
                 gifimg.setVisibility(View.GONE);
+                final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+                dangerzonebutton.setVisibility(View.VISIBLE);
             }
         }, 2500);
     }

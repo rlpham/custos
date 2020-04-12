@@ -10,18 +10,7 @@
 
 
 
-    <Button
-        android:id="@+id/mapsDsngerZoneButton"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignParentEnd="true"
 
-        android:layout_alignParentBottom="true"
-
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="106dp"
-        android:background="@drawable/circlebutton"
-        android:text="@string/empty" />
 
 
 
@@ -122,6 +111,19 @@
         android:src="@drawable/splash2"
         >
     </pl.droidsonroids.gif.GifImageView>
+    <Button
+        android:id="@+id/mapsDsngerZoneButton"
+        android:layout_width="60dp"
+        android:layout_height="70dp"
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="106dp"
+        android:background="@drawable/dangercautionimg"
+        android:text="@string/empty" />
+
 
 </RelativeLayout>
 
