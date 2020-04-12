@@ -315,12 +315,27 @@ private void setcontactslocation(){
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.child(ul.getUID()).exists()) {
-                                DataSnapshot snapshot = dataSnapshot.child(ul.getUID()).child("friendName");
-                                String name=snapshot.getValue()+"";
-                                LatLng ll=new LatLng(ul.getLat(),ul.getLon());
-                                setEventsLocationwithoutzooming(ll,name);
+                                user_information2.orderByKey()
+                                        .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.child(ul.getUID()).exists()) {
+                                            DataSnapshot snapshot = dataSnapshot.child(ul.getUID()).child("userName");
+                                            String name = snapshot.getValue() + "";
+                                            LatLng ll = new LatLng(ul.getLat(), ul.getLon());
+                                            setEventsLocationwithoutzooming(ll, name);
 
-                            }}
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                           }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
