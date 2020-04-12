@@ -834,7 +834,8 @@ private void darkModeChecker(){
         /**
          * Dale's danger zone markers
          */
-        if((marker.getTitle().equals("High")) || (marker.getTitle().equals("Medium")) || (marker.getTitle().equals("Low")) ) {
+
+        if(marker.getSnippet().contains("Danger")) {
             String criticalLevel = marker.getTitle();
             String description = marker.getSnippet();
             DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
@@ -890,7 +891,7 @@ private void darkModeChecker(){
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
             dangerMarker.snippet(description);
 
-            mMap.addMarker(dangerMarker);
+
         }
 
         if (risk_level.contains("Medium")) {
