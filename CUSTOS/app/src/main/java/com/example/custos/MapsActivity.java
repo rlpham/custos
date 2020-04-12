@@ -216,6 +216,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //    searchView.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
                         startActivity(intent);
+                        finish();
 
                         return true;
 
@@ -236,7 +237,7 @@ private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
         if((mess.equals("Home Location")) && !(mess.equals(" "))){
-            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3)));
+            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3))).setSnippet("All because of dale");
 
 
 
@@ -253,7 +254,7 @@ private LatLng eventlocation;
     public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18)));
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18))).setSnippet("All because of dale");
 
     }
     public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess,String desc) {
