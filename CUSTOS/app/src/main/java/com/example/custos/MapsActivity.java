@@ -254,7 +254,7 @@ private LatLng eventlocation;
     public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18))).setSnippet("All because of dale");
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.tempcontactpic))).setSnippet("All because of dale");
 
     }
     public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess,String desc) {
@@ -390,7 +390,7 @@ private void setcontactslocation(){
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                handler.removeCallbacksAndMessages(null);
             }
         });
 
