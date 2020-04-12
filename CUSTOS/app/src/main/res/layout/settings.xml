@@ -1,248 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#1D1D1D">
+    android:background="#1D1D1D"
+    android:orientation="vertical"
+    android:padding="10dp">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#212121"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="Settings"
+                android:textColor="#FECE2F"
+                android:layout_marginLeft="10dp"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewSetting"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="35dp"
+                android:src="@mipmap/ic_launcher" />
+
+
+            <TextView
+                android:id="@+id/textNameSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="55dp"
+                android:layout_toRightOf="@+id/imageViewSetting"
+                android:includeFontPadding="false"
+                android:text="Name"
+                android:textColor="#FECE2F"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/settingsSignOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="75dp"
+                android:layout_toRightOf="@+id/imageViewSetting"
+                android:text="View Profile"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textCursorDrawable="@color/colorwhite"
+                android:textSize="17sp" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/reportBug"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report a problem"
+            android:background="#fece2f"
+            android:textStyle="bold"
+            android:textSize="19dp"
+            android:layout_marginTop="70dp"
+            android:transitionName="edit_info"/>
+
+
+        <Button
+            android:id="@+id/SettingReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/information"
+            android:background="#fece2f"
+            android:textStyle="bold"
+            android:textSize="19dp"
+            android:layout_marginTop="20dp"
+            android:transitionName="edit_info"/>
+
+        <Switch
+            android:id="@+id/darkMode"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+
+
+            android:text="@string/light_dark_mode"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+
+
+
+
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/cardViewReport"
         android:layout_width="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:background="#212121"
-        android:padding="8dp">
-
-
-        <TextView
-            android:id="@+id/imageReport"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:text="@string/settingXML"
-            android:textColor="@color/white"
-            android:textColorHighlight="#FFFFFF"
-            android:textColorHint="#FFFFFF"
-            android:textCursorDrawable="@color/colorwhite"
-            android:textSize="24sp"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-            android:textStyle="bold" />
+        android:background="#212121">
 
 
     </RelativeLayout>
 
-<!--
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="346dp"
-        android:layout_below="@+id/mapMode"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="61dp"
-        android:layout_marginEnd="1dp"
-        android:weightSum="6">
-
-        <LinearLayout
-            android:id="@+id/settingscontainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/SettingReport"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#fece2f"
-                android:gravity="center"
-                android:text="@string/Report"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/invisibleBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#fece2f"
-                android:gravity="center"
-                android:text="@string/Report"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="invisible" />
-
-
-            <Button
-                android:id="@+id/settingsSignOut"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#fece2f"
-                android:gravity="center"
-                android:text="@string/userinfo"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-
-            <Button
-                android:id="@+id/invisibleBtn2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#fece2f"
-                android:gravity="center"
-                android:text="@string/Report"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="invisible" />
-
-
-            <Button
-                android:id="@+id/mapMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#fece2f"
-                android:gravity="center"
-                android:text="Light & Dark Mode"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-    </ScrollView>
-
-    -->
-    <LinearLayout
-        android:id="@+id/linearlayoutReport"
-        android:layout_width="match_parent"
-        android:layout_height="375dp"
-        android:layout_below="@+id/cardViewReport"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="30dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="7">
-
-
-        <Button
-            android:id="@+id/settingsSignOut"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_weight="1"
-            android:background="@drawable/sv_round_login"
-            android:gravity="center"
-            android:text="@string/userinfo"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-
-        <Button
-            android:id="@+id/invisibleBtn2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#fece2f"
-            android:gravity="center"
-            android:text="@string/Report"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:visibility="invisible" />
-        <Button
-            android:id="@+id/SettingReport"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_weight="1"
-            android:background="@drawable/sv_round_login"
-            android:gravity="center"
-            android:text="@string/information"
-            android:textSize="24sp"
-            android:textStyle="bold" />
 
 
 
-        <Button
-            android:id="@+id/invisibleBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#fece2f"
-            android:gravity="center"
-            android:text="@string/Report"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/reportBug"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_weight="1"
-            android:background="@drawable/sv_round_login"
-            android:gravity="center"
-            android:text="@string/submit_a_bug"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-
-
-        <Button
-            android:id="@+id/invisibleBtn3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#fece2f"
-            android:gravity="center"
-            android:text="@string/Report"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:visibility="invisible" />
-
-
-
-        <Switch
-            android:id="@+id/darkMode"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_weight="1"
-            android:background="@drawable/sv_round_login"
-            android:gravity="center"
-
-            android:text="@string/light_dark_mode"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-        <!--  <Button
-            android:id="@+id/mapMode"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_weight="1"
-            android:background="@drawable/sv_round_login"
-            android:gravity="center"
-            android:text="@string/themeSetting"
-            android:textSize="24sp"
-            android:textStyle="bold" />-->
-    </LinearLayout>
-
-
-
-
-    <!--   <Button
-           android:id="@+id/shareReport"
-           android:layout_width="322dp"
-           android:layout_height="60dp"
-           android:layout_below="@+id/linearlayoutReport"
-           android:layout_centerHorizontal="true"
-           android:layout_marginTop="25dp"
-           android:background="#fece2f"
-           android:gravity="center"
-           android:text="@string/sharetextforbutton"
-           android:textSize="24sp"
-           android:textStyle="bold" />-->
-
-
-</RelativeLayout>
+</LinearLayout>
