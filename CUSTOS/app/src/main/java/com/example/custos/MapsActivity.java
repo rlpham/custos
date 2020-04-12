@@ -300,29 +300,47 @@ private LatLng eventlocation;
     }
 
 private void setcontactslocation(){
+    final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    for (final UserLocation ul: userList) {
+    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Friends");
 
-        user_information2.orderByKey()
-                .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(ul.getUID()).exists()) {
-                DataSnapshot snapshot = dataSnapshot.child(ul.getUID()).child("userName");
-                  String name=snapshot.getValue()+"";
-                  LatLng ll=new LatLng(ul.getLat(),ul.getLon());
-                  setEventsLocationwithoutzooming(ll,name);
+    databaseReference.orderByKey().equalTo(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if(dataSnapshot.child(fUser.getUid()).exists()){
+                for (final UserLocation ul: userList) {
 
-            }}
+                    databaseReference.child(fUser.getUid()).orderByKey()
+                            .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.child(ul.getUID()).exists()) {
+                                DataSnapshot snapshot = dataSnapshot.child(ul.getUID()).child("friendName");
+                                String name=snapshot.getValue()+"";
+                                LatLng ll=new LatLng(ul.getLat(),ul.getLon());
+                                setEventsLocationwithoutzooming(ll,name);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }}
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
 
             }
-        });
 
+        }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
 
     }
+});
+
 
 }
 
