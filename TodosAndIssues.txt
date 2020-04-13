@@ -4,16 +4,20 @@ _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
+Bottom Buttons:
+hiding it will not work, cause some android phones have physical buttons which defeats purpose
+
 Nav Bar / Every Fragment:
 1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map
 
 Events:
-1. Need to validate that user pick a valid date (Like today is 4/8/2020 and user pick 3/21/2020
-2. Need a limit on name & description
-3. this line is causing a lot of problems (e.g crashes app when creating events, won't let me view events after creating it, won't let me press back on invite guest) (obj.put("invited_users", getInvitedUsers(element.child("invited_users").getValue().toString()));)
+1. Need a limit on name & description (using this in xml probably best: android:maxLength="" )
+2. Need to link invite guest to Friends database now
+3. need to move the xml to cover whole screen due to hiding user buttons
+4. user can enter a new line in description which messes with layout
 
 Notification:
-1. Needs to be able to see and accept/reject invited events and friend request
+1. TODO ALL
 
 Maps:
 1. Need a way to find destination
@@ -21,22 +25,15 @@ Maps:
 DangerZone:
 1. Need to hide Datasnapshot output when clicking on marker ex: (Datasnapshot = { key = zone_name, value =....}
 2. Need to validate that user gave a name
-3. Need a light color variant of the dangerzone button when user changes to dark mode
+3. need to have character limit on name and description (using this in xml probably best: android:maxLength="" )
 4. Need to figure out how to delete old markers
+5. "if(marker.getSnippet().contains("Danger"))" is crashing app when clicking a marker
 
 Contacts:
-1. Needs to show who is their current friends (not sure if it works)
+1. search bars get smush sometimes
 
-Settings:	
-1. Change buttons
-
-User Account:										
+Edit Info:										
 1. Clicking top left yellow button will send user to map activity instead of setting page
-2. Changing home location will save before actually pressing save button 
-3. Have save home location and emergency contact save only after they click the 1 save
-4. Save button shows loading dialog even though if there were no changes
-
-
-Information:
-1. Needs to get correct contacts
+2. Have save home location and emergency contact save only after they click the 1 save
+3. Save button shows loading dialog even though if there were no changes
 ```
