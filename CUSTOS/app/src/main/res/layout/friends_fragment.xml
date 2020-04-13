@@ -54,6 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
             android:id="@+id/search_friends_icon"
             android:layout_width="wrap_content"
@@ -62,14 +63,12 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginEnd="22dp"
-            android:layout_marginBottom="544dp"
+            android:layout_marginBottom="616dp"
             android:drawableRight="@drawable/ic_search_yellow_29dp"
             android:text="Search  "
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />
-
-
 
         <EditText
             android:layout_width="335dp"
