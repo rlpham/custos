@@ -22,4 +22,5 @@ public class DangerZoneDialogue extends DialogFragment {
                 });
         return builder.create();
     }
+
 }

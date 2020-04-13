@@ -872,12 +872,14 @@ private void darkModeChecker(){
             String criticalLevel = marker.getTitle();
             String description = marker.getSnippet();
             DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
+
             Bundle args = new Bundle();
             //Set arguments in the bundle
             args.putString("criticallevel", criticalLevel);
             args.putString("description", description);
             dangerZoneDialogue.setArguments(args);
             dangerZoneDialogue.show(getSupportFragmentManager(), "danger zone dialogue");
+            //dangerZoneDialogue.setStyle(0,Style.);
         }
         return false;
     }
@@ -926,21 +928,21 @@ private void darkModeChecker(){
         System.out.println("RISK LEVELS ARE: " + risk_level);
         if(risk_level.contains("Low")){
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
-            dangerMarker.snippet("Low Danger: " + description);
+            dangerMarker.snippet("Low Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
         }
 
         if (risk_level.contains("Medium")) {
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
-            dangerMarker.snippet("Medium Danger: " + description);
+            dangerMarker.snippet("Medium Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
         }
 
         if(risk_level.contains("High")) {
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
-            dangerMarker.snippet("High Danger: " + description);
+            dangerMarker.snippet("High Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
         }
