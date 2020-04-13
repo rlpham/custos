@@ -95,4 +95,7 @@
     <string name="event_edit_button_label">Edit</string>
     <string name="event_details_title_placeholder">Event Name</string>
     <string name="terms_of_use">Terms of Use?</string>
+    <string name="danger_zone">Danger Zone</string>
+    <string name="nameDangerZone">Name</string>
+    <string name="descriptionDangerZone">Description</string>
 </resources>
