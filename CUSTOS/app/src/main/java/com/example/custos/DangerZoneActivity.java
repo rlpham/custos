@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.util.Date;
 import java.util.Random;
 
 public class DangerZoneActivity extends AppCompatActivity {
@@ -80,6 +81,7 @@ public class DangerZoneActivity extends AppCompatActivity {
                 //Add in handler code here
                 int requestCode = 0;
                 String generatedId = generateDangerZoneId();
+                Date date = new Date();
 
                 Intent dangerIntent = new Intent(DangerZoneActivity.this, MapsActivity.class);
 
@@ -95,6 +97,7 @@ public class DangerZoneActivity extends AppCompatActivity {
                 dangerZonedb.child(generatedId).child("description").setValue(createdDangerZone.getDescription());
                 dangerZonedb.child(generatedId).child("lat").setValue(createdDangerZone.getLatitude());
                 dangerZonedb.child(generatedId).child("long").setValue(createdDangerZone.getLongititude());
+                dangerZonedb.child(generatedId).child("time").setValue(date.toString());
                 System.out.println(userInputDangerLevel);
 
                 String userID = "Nope";
