@@ -280,7 +280,7 @@ private LatLng eventlocation;
 
         }else
         if(eventlocation!=null) {
-            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess)).setSnippet("All because of dale");
            // moveToCurrentLocation(eventlocation);
         }
     }
@@ -492,7 +492,7 @@ private void setcontactslocation(){
 
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE )));
+                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE ))).setSnippet("All because of dale");
                             moveToCurrentLocation(sydney);
                             user_information.orderByKey()
                                     .equalTo(firebaseUser.getUid())
