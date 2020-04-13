@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -79,7 +77,7 @@ public class MainEventListActivity extends Fragment {
                 super(v);
                 cardView = v.findViewById(R.id.cv);
                 eventTitle = v.findViewById(R.id.event_title);
-                eventLocation = v.findViewById(R.id.event_detail_location);
+                eventLocation = v.findViewById(R.id.card_event_location);
                 eventDate = v.findViewById(R.id.event_date);
                 eventTime = v.findViewById(R.id.event_time);
             }
@@ -111,22 +109,23 @@ public class MainEventListActivity extends Fragment {
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //START HERE
+                        System.out.println("CLICKED HERE");
                         try {
                             Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                            intent.putExtra("event_id", data.getJSONObject(position).getString("id"));
                             intent.putExtra("event_name", data.getJSONObject(position).getString("name"));
                             intent.putExtra("event_desc", data.getJSONObject(position).getString("description"));
                             intent.putExtra("event_date", data.getJSONObject(position).getString("date"));
                             intent.putExtra("event_time", data.getJSONObject(position).getString("time"));
                             intent.putExtra("invited_users", data.getJSONObject(position).getString("invited_users"));
+                            intent.putExtra("location_name", data.getJSONObject(position).getString("location_name"));
                             startActivity(intent);
                         } catch(JSONException e) {
-
+                            System.out.println(e);
                         }
 
                     }
                 });
-
                 holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -152,33 +151,12 @@ public class MainEventListActivity extends Fragment {
         }
     }
 
-    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        private final int verticalSpaceHeight;
-
-        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
-            this.verticalSpaceHeight = verticalSpaceHeight;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-                outRect.bottom = verticalSpaceHeight;
-            }
-        }
-
-
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.main_event, container, false);
-
-        //Modifys the view to go on top of navigation rather than on top
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                 .getDefaultDisplay()
@@ -190,13 +168,13 @@ public class MainEventListActivity extends Fragment {
 
         switch(displayMetrics.densityDpi) {
             case 420:
-                dpiOffset = 210;
+                dpiOffset = 20;
                 break;
             case 560:
-                dpiOffset = 330;
+                dpiOffset = 50;
                 break;
             default:
-                dpiOffset = 210;
+                dpiOffset = 20;
                 break;
         }
         view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height-dpiOffset));
@@ -235,7 +213,6 @@ public class MainEventListActivity extends Fragment {
     }
 
     public void listify() throws JSONException {
-
         JSONArray data = dbHandler.getEventsList();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
@@ -246,16 +223,17 @@ public class MainEventListActivity extends Fragment {
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
                     JSONObject obj = new JSONObject();
                     try {
+                        obj.put("id", element.getKey());
                         obj.put("name", element.child("name").getValue());
                         obj.put("location", element.child("area").getValue());
                         obj.put("date", element.child("date").getValue());
                         obj.put("time", element.child("time").getValue());
                         obj.put("description", element.child("description").getValue());
+                        obj.put("location_name", element.child("location_name").getValue());
                         if(element.child("invited_users").getValue() == null) {
                             obj.put("invited_users", "none");
                         } else {
                             obj.put("invited_users",  getInvitedUsers(element.child("invited_users").getValue().toString()));
-
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -269,7 +247,6 @@ public class MainEventListActivity extends Fragment {
                 RecyclerView.Adapter adapter = new EventListAdapter(data2);
                 rv.setHasFixedSize(true);
                 rv.setLayoutManager(llm);
-                //rv.addItemDecoration(new VerticalSpaceItemDecoration(75));
                 rv.setAdapter(adapter);
 
 
@@ -284,7 +261,6 @@ public class MainEventListActivity extends Fragment {
     //Creates list of names based off raw string value of datasnapshot
     private String getInvitedUsers(String data)  {
         //I/System.out: {a={name=Madison Beer}, b={name=Blake Lively}, c={name=Alex Morgan}}
-        //ArrayList<String> invited_users = new ArrayList<String>();
         String invited_users = "";
 
         if(data == "none") {

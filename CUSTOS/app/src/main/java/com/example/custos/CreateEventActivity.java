@@ -62,6 +62,8 @@ public class CreateEventActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
     Place place;
+    String location_name;
+    ToolKit toolKit;
 
     ArrayList<String> selected;
 
@@ -75,6 +77,7 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
 
+        toolKit = new ToolKit();
         lv = findViewById(R.id.event_detail_invite_list);
 
         event_date_text_view = findViewById(R.id.event_detail_date);
@@ -121,9 +124,16 @@ public class CreateEventActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         String am_pm = "";
                         if(selectedHour > 11) {
-                            selectedHour = selectedHour - 12;
+                            if(selectedHour == 12) {
+                                selectedHour = 12;
+                            } else {
+                                selectedHour = selectedHour - 12;
+                            }
                             am_pm = "PM";
                         } else {
+                            if(selectedHour == 0) {
+                                selectedHour = 12;
+                            }
                             am_pm = "AM";
                         }
 
@@ -143,11 +153,11 @@ public class CreateEventActivity extends AppCompatActivity {
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         //PlacesClient placesClient = Places.createClient(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.event_detail_location);
+                getSupportFragmentManager().findFragmentById(R.id.event_location);
 
 
         // Specify the types of place data to return.
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME,Place.Field.LAT_LNG));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         //autocompleteFragment.setLocationRestriction(RectangularBounds.newInstance(new LatLng(40.263680,-76.890739), new LatLng(40.285519,-76.650589)));
 
         // Set up a PlaceSelectionListener to handle the response.
@@ -158,6 +168,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 place = pl;
                 lat = latLng.latitude;
                 lon = latLng.longitude;
+                location_name = pl.getName();
             }
 
             @Override
@@ -201,6 +212,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("area").setValue(getLocationText(lat, lon));
                     user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location").child("latitude").setValue(lat);
                     user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location").child("longitude").setValue(lon);
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location_name").setValue(location_name);
 
 //                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("date").setValue(event_date_text_view.getText().toString());
 //                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("time").setValue(event_time_text_view.getText().toString());
@@ -227,7 +239,7 @@ public class CreateEventActivity extends AppCompatActivity {
                                         notification.child("timestamp").setValue(strDate);
                                         notification.child("sender").setValue(firebaseUser.getUid());
                                         //user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
-                                        user_information.child(firebaseUser.getUid()).child(id).child(Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                                        user_information.child(firebaseUser.getUid()).child(id).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
                                     }
                                 }
                             }

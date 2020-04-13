@@ -54,20 +54,6 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/event_detail_location"
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/event_title"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="125dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="125dp"
-                android:gravity="center"
-                android:text="CITY, STATE"
-                android:textSize="14sp" />
-
-            <TextView
                 android:id="@+id/event_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,6 +74,19 @@
                 android:layout_marginEnd="35dp"
                 android:text="TIME"
                 android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/card_event_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/event_title"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="125dp"
+                android:gravity="center"
+                android:text="CITY, STATE" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
