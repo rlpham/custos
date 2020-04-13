@@ -25,6 +25,10 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +51,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     Place place;
     AutocompleteSupportFragment autocompleteFragment;
     boolean isEditMode = false;
+    FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_date_input = findViewById(R.id.event_detail_date_input);
         event_detail_time_input = findViewById(R.id.event_detail_time_input);
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         final Intent intent = getIntent();
 
         String title = intent.getStringExtra("event_name");
@@ -87,8 +94,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_date_input.setText(event_detail_date.getText().toString());
         event_detail_time_input.setText(event_detail_time.getText().toString());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, invited_users);
-        event_detail_invite_list.setAdapter(adapter);
+        if(invited_users.length == 1 && invited_users[0].equals("none")) {
+
+        } else {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, invited_users);
+            event_detail_invite_list.setAdapter(adapter);
+        }
 
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         autocompleteFragment = (AutocompleteSupportFragment)
@@ -158,6 +169,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_detail_date.setVisibility(View.VISIBLE);
                         event_detail_time.setVisibility(View.VISIBLE);
 
+                        //TODO: Update event path with new credentials (name, description, date, time, location, invited_guests)
+                        DatabaseReference db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
+                        db.child(event_detail_title.getText().toString()).setValue(event_detail_title_input.getText().toString());
+
                         event_detail_title.setText(event_detail_title_input.getText().toString());
                         event_detail_description.setText(event_detail_description_input.getText().toString());
                         event_detail_date.setText(event_detail_date_input.getText().toString());
@@ -165,7 +180,6 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                         edit_event_guests_button.setVisibility(View.INVISIBLE);
 
-                        //TODO: Update event path with new credentials (name, description, date, time, location, invited_guests)
 
 
                     }

@@ -2,15 +2,15 @@ package com.example.custos.utils;
 
 public class Event {
 
-    private String UID;
+    private String ID;
     private String name;
     private String description;
     private String latitude;
     private String longitude;
     private String date_time;
 
-    public Event(String UID, String name, String description, String date_time) {
-        this.UID = UID;
+    public Event(String ID, String name, String description, String date_time) {
+        this.ID = ID;
         this.name = name;
         this.description = description;
         this.date_time = date_time;
@@ -34,6 +34,10 @@ public class Event {
 
     public String getLongitude() {
         return longitude;
+    }
+
+    public String getID() {
+        return ID;
     }
 
 }

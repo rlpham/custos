@@ -89,7 +89,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 int mYear = c.get(Calendar.YEAR); // current year
                 int mMonth = c.get(Calendar.MONTH); // current month
                 int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-                // date picker dialog
+                // date picker dialogx
                 datePickerDialog = new DatePickerDialog(CreateEventActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
 
@@ -101,6 +101,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
                             }
                         }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 datePickerDialog.show();
             }
         });
@@ -191,21 +192,29 @@ public class CreateEventActivity extends AppCompatActivity {
 
                     //create event to database -> DB/user_event/<uid>/<event_name>
                     user_information = FirebaseDatabase.getInstance().getReference("user_event");
-                    Common.event = new Event(firebaseUser.getUid(), name, description, event_time_text_view.getText().toString());
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName());
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("date").setValue(event_date_text_view.getText().toString());
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("time").setValue(event_time_text_view.getText().toString());
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("description").setValue(Common.event.getDescription());
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("area").setValue(getLocationText(lat, lon));
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("location").child("latitude").setValue(lat);
-                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getName() + "/location").child("longitude").setValue(lon);
+                    Common.event = new Event(createEventID(), name, description, event_time_text_view.getText().toString());
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID());
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("name").setValue(Common.event.getName());
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("date").setValue(event_date_text_view.getText().toString());
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("time").setValue(event_time_text_view.getText().toString());
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("description").setValue(Common.event.getDescription());
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("area").setValue(getLocationText(lat, lon));
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location").child("latitude").setValue(lat);
+                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location").child("longitude").setValue(lon);
+
+//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("date").setValue(event_date_text_view.getText().toString());
+//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("time").setValue(event_time_text_view.getText().toString());
+//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("description").setValue(Common.event.getDescription());
+//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("area").setValue(getLocationText(lat, lon));
+//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("location").child("latitude").setValue(lat);
+//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName() + "/location").child("longitude").setValue(lon);
 
                     //Gather list uids of invited guests
                     userReference = FirebaseDatabase.getInstance().getReference("Users");
                     userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String id = "E" + generateNumber();
+                            String id = Common.event.getID();
                             String strDate = getCurrentTime();
                             for(int i = 0; i < invited_list.getCount(); i++) {
                                 for(DataSnapshot element : dataSnapshot.getChildren()) {
@@ -217,7 +226,8 @@ public class CreateEventActivity extends AppCompatActivity {
                                         notification.child("message").setValue("<SENDER UID> has invited you to an event <EVENT NAME>");
                                         notification.child("timestamp").setValue(strDate);
                                         notification.child("sender").setValue(firebaseUser.getUid());
-                                        user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                                        //user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                                        user_information.child(firebaseUser.getUid()).child(id).child(Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
                                     }
                                 }
                             }
@@ -261,10 +271,16 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 18) {
-            selected = data.getStringArrayListExtra("values");
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected);
-            lv = findViewById(R.id.event_detail_invite_list);
-            lv.setAdapter(adapter);
+
+            if(data != null) {
+                selected = data.getStringArrayListExtra("values");
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected);
+                lv = findViewById(R.id.event_detail_invite_list);
+                lv.setAdapter(adapter);
+            } else {
+
+            }
+
         }
     }
 
@@ -314,6 +330,11 @@ public class CreateEventActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         String strDate = dateFormat.format(date);
         return strDate;
+    }
+
+    private String createEventID() {
+        String id = "E" + generateNumber();
+        return id;
     }
 
 }
