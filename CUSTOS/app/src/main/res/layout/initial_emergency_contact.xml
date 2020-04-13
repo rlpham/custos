@@ -110,7 +110,7 @@
             android:id="@+id/emergency_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="360dp"
             android:background="#fece2f"
             android:text="SAVE"
             android:textSize="19dp"
