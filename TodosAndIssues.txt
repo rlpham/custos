@@ -4,17 +4,12 @@ _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
-Bottom Buttons:
-hiding it will not work, cause some android phones have physical buttons which defeats purpose
-
 Nav Bar / Every Fragment:
 1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map
 
 Events:
-1. Need a limit on name & description (using this in xml probably best: android:maxLength="" )
-2. Need to link invite guest to Friends database now
-3. need to move the xml to cover whole screen due to hiding user buttons
-4. user can enter a new line in description which messes with layout
+1. Need to link invite guest from Friends database now
+2. user can enter a new line in description which messes with layout
 
 Notification:
 1. TODO ALL
@@ -30,10 +25,9 @@ DangerZone:
 5. "if(marker.getSnippet().contains("Danger"))" is crashing app when clicking a marker
 
 Contacts:
-1. search bars get smush sometimes
+1. search bars get smush sometimes (not a big deal)
+2. if user has a friend, search bar can't be click sometimes
 
 Edit Info:										
 1. Clicking top left yellow button will send user to map activity instead of setting page
-2. Have save home location and emergency contact save only after they click the 1 save
-3. Save button shows loading dialog even though if there were no changes
 ```
