@@ -638,8 +638,8 @@ private void setcontactslocation(){
                             for(DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()){
                                 String name="",desc="",date="",time="";
                                 double lat=0,lon=0;
-                                if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()) {
-                                    name=snapshot.getKey();
+                                if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()&&snapshot.child("name").exists()) {
+                                    name=snapshot.child("name").getValue().toString();
                                     lat = Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
                                     lon = Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
                                     desc=snapshot.child("description").getValue().toString();
