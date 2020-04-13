@@ -110,8 +110,43 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DatabaseReference db,db2,db3,db4;
     //tillhere
 
+
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+//rahul test
+       final View decorView = getWindow().getDecorView();
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+       final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            // TODO: The system bars are visible. Make any desired
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    decorView.setSystemUiVisibility(uiOptions);
+                                }
+                            }, 2000);
+                        } else {
+                            // TODO: The system bars are NOT visible. Make any desired
+                            // adjustments to your UI, such as hiding the action bar or
+                            // other navigational controls.
+                        }
+                    }
+                });
+        //till here rahul out
 
         // Dale's Code
         //mMap.setOnMarkerClickListener(this);
@@ -216,6 +251,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //    searchView.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
                         startActivity(intent);
+                        finish();
 
                         return true;
 
@@ -236,7 +272,7 @@ private LatLng eventlocation;
     public void setEventsLocation(LatLng ll,String mess){
         eventlocation=ll;
         if((mess.equals("Home Location")) && !(mess.equals(" "))){
-            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3)));
+            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3))).setSnippet("All because of dale");
 
 
 
@@ -253,7 +289,7 @@ private LatLng eventlocation;
     public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.baseline_face_white_18)));
+        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.tempcontactpic))).setSnippet("All because of dale");
 
     }
     public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess,String desc) {
@@ -389,7 +425,7 @@ private void setcontactslocation(){
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                handler.removeCallbacksAndMessages(null);
             }
         });
 
@@ -709,6 +745,8 @@ private void darkModeChecker(){
             public void run() {
                 GifImageView gifimg=findViewById(R.id.gifinmaps);
                 gifimg.setVisibility(View.GONE);
+                final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+                dangerzonebutton.setVisibility(View.VISIBLE);
             }
         }, 2500);
     }

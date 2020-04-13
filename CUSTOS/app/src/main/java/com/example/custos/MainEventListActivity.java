@@ -1,14 +1,17 @@
 package com.example.custos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -199,10 +202,12 @@ public class MainEventListActivity extends Fragment {
         view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height-dpiOffset));
 
         view.findViewById(R.id.add_event).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
                 startActivityForResult(intent, 1);
+
             }
         });
 
@@ -241,12 +246,17 @@ public class MainEventListActivity extends Fragment {
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
                     JSONObject obj = new JSONObject();
                     try {
-                        obj.put("name", element.getKey());
+                        obj.put("name", element.child("name").getValue());
                         obj.put("location", element.child("area").getValue());
                         obj.put("date", element.child("date").getValue());
                         obj.put("time", element.child("time").getValue());
                         obj.put("description", element.child("description").getValue());
-                        obj.put("invited_users",  getInvitedUsers(element.child("invited_users").getValue().toString()));
+                        if(element.child("invited_users").getValue() == null) {
+                            obj.put("invited_users", "none");
+                        } else {
+                            obj.put("invited_users",  getInvitedUsers(element.child("invited_users").getValue().toString()));
+
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

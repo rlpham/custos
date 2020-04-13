@@ -1,11 +1,14 @@
 package com.example.custos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,7 @@ import java.util.ArrayList;
 public class InviteGuestsActivity extends AppCompatActivity {
 
     ListView listView;
+    TextView invite_guests_back_button;
 
     ArrayList<String> selected = new ArrayList<String>();
     ArrayList<String> uids;
@@ -110,6 +114,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
         // TODO: Set up checkable text views in list, then pass them into intent and test
         // https://abhiandroid.com/ui/checkedtextview
         listView = findViewById(R.id.listView);
+        invite_guests_back_button = findViewById(R.id.invite_guests_back_button);
 
         intent2 = getIntent();
 
@@ -143,6 +148,14 @@ public class InviteGuestsActivity extends AppCompatActivity {
                 onActivityResult(18,18, intent);
                 setResult(18, intent);
                 finish();
+            }
+        });
+
+        invite_guests_back_button.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+
             }
         });
         
