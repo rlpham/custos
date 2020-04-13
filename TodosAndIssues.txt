@@ -25,8 +25,7 @@ DangerZone:
 5. "if(marker.getSnippet().contains("Danger"))" is crashing app when clicking a marker
 
 Contacts:
-1. search bars get smush sometimes (not a big deal)
-2. if user has a friend, search bar can't be click sometimes
+
 
 Edit Info:										
 1. Clicking top left yellow button will send user to map activity instead of setting page
