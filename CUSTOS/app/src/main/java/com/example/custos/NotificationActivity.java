@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.custos.adapters.FriendsAdapter;
-import com.example.custos.adapters.NotificationsAdapter;
+//import com.example.custos.adapters.NotificationsAdapter;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Friends;
-import com.example.custos.utils.Notifications;
+//import com.example.custos.utils.Notifications;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
