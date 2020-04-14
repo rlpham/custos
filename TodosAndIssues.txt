@@ -1,18 +1,18 @@
 ```
-April 10, 2020
+April 14, 2020 Last gitpull 6:30ish pm
 _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
 Nav Bar / Every Fragment:
-1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map
+1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map (need to do 1 more)
 
 Events:
 1. Need to link invite guest from Friends database now
 2. user can enter a new line in description which messes with layout
 
 Notification:
-1. TODO ALL
+1. in progress atm ~
 
 Maps:
 1. Need a way to find destination
@@ -24,9 +24,4 @@ DangerZone:
 4. Need to figure out how to delete old markers
 5. "if(marker.getSnippet().contains("Danger"))" is crashing app when clicking a marker
 
-Contacts:
-
-
-Edit Info:										
-1. Clicking top left yellow button will send user to map activity instead of setting page
 ```
