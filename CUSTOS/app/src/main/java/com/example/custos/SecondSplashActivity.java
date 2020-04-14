@@ -2,6 +2,7 @@ package com.example.custos;
 
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,7 +53,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,7 +202,8 @@ public class SecondSplashActivity extends AppCompatActivity{
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              finish();
+                Intent intent = new Intent(SecondSplashActivity.this,MapsActivity.class);
+                startActivity(intent);
 
             }
         });
