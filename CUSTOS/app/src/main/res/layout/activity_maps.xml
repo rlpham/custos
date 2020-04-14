@@ -124,8 +124,39 @@
           android:background="@drawable/dangercautionimg"
           android:text="@string/empty" />
 
+    <LinearLayout
+        android:id="@+id/mapsbackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="60dp"
+        android:orientation="vertical"
 
-  </RelativeLayout>
+        >
+
+
+        <LinearLayout
+            android:id="@+id/mapsfriendzone"
+            android:layout_width="350dp"
+            android:layout_height="400dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="250dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="250dp"
+            android:background="@color/quantum_bluegrey300"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/mapsfriendbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/userinfo" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>
 
 
 
