@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:includeFontPadding="false"
-                android:text="Settings"
+                android:text="@string/settings_text"
                 android:textColor="#FECE2F"
                 android:layout_marginLeft="10dp"
                 android:textColorHighlight="#FFFFFF"
@@ -71,51 +71,62 @@
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="392dp"
+        android:layout_height="403dp"
+        android:orientation="vertical"
         android:padding="30dp"
-        android:orientation="vertical">
+        android:weightSum="5">
 
 
         <Button
             android:id="@+id/reportBug"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Report a problem"
-            android:background="#fece2f"
-            android:textStyle="bold"
-            android:textSize="19dp"
             android:layout_marginTop="70dp"
-            android:transitionName="edit_info"/>
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:text="@string/report_a_problem"
+            android:textSize="19sp"
+            android:textStyle="bold"
+           />
 
 
         <Button
             android:id="@+id/SettingReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/information"
-            android:background="#fece2f"
-            android:textStyle="bold"
-            android:textSize="19dp"
             android:layout_marginTop="20dp"
-            android:transitionName="edit_info"/>
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:text="@string/information"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            />
 
         <Switch
             android:id="@+id/darkMode"
             android:layout_width="match_parent"
             android:layout_height="49dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:background="#fece2f"
             android:gravity="center"
-            android:layout_marginTop="20dp"
-
-
             android:text="@string/light_dark_mode"
             android:textSize="19sp"
             android:textStyle="bold" />
-
-
+        <Switch
+            android:id="@+id/locationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="#fece2f"
+            android:gravity="center"
+            android:text="@string/location_text_switch"
+            android:textSize="19sp"
+            android:textStyle="bold" />
 
 
 
@@ -124,7 +135,6 @@
     <RelativeLayout
         android:id="@+id/cardViewReport"
         android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
         android:background="#212121">
 

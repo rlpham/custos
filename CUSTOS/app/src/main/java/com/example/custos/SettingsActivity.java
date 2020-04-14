@@ -197,13 +197,9 @@ public class SettingsActivity extends Fragment {
         });
 
 
-//        Button lightNDark = view.findViewById(R.id.mapMode);
-//        lightNDark.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //for light and dark mode
-//            }
-//        });
+        //location switch
+        final Switch loc = view.findViewById(R.id.locationSwitch);
+
 
 
 
