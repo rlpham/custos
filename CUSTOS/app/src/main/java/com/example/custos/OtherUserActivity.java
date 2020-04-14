@@ -37,6 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class OtherUserActivity extends AppCompatActivity {
     public static final String TAG = "OtherUserActivity";
     private String CURRENT_STATE;
+    private DatabaseReference notificationsRef;
     CircleImageView otherUserImage;
     TextView otherName,
             otherName2,
@@ -117,7 +118,10 @@ public class OtherUserActivity extends AppCompatActivity {
         declineRequest.setEnabled(false);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(otherUserId);
-        friendRequestReference = FirebaseDatabase.getInstance().getReference("FriendRequests");
+        friendRequestReference = FirebaseDatabase.getInstance().getReference(Common.FRIEND_REQUEST);
+
+        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS);
+
         acceptFriends = FirebaseDatabase.getInstance().getReference("Friends");
         if (!currentUID.equals(otherUserId)) {
             addFriend.setOnClickListener(new View.OnClickListener() {
@@ -493,7 +497,62 @@ public class OtherUserActivity extends AppCompatActivity {
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm:ss.SSS");
         timeSent = currentDate.format(calendar.getTime());
 
+        notificationsRef.child(currentUID).child(otherUserId)
+                .child("request_type").setValue("sentFriendRequest")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            notificationsRef.child(otherUserId).child(currentUID)
+                                    .child("request_type").setValue("receivedFriendRequest")
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                notificationsRef.child(currentUID).child(otherUserId).child("request_time").setValue(timeSent);
+                                                notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(timeSent);
+                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+                                                databaseReference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        String name = dataSnapshot.child(otherUserId)
+                                                                .child(Common.USER_NAME).getValue().toString();
+                                                        notificationsRef.child(currentUID).child(otherUserId).child(Common.FRIEND_NAME).setValue(name);
+                                                        String uid = dataSnapshot.child(otherUserId)
+                                                                .child(Common.UID).getValue().toString();
+                                                        notificationsRef.child(currentUID).child(otherUserId).child(Common.UID).setValue(uid);
+                                                    }
 
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                                databaseReference.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        String nameCurr = dataSnapshot.child(currentUID)
+                                                                .child(Common.USER_NAME).getValue().toString();
+                                                        notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                                        String uidCurr = dataSnapshot.child(currentUID)
+                                                                .child(Common.UID).getValue().toString();
+                                                        notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                        }
+
+                    }
+                });
         friendRequestReference.child(currentUID).child(otherUserId).child("request_time").setValue(timeSent);
         friendRequestReference.child(otherUserId).child(currentUID).child("request_time").setValue(timeSent);
 

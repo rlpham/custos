@@ -44,18 +44,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.layout_friends,parent,false);
-        view.setFocusableInTouchMode(true);
-        view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            final public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-
-                    return true;
-                }
-                return false;
-            }
-        });
         return new FriendsAdapter.ViewHolder(view);
     }
 
@@ -101,6 +89,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         friendReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                System.out.println(friends.getUID()+"_------------------------------------------------------------");
                 if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
                     friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
                 }
