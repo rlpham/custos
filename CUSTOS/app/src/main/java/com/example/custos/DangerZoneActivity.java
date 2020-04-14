@@ -80,7 +80,7 @@ public class DangerZoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(nameFillIn.length() == 0)
+                if(nameFillIn.getText().toString().trim().length() == 0)
                 {
                     nameRequired();
                 }
