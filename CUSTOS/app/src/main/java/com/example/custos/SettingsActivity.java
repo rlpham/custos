@@ -219,6 +219,11 @@ public class SettingsActivity extends Fragment {
 
 
 
+        //danger zone switch
+        final Switch danger = view.findViewById(R.id.dangerSwitch);
+
+
+
 
         // Inflate the layout for this fragment
         return view;

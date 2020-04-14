@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.custos.utils.DangerZone;
 import com.google.android.libraries.places.api.Places;
@@ -78,6 +79,17 @@ public class DangerZoneActivity extends AppCompatActivity {
         submitdangerzonebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(nameFillIn.length() == 0)
+                {
+                    nameRequired();
+                }
+                else
+                {
+
+
+
+
                 //Add in handler code here
                 int requestCode = 0;
                 String generatedId = generateDangerZoneId();
@@ -144,7 +156,10 @@ public class DangerZoneActivity extends AppCompatActivity {
 //                }
 
             }
+
+            }
         });
+
     }
 
     /**
@@ -163,6 +178,9 @@ public class DangerZoneActivity extends AppCompatActivity {
         return generatedId;
     }
 
-
+    public void nameRequired()
+    {
+        Toast.makeText(this, "Name is required", Toast.LENGTH_SHORT).show();
+    }
 
 }
