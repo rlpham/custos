@@ -938,7 +938,7 @@ private void darkModeChecker(){
                     mapsfriendName.setText(dataSnapshot.child("userName").getValue().toString());
                     String imgurl=dataSnapshot.child("imageURL").getValue().toString();
                     if (imgurl.equals("default")) {
-                      //  otherUserImage.setImageResource(R.mipmap.ic_launcher);
+                        mapsfriendicon.setImageResource(R.mipmap.ic_launcher);
                     } else {
                       //  StorageReference httpsReference = storage.getReferenceFromUrl(imgurl);
                         Glide.with(getApplicationContext()).load(imgurl).into(mapsfriendicon);
