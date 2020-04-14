@@ -100,33 +100,32 @@
 <!--        android:background="@android:drawable/ic_menu_search" />-->
 
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gifinmaps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/quantum_black_100"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        android:src="@drawable/splash2"
-        >
-    </pl.droidsonroids.gif.GifImageView>
-    <Button
-        android:id="@+id/mapsDsngerZoneButton"
-        android:layout_width="60dp"
-        android:layout_height="70dp"
-        android:layout_alignParentEnd="true"
+    <!--   <pl.droidsonroids.gif.GifImageView
+          android:id="@+id/gifinmaps"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@color/quantum_black_100"
+          android:layout_marginStart="0dp"
+          android:layout_marginTop="0dp"
+          android:layout_marginEnd="0dp"
+          android:layout_marginBottom="0dp"
+          android:src="@drawable/splash2"
+          >
+      </pl.droidsonroids.gif.GifImageView>/>-->
+      <Button
+          android:id="@+id/mapsDsngerZoneButton"
+          android:layout_width="60dp"
+          android:layout_height="70dp"
+          android:layout_alignParentEnd="true"
 
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="106dp"
-        android:background="@drawable/dangercautionimg"
-        android:text="@string/empty" />
+          android:layout_alignParentBottom="true"
+          android:layout_marginEnd="36dp"
+          android:layout_marginBottom="106dp"
+          android:background="@drawable/dangercautionimg"
+          android:text="@string/empty" />
 
 
-</RelativeLayout>
+  </RelativeLayout>
 
 
 

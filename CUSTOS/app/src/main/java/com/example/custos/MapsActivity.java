@@ -740,15 +740,15 @@ private void darkModeChecker(){
                 setcontactslocation();
             }
         }, 2000);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                GifImageView gifimg=findViewById(R.id.gifinmaps);
-                gifimg.setVisibility(View.GONE);
-                final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
-                dangerzonebutton.setVisibility(View.VISIBLE);
-            }
-        }, 2500);
+      //  handler.postDelayed(new Runnable() {
+         //   @Override
+        //    public void run() {
+               // GifImageView gifimg=findViewById(R.id.gifinmaps);
+              //  gifimg.setVisibility(View.GONE);
+           //    final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+            //    dangerzonebutton.setVisibility(View.VISIBLE);
+        //    }
+      //  }, 2500);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
