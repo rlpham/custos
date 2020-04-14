@@ -4,12 +4,11 @@ _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
-Nav Bar / Every Fragment:
-1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map (need to do 1 more)
-
 Events:
 1. Need to link invite guest from Friends database now
-2. user can enter a new line in description which messes with layout
+2. user can enter a new line in description which messes with layout\
+3. need safety event
+4. need reoccurring event
 
 Notification:
 1. in progress atm ~
@@ -19,9 +18,5 @@ Maps:
 
 DangerZone:
 1. Need to hide Datasnapshot output when clicking on marker ex: (Datasnapshot = { key = zone_name, value =....}
-2. Need to validate that user gave a name
-3. need to have character limit on name and description (using this in xml probably best: android:maxLength="" )
-4. Need to figure out how to delete old markers
-5. "if(marker.getSnippet().contains("Danger"))" is crashing app when clicking a marker
-
+2. Need to figure out how to delete old markers
 ```
