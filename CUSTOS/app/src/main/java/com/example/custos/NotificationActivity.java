@@ -36,8 +36,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class NotificationActivity extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private NotificationsAdapter adapter;
-    private List<Notifications> notificationsList;
+//    private NotificationsAdapter adapter;
+//    private List<Notifications> notificationsList;
     public NotificationActivity() {
         // Required empty public constructor
     }
@@ -64,8 +64,8 @@ public class NotificationActivity extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_notification);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        notificationsList = new ArrayList<>();
-        readUser();
+//        notificationsList = new ArrayList<>();
+//        readUser();
 //        recyclerView.setLayoutManager(linearLayoutManager);
 //        recyclerView.setHasFixedSize(true);
 
@@ -86,32 +86,32 @@ public class NotificationActivity extends Fragment {
         return view;
     }
 
-    private void readUser() {
-        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(fUser.getUid());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    notificationsList.clear();
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        Notifications notifications = snapshot.getValue(Notifications.class);
-                        assert notifications != null;
-                        assert fUser != null;
-                        notificationsList.add(notifications);
-
-                    adapter = new NotificationsAdapter(getContext(), notificationsList);
-                    recyclerView.setAdapter(adapter);
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void readUser() {
+//        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(fUser.getUid());
+//        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    notificationsList.clear();
+//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+//                        Notifications notifications = snapshot.getValue(Notifications.class);
+//                        assert notifications != null;
+//                        assert fUser != null;
+//                        notificationsList.add(notifications);
+//
+//                    adapter = new NotificationsAdapter(getContext(), notificationsList);
+//                    recyclerView.setAdapter(adapter);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 
 //    public static class NotificationsViewHolder extends RecyclerView.ViewHolder{
