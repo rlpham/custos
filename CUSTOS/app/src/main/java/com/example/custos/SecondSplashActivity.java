@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -106,6 +107,10 @@ public class SecondSplashActivity extends AppCompatActivity{
         displayEmergencyContact = findViewById(R.id.emergencyContactDisplay);
 
         final View decorView = getWindow().getDecorView();
+
+
+
+
         // Hide both the navigation bar and the status bar.
         // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
         // a general rule, you should design your app to hide the status bar whenever you
@@ -197,8 +202,7 @@ public class SecondSplashActivity extends AppCompatActivity{
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SecondSplashActivity.this,MapsActivity.class);
-                startActivity(intent);
+              finish();
 
             }
         });
@@ -216,7 +220,7 @@ public class SecondSplashActivity extends AppCompatActivity{
                     }
 
                 });
-                logoutDialog.setPositiveButton("Ye", new DialogInterface.OnClickListener() {
+                logoutDialog.setPositiveButton("Yea", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         signOut();
@@ -328,6 +332,11 @@ public class SecondSplashActivity extends AppCompatActivity{
             email.setText(firebaseEmail);
             //Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }
+
+
+
+
+
     }
 
 
