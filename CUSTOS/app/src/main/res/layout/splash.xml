@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="539dp"
+        android:layout_marginTop="567dp"
         android:layout_marginEnd="79dp"
         android:width="100dp"
         android:background="@drawable/sv_round_login"

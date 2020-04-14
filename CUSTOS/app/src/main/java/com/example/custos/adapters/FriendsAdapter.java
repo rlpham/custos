@@ -31,6 +31,9 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
     private Context context;
     private List<Friends> friend;
     private DatabaseReference databaseReference;
+    private String userName;
+    private String imgURL;
+    private DatabaseReference friendReference;
     public FriendsAdapter(Context context, List<Friends> friends){
         this.context = context;
         this.friend = friends;
@@ -51,7 +54,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(friends.getUID()).child(Common.USER_NAME).exists()){
-                    String userName = dataSnapshot.child(friends.getUID())
+                    userName = dataSnapshot.child(friends.getUID())
                             .child(Common.USER_NAME).getValue().toString();
                     holder.friendName.setText(userName);
                 }
@@ -62,7 +65,6 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             }
         });
-
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(friends.getUID());
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -71,7 +73,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
                 if(user.getImageURL().equals("default")){
                     holder.friendImage.setImageResource(R.mipmap.ic_launcher);
                 }else{
-                    String imgURL = dataSnapshot.child(Common.IMAGE_URL).getValue().toString();
+                    imgURL = dataSnapshot.child(Common.IMAGE_URL).getValue().toString();
                     Glide.with(context).load(imgURL).into(holder.friendImage);
                 }
             }
@@ -81,6 +83,37 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
 
             }
         });
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        friendReference = FirebaseDatabase.getInstance().getReference(Common.FRIENDS).child(firebaseUser.getUid());
+        friendReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
+                    friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+                }
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+                        String image = dataSnapshot2.child(Common.IMAGE_URL).getValue().toString();
+                        if(!dataSnapshot.child(friends.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)){
+                            friendReference.child(friends.getUID()).child(Common.IMAGE_URL).setValue(image);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         //holder.friendEmail.setText(friends.getFriendEmail());
         holder.date.setText("Since "+ friends.getDate());
 //        holder.friendName.setText(friends.getFriendName());
