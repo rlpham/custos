@@ -48,7 +48,7 @@ public class OtherUserActivity extends AppCompatActivity {
             backButton;
     Button addFriend, declineRequest;
     String currentUID, otherUserId, saveCurrentDate;
-    String timeSent;
+    String timeSent,dateSent,dateAccept,timeAccept;
     FirebaseUser firebaseUser;
     DatabaseReference friendRequestReference;
     DatabaseReference databaseReference;
@@ -318,7 +318,7 @@ public class OtherUserActivity extends AppCompatActivity {
                 });
     }
 
-    private void acceptRequest() {
+    public void acceptRequest() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
         saveCurrentDate = currentDate.format(calendar.getTime());
@@ -409,9 +409,64 @@ public class OtherUserActivity extends AppCompatActivity {
                     }
                 });
 
+
+        Calendar calendarAccept = Calendar.getInstance();
+        SimpleDateFormat acceptDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        dateAccept = acceptDate.format(calendarAccept.getTime());
+        timeAccept = acceptTime.format(timeAcceptFriend.getTime());
+
+        notificationsRef.child(currentUID).child(otherUserId)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"removed notification",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"removed failed",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        notificationsRef.child(otherUserId).child(currentUID)
+                .child("request_type").setValue("acceptedFriendRequest")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(dateAccept + " at "+ timeAccept);
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String nameCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.USER_NAME).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                    String uidCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.UID).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+                                    String img = dataSnapshot.child(currentUID)
+                                            .child(Common.IMAGE_URL).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+
+
     }
 
-    private void cancelFriendRequest() {
+    public void cancelFriendRequest() {
         friendRequestReference.child(currentUID).child(otherUserId)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -432,6 +487,19 @@ public class OtherUserActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
+                        }
+                    }
+                });
+
+        notificationsRef.child(otherUserId).child(currentUID)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"removed notification",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"removed failed",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -494,67 +562,45 @@ public class OtherUserActivity extends AppCompatActivity {
 
     private void sendFriendRequest() {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm:ss.SSS");
-        timeSent = currentDate.format(calendar.getTime());
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar time = Calendar.getInstance();
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+        dateSent = currentDate.format(calendar.getTime());
+        timeSent = currentTime.format(time.getTime());
 
-        notificationsRef.child(currentUID).child(otherUserId)
-                .child("request_type").setValue("sentFriendRequest")
+        notificationsRef.child(otherUserId).child(currentUID)
+                .child("request_type").setValue("receivedFriendRequest")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            notificationsRef.child(otherUserId).child(currentUID)
-                                    .child("request_type").setValue("receivedFriendRequest")
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
-                                                notificationsRef.child(currentUID).child(otherUserId).child("request_time").setValue(timeSent);
-                                                notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(timeSent);
-                                                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
-                                                databaseReference.addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        String name = dataSnapshot.child(otherUserId)
-                                                                .child(Common.USER_NAME).getValue().toString();
-                                                        notificationsRef.child(currentUID).child(otherUserId).child(Common.FRIEND_NAME).setValue(name);
-                                                        String uid = dataSnapshot.child(otherUserId)
-                                                                .child(Common.UID).getValue().toString();
-                                                        notificationsRef.child(currentUID).child(otherUserId).child(Common.UID).setValue(uid);
-                                                    }
+                            notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(dateSent + " at "+ timeSent);
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String nameCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.USER_NAME).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                    String uidCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.UID).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+                                    String img = dataSnapshot.child(currentUID)
+                                            .child(Common.IMAGE_URL).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                                }
 
-                                                    }
-                                                });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                databaseReference.addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                        String nameCurr = dataSnapshot.child(currentUID)
-                                                                .child(Common.USER_NAME).getValue().toString();
-                                                        notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
-                                                        String uidCurr = dataSnapshot.child(currentUID)
-                                                                .child(Common.UID).getValue().toString();
-                                                        notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
+                                }
+                            });
                         }
-
                     }
                 });
-        friendRequestReference.child(currentUID).child(otherUserId).child("request_time").setValue(timeSent);
-        friendRequestReference.child(otherUserId).child(currentUID).child("request_time").setValue(timeSent);
+        friendRequestReference.child(currentUID).child(otherUserId).child("request_time").setValue(dateSent);
+        friendRequestReference.child(otherUserId).child(currentUID).child("request_time").setValue(dateSent);
 
         friendRequestReference.child(currentUID).child(otherUserId)
                 .child("request_type").setValue("sent")
