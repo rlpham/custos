@@ -671,7 +671,7 @@ private void setcontactslocation()  {
                             for(DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()){
                                 double lat=0,lon=0;
                                 if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()&&snapshot.child("name").exists()) {
-                                   lat=Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
+                                    lat=Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
                                     lon=Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
                                     setEventsLocationwithoutzoomingwithdesc(new LatLng(lat,lon),snapshot.getKey());
                                 }

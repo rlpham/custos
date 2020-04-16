@@ -206,7 +206,8 @@ public class CreateEventActivity extends AppCompatActivity {
                     //    public Event(String ID, String name, String area, String date,
                     //      String time, String description, String location_name,
                     //      ArrayList<User> invited_users) {
-                    final Event event = new Event(createEventID(), name, getLocationText(lat, lon),
+                    final String id = createEventID();
+                    Event event = new Event(id, name, getLocationText(lat, lon),
                             event_date_text_view.getText().toString(),
                             event_time_text_view.getText().toString(),
                             description, location_name);
@@ -240,12 +241,12 @@ public class CreateEventActivity extends AppCompatActivity {
                                     String current_name = getNameFromValue(element.getValue().toString());
                                     if(invited_name.equals(current_name)) {
                                         //use element.getKey() to write into DB/user/<UID>/notifications/eventInvite
-                                        DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(event.getID());
-                                        notification.child("message").setValue(firebaseUser.getUid() + " has invited you to \"" + event.getName() + "\"");
+                                        DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(id);
+                                        notification.child("message").setValue(firebaseUser.getUid() + " has invited you to \"" + name + "\"");
                                         notification.child("timestamp").setValue(getCurrentTime());
                                         notification.child("sender").setValue(firebaseUser.getUid());
                                         //user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
-                                        user_information.child(firebaseUser.getUid()).child(event.getID()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                                        user_information.child(firebaseUser.getUid()).child(id).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
 
                                         //TODO: Append to root/<invited_user_id>/.... using 'selected' ArrayList
                                         
@@ -259,7 +260,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
                         }
                     });
-
                     Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                     onActivityResult(1,1,intent);
                     setResult(1, intent);
@@ -340,8 +340,6 @@ public class CreateEventActivity extends AppCompatActivity {
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude,1);
             locationText = addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea();
-            Log.d("mylog","complete address: " + addresses.toString());
-            Log.d("mylog","address: " + locationText);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -220,11 +220,7 @@ public class MainEventListActivity extends Fragment {
         rv = view.findViewById(R.id.recycler);
         llm = new LinearLayoutManager(this.getContext());
 
-        try {
-            listify();
-        } catch(JSONException e) {
-            System.out.println(e);
-        }
+        listify();
 
         return view;
     }
@@ -240,8 +236,8 @@ public class MainEventListActivity extends Fragment {
 
     }
 
-    public void listify() throws JSONException {
-        JSONArray data = dbHandler.getEventsList();
+    public void listify() {
+        //JSONArray data = dbHandler.getEventsList();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
         db.addValueEventListener(new ValueEventListener() {
