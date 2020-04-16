@@ -38,6 +38,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
     ListView listView;
     TextView invite_guests_back_button;
 
+    ArrayList<User> users = new ArrayList<User>();
     //ArrayList<String> selectedNames = new ArrayList<String>();
     ArrayList<User> selectedUsers = new ArrayList<User>();
 
@@ -76,16 +77,23 @@ public class InviteGuestsActivity extends AppCompatActivity {
             //ArrayList<User> idk = intent2.getStringArrayListExtra("selectedUsers");
             Bundle args = intent2.getBundleExtra("BUNDLE");
             ArrayList<User> idk = (ArrayList<User>) args.getSerializable("BUNDLE");
+
             view = inflater.inflate(R.layout.invite_guest_item, null);
             final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
 
-            for(User element : idk) {
-                if(element.getUserName().equals(users.get(position).getUserName())) {
-                    ctv.setCheckMarkDrawable(R.drawable.checked);
-                    ctv.setChecked(true);
-                    selectedUsers.add(element);
-                }
+            if(idk == null) {
+            //do nothing
+            } else {
+                //TODO: PERSIST CHECK MARK IF THE USER IS ALREADY INVITED
+//                for(User element : idk) {
+//                    if(element.getUserName().equals(users.get(position).getUserName())) {
+//                        ctv.setCheckMarkDrawable(R.drawable.checked);
+//                        ctv.setChecked(true);
+//                        selectedUsers.add(element);
+//                    }
+//                }
             }
+
             ctv.setTextColor(Color.parseColor("#FFFFFF"));
             //ctv.setText(names[position]);
             ctv.setText(users.get(position).getUserName());
@@ -109,19 +117,30 @@ public class InviteGuestsActivity extends AppCompatActivity {
                         ctv.setCheckMarkDrawable(R.drawable.checked);
                         ctv.setChecked(true);
 
-                        for(int i = 0; i < selectedUsers.size(); i++) {
-                            if(selectedUsers.get(i).getUserName().equals(ctv.getText().toString())) {
-                                for(int j = 0; j < users.size(); j++) {
-                                    if(selectedUsers.get(i).getUserName().equals(users.get(j).getUserName())) {
-                                        User user = new User();
-                                        user.setUserName(ctv.getText().toString());
-                                        user.setUID((users.get(j).getUID()));
-                                        selectedUsers.add(user);
-                                        break;
-                                    }
-                                }
+                        for(int i = 0; i < users.size(); i++) {
+                            if(users.get(i).getUserName().equals(ctv.getText().toString())) {
+                                User user = new User();
+                                user.setUserName(ctv.getText().toString());
+                                user.setUID(users.get(i).getUID());
+                                selectedUsers.add(user);
                             }
                         }
+
+                        //Selectedusers initial size is 0 therefore it skips over this. TODO
+
+//                        for(int i = 0; i < selectedUsers.size(); i++) {
+//                            if(selectedUsers.get(i).getUserName().equals(ctv.getText().toString())) {
+//                                for(int j = 0; j < users.size(); j++) {
+//                                    if(selectedUsers.get(i).getUserName().equals(users.get(j).getUserName())) {
+//                                        User user = new User();
+//                                        user.setUserName(ctv.getText().toString());
+//                                        user.setUID((users.get(j).getUID()));
+//                                        selectedUsers.add(user);
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                        }
 //                        if(!selectedNames.contains(ctv.getText().toString())) {
 //                            selectedNames.add(ctv.getText().toString());
 //                        }
@@ -151,7 +170,6 @@ public class InviteGuestsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                String[] names = new String[(int)dataSnapshot.getChildrenCount()];
 //                String[] uids = new String[(int)dataSnapshot.getChildrenCount()];
-                ArrayList<User> users = new ArrayList<User>();
                 int i = 0;
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
                     //creates 2 parallel arrays (names, uid)
@@ -161,6 +179,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
                     user.setUserName(element.child("friendName").getValue().toString());
                     user.setUID(element.getKey());
                     i++;
+                    users.add(user);
                 }
                 InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), users);
                 listView.setAdapter(adapter);

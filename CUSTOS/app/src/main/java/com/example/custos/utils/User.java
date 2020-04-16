@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.HashMap;
 
-public class User {
+public class User implements java.io.Serializable {
 
     private String userName;
     private String userEmail;

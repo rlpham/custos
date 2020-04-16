@@ -248,17 +248,14 @@ public class MainEventListActivity extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 data3 = new ArrayList<Event>();
-                data2 = new JSONArray();
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
-                    JSONObject obj = new JSONObject();
-                    //Event event = new Event(id, name, area, date, time, description, location_name, invited_users);
 
                     String id = element.getKey();
                     String name = element.child("name").getValue().toString();
-                    String area = element.child("area").getValue().toString();
                     String date = element.child("date").getValue().toString();
                     String time = element.child("time").getValue().toString();
                     String description = element.child("description").getValue().toString();
+                    String area = element.child("area").getValue().toString();
                     String location_name = element.child("location_name").getValue().toString();
                     ArrayList<User> invited_users = getInvitedUsers(dataSnapshot.child(id));
                     Event event = new Event(id, name, area, date, time, description, location_name, invited_users);
@@ -282,7 +279,6 @@ public class MainEventListActivity extends Fragment {
 //                    } catch (JSONException e) {
 //                        e.printStackTrace();
 //                    }
-                    data2.put(obj);
                     data3.add(event);
                 }
 

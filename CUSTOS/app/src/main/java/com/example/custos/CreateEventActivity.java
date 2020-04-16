@@ -248,6 +248,7 @@ public class CreateEventActivity extends AppCompatActivity {
                                         user_information.child(firebaseUser.getUid()).child(event.getID()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
 
                                         //TODO: Append to root/<invited_user_id>/.... using 'selected' ArrayList
+                                        
                                     }
                                 }
                             }
