@@ -239,7 +239,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final RelativeLayout mapsfriendlayoutbackgorund=findViewById(R.id.mapsBackground);
         final RelativeLayout friendsbackground=findViewById(R.id.mapsfriendzone);
         final RelativeLayout evntsbackground=findViewById(R.id.mapseventzone);
-        mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
+        //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
         mapsfriendlayoutbackgorund.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 friendsbackground.setVisibility(View.GONE);
