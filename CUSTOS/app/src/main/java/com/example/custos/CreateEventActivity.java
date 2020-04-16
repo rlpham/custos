@@ -271,7 +271,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     selected.add(lv.getItemAtPosition(i).toString());
                 }
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
-                intent.putStringArrayListExtra("selected", selected);
+                intent.putStringArrayListExtra("selectedNames", selected);
                 startActivityForResult(intent, 18);
             }
         });

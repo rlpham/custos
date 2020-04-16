@@ -35,8 +35,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
     ListView listView;
     TextView invite_guests_back_button;
 
-    ArrayList<String> selected = new ArrayList<String>();
-    ArrayList<String> uids;
+    ArrayList<String> selectedNames = new ArrayList<String>();
 
     Intent intent2;
 
@@ -70,7 +69,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
 
-            ArrayList<String> idk = intent2.getStringArrayListExtra("selected");
+            ArrayList<String> idk = intent2.getStringArrayListExtra("selectedNames");
             view = inflater.inflate(R.layout.invite_guest_item, null);
             final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
 
@@ -78,7 +77,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
                 if(element.equals(names[position])) {
                     ctv.setCheckMarkDrawable(R.drawable.checked);
                     ctv.setChecked(true);
-                    selected.add(element);
+                    selectedNames.add(element);
                 }
             }
             ctv.setTextColor(Color.parseColor("#FFFFFF"));
@@ -90,15 +89,15 @@ public class InviteGuestsActivity extends AppCompatActivity {
                         value = "un-Checked";
                         ctv.setCheckMarkDrawable(0);
                         ctv.setChecked(false);
-                        if(selected.contains(ctv.getText().toString())) {
-                            selected.remove(ctv.getText().toString());
+                        if(selectedNames.contains(ctv.getText().toString())) {
+                            selectedNames.remove(ctv.getText().toString());
                         }
                     } else if (!ctv.isChecked()) {
                         value = "Checked";
                         ctv.setCheckMarkDrawable(R.drawable.checked);
                         ctv.setChecked(true);
-                        if(!selected.contains(ctv.getText().toString())) {
-                            selected.add(ctv.getText().toString());
+                        if(!selectedNames.contains(ctv.getText().toString())) {
+                            selectedNames.add(ctv.getText().toString());
                         }
                     }
                 }
@@ -119,7 +118,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
         intent2 = getIntent();
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid()).child("contacts");
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
         db.addValueEventListener(new ValueEventListener() {
 
             @Override
@@ -127,7 +126,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
                 String[] names = new String[(int)dataSnapshot.getChildrenCount()];
                 int i = 0;
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
-                    names[i] = element.child("name").getValue().toString();
+                    names[i] = element.child("friendName").getValue().toString();
                     i++;
                 }
                 InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), names);
@@ -144,7 +143,7 @@ public class InviteGuestsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
-                intent.putExtra("values", selected);
+                intent.putExtra("values", selectedNames);
                 onActivityResult(18,18, intent);
                 setResult(18, intent);
                 finish();

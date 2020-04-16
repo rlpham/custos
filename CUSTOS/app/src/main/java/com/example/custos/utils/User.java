@@ -1,5 +1,8 @@
 package com.example.custos.utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 
 public class User {
@@ -11,7 +14,8 @@ public class User {
     private String UID;
     private String imageURL;
     private HashMap<String,User> acceptList;
-    public User(){
+
+    public User() {
 
     }
     public User(String name,String uid, String email){
