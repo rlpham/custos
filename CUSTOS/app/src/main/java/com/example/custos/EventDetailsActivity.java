@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.custos.utils.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -64,6 +65,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     double lon;
     ToolKit toolKit;
     String location_name_input;
+    ArrayList<User> invited_users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,19 @@ public class EventDetailsActivity extends AppCompatActivity {
         String description = intent.getStringExtra("event_desc");
         String date = intent.getStringExtra("event_date");
         String time = intent.getStringExtra("event_time");
-        String[] invited_users = intent.getStringExtra("invited_users").split(",");
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        if(args != null) {
+            invited_users = (ArrayList<User>) args.getSerializable("ARRAYLIST");
+            String[] invited_users_adapter = new String[invited_users.size()];
+            for(int i = 0; i < invited_users.size(); i++) {
+                invited_users_adapter[i] = invited_users.get(i).getUserName();
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    R.layout.invite_guest_list_item, R.id.aaaaaaaa, invited_users_adapter);
+            event_detail_invite_list.setAdapter(adapter);
+        }
+
+        //String[] invited_users = intent.getStringExtra("invited_users").split(",");
         String location_name = intent.getStringExtra("location_name");
 
         toolKit = new ToolKit();
@@ -110,12 +124,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_date_input.setText(event_detail_date.getText().toString());
         event_detail_time_input.setText(event_detail_time.getText().toString());
 
-        if(invited_users.length == 1 && invited_users[0].equals("none")) {
 
-        } else {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, invited_users);
-            event_detail_invite_list.setAdapter(adapter);
-        }
 
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         autocompleteFragment = (AutocompleteSupportFragment)
@@ -319,10 +328,21 @@ public class EventDetailsActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 18) {
-            ArrayList<String> selected = data.getStringArrayListExtra("values");
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected);
-            event_detail_invite_list = findViewById(R.id.event_detail_invite_list);
-            event_detail_invite_list.setAdapter(adapter);
+
+            if(data != null) {
+                Bundle args = data.getBundleExtra("BUNDLE");
+                ArrayList<User> selected = (ArrayList<User>) args.getSerializable("ARRAYLIST");
+                String[] selected_adapter = new String[selected.size()];
+                for(int i = 0; i < selected.size(); i++) {
+                    selected_adapter[i] = selected.get(i).getUserName();
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected_adapter);
+                event_detail_invite_list = findViewById(R.id.event_detail_invite_list);
+                event_detail_invite_list.setAdapter(adapter);
+            } else {
+
+            }
+
         }
     }
 

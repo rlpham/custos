@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Event;
+import com.example.custos.utils.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -65,8 +66,8 @@ public class CreateEventActivity extends AppCompatActivity {
     String location_name;
     ToolKit toolKit;
 
-    ArrayList<String> selected;
-
+    //users that will be invited when creating event.
+    ArrayList<User> selected;
 
     FirebaseUser firebaseUser;
     private DatabaseReference user_information;
@@ -186,7 +187,6 @@ public class CreateEventActivity extends AppCompatActivity {
                 event_description_text_view = findViewById(R.id.event_detail_description);
                 event_date_text_view = findViewById(R.id.event_date);
                 event_time_text_view = findViewById(R.id.event_detail_time);
-                final ListView invited_list = findViewById(R.id.event_detail_invite_list);
 
                 event_date_text_view = findViewById(R.id.event_detail_date);
                 event_time_text_view = findViewById(R.id.event_detail_time);
@@ -203,16 +203,22 @@ public class CreateEventActivity extends AppCompatActivity {
 
                     //create event to database -> DB/user_event/<uid>/<event_name>
                     user_information = FirebaseDatabase.getInstance().getReference("user_event");
-                    Common.event = new Event(createEventID(), name, description, event_time_text_view.getText().toString());
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID());
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("name").setValue(Common.event.getName());
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("date").setValue(event_date_text_view.getText().toString());
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("time").setValue(event_time_text_view.getText().toString());
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("description").setValue(Common.event.getDescription());
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("area").setValue(getLocationText(lat, lon));
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location").child("latitude").setValue(lat);
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location").child("longitude").setValue(lon);
-                    user_information.child(firebaseUser.getUid()).child(Common.event.getID()).child("location_name").setValue(location_name);
+                    //    public Event(String ID, String name, String area, String date,
+                    //      String time, String description, String location_name,
+                    //      ArrayList<User> invited_users) {
+                    final Event event = new Event(createEventID(), name, getLocationText(lat, lon),
+                            event_date_text_view.getText().toString(),
+                            event_time_text_view.getText().toString(),
+                            description, location_name);
+                    user_information.child(firebaseUser.getUid()).child(event.getID());
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("name").setValue(event.getName());
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("date").setValue(event.getDate());
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("time").setValue(event.getTime());
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("description").setValue(event.getDescription());
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("area").setValue(event.getArea());
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("location").child("latitude").setValue(lat);
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("location").child("longitude").setValue(lon);
+                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("location_name").setValue(event.getLocation_name());
 
 //                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("date").setValue(event_date_text_view.getText().toString());
 //                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("time").setValue(event_time_text_view.getText().toString());
@@ -224,22 +230,24 @@ public class CreateEventActivity extends AppCompatActivity {
                     //Gather list uids of invited guests
                     userReference = FirebaseDatabase.getInstance().getReference("Users");
                     userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
+
+                        //TODO: REWRITE THIS TO INCORPORATE JUST ONE LIST VIEW AND THE SELECTED ARRAYLIST
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            String id = Common.event.getID();
-                            String strDate = getCurrentTime();
-                            for(int i = 0; i < invited_list.getCount(); i++) {
+                            for(int i = 0; i < lv.getCount(); i++) {
                                 for(DataSnapshot element : dataSnapshot.getChildren()) {
-                                    String invited_name = invited_list.getItemAtPosition(i).toString();
+                                    String invited_name = lv.getItemAtPosition(i).toString();
                                     String current_name = getNameFromValue(element.getValue().toString());
                                     if(invited_name.equals(current_name)) {
                                         //use element.getKey() to write into DB/user/<UID>/notifications/eventInvite
-                                        DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(id);
-                                        notification.child("message").setValue("<SENDER UID> has invited you to an event <EVENT NAME>");
-                                        notification.child("timestamp").setValue(strDate);
+                                        DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(event.getID());
+                                        notification.child("message").setValue(firebaseUser.getUid() + " has invited you to \"" + event.getName() + "\"");
+                                        notification.child("timestamp").setValue(getCurrentTime());
                                         notification.child("sender").setValue(firebaseUser.getUid());
                                         //user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
-                                        user_information.child(firebaseUser.getUid()).child(id).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                                        user_information.child(firebaseUser.getUid()).child(event.getID()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+
+                                        //TODO: Append to root/<invited_user_id>/.... using 'selected' ArrayList
                                     }
                                 }
                             }
@@ -266,12 +274,19 @@ public class CreateEventActivity extends AppCompatActivity {
         findViewById(R.id.event_detail_edit_guests).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> selected = new ArrayList<String>();
-                for(int i = 0; i < lv.getCount(); i++) {
-                    selected.add(lv.getItemAtPosition(i).toString());
-                }
+//                ArrayList<User> intent_selected = new ArrayList<User>();
+//                for(int i = 0; i < lv.getCount(); i++) {
+//                    for(int j = 0; j < selected.size(); j++) {
+//                        if(lv.getItemAtPosition(i).toString().equals(selected.get(j).getUserName())) {
+//                            intent_selected.add(selected.get(j));
+//                        }
+//                    }
+//                }
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
-                intent.putStringArrayListExtra("selectedNames", selected);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST", selected);
+                intent.putExtra("BUNDLE", args);
+                //intent.putStringArrayListExtra("selectedUsers", selected);
                 startActivityForResult(intent, 18);
             }
         });
@@ -285,8 +300,14 @@ public class CreateEventActivity extends AppCompatActivity {
         if(requestCode == 18) {
 
             if(data != null) {
-                selected = data.getStringArrayListExtra("values");
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selected);
+                //selected = data.getStringArrayListExtra("values");
+                Bundle args = data.getBundleExtra("BUNDLE");
+                selected = (ArrayList<User>) args.getSerializable("ARRAYLIST");
+                String[] selectedNames = new String[selected.size()];
+                for(int i = 0; i < selected.size(); i++) {
+                    selectedNames[i] = selected.get(i).getUserName();
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.invite_guest_list_item, R.id.aaaaaaaa, selectedNames);
                 lv = findViewById(R.id.event_detail_invite_list);
                 lv.setAdapter(adapter);
             } else {
