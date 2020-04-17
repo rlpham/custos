@@ -1,5 +1,7 @@
 package com.example.custos.utils;
 
+import android.view.View;
+
 public class Common {
     public static final String USER_INFORMATION     = "User Information";
     public static final String USER_ADDRESS         = "User Address";
@@ -37,5 +39,13 @@ public class Common {
 
     public static final String PASSWORD = "";
     public static final String EMAIL = "psucustos@gmail.com";
+
+    public static int ui_flags =
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
 }
