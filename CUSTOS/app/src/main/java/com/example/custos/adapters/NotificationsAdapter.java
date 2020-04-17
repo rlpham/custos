@@ -1,18 +1,23 @@
 package com.example.custos.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.custos.NotificationActivity;
 import com.example.custos.OtherUserActivity;
 import com.example.custos.R;
 import com.example.custos.utils.Common;
@@ -32,13 +37,20 @@ import java.util.Map;
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.ViewHolder> {
     private Context context;
     private List<Notifications> notificationsList;
-    private Map<Integer,Object> deletedItems;
+    private Map<Integer, Object> deletedItems;
     private DatabaseReference databaseReference;
     private String userName;
     private String imgURL;
     private DatabaseReference notificationsRef;
     private FirebaseUser firebaseUser;
     private Handler handler = new Handler();
+    private static int ui_flags =
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
     public NotificationsAdapter(Context context, List<Notifications> notificationsList2) {
         this.context = context;
@@ -98,19 +110,22 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 System.out.println(notification.getUID() + "-------------------------------");
                 if (dataSnapshot.exists()) {
-                    if (dataSnapshot.child(notification.getUID())
-                            .child("request_type")
-                            .getValue()
-                            .toString().equals("receivedFriendRequest")) {
-                        holder.friendName.setText(userName + " wants to add you as friend");
+                    if (dataSnapshot.child(notification.getUID()).exists()) {
+                        if (dataSnapshot.child(notification.getUID())
+                                .child("request_type")
+                                .getValue()
+                                .toString().equals("receivedFriendRequest")) {
+                            holder.friendName.setText(userName + " wants to add you as friend");
 
+                        }
+                        if (dataSnapshot.child(notification.getUID())
+                                .child("request_type")
+                                .getValue()
+                                .toString().equals("acceptedFriendRequest")) {
+                            holder.friendName.setText(userName + " accepted your friend request");
+                        }
                     }
-                    if (dataSnapshot.child(notification.getUID())
-                            .child("request_type")
-                            .getValue()
-                            .toString().equals("acceptedFriendRequest")) {
-                        holder.friendName.setText(userName + " accepted your friend request");
-                    }
+
 
                 }
 
@@ -164,37 +179,64 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 context.startActivity(intent);
             }
         });
-//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.Chill);
-//                alertDialog.setTitle("Delete Notification");
-//                alertDialog.setMessage("Do you want to remove this notification?");
-//                alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
-//                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        dialogInterface.dismiss();
-//                    }
-//                });
-//                alertDialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(final DialogInterface dialogInterface, int i) {
-//                        Intent intent = new Intent(context,NotificationActivity.class);
-//                        context.startActivity(intent);
-//                        handler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                notificationsRef.child(notification.getUID()).removeValue();
-//                            }
-//                        },2000);
-//                        dialogInterface.dismiss();
-//                    }
-//                });
-//                alertDialog.show();
-//                return false;
-//            }
-//        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.Chill);
+                alertDialog.setTitle("Delete Notification");
+                alertDialog.setMessage("Do you want to remove this notification?");
+                alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alertDialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialogInterface, int i) {
+                        notificationsRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.child(notification.getUID()).exists()) {
+                                    try {
+                                        notificationsRef.child(notification.getUID()).removeValue();
+                                    } catch (Exception e) {
+                                        Toast.makeText(context, e.getMessage() + "Deleting", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                       // dialogInterface.dismiss();
+                    }
+                });
+                // Create the alertDialog:
+                AlertDialog alertDialog2 = alertDialog.create();
+
+                // Set alertDialog "not focusable" so nav bar still hiding:
+                alertDialog2.getWindow().
+                        setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                // Set full-sreen mode (immersive sticky):
+                alertDialog2.getWindow().getDecorView().setSystemUiVisibility(ui_flags);
+
+                // Show the alertDialog:
+                alertDialog2.show();
+
+                // Set dialog focusable so we can avoid touching outside:
+                alertDialog2.getWindow().
+                        clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                return false;
+            }
+        });
 
 
     }

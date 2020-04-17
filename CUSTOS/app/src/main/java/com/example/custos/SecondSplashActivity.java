@@ -15,6 +15,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -227,7 +228,22 @@ public class SecondSplashActivity extends AppCompatActivity{
                         signOut();
                     }
                 });
-                logoutDialog.show();
+                AlertDialog alertDialog2 = logoutDialog.create();
+
+                // Set alertDialog "not focusable" so nav bar still hiding:
+                alertDialog2.getWindow().
+                        setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                // Set full-sreen mode (immersive sticky):
+                alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                // Show the alertDialog:
+                alertDialog2.show();
+
+                // Set dialog focusable so we can avoid touching outside:
+                alertDialog2.getWindow().
+                        clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             }
         });
 

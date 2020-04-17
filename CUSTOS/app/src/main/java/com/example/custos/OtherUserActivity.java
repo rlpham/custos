@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -153,7 +154,22 @@ public class OtherUserActivity extends AppCompatActivity {
                                 }, 1500);
                             }
                         });
-                        alertDialog.show();
+                        AlertDialog alertDialog2 = alertDialog.create();
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        alertDialog2.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                        // Show the alertDialog:
+                        alertDialog2.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        alertDialog2.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
                     }
                     if (CURRENT_STATE.equals("request_sent")) {
@@ -180,7 +196,22 @@ public class OtherUserActivity extends AppCompatActivity {
                                 }, 1500);
                             }
                         });
-                        alertDialog.show();
+                        AlertDialog alertDialog2 = alertDialog.create();
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        alertDialog2.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                        // Show the alertDialog:
+                        alertDialog2.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        alertDialog2.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
                     }
                     if (CURRENT_STATE.equals("request_received")) {
@@ -202,6 +233,7 @@ public class OtherUserActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
+                                addFriend.setEnabled(true);
                             }
                         });
                         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -218,7 +250,22 @@ public class OtherUserActivity extends AppCompatActivity {
                                 }, 1000);
                             }
                         });
-                        alertDialog.show();
+                        AlertDialog alertDialog2 = alertDialog.create();
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        alertDialog2.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                        // Show the alertDialog:
+                        alertDialog2.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        alertDialog2.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
                     }
 
                 }

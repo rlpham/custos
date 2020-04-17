@@ -73,18 +73,17 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:layout_width="389dp"
-        android:layout_height="410dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="30dp"
-        android:weightSum="5">
+        android:padding="30dp">
 
 
         <Button
             android:id="@+id/reportBug"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="20dp"
             android:layout_weight="1"
             android:background="#fece2f"
             android:text="@string/report_a_problem"
@@ -141,18 +140,21 @@
             android:textStyle="bold" />
 
 
+
+
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/cardViewReport"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/signout_button_setting"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#212121">
-
-
-    </RelativeLayout>
-
-
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="50dp"
+        android:drawableLeft="@drawable/ic_directions_run_yellow_50dp"
+        android:text="Logout"
+        android:textColor="#FFFFFF"
+        android:textSize="18dp"
+        android:textStyle="normal"/>
 
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.custos;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +40,7 @@ public class NotificationActivity extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private NotificationsAdapter adapter;
     private List<Notifications> notificationsList;
+    private TextView noNotifications;
     public NotificationActivity() {
         // Required empty public constructor
     }
@@ -62,6 +65,8 @@ public class NotificationActivity extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notificationfragment, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_notification);
+        noNotifications = view.findViewById(R.id.no_notifications);
+        noNotifications.setVisibility(View.INVISIBLE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         notificationsList = new ArrayList<>();
@@ -97,7 +102,7 @@ public class NotificationActivity extends Fragment {
                         Notifications notifications = snapshot.getValue(Notifications.class);
                         assert notifications != null;
                         assert fUser != null;
-                            notificationsList.add(0,notifications);
+                        notificationsList.add(notifications);
 
 
                     adapter = new NotificationsAdapter(getContext(), notificationsList);
@@ -112,6 +117,20 @@ public class NotificationActivity extends Fragment {
 
             }
         });
+//        DatabaseReference friendRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS);
+//        friendRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(!dataSnapshot.child(fUser.getUid()).exists()){
+//                    noNotifications.setVisibility(View.VISIBLE);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
 
