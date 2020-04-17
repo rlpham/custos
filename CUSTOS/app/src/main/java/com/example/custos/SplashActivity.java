@@ -50,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
     TextView termsNService;
     FirebaseAuth mAuth;
     User userApp = new User();
+    boolean first, second;
     private SharedPreference sharedPreferenceObj;
 
 
@@ -99,10 +100,11 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
                 });
+
         termsNService = findViewById(R.id.termNSer);
         termsNService.setVisibility(View.INVISIBLE);
-//        termsNService.setText(Html.fromHtml("Do you agree to the <a href=\'https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf\'>Terms and Service</a>"));
-//        termsNService.setMovementMethod(LinkMovementMethod.getInstance());
+        termsNService.setText(Html.fromHtml("Do you agree to the \n<a href=\'https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf\'>Terms and Service</a>?"));
+        termsNService.setMovementMethod(LinkMovementMethod.getInstance());
         ////////////////////https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf
 
         sharedPreferenceObj = new SharedPreference(SplashActivity.this);
@@ -114,9 +116,12 @@ public class SplashActivity extends AppCompatActivity {
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            sharedPreferenceObj.setApp_runFirst("NO");
-
-
+                            setSecond();
+                            if(first && second)
+                            {
+                                sharedPreferenceObj.setApp_runFirst("NO");
+                                System.out.println("no longer first time");
+                            }
                         }
                     })
                     .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
@@ -127,39 +132,43 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
-                    .setTitle("Do you agree to the Terms and Services below?")
-                    .setMessage(s)
+                    .setTitle("Terms and Services")
+                    .setMessage(Html.fromHtml("Do you accept Custos's " + "<a href=\"https://github.com/rlpham/Custos/blob/master/TermsAndServices.pdf\">Terms & Services</a>?"))
                     .create();
 
             d.show();
             ((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
 
-            final SpannableString st = new SpannableString("https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf\n"); // msg should have url to enable clicking
-            Linkify.addLinks(st, Linkify.ALL);
+//            final SpannableString st = new SpannableString("https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf"); // msg should have url to enable clicking
+//            Linkify.addLinks(st, Linkify.ALL);
 
             final AlertDialog dd = new AlertDialog.Builder(SplashActivity.this, R.style.Chill)
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            sharedPreferenceObj.setApp_runFirst("NO");
-
+                            //sharedPreferenceObj.setApp_runFirst("NO");
+                            setFirst();
+                            if(first && second)
+                            {
+                                sharedPreferenceObj.setApp_runFirst("NO");
+                                System.out.println("no longer first time");
+                            }
                         }
                     })
                     .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
+                              finish();
                         }
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
-                    .setTitle("Do you agree to the Privacy Policy below?")
-                    .setMessage(st)
+                    .setTitle("Privacy Policy")
+                    .setMessage(Html.fromHtml("Do you accept Custos's " + "<a href=\"https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf\">Privacy Policy</a>?"))
                     .create();
 
             dd.show();
             ((TextView) dd.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
-
 
         } else {
 
@@ -368,6 +377,15 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    public void setFirst()
+    {
+        first = true;
+    }
+
+    public void setSecond()
+    {
+        second = true;
+    }
 
 //TODO: saved last signed in google account
 //    @Override
