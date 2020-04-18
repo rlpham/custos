@@ -621,7 +621,8 @@ private void setcontactslocation()  {
         /**
          * Generate markers
          */
-        generateMarkers();
+        dangerZoneFacilitator();
+        //generateMarkers();
 
         //Dale Code
         mMap.setOnMarkerClickListener(this);
@@ -1125,6 +1126,47 @@ private void darkModeChecker(){
                     }
                 });
     }
+
+    /**
+     * Check to see if dangerZone is enabled or disabled
+     * @return
+     */
+    private void dangerZoneFacilitator(){
+        final DatabaseReference dangerZoneReference = FirebaseDatabase.getInstance().getReference("userSettings");
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        boolean showDangerZone = true;
+        dangerZoneReference.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+
+
+                            }
+                        }
+                        //if user available
+                        else {
+                            String dangerzoneval=  dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").getValue().toString();
+                            if(dangerzoneval.equals("true")){
+                                generateMarkers();
+                            }else {
+                                //DO NOTHING
+                            }
+                        }
+
+
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
+
 
     /**
      * Actually placing the marker on the map based on what's in the DB
