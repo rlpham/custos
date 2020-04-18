@@ -322,6 +322,24 @@ public class SettingsActivity extends Fragment {
             }
         });
 
+        dangerzoneswitch.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        String dangerzoneval=  dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").getValue().toString();
+                        if(dangerzoneval.equals("true")){
+                            danger.setChecked(true);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
 
         // Inflate the layout for this fragment
