@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class OtherUserActivity extends AppCompatActivity {
     public static final String TAG = "OtherUserActivity";
     private String CURRENT_STATE;
+    private DatabaseReference notificationsRef;
     CircleImageView otherUserImage;
     TextView otherName,
             otherName2,
@@ -47,7 +49,7 @@ public class OtherUserActivity extends AppCompatActivity {
             backButton;
     Button addFriend, declineRequest;
     String currentUID, otherUserId, saveCurrentDate;
-    String timeSent;
+    String timeSent,dateSent,dateAccept,timeAccept;
     FirebaseUser firebaseUser;
     DatabaseReference friendRequestReference;
     DatabaseReference databaseReference;
@@ -78,7 +80,37 @@ public class OtherUserActivity extends AppCompatActivity {
             }
         });
 
+        final View decorView = getWindow().getDecorView();
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
 
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            // TODO: The system bars are visible. Make any desired
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    decorView.setSystemUiVisibility(uiOptions);
+                                }
+                            }, 2000);
+                        } else {
+                            // TODO: The system bars are NOT visible. Make any desired
+                            // adjustments to your UI, such as hiding the action bar or
+                            // other navigational controls.
+                        }
+                    }
+                });
         intent = getIntent();
         currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         otherUserId = intent.getStringExtra("userid");
@@ -87,7 +119,10 @@ public class OtherUserActivity extends AppCompatActivity {
         declineRequest.setEnabled(false);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(otherUserId);
-        friendRequestReference = FirebaseDatabase.getInstance().getReference("FriendRequests");
+        friendRequestReference = FirebaseDatabase.getInstance().getReference(Common.FRIEND_REQUEST);
+
+        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS);
+
         acceptFriends = FirebaseDatabase.getInstance().getReference("Friends");
         if (!currentUID.equals(otherUserId)) {
             addFriend.setOnClickListener(new View.OnClickListener() {
@@ -119,7 +154,22 @@ public class OtherUserActivity extends AppCompatActivity {
                                 }, 1500);
                             }
                         });
-                        alertDialog.show();
+                        AlertDialog alertDialog2 = alertDialog.create();
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        alertDialog2.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                        // Show the alertDialog:
+                        alertDialog2.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        alertDialog2.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
                     }
                     if (CURRENT_STATE.equals("request_sent")) {
@@ -146,7 +196,22 @@ public class OtherUserActivity extends AppCompatActivity {
                                 }, 1500);
                             }
                         });
-                        alertDialog.show();
+                        AlertDialog alertDialog2 = alertDialog.create();
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        alertDialog2.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                        // Show the alertDialog:
+                        alertDialog2.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        alertDialog2.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 
                     }
                     if (CURRENT_STATE.equals("request_received")) {
@@ -168,6 +233,7 @@ public class OtherUserActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.dismiss();
+                                addFriend.setEnabled(true);
                             }
                         });
                         alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -184,7 +250,22 @@ public class OtherUserActivity extends AppCompatActivity {
                                 }, 1000);
                             }
                         });
-                        alertDialog.show();
+                        AlertDialog alertDialog2 = alertDialog.create();
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        alertDialog2.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                        // Show the alertDialog:
+                        alertDialog2.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        alertDialog2.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
                     }
 
                 }
@@ -284,7 +365,7 @@ public class OtherUserActivity extends AppCompatActivity {
                 });
     }
 
-    private void acceptRequest() {
+    public void acceptRequest() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
         saveCurrentDate = currentDate.format(calendar.getTime());
@@ -375,9 +456,64 @@ public class OtherUserActivity extends AppCompatActivity {
                     }
                 });
 
+
+        Calendar calendarAccept = Calendar.getInstance();
+        SimpleDateFormat acceptDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        dateAccept = acceptDate.format(calendarAccept.getTime());
+        timeAccept = acceptTime.format(timeAcceptFriend.getTime());
+
+        notificationsRef.child(currentUID).child(otherUserId)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"removed notification",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"removed failed",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+        notificationsRef.child(otherUserId).child(currentUID)
+                .child("request_type").setValue("acceptedFriendRequest")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(dateAccept + " at "+ timeAccept);
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String nameCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.USER_NAME).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                    String uidCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.UID).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+                                    String img = dataSnapshot.child(currentUID)
+                                            .child(Common.IMAGE_URL).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+
+
     }
 
-    private void cancelFriendRequest() {
+    public void cancelFriendRequest() {
         friendRequestReference.child(currentUID).child(otherUserId)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -398,6 +534,19 @@ public class OtherUserActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
+                        }
+                    }
+                });
+
+        notificationsRef.child(otherUserId).child(currentUID)
+                .removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"removed notification",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"removed failed",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -460,12 +609,45 @@ public class OtherUserActivity extends AppCompatActivity {
 
     private void sendFriendRequest() {
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy HH:mm:ss.SSS");
-        timeSent = currentDate.format(calendar.getTime());
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar time = Calendar.getInstance();
+        SimpleDateFormat currentTime = new SimpleDateFormat("hh:mm a");
+        dateSent = currentDate.format(calendar.getTime());
+        timeSent = currentTime.format(time.getTime());
 
+        notificationsRef.child(otherUserId).child(currentUID)
+                .child("request_type").setValue("receivedFriendRequest")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(dateSent + " at "+ timeSent);
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
-        friendRequestReference.child(currentUID).child(otherUserId).child("request_time").setValue(timeSent);
-        friendRequestReference.child(otherUserId).child(currentUID).child("request_time").setValue(timeSent);
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String nameCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.USER_NAME).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                    String uidCurr = dataSnapshot.child(currentUID)
+                                            .child(Common.UID).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+                                    String img = dataSnapshot.child(currentUID)
+                                            .child(Common.IMAGE_URL).getValue().toString();
+                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+        friendRequestReference.child(currentUID).child(otherUserId).child("request_time").setValue(dateSent);
+        friendRequestReference.child(otherUserId).child(currentUID).child("request_time").setValue(dateSent);
 
         friendRequestReference.child(currentUID).child(otherUserId)
                 .child("request_type").setValue("sent")

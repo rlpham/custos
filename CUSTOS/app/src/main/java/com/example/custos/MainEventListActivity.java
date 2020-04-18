@@ -8,12 +8,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.custos.utils.Event;
+import com.example.custos.utils.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MainEventListActivity extends Fragment {
@@ -42,6 +44,7 @@ public class MainEventListActivity extends Fragment {
     DatabaseReference db;
     FirebaseUser firebaseUser;
     JSONArray data2;
+    ArrayList<Event> data3;
     RecyclerView rv;
     View view;
     LinearLayoutManager llm;
@@ -64,7 +67,7 @@ public class MainEventListActivity extends Fragment {
     }
 
     class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
-        JSONArray data;
+        ArrayList<Event> data;
         ArrayList<String> invited_users;
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -79,13 +82,13 @@ public class MainEventListActivity extends Fragment {
                 super(v);
                 cardView = v.findViewById(R.id.cv);
                 eventTitle = v.findViewById(R.id.event_title);
-                eventLocation = v.findViewById(R.id.event_detail_location);
+                eventLocation = v.findViewById(R.id.card_event_location);
                 eventDate = v.findViewById(R.id.event_date);
                 eventTime = v.findViewById(R.id.event_time);
             }
         }
 
-        EventListAdapter(JSONArray data) {
+        EventListAdapter(ArrayList<Event> data) {
             this.data = data;
         }
 
@@ -103,30 +106,39 @@ public class MainEventListActivity extends Fragment {
         public void onBindViewHolder(ViewHolder holder, final int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            try {
-                holder.eventTitle.setText(data.getJSONObject(position).getString("name"));
-                holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
-                holder.eventDate.setText(data.getJSONObject(position).getString("date"));
-                holder.eventTime.setText(data.getJSONObject(position).getString("time"));
+//            try {
+//                holder.eventTitle.setText(data.getJSONObject(position).getString("name"));
+//                holder.eventLocation.setText(data.getJSONObject(position).getString("location"));
+//                holder.eventDate.setText(data.getJSONObject(position).getString("date"));
+//                holder.eventTime.setText(data.getJSONObject(position).getString("time"));
+
+                holder.eventTitle.setText(data.get(position).getName());
+                holder.eventLocation.setText(data.get(position).getArea());
+                holder.eventDate.setText(data.get(position).getDate());
+                holder.eventTime.setText(data.get(position).getTime());
+
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //START HERE
-                        try {
+                        System.out.println("CLICKED HERE");
+                        //try {
                             Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                            intent.putExtra("event_name", data.getJSONObject(position).getString("name"));
-                            intent.putExtra("event_desc", data.getJSONObject(position).getString("description"));
-                            intent.putExtra("event_date", data.getJSONObject(position).getString("date"));
-                            intent.putExtra("event_time", data.getJSONObject(position).getString("time"));
-                            intent.putExtra("invited_users", data.getJSONObject(position).getString("invited_users"));
+                            intent.putExtra("event_id", data.get(position).getID());
+                            intent.putExtra("event_name", data.get(position).getName());
+                            intent.putExtra("event_desc", data.get(position).getDescription());
+                            intent.putExtra("event_date", data.get(position).getDate());
+                            Bundle args = new Bundle();
+                            args.putSerializable("BUNDLE", (Serializable)data.get(position).getInvited_users());
+                            intent.putExtra("ARRAYLIST", args);
+                            intent.putExtra("event_time", data.get(position).getTime());
+                            intent.putExtra("location_name", data.get(position).getLocation_name());
                             startActivity(intent);
-                        } catch(JSONException e) {
-
-                        }
+//                        } catch(JSONException e) {
+//                            System.out.println(e);
+//                        }
 
                     }
                 });
-
                 holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -136,39 +148,20 @@ public class MainEventListActivity extends Fragment {
                         return true;
                     }
                 });
-            } catch (JSONException e) {
-                System.out.println(e);
-            }
+//            } catch (JSONException e) {
+//                System.out.println(e);
+//            }
         }
 
         @Override
         public int getItemCount() {
-            return data.length();
+            return data.size();
         }
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
         }
-    }
-
-    public class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
-
-        private final int verticalSpaceHeight;
-
-        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
-            this.verticalSpaceHeight = verticalSpaceHeight;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-                                   RecyclerView.State state) {
-            if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-                outRect.bottom = verticalSpaceHeight;
-            }
-        }
-
-
     }
 
 
@@ -178,7 +171,20 @@ public class MainEventListActivity extends Fragment {
 
         view = inflater.inflate(R.layout.main_event, container, false);
 
-        //Modifys the view to go on top of navigation rather than on top
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            final public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager()
                 .getDefaultDisplay()
@@ -190,13 +196,13 @@ public class MainEventListActivity extends Fragment {
 
         switch(displayMetrics.densityDpi) {
             case 420:
-                dpiOffset = 210;
+                dpiOffset = 20;
                 break;
             case 560:
-                dpiOffset = 330;
+                dpiOffset = 50;
                 break;
             default:
-                dpiOffset = 210;
+                dpiOffset = 20;
                 break;
         }
         view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height-dpiOffset));
@@ -214,11 +220,7 @@ public class MainEventListActivity extends Fragment {
         rv = view.findViewById(R.id.recycler);
         llm = new LinearLayoutManager(this.getContext());
 
-        try {
-            listify();
-        } catch(JSONException e) {
-            System.out.println(e);
-        }
+        listify();
 
         return view;
     }
@@ -234,42 +236,54 @@ public class MainEventListActivity extends Fragment {
 
     }
 
-    public void listify() throws JSONException {
-
-        JSONArray data = dbHandler.getEventsList();
+    public void listify() {
+        //JSONArray data = dbHandler.getEventsList();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                data2 = new JSONArray();
+                data3 = new ArrayList<Event>();
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.put("name", element.child("name").getValue());
-                        obj.put("location", element.child("area").getValue());
-                        obj.put("date", element.child("date").getValue());
-                        obj.put("time", element.child("time").getValue());
-                        obj.put("description", element.child("description").getValue());
-                        if(element.child("invited_users").getValue() == null) {
-                            obj.put("invited_users", "none");
-                        } else {
-                            obj.put("invited_users",  getInvitedUsers(element.child("invited_users").getValue().toString()));
 
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    data2.put(obj);
+                    String id = element.getKey();
+                    String name = element.child("name").getValue().toString();
+                    String date = element.child("date").getValue().toString();
+                    String time = element.child("time").getValue().toString();
+                    String description = element.child("description").getValue().toString();
+                    String area = element.child("area").getValue().toString();
+                    String location_name = element.child("location_name").getValue().toString();
+                    ArrayList<User> invited_users = getInvitedUsers(dataSnapshot.child(id));
+                    Event event = new Event(id, name, area, date, time, description, location_name, invited_users);
+
+//                    try {
+//                        obj.put("id", element.getKey());
+//                        obj.put("name", element.child("name").getValue());
+//                        obj.put("location", element.child("area").getValue());
+//                        obj.put("date", element.child("date").getValue());
+//                        obj.put("time", element.child("time").getValue());
+//                        obj.put("description", element.child("description").getValue());
+//                        obj.put("location_name", element.child("location_name").getValue());
+
+
+
+//                        if(element.child("invited_users").getValue() == null) {
+//                            obj.put("invited_users", "none");
+//                        } else {
+//                            //obj.put("invited_users",  getInvitedUsers(element.child("invited_users").getValue().toString()));
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+                    data3.add(event);
                 }
 
 
                 rv = view.findViewById(R.id.recycler);
                 llm = new LinearLayoutManager(getContext());
-                RecyclerView.Adapter adapter = new EventListAdapter(data2);
+                RecyclerView.Adapter adapter = new EventListAdapter(data3);
                 rv.setHasFixedSize(true);
                 rv.setLayoutManager(llm);
-                //rv.addItemDecoration(new VerticalSpaceItemDecoration(75));
                 rv.setAdapter(adapter);
 
 
@@ -282,29 +296,40 @@ public class MainEventListActivity extends Fragment {
 
     }
     //Creates list of names based off raw string value of datasnapshot
-    private String getInvitedUsers(String data)  {
-        //I/System.out: {a={name=Madison Beer}, b={name=Blake Lively}, c={name=Alex Morgan}}
-        //ArrayList<String> invited_users = new ArrayList<String>();
-        String invited_users = "";
+//    private ArrayList<User> getInvitedUsers(String data)  {
+//        //I/System.out: {a={name=Madison Beer}, b={name=Blake Lively}, c={name=Alex Morgan}}
+//        String invited_users = "";
+//
+//        if(data == "none") {
+//            return "none";
+//        } else {
+//            for(int i = 0; i < data.length(); i++) {
+//                if (i + 5 < data.length()) {
+//                    if (data.substring(i, i + 5).equals("name=")) {
+//                        int index = i + 5;
+//                        for (int j = index; j < data.length(); j++) {
+//                            if (data.charAt(j) == '}') {
+//                                invited_users += (data.substring(index, j) + ',');
+//                                break;
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            return invited_users;
+//        }
+//    }
 
-        if(data == "none") {
-            return "none";
-        } else {
-            for(int i = 0; i < data.length(); i++) {
-                if (i + 5 < data.length()) {
-                    if (data.substring(i, i + 5).equals("name=")) {
-                        int index = i + 5;
-                        for (int j = index; j < data.length(); j++) {
-                            if (data.charAt(j) == '}') {
-                                invited_users += (data.substring(index, j) + ',');
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            return invited_users;
+    private ArrayList<User> getInvitedUsers(DataSnapshot dataSnapshot) {
+        ArrayList<User> invited_users = new ArrayList<User>();
+        DataSnapshot data = dataSnapshot.child("invited_users");
+        for(DataSnapshot element : data.getChildren()) {
+            User user = new User();
+            user.setUserName(element.child("name").getValue().toString());
+            user.setUID(element.getKey());
+            invited_users.add(user);
         }
+        return invited_users;
     }
 
 

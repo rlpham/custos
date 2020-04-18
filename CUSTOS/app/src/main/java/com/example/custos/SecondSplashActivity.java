@@ -2,6 +2,7 @@ package com.example.custos;
 
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,7 +54,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,6 +106,42 @@ public class SecondSplashActivity extends AppCompatActivity{
         signOut =       findViewById(R.id.signout_button);
         homeLocation =  findViewById(R.id.homeLocation);
         displayEmergencyContact = findViewById(R.id.emergencyContactDisplay);
+
+        final View decorView = getWindow().getDecorView();
+
+
+
+
+        // Hide both the navigation bar and the status bar.
+        // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
+        // a general rule, you should design your app to hide the status bar whenever you
+        // hide the navigation bar.
+        final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            // TODO: The system bars are visible. Make any desired
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    decorView.setSystemUiVisibility(uiOptions);
+                                }
+                            }, 2000);
+                        } else {
+                            // TODO: The system bars are NOT visible. Make any desired
+                            // adjustments to your UI, such as hiding the action bar or
+                            // other navigational controls.
+                        }
+                    }
+                });
 
         //setHomeButton = findViewById(R.id.setHomeLocation);
         backButton =    findViewById(R.id.back_button2);
@@ -184,13 +222,28 @@ public class SecondSplashActivity extends AppCompatActivity{
                     }
 
                 });
-                logoutDialog.setPositiveButton("Ye", new DialogInterface.OnClickListener() {
+                logoutDialog.setPositiveButton("Yea", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         signOut();
                     }
                 });
-                logoutDialog.show();
+                AlertDialog alertDialog2 = logoutDialog.create();
+
+                // Set alertDialog "not focusable" so nav bar still hiding:
+                alertDialog2.getWindow().
+                        setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                // Set full-sreen mode (immersive sticky):
+                alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                // Show the alertDialog:
+                alertDialog2.show();
+
+                // Set dialog focusable so we can avoid touching outside:
+                alertDialog2.getWindow().
+                        clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             }
         });
 
@@ -296,6 +349,11 @@ public class SecondSplashActivity extends AppCompatActivity{
             email.setText(firebaseEmail);
             //Glide.with(this).load(String.valueOf(personPhoto)).into(imageView);
         }
+
+
+
+
+
     }
 
 

@@ -3,17 +3,24 @@ package com.example.custos;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +32,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.FirstTimeLoginDialog;
 import com.example.custos.utils.User;
@@ -58,11 +66,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import pl.droidsonroids.gif.GifImageView;
 
 //import com.google.android.libraries.places.api.Places;
@@ -76,6 +96,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FragmentTransaction transaction;
     private FusedLocationProviderClient fusedLocationClient;
     private final int ok = 0;
+
     GoogleSignInClient googleSignInClient;
     //Testcode below
 
@@ -214,9 +235,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //startActivity(intent);
             }
         });
-
-
-
+        final Button friendmapbutton=findViewById(R.id.mapsfriendbutton);
+        final RelativeLayout mapsfriendlayoutbackgorund=findViewById(R.id.mapsBackground);
+        final RelativeLayout friendsbackground=findViewById(R.id.mapsfriendzone);
+        final RelativeLayout evntsbackground=findViewById(R.id.mapseventzone);
+        //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
+        mapsfriendlayoutbackgorund.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                friendsbackground.setVisibility(View.GONE);
+                mapsfriendlayoutbackgorund.setVisibility(View.GONE);
+                evntsbackground.setVisibility(View.GONE);
+                friendmapbutton.setVisibility(View.GONE); }
+        });
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -226,21 +256,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_events:
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
+                      //  friendmapbutton.setVisibility(View.GONE);
+                  //      mapsback.setVisibility(View.GONE);
+                        friendsbackground.setVisibility(View.GONE);
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
+                        friendsbackground.setVisibility(View.GONE);
+                    //    mapsback.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
+                        friendsbackground.setVisibility(View.GONE);
+                    //    mapsback.setVisibility(View.GONE);
                       openFragment(FriendsFragment.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
+                        friendsbackground.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
+                     //   mapsback.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
 //                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
 //                        startActivityForResult(intent,2);
@@ -280,7 +319,7 @@ private LatLng eventlocation;
 
         }else
         if(eventlocation!=null) {
-            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess));
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess)).setSnippet("All because of dale");
            // moveToCurrentLocation(eventlocation);
         }
     }
@@ -289,13 +328,13 @@ private LatLng eventlocation;
     public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.tempcontactpic))).setSnippet("All because of dale");
+        mMap.addMarker(new MarkerOptions().position(ll).snippet("Contacts").icon(BitmapDescriptorFactory.fromResource(R.drawable.face2))).setTag(mess);
 
     }
-    public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess,String desc) {
+    public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess) {
 
 
-        mMap.addMarker(new MarkerOptions().position(ll).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.event3))).setSnippet(desc);
+        mMap.addMarker(new MarkerOptions().position(ll).snippet("Events").icon(BitmapDescriptorFactory.fromResource(R.drawable.event3))).setTag(mess);
 
     }
     /**
@@ -335,10 +374,11 @@ private LatLng eventlocation;
         });
     }
 
-private void setcontactslocation(){
+private void setcontactslocation()  {
     final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
 
     final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Friends");
+
 
     databaseReference.orderByKey().equalTo(fUser.getUid()).addValueEventListener(new ValueEventListener() {
         @Override
@@ -351,25 +391,9 @@ private void setcontactslocation(){
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.child(ul.getUID()).exists()) {
-                                user_information2.orderByKey()
-                                        .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.child(ul.getUID()).exists()) {
-                                            DataSnapshot snapshot = dataSnapshot.child(ul.getUID()).child("userName");
-                                            String name = snapshot.getValue() + "";
-                                            LatLng ll = new LatLng(ul.getLat(), ul.getLon());
-                                            setEventsLocationwithoutzooming(ll, name);
+                                LatLng ll = new LatLng(ul.getLat(), ul.getLon());
+                                setEventsLocationwithoutzooming(ll, ul.getUID());
 
-                                        }
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
                             }
                            }
 
@@ -443,10 +467,18 @@ private void setcontactslocation(){
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
     DatabaseReference user_information2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-
+//        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener(){
+//
+//            @Override
+//            public void onMapClick(LatLng point) {
+//friendsbackground.setVisibility(View.GONE);
+//            }
+//
+//        });
 //        db.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -491,9 +523,10 @@ private void setcontactslocation(){
                         public void onSuccess(final Location location) {
 
                             LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
-                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE )));
+//                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
+//                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE ))).setSnippet("All because of dale");
                             moveToCurrentLocation(sydney);
+
                             user_information.orderByKey()
                                     .equalTo(firebaseUser.getUid())
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -636,16 +669,11 @@ private void setcontactslocation(){
                         //if user available
                         else {
                             for(DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()){
-                                String name="",desc="",date="",time="";
                                 double lat=0,lon=0;
                                 if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()&&snapshot.child("name").exists()) {
-                                    name=snapshot.child("name").getValue().toString();
-                                    lat = Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
-                                    lon = Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
-                                    desc=snapshot.child("description").getValue().toString();
-                                    date=snapshot.child("date").getValue().toString();
-                                    time=snapshot.child("time").getValue().toString();
-                                    setEventsLocationwithoutzoomingwithdesc(new LatLng(lat,lon),name,desc +" at "+ time + " , "+date);
+                                    lat=Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
+                                    lon=Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
+                                    setEventsLocationwithoutzoomingwithdesc(new LatLng(lat,lon),snapshot.getKey());
                                 }
 
                             }
@@ -729,6 +757,7 @@ private void darkModeChecker(){
             @Override
             public void run() {
                getcurrentlocation(googleMap);
+             try{   setcontactslocation();}catch (Exception e){}
                 handler.postDelayed(this, 10000);
             }
         }, 10000);
@@ -737,22 +766,22 @@ private void darkModeChecker(){
             @Override
             public void run() {
                setHomeLoc();
-                setcontactslocation();
+               try{   setcontactslocation();}catch (Exception e){}
             }
         }, 2000);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                GifImageView gifimg=findViewById(R.id.gifinmaps);
-                gifimg.setVisibility(View.GONE);
-                final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
-                dangerzonebutton.setVisibility(View.VISIBLE);
-            }
-        }, 2500);
+      //  handler.postDelayed(new Runnable() {
+         //   @Override
+        //    public void run() {
+               // GifImageView gifimg=findViewById(R.id.gifinmaps);
+              //  gifimg.setVisibility(View.GONE);
+           //    final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+            //    dangerzonebutton.setVisibility(View.VISIBLE);
+        //    }
+      //  }, 2500);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
         // Zoom out to zoom level 10, animating with a duration of 2 seconds.
@@ -893,15 +922,162 @@ private void darkModeChecker(){
 
 
     }
+    private String getInvitedUsers(String data)  {
+        //I/System.out: {a={name=Madison Beer}, b={name=Blake Lively}, c={name=Alex Morgan}}
+        String invited_users = "";
 
+        if(data == "none") {
+            return "none";
+        } else {
+            for(int i = 0; i < data.length(); i++) {
+                if (i + 5 < data.length()) {
+                    if (data.substring(i, i + 5).equals("name=")) {
+                        int index = i + 5;
+                        for (int j = index; j < data.length(); j++) {
+                            if (data.charAt(j) == '}') {
+                                invited_users += (data.substring(index, j) + ',');
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return invited_users;
+        }
+    }
     /**
      * This is the actionlistener for all the markers!! Add to this method if you want marker
      * to do something when clicked.
      * @param marker
      * @return
      */
+    JSONArray data2;
     @Override
     public boolean onMarkerClick(Marker marker) {
+        final RelativeLayout mapsfriendlayoutbackgorund=findViewById(R.id.mapsBackground);
+        if(marker.getSnippet().contains("Events")){
+            final TextView mapseventName=findViewById(R.id.mapseventName);
+            final Button mapeventbutton=findViewById(R.id.mapseventbutton);
+            final RelativeLayout mapseventlayout=findViewById(R.id.mapseventzone);
+            final String eventid=marker.getTag().toString();
+           FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(eventid);
+            db.addValueEventListener(new ValueEventListener() {
+                                         @Override
+                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                             data2 = new JSONArray();
+                                                 JSONObject obj = new JSONObject();
+                                                 try {
+                                                     obj.put("id", dataSnapshot.getKey());
+                                                     obj.put("name", dataSnapshot.child("name").getValue());
+                                                     obj.put("location", dataSnapshot.child("area").getValue());
+                                                     obj.put("date", dataSnapshot.child("date").getValue());
+                                                     obj.put("time", dataSnapshot.child("time").getValue());
+                                                     obj.put("description", dataSnapshot.child("description").getValue());
+                                                     obj.put("location_name", dataSnapshot.child("location_name").getValue());
+                                                     if(dataSnapshot.child("invited_users").getValue() == null) {
+                                                         obj.put("invited_users", "none");
+                                                     } else {
+                                                         obj.put("invited_users",  getInvitedUsers(dataSnapshot.child("invited_users").getValue().toString()));
+                                                     }
+                                                 } catch (JSONException e) {
+                                                     e.printStackTrace();
+                                                 }
+                                                 data2.put(obj);
+                                             try {
+                                                 mapseventName.setText(data2.getJSONObject(0).getString("name"));
+                                             }catch (Exception e){
+
+                                             }
+
+                                         }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            mapseventName.setVisibility(View.VISIBLE);
+            mapseventlayout.setVisibility(View.VISIBLE);
+            mapeventbutton.setVisibility(View.VISIBLE);
+            mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
+            mapeventbutton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    mapseventlayout.setVisibility(View.GONE);
+                    mapsfriendlayoutbackgorund.setVisibility(View.GONE);
+                    mapeventbutton.setVisibility(View.GONE);
+                    mapseventName.setVisibility(View.GONE);
+                    try {
+                        Intent intent = new Intent(getApplicationContext(), EventDetailsActivity.class);
+                        intent.putExtra("event_id", data2.getJSONObject(0).getString("id"));
+                        intent.putExtra("event_name", data2.getJSONObject(0).getString("name"));
+                        intent.putExtra("event_desc", data2.getJSONObject(0).getString("description"));
+                        intent.putExtra("event_date", data2.getJSONObject(0).getString("date"));
+                        intent.putExtra("event_time", data2.getJSONObject(0).getString("time"));
+                        intent.putExtra("invited_users", data2.getJSONObject(0).getString("invited_users"));
+                        intent.putExtra("location_name", data2.getJSONObject(0).getString("location_name"));
+                        startActivity(intent);
+                    } catch(JSONException e) {
+                        System.out.println(e);
+                    }
+                }
+            });
+
+        }
+
+        if(marker.getSnippet().contains("Contacts")){
+            final TextView mapsfriendName=findViewById(R.id.mapsfriendName);
+
+            final Button friendmapbutton=findViewById(R.id.mapsfriendbutton);
+            final RelativeLayout mapsfriendlayout=findViewById(R.id.mapsfriendzone);
+           final CircleImageView mapsfriendicon=findViewById(R.id.mapsfriendimage);
+
+       //    final FirebaseStorage storage = FirebaseStorage.getInstance();
+            final String uidtemp=marker.getTag().toString();
+
+
+            user_information2.child(uidtemp).orderByKey().addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    mapsfriendName.setText(dataSnapshot.child("userName").getValue().toString());
+                    String imgurl=dataSnapshot.child("imageURL").getValue().toString();
+                    if (imgurl.equals("default")) {
+                        mapsfriendicon.setImageResource(R.mipmap.ic_launcher);
+                    } else {
+                      //  StorageReference httpsReference = storage.getReferenceFromUrl(imgurl);
+                        Glide.with(getApplicationContext()).load(imgurl).into(mapsfriendicon);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+            mapsfriendName.setVisibility(View.VISIBLE);
+
+            mapsfriendlayout.setVisibility(View.VISIBLE);
+            friendmapbutton.setVisibility(View.VISIBLE);
+            mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
+
+            friendmapbutton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    mapsfriendlayout.setVisibility(View.GONE);
+                    mapsfriendlayoutbackgorund.setVisibility(View.GONE);
+                    friendmapbutton.setVisibility(View.GONE);
+                    Intent intent = new Intent(MapsActivity.this, OtherUserActivity.class);
+                    intent.putExtra("userid",uidtemp);
+                    startActivity(intent);
+                }
+            });
+
+
+        }
+
         /**
          * Dale's danger zone markers
          */

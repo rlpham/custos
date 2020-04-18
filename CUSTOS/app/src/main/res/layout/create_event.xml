@@ -43,7 +43,7 @@
         android:textSize="12sp" />
 
     <fragment
-        android:id="@+id/event_detail_location"
+        android:id="@+id/event_location"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -73,7 +73,7 @@
         android:id="@+id/textView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_detail_location"
+        android:layout_below="@+id/event_location"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"

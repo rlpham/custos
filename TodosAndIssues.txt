@@ -1,42 +1,22 @@
 ```
-April 10, 2020
+April 14, 2020 Last gitpull 6:30ish pm
 _____________
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
-Nav Bar / Every Fragment:
-1. Need to figure out how to fix dealing with fragments if user clicks back button and it goes to map
-
 Events:
-1. Need to validate that user pick a valid date (Like today is 4/8/2020 and user pick 3/21/2020
-2. Need a limit on name & description
-3. this line is causing a lot of problems (e.g crashes app when creating events, won't let me view events after creating it, won't let me press back on invite guest) (obj.put("invited_users", getInvitedUsers(element.child("invited_users").getValue().toString()));)
+1. Need to link invite guest from Friends database now
+2. user can enter a new line in description which messes with layout\
+3. need safety event
+4. need reoccurring event
 
 Notification:
-1. Needs to be able to see and accept/reject invited events and friend request
+1. in progress atm ~
 
 Maps:
 1. Need a way to find destination
 
 DangerZone:
 1. Need to hide Datasnapshot output when clicking on marker ex: (Datasnapshot = { key = zone_name, value =....}
-2. Need to validate that user gave a name
-3. Need a light color variant of the dangerzone button when user changes to dark mode
-4. Need to figure out how to delete old markers
-
-Contacts:
-1. Needs to show who is their current friends (not sure if it works)
-
-Settings:	
-1. Change buttons
-
-User Account:										
-1. Clicking top left yellow button will send user to map activity instead of setting page
-2. Changing home location will save before actually pressing save button 
-3. Have save home location and emergency contact save only after they click the 1 save
-4. Save button shows loading dialog even though if there were no changes
-
-
-Information:
-1. Needs to get correct contacts
+2. Need to figure out how to delete old markers
 ```

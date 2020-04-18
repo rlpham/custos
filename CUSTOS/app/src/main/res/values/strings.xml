@@ -1,9 +1,9 @@
 <resources>
     //there are multiple dupilcates, control f before adding!
     <string name="app_name">Custos</string>
-
     <string name="empty"></string>
     <string name="event_add">+</string>
+    <string name="view_event">View Event</string>
     <string name="title_activity_maps">Map</string>
     <string name="notification">Notifications</string>
     <string name="settings">Settings</string>
@@ -98,4 +98,7 @@
     <string name="danger_zone">Danger Zone</string>
     <string name="nameDangerZone">Name</string>
     <string name="descriptionDangerZone">Description</string>
+    <string name="location_text_switch">LOCATION</string>
+    <string name="settings_text">Settings</string>
+    <string name="report_a_problem">Report a problem</string>
 </resources>

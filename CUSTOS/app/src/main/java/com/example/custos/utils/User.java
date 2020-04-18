@@ -1,8 +1,11 @@
 package com.example.custos.utils;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.HashMap;
 
-public class User {
+public class User implements java.io.Serializable {
 
     private String userName;
     private String userEmail;
@@ -11,9 +14,16 @@ public class User {
     private String UID;
     private String imageURL;
     private HashMap<String,User> acceptList;
-    public User(){
+
+    public User() {
 
     }
+
+    public User(String name, String uid) {
+        this.userName = name;
+        this.UID = uid;
+    }
+
     public User(String name,String uid, String email){
         this.UID =uid;
         this.userEmail = email;

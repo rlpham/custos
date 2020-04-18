@@ -197,7 +197,7 @@
             android:background="#fece2f"
             android:textStyle="bold"
             android:textSize="19dp"
-            android:layout_marginTop="110dp"
+            android:layout_marginTop="210dp"
             android:transitionName="edit_info"/>
 
 

@@ -84,7 +84,6 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="167dp"
         android:layout_height="37dp"
-
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="114dp"
@@ -100,7 +99,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="39dp"
-        android:layout_marginTop="630dp"
+        android:layout_marginTop="680dp"
         android:layout_marginEnd="28dp"
         android:background="#fece2f"
         android:text="SAVE"

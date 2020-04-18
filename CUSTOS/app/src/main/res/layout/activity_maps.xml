@@ -42,6 +42,7 @@
             android:id="@+id/search_view_mapActivity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
@@ -99,31 +100,136 @@
 <!--        android:background="@android:drawable/ic_menu_search" />-->
 
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/gifinmaps"
+    <!--   <pl.droidsonroids.gif.GifImageView
+          android:id="@+id/gifinmaps"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@color/quantum_black_100"
+          android:layout_marginStart="0dp"
+          android:layout_marginTop="0dp"
+          android:layout_marginEnd="0dp"
+          android:layout_marginBottom="0dp"
+          android:src="@drawable/splash2"
+          >
+      </pl.droidsonroids.gif.GifImageView>/>-->
+      <Button
+          android:id="@+id/mapsDsngerZoneButton"
+          android:layout_width="60dp"
+          android:layout_height="70dp"
+          android:layout_alignParentEnd="true"
+
+          android:layout_alignParentBottom="true"
+          android:layout_marginEnd="36dp"
+          android:layout_marginBottom="106dp"
+          android:background="@drawable/dangercautionimg"
+          android:text="@string/empty" />
+
+    <RelativeLayout
+        android:id="@+id/mapsBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:visibility="gone"
+
+        >
+    </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/mapsfriendzone"
+            android:clickable="false"
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="250dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="250dp"
+            android:visibility="gone"
+            android:background="@drawable/sv_round"
+           >
+
+            <Button
+                android:id="@+id/mapsfriendbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+
+                android:layout_marginBottom="0dp"
+                android:text="@string/userinfo" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/mapsfriendimage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/mapsfriendName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="100dp"
+                android:textSize="20sp"
+                android:layout_marginTop="25dp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/app_name" />
+
+
+        </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/mapseventzone"
+        android:clickable="false"
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/quantum_black_100"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        android:src="@drawable/splash2"
-        >
-    </pl.droidsonroids.gif.GifImageView>
-    <Button
-        android:id="@+id/mapsDsngerZoneButton"
-        android:layout_width="60dp"
-        android:layout_height="70dp"
-        android:layout_alignParentEnd="true"
-
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="106dp"
-        android:background="@drawable/dangercautionimg"
-        android:text="@string/empty" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="250dp"
+        android:visibility="gone"
+        android:background="@drawable/sv_round"
+        >
 
+        <Button
+            android:id="@+id/mapseventbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+
+            android:layout_marginBottom="0dp"
+            android:text="@string/view_event" />
+
+
+        <TextView
+            android:id="@+id/mapseventName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:layout_marginTop="25dp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/event_details_title_placeholder" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
 

@@ -1,15 +1,22 @@
 package com.example.custos;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -17,8 +24,15 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.custos.utils.Common;
+import com.example.custos.utils.LogoutDialog;
 import com.example.custos.utils.User;
 import com.example.custos.utils.UserLocation;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -52,8 +66,9 @@ public class SettingsActivity extends Fragment {
     FirebaseUser firebaseUser;
     DatabaseReference databaseReference;
     CircleImageView imageView;
-    TextView name;
-
+    TextView name,logout;
+    GoogleSignInClient googleSignInClient;
+    Handler handler = new Handler();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +81,67 @@ public class SettingsActivity extends Fragment {
                              Bundle savedInstanceState) {
 
         final View view=inflater.inflate(R.layout.settings, container, false);
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            final public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(getContext(),googleSignInOptions);
+
         imageView = view.findViewById(R.id.imageViewSetting);
         name = view.findViewById(R.id.textNameSetting);
+        logout = view.findViewById(R.id.signout_button_setting);
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder logoutDialog = new AlertDialog.Builder(getContext(),R.style.Chill);
+                logoutDialog.setTitle("Logout?");
+                logoutDialog.setMessage("Are you sure you want to logout?");
+                logoutDialog.setIcon(R.drawable.ic_directions_run_yellow_24dp);
+                logoutDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+
+                });
+                logoutDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        signOut();
+                    }
+                });
+                AlertDialog alertDialog2 = logoutDialog.create();
+
+                // Set alertDialog "not focusable" so nav bar still hiding:
+                alertDialog2.getWindow().
+                        setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                // Set full-sreen mode (immersive sticky):
+                alertDialog2.getWindow().getDecorView().setSystemUiVisibility(Common.ui_flags);
+
+                // Show the alertDialog:
+                alertDialog2.show();
+
+                // Set dialog focusable so we can avoid touching outside:
+                alertDialog2.getWindow().
+                        clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            }
+        });
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(firebaseUser.getUid());
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -197,17 +271,66 @@ public class SettingsActivity extends Fragment {
         });
 
 
-//        Button lightNDark = view.findViewById(R.id.mapMode);
-//        lightNDark.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //for light and dark mode
-//            }
-//        });
+        //location switch
+        final Switch loc = view.findViewById(R.id.locationSwitch);
+
+
+
+        //danger zone switch
+        final Switch danger = view.findViewById(R.id.dangerSwitch);
+
 
 
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void signOut(){
+
+        final LogoutDialog logoutDialog = new LogoutDialog(getActivity());
+        FirebaseAuth.getInstance().signOut();
+        googleSignInClient.signOut()
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        logoutDialog.startDialog();
+                        Toast.makeText(getContext(),"Logging out...", Toast.LENGTH_LONG).show();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                updateUI(null);
+                                Intent intent = new Intent(getContext(),SplashActivity.class);
+                                startActivity(intent);
+                                logoutDialog.dismissDialog();
+                            }
+                        },4000);
+
+                    }
+                });
+
+
+    }
+    private void updateUI(FirebaseUser firebaseUser){
+        //signOutButton.setVisibility(View.VISIBLE);
+        GoogleSignInAccount googleSignInAccount = GoogleSignIn.getLastSignedInAccount(getContext());
+        if(googleSignInAccount != null){
+            String personName = googleSignInAccount.getDisplayName();
+            String personGivenName = googleSignInAccount.getGivenName();
+            String personFamilyName = googleSignInAccount.getFamilyName();
+            String personEmail = googleSignInAccount.getEmail();
+            String personId = googleSignInAccount.getId();
+            Uri personPhoto = googleSignInAccount.getPhotoUrl();
+            Toast.makeText(getContext(), "\t"+personName + "\n" + personEmail,Toast.LENGTH_SHORT).show();
+        }
+        User user = new User();
+        if(firebaseUser != null){
+
+            user.setUserEmail(firebaseUser.getEmail());
+            user.setUID(firebaseUser.getUid());
+        }else{
+            user.setUserEmail(null);
+            user.setUID(null);
+        }
     }
 }

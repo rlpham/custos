@@ -1,9 +1,12 @@
 package com.example.custos;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.custos.adapters.FriendsAdapter;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Friends;
+import com.example.custos.utils.LoadingDialog;
 import com.example.custos.utils.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +44,8 @@ public class FriendsFragment extends Fragment {
     private TextView searchIcon;
     private EditText searchSpace;
     private TextView addFriend,noFriends;
+
+    private Context context;
     public static Fragment newInstance() {
         FriendsFragment fragment = new FriendsFragment();
         return fragment;
@@ -49,6 +55,18 @@ public class FriendsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.friends_fragment,container,false);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            final public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    return true;
+                }
+                return false;
+            }
+        });
         recylerView = view.findViewById(R.id.recycler_view_friends);
         searchIcon = view.findViewById(R.id.search_friends_icon);
         searchSpace = view.findViewById(R.id.search_friends);
@@ -57,6 +75,7 @@ public class FriendsFragment extends Fragment {
         noFriends.setVisibility(View.INVISIBLE);
         searchIcon.setVisibility(View.VISIBLE);
         searchSpace.setVisibility(View.INVISIBLE);
+
 
 
         recylerView.setHasFixedSize(true);
