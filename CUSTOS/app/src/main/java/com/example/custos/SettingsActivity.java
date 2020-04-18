@@ -277,8 +277,50 @@ public class SettingsActivity extends Fragment {
 
 
         //danger zone switch
+        /**
+         * Dale's code
+         */
+        final DatabaseReference dangerzoneswitch = FirebaseDatabase.getInstance().getReference("userSettings");
         final Switch danger = view.findViewById(R.id.dangerSwitch);
+        danger.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                {
+                    dangerzoneswitch.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    dangerzoneswitch.child(firebaseUser.getUid()).child("dangerzone").setValue("true");
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                }
+                            });
+                }
+                else
+                {
+                    dangerzoneswitch.orderByKey()
+                            .equalTo(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    darkLight.child(firebaseUser.getUid()).child("dangerzone").setValue("false");
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                }
+
+
+
+            }
+        });
 
 
 
