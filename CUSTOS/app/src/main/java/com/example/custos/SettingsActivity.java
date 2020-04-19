@@ -327,10 +327,12 @@ public class SettingsActivity extends Fragment {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").exists()){
+                            String dangerzoneval=  dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").getValue().toString();
+                            if(dangerzoneval.equals("true")){
+                                danger.setChecked(true);
+                            }
 
-                        String dangerzoneval=  dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").getValue().toString();
-                        if(dangerzoneval.equals("true")){
-                            danger.setChecked(true);
                         }
                     }
                     @Override
