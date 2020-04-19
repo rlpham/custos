@@ -93,7 +93,8 @@ public class NotificationActivity extends Fragment {
 
     private void readUser() {
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(fUser.getUid());
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
+                .child(fUser.getUid()).child("friend_request_notifications");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

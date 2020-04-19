@@ -464,7 +464,7 @@ public class OtherUserActivity extends AppCompatActivity {
         dateAccept = acceptDate.format(calendarAccept.getTime());
         timeAccept = acceptTime.format(timeAcceptFriend.getTime());
 
-        notificationsRef.child(currentUID).child(otherUserId)
+        notificationsRef.child(currentUID).child("friend_request_notifications").child(otherUserId)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -476,13 +476,13 @@ public class OtherUserActivity extends AppCompatActivity {
                         }
                     }
                 });
-        notificationsRef.child(otherUserId).child(currentUID)
+        notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
                 .child("request_type").setValue("acceptedFriendRequest")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(dateAccept + " at "+ timeAccept);
+                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child("request_time").setValue(dateAccept + " at "+ timeAccept);
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
                             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -490,13 +490,13 @@ public class OtherUserActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     String nameCurr = dataSnapshot.child(currentUID)
                                             .child(Common.USER_NAME).getValue().toString();
-                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                    notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
                                     String uidCurr = dataSnapshot.child(currentUID)
                                             .child(Common.UID).getValue().toString();
-                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+                                    notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.UID).setValue(uidCurr);
                                     String img = dataSnapshot.child(currentUID)
                                             .child(Common.IMAGE_URL).getValue().toString();
-                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                                    notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.IMAGE_URL).setValue(img);
                                 }
 
                                 @Override
@@ -538,7 +538,7 @@ public class OtherUserActivity extends AppCompatActivity {
                     }
                 });
 
-        notificationsRef.child(otherUserId).child(currentUID)
+        notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -615,13 +615,13 @@ public class OtherUserActivity extends AppCompatActivity {
         dateSent = currentDate.format(calendar.getTime());
         timeSent = currentTime.format(time.getTime());
 
-        notificationsRef.child(otherUserId).child(currentUID)
+        notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
                 .child("request_type").setValue("receivedFriendRequest")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            notificationsRef.child(otherUserId).child(currentUID).child("request_time").setValue(dateSent + " at "+ timeSent);
+                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child("request_time").setValue(dateSent + " at "+ timeSent);
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
                             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -629,13 +629,13 @@ public class OtherUserActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     String nameCurr = dataSnapshot.child(currentUID)
                                             .child(Common.USER_NAME).getValue().toString();
-                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                    notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.FRIEND_NAME).setValue(nameCurr);
                                     String uidCurr = dataSnapshot.child(currentUID)
                                             .child(Common.UID).getValue().toString();
-                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.UID).setValue(uidCurr);
+                                    notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.UID).setValue(uidCurr);
                                     String img = dataSnapshot.child(currentUID)
                                             .child(Common.IMAGE_URL).getValue().toString();
-                                    notificationsRef.child(otherUserId).child(currentUID).child(Common.IMAGE_URL).setValue(img);
+                                    notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.IMAGE_URL).setValue(img);
                                 }
 
                                 @Override
