@@ -557,6 +557,7 @@ private void setcontactslocation()  {
                                     });
                             final String imgURL = "default";
                             final String userName = "Custos";
+
                             user_information2.orderByKey()
                             .equalTo(firebaseUser.getUid())
                             .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -582,6 +583,26 @@ private void setcontactslocation()  {
                                                     }else{
                                                         Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
                                                     }
+                                                }
+                                            });
+                                            FirebaseInstanceId.getInstance().getInstanceId()
+                                                    .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                                        @Override
+                                                        public void onSuccess(InstanceIdResult instanceIdResult) {
+//                                    tokens.child(firebaseUser.getUid())
+//                                            .setValue(instanceIdResult.getToken());
+                                                            String deviceToken = instanceIdResult.getToken();
+                                                            user_information2.child(firebaseUser.getUid()).child("userToken").setValue(deviceToken)
+                                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                        @Override
+                                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                                        }
+                                                                    });
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(MapsActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         }

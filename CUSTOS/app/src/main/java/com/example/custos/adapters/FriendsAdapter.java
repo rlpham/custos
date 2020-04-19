@@ -86,38 +86,38 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
         });
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         friendReference = FirebaseDatabase.getInstance().getReference(Common.FRIENDS).child(firebaseUser.getUid());
-        friendReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                System.out.println(friends.getUID()+"_------------------------------------------------------------");
-                if(dataSnapshot.child(friends.getUID()).exists()){
-                    if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
-                        friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
-                    }
-                }
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
-                        String image = dataSnapshot2.child(Common.IMAGE_URL).getValue().toString();
-                        if(dataSnapshot.child(friends.getUID()).exists()){
-                            if(!dataSnapshot.child(friends.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)){
-                                friendReference.child(friends.getUID()).child(Common.IMAGE_URL).setValue(image);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        friendReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+//                System.out.println(friends.getUID()+"_------------------------------------------------------------");
+//                if(dataSnapshot.child(friends.getUID()).exists()){
+//                    if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
+//                        friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+//                    }
+//                }
+//                databaseReference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+//                        String image = dataSnapshot2.child(Common.IMAGE_URL).getValue().toString();
+//                        if(dataSnapshot.child(friends.getUID()).exists()){
+//                            if(!dataSnapshot.child(friends.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)){
+//                                friendReference.child(friends.getUID()).child(Common.IMAGE_URL).setValue(image);
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         //holder.friendEmail.setText(friends.getFriendEmail());
