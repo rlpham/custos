@@ -14,12 +14,14 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -239,6 +241,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final RelativeLayout mapsfriendlayoutbackgorund=findViewById(R.id.mapsBackground);
         final RelativeLayout friendsbackground=findViewById(R.id.mapsfriendzone);
         final RelativeLayout evntsbackground=findViewById(R.id.mapseventzone);
+       final Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
         //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
         mapsfriendlayoutbackgorund.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -256,20 +259,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_events:
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
+                        spinner.setVisibility(View.GONE);
                       //  friendmapbutton.setVisibility(View.GONE);
                   //      mapsback.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
+
                         openFragment(MainEventListActivity.newInstance());
                         return true;
                     case R.id.navigation_notifications:
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
+                        spinner.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                     //    mapsback.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
+                        spinner.setVisibility(View.GONE);
                     searchView.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                     //    mapsback.setVisibility(View.GONE);
@@ -277,6 +284,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
+                        spinner.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
                      //   mapsback.setVisibility(View.GONE);
@@ -672,6 +680,15 @@ private void setcontactslocation()  {
             }
         });
     }
+ArrayList<String> eventListSelection;
+
+    private void addEventsSpinner(){
+        Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.spinner_item, eventListSelection);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner.setAdapter(adapter);
+
+    }
 
     private void eventLocationAdder(){
 
@@ -682,25 +699,29 @@ private void setcontactslocation()  {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        eventListSelection=new ArrayList<String>();
                         if (dataSnapshot.getValue() == null) {
                             //uid not exist
                             if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
-
+                                eventListSelection.add("NO EVENTS");
                             }
                         }
                         //if user available
                         else {
                             for(DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()){
+                               eventListSelection.add(snapshot.child("name").getValue().toString());
                                 double lat=0,lon=0;
                                 if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()&&snapshot.child("name").exists()) {
+
                                     lat=Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
                                     lon=Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
                                     setEventsLocationwithoutzoomingwithdesc(new LatLng(lat,lon),snapshot.getKey());
                                 }
 
                             }
-                        }
 
+                        }
+                        addEventsSpinner();
 
                     }
                     @Override
