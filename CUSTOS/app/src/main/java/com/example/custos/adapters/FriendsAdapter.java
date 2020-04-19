@@ -90,15 +90,19 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 System.out.println(friends.getUID()+"_------------------------------------------------------------");
-                if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
-                    friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+                if(dataSnapshot.child(friends.getUID()).exists()){
+                    if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
+                        friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+                    }
                 }
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
                         String image = dataSnapshot2.child(Common.IMAGE_URL).getValue().toString();
-                        if(!dataSnapshot.child(friends.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)){
-                            friendReference.child(friends.getUID()).child(Common.IMAGE_URL).setValue(image);
+                        if(dataSnapshot.child(friends.getUID()).exists()){
+                            if(!dataSnapshot.child(friends.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)){
+                                friendReference.child(friends.getUID()).child(Common.IMAGE_URL).setValue(image);
+                            }
                         }
                     }
 
