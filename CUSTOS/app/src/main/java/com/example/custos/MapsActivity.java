@@ -1148,7 +1148,7 @@ private void darkModeChecker(){
                             }
                         }
                         //if user available
-                        else {
+                        else if(dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").exists()){
                             String dangerzoneval=  dataSnapshot.child(firebaseUser.getUid()).child("dangerzone").getValue().toString();
                             if(dangerzoneval.equals("true")){
                                 generateMarkers();
