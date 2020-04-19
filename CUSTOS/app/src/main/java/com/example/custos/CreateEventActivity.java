@@ -70,7 +70,6 @@ public class CreateEventActivity extends AppCompatActivity {
     ArrayList<User> selected;
 
     FirebaseUser firebaseUser;
-    private DatabaseReference user_information;
     private DatabaseReference userReference;
 
     @Override
@@ -195,40 +194,37 @@ public class CreateEventActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-
                     name = event_name_text_view.getText().toString();
                     description = event_description_text_view.getText().toString();
 
                     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
                     //create event to database -> DB/user_event/<uid>/<event_name>
-                    user_information = FirebaseDatabase.getInstance().getReference("user_event");
                     //    public Event(String ID, String name, String area, String date,
                     //      String time, String description, String location_name,
                     //      ArrayList<User> invited_users) {
-                    final String id = createEventID();
-                    Event event = new Event(id, name, getLocationText(lat, lon),
+
+
+                     final String id = createEventID();
+                     Event event = new Event(id, name, getLocationText(lat, lon),
                             event_date_text_view.getText().toString(),
                             event_time_text_view.getText().toString(),
                             description, location_name);
-                    user_information.child(firebaseUser.getUid()).child(event.getID());
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("name").setValue(event.getName());
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("date").setValue(event.getDate());
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("time").setValue(event.getTime());
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("description").setValue(event.getDescription());
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("area").setValue(event.getArea());
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("location").child("latitude").setValue(lat);
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("location").child("longitude").setValue(lon);
-                    user_information.child(firebaseUser.getUid()).child(event.getID()).child("location_name").setValue(event.getLocation_name());
 
-//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("date").setValue(event_date_text_view.getText().toString());
-//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("time").setValue(event_time_text_view.getText().toString());
-//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("description").setValue(Common.event.getDescription());
-//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("area").setValue(getLocationText(lat, lon));
-//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName()).child("location").child("latitude").setValue(lat);
-//                    user_information.child(firebaseUser.getUid() + "/" + Common.event.getID() + Common.event.getName() + "/location").child("longitude").setValue(lon);
+                    DatabaseReference user_information = FirebaseDatabase.getInstance()
+                            .getReference("user_event")
+                            .child(firebaseUser.getUid())
+                            .child(id);
 
-                    //Gather list uids of invited guests
+                    user_information.child("name").setValue(event.getName());
+                    user_information.child("date").setValue(event.getDate());
+                    user_information.child("time").setValue(event.getTime());
+                    user_information.child("description").setValue(event.getDescription());
+                    user_information.child("area").setValue(event.getArea());
+                    user_information.child("location").child("latitude").setValue(lat);
+                    user_information.child("location").child("longitude").setValue(lon);
+                    user_information.child("location_name").setValue(event.getLocation_name());
+
                     userReference = FirebaseDatabase.getInstance().getReference("Users");
                     userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
 
@@ -245,8 +241,8 @@ public class CreateEventActivity extends AppCompatActivity {
                                         notification.child("message").setValue(firebaseUser.getUid() + " has invited you to \"" + name + "\"");
                                         notification.child("timestamp").setValue(getCurrentTime());
                                         notification.child("sender").setValue(firebaseUser.getUid());
-                                        //user_information.child(firebaseUser.getUid() + "/" + Common.event.getName()).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
-                                        user_information.child(firebaseUser.getUid()).child(id).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+
+                                        //user_information.child(firebaseUser.getUid()).child(id).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
 
                                         //TODO: Append to root/<invited_user_id>/.... using 'selected' ArrayList
                                         
@@ -264,7 +260,6 @@ public class CreateEventActivity extends AppCompatActivity {
                     onActivityResult(1,1,intent);
                     setResult(1, intent);
                     finish();
-
                 }
 
 
