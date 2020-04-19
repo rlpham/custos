@@ -71,7 +71,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
     private DatabaseReference userReference;
-    User user;
+    User current_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +83,9 @@ public class CreateEventActivity extends AppCompatActivity {
         userReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = new User();
-                user.setUserName(dataSnapshot.child("userName").getValue().toString());
-                user.setImageURL(dataSnapshot.child("imageURL").getValue().toString());
+                current_user = new User();
+                current_user.setUserName(dataSnapshot.child("userName").getValue().toString());
+                current_user.setImageURL(dataSnapshot.child("imageURL").getValue().toString());
             }
 
             @Override
@@ -218,7 +218,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     final String id = createEventID();
                     name = event_name_text_view.getText().toString();
                     description = event_description_text_view.getText().toString();
-                    Event event = new Event(id, name, getLocationText(lat, lon),
+                    final Event event = new Event(id, name, getLocationText(lat, lon),
                             event_date_text_view.getText().toString(),
                             event_time_text_view.getText().toString(),
                             description, location_name, selected);
@@ -236,19 +236,20 @@ public class CreateEventActivity extends AppCompatActivity {
                     user_information.child("location").child("latitude").setValue(lat);
                     user_information.child("location").child("longitude").setValue(lon);
                     user_information.child("location_name").setValue(event.getLocation_name());
+                    user_information.child("isOwner").setValue("true");
                     for(User user : selected) {
                         user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
                     }
 
-
                     //Send notifications to invited users
                     DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
+                    DatabaseReference events = FirebaseDatabase.getInstance().getReference("user_event");
+
                     for(User user : selected) {
-                        //Check if event already exists in user's user_event path
                         notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("friendName").setValue(user.getUserName());
+                                .child("friendName").setValue(current_user.getUserName());
                         notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("imageURL").setValue(user.getImageURL());
+                                .child("imageURL").setValue(current_user.getImageURL());
                         notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
                                 .child("request_time").setValue(getRequestTime());
                         notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
@@ -268,16 +269,15 @@ public class CreateEventActivity extends AppCompatActivity {
                                 .child("event_details").child("time").setValue(event.getTime());
                         notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
                                 .child("event_details").child("description").setValue(event.getDescription());
-                    }
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("isOwner").setValue("false");
+                        }
 
                     Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                     onActivityResult(1,1,intent);
                     setResult(1, intent);
                     finish();
                 }
-
-
-
             }
         });
 
@@ -388,5 +388,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         return dateAccept + " at " + timeAccept;
     }
+
+
 
 }

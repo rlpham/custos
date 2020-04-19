@@ -42,18 +42,6 @@
         android:textColorHint="#FFFFFF"
         android:textSize="12sp" />
 
-    <fragment
-        android:id="@+id/event_location"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_below="@+id/event_detail_date"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="45dp" />
-
     <Button
         android:id="@+id/event_detail_edit_guests"
         android:layout_width="35dp"
@@ -73,10 +61,10 @@
         android:id="@+id/textView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/event_location"
+        android:layout_below="@+id/linear_layout_fragment"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         android:text="Invited"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
@@ -150,5 +138,25 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:focusableInTouchMode="false"/>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_fragment"
+        android:layout_width="359dp"
+        android:layout_height="53dp"
+        android:layout_below="@+id/event_detail_date"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <fragment
+            android:id="@+id/event_location"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>
