@@ -71,11 +71,28 @@ public class CreateEventActivity extends AppCompatActivity {
 
     FirebaseUser firebaseUser;
     private DatabaseReference userReference;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userReference = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid());
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = new User();
+                user.setUserName(dataSnapshot.child("userName").getValue().toString());
+                user.setImageURL(dataSnapshot.child("imageURL").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         toolKit = new ToolKit();
         lv = findViewById(R.id.event_detail_invite_list);
@@ -194,22 +211,17 @@ public class CreateEventActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
+
+
+
+                    //Create event under root/user_event/uid/......
+                    final String id = createEventID();
                     name = event_name_text_view.getText().toString();
                     description = event_description_text_view.getText().toString();
-
-                    firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-                    //create event to database -> DB/user_event/<uid>/<event_name>
-                    //    public Event(String ID, String name, String area, String date,
-                    //      String time, String description, String location_name,
-                    //      ArrayList<User> invited_users) {
-
-
-                     final String id = createEventID();
-                     Event event = new Event(id, name, getLocationText(lat, lon),
+                    Event event = new Event(id, name, getLocationText(lat, lon),
                             event_date_text_view.getText().toString(),
                             event_time_text_view.getText().toString(),
-                            description, location_name);
+                            description, location_name, selected);
 
                     DatabaseReference user_information = FirebaseDatabase.getInstance()
                             .getReference("user_event")
@@ -224,38 +236,40 @@ public class CreateEventActivity extends AppCompatActivity {
                     user_information.child("location").child("latitude").setValue(lat);
                     user_information.child("location").child("longitude").setValue(lon);
                     user_information.child("location_name").setValue(event.getLocation_name());
+                    for(User user : selected) {
+                        user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                    }
 
-                    userReference = FirebaseDatabase.getInstance().getReference("Users");
-                    userReference.child(firebaseUser.getUid()).child("contacts").addValueEventListener(new ValueEventListener() {
 
-                        //TODO: REWRITE THIS TO INCORPORATE JUST ONE LIST VIEW AND THE SELECTED ARRAYLIST
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(int i = 0; i < lv.getCount(); i++) {
-                                for(DataSnapshot element : dataSnapshot.getChildren()) {
-                                    String invited_name = lv.getItemAtPosition(i).toString();
-                                    String current_name = getNameFromValue(element.getValue().toString());
-                                    if(invited_name.equals(current_name)) {
-                                        //use element.getKey() to write into DB/user/<UID>/notifications/eventInvite
-                                        DatabaseReference notification = userReference.child(element.getKey()).child("notifications").child("event_invites").child(id);
-                                        notification.child("message").setValue(firebaseUser.getUid() + " has invited you to \"" + name + "\"");
-                                        notification.child("timestamp").setValue(getCurrentTime());
-                                        notification.child("sender").setValue(firebaseUser.getUid());
+                    //Send notifications to invited users
+                    DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
+                    for(User user : selected) {
+                        //Check if event already exists in user's user_event path
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("friendName").setValue(user.getUserName());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("imageURL").setValue(user.getImageURL());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("request_time").setValue(getRequestTime());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("request_type").setValue("invite_sent");
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("uid").setValue(firebaseUser.getUid());
 
-                                        //user_information.child(firebaseUser.getUid()).child(id).child("invited_users").child(element.getKey()).child("name").setValue(invited_name);
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("name").setValue(event.getName());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("area").setValue(event.getArea());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("location_name").setValue(event.getLocation_name());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("date").setValue(event.getDate());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("time").setValue(event.getTime());
+                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                .child("event_details").child("description").setValue(event.getDescription());
+                    }
 
-                                        //TODO: Append to root/<invited_user_id>/.... using 'selected' ArrayList
-                                        
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
                     Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                     onActivityResult(1,1,intent);
                     setResult(1, intent);
@@ -362,6 +376,17 @@ public class CreateEventActivity extends AppCompatActivity {
     private String createEventID() {
         String id = "E" + generateNumber();
         return id;
+    }
+
+    private String getRequestTime() {
+        Calendar calendarAccept = Calendar.getInstance();
+        SimpleDateFormat acceptDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        String dateAccept = acceptDate.format(calendarAccept.getTime());
+        String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
+
+        return dateAccept + " at " + timeAccept;
     }
 
 }
