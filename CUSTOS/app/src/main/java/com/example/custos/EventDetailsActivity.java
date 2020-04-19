@@ -31,8 +31,11 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +53,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     TextView event_detail_date;
     TextView event_detail_time;
     ListView event_detail_invite_list;
-    Button edit_event_button;
     Button edit_event_guests_button;
     EditText event_detail_title_input;
     EditText event_detail_description_input;
@@ -72,14 +74,19 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_details);
 
+
         //Textviews that show event details
         event_detail_title = findViewById(R.id.event_detail_title);
         event_detail_description = findViewById(R.id.event_detail_description);
         event_detail_date = findViewById(R.id.event_detail_date);
         event_detail_time = findViewById(R.id.event_detail_time);
         event_detail_invite_list = findViewById(R.id.event_detail_invite_list);
-        edit_event_button = findViewById(R.id.edit_event_button);
+        final Button edit_event_button = findViewById(R.id.edit_event_button);
         edit_event_guests_button = findViewById(R.id.event_detail_invite_guests);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
         //EditText that is enabled when "EDIT" is clicked
         event_detail_title_input = findViewById(R.id.event_detail_title_input);
@@ -87,7 +94,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_date_input = findViewById(R.id.event_detail_date_input);
         event_detail_time_input = findViewById(R.id.event_detail_time_input);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         final Intent intent = getIntent();
 
@@ -108,8 +114,24 @@ public class EventDetailsActivity extends AppCompatActivity {
             event_detail_invite_list.setAdapter(adapter);
         }
 
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id);
+
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("isOwner").getValue().toString().equals("false")) {
+                    edit_event_button.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         //String[] invited_users = intent.getStringExtra("invited_users").split(",");
-        String location_name = intent.getStringExtra("location_name");
+        //String location_name = intent.getStringExtra("location_name");
 
         toolKit = new ToolKit();
 
@@ -200,7 +222,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_detail_date.setVisibility(View.VISIBLE);
                         event_detail_time.setVisibility(View.VISIBLE);
 
-                        //TODO: Update event path with new credentials (name, description, date, time, location, invited_guests)
                         DatabaseReference db_root = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id);
                         DatabaseReference db_location = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id).child("location");
 
@@ -216,6 +237,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_location_map.put("latitude", lat);
                         event_location_map.put("longitude", lon);
 
+                        //TODO: update invited users on modify event
 //                        db.child("invited_users");
 
                         db_root.updateChildren(event_root_map);
