@@ -25,15 +25,15 @@ public class Event {
         this.invited_users = invited_users;
     }
 
-    public Event(String ID, String name, String area, String date, String time, String description, String location_name) {
-        this.ID = ID;
-        this.name = name;
-        this.area = area;
-        this.date = date;
-        this.time = time;
-        this.description = description;
-        this.location_name = location_name;
-    }
+//    public Event(String ID, String name, String area, String date, String time, String description, String location_name) {
+//        this.ID = ID;
+//        this.name = name;
+//        this.area = area;
+//        this.date = date;
+//        this.time = time;
+//        this.description = description;
+//        this.location_name = location_name;
+//    }
 
     public String getName() {
         return name;

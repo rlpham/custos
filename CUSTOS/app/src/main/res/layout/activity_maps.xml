@@ -231,6 +231,15 @@
 
     </RelativeLayout>
 
+    <Spinner
+        android:id="@+id/mapsEventSelection"
+        android:layout_width="fill_parent"
+        android:background="@drawable/sv_round"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        />
+
 </RelativeLayout>
 
 

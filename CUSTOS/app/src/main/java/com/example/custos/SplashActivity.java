@@ -36,8 +36,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
@@ -347,16 +350,39 @@ public class SplashActivity extends AppCompatActivity {
         final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
         signInDialog.startDialog();
         AuthCredential authCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     //Toast.makeText(SplashActivity.this,"Successful",Toast.LENGTH_SHORT).show();
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                    startActivity(intent);
-                    updateUI(user);
-                    signInDialog.dismissDialog();
+                    final FirebaseUser user = mAuth.getCurrentUser();
+                    String online_uid = mAuth.getCurrentUser().getUid();
+                    FirebaseInstanceId.getInstance().getInstanceId()
+                            .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                @Override
+                                public void onSuccess(InstanceIdResult instanceIdResult) {
+//                                    tokens.child(firebaseUser.getUid())
+//                                            .setValue(instanceIdResult.getToken());
+                                    String deviceToken = instanceIdResult.getToken();
+                                    userRef.child(user.getUid()).child("userToken").setValue(deviceToken)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                                                startActivity(intent);
+                                                updateUI(user);
+                                                signInDialog.dismissDialog();
+                                            }
+                                        });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(SplashActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 } else {
 
                     Toast.makeText(SplashActivity.this, "Failed!", Toast.LENGTH_SHORT).show();

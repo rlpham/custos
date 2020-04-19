@@ -23,6 +23,8 @@ import com.example.custos.R;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Notifications;
 import com.example.custos.utils.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -70,7 +72,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         final Notifications notification = notificationsList.get(position);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
-        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(firebaseUser.getUid());
+        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
+                .child(firebaseUser.getUid())
+                .child("friend_request_notifications");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -138,33 +142,33 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         });
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(firebaseUser.getUid());
-        notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.child(notification.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)) {
-                    notificationsRef.child(notification.getUID()).child(Common.FRIEND_NAME).setValue(userName);
-                }
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
-                        String image = dataSnapshot2.child(Common.IMAGE_URL).getValue().toString();
-                        if (!dataSnapshot.child(notification.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)) {
-                            notificationsRef.child(notification.getUID()).child(Common.IMAGE_URL).setValue(image);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+//                if (!dataSnapshot.child(notification.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)) {
+//                    notificationsRef.child(notification.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+//                }
+//                databaseReference.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot2) {
+//                        String image = dataSnapshot2.child(Common.IMAGE_URL).getValue().toString();
+//                        if (!dataSnapshot.child(notification.getUID()).child(Common.IMAGE_URL).getValue().toString().equals(image)) {
+//                            notificationsRef.child(notification.getUID()).child(Common.IMAGE_URL).setValue(image);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         //holder.friendEmail.setText(friends.getFriendEmail());
@@ -179,6 +183,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 context.startActivity(intent);
             }
         });
+        final DatabaseReference notificationRef2 = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS);
+
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -196,23 +202,18 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 alertDialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialogInterface, int i) {
-                        notificationsRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.child(notification.getUID()).exists()) {
-                                    try {
-                                        notificationsRef.child(notification.getUID()).removeValue();
-                                    } catch (Exception e) {
-                                        Toast.makeText(context, e.getMessage() + "Deleting", Toast.LENGTH_SHORT).show();
+                        notificationRef2.child(firebaseUser.getUid()).child("friend_request_notifications").child(notification.getUID())
+                                .removeValue()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            Toast.makeText(context,"removed notification",Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            Toast.makeText(context,"removed failed",Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
+                                });
 
                        // dialogInterface.dismiss();
                     }

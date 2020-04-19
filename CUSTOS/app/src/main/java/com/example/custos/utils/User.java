@@ -13,6 +13,7 @@ public class User implements java.io.Serializable {
     private String userAddress;
     private String UID;
     private String imageURL;
+    private String userToken;
     private HashMap<String,User> acceptList;
 
     public User() {
@@ -36,6 +37,14 @@ public class User implements java.io.Serializable {
         this.userName = name;
         this.imageURL = img;
         acceptList = new HashMap<>();
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public String getImageURL() {
