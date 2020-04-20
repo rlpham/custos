@@ -1,6 +1,7 @@
 package com.example.custos;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -9,9 +10,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,6 +59,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     TextView event_detail_time;
     ListView event_detail_invite_list;
     Button edit_event_guests_button;
+    Button back_button;
     EditText event_detail_title_input;
     EditText event_detail_description_input;
     EditText event_detail_date_input;
@@ -69,12 +75,38 @@ public class EventDetailsActivity extends AppCompatActivity {
     String location_name_input;
     ArrayList<User> invited_users;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Handler handler = new Handler();
+        final View decorView = getWindow().getDecorView();
+
+        final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    decorView.setSystemUiVisibility(uiOptions);
+                                }
+                            }, 2000);
+                        } else {
+
+                        }
+                    }
+                });
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_details);
-
-
         //Textviews that show event details
         event_detail_title = findViewById(R.id.event_detail_title);
         event_detail_description = findViewById(R.id.event_detail_description);
@@ -86,14 +118,20 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-
-
         //EditText that is enabled when "EDIT" is clicked
         event_detail_title_input = findViewById(R.id.event_detail_title_input);
         event_detail_description_input = findViewById(R.id.event_detail_description_input);
         event_detail_date_input = findViewById(R.id.event_detail_date_input);
         event_detail_time_input = findViewById(R.id.event_detail_time_input);
 
+        back_button = findViewById(R.id.event_detail_back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
 
         final Intent intent = getIntent();
 
@@ -175,8 +213,9 @@ public class EventDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!isEditMode) {
                     isEditMode = true;
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+                    back_button.setVisibility(View.GONE);
+//                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                     edit_event_button.setText(R.string.invite_guests_done_button);
 
                     event_detail_title_input.setVisibility(View.VISIBLE);
@@ -207,6 +246,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                         toast.show();
                     } else {
                         isEditMode = false;
+                        back_button.setVisibility(View.VISIBLE);
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                         edit_event_button.setText(R.string.event_edit_button_label);

@@ -10,11 +10,13 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,6 +67,7 @@ public class CreateEventActivity extends AppCompatActivity {
     Place place;
     String location_name;
     ToolKit toolKit;
+    Button back_button;
 
     //users that will be invited when creating event.
     ArrayList<User> selected;
@@ -75,8 +78,44 @@ public class CreateEventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Handler handler = new Handler();
+        final View decorView = getWindow().getDecorView();
+
+        final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    decorView.setSystemUiVisibility(uiOptions);
+                                }
+                            }, 2000);
+                        } else {
+
+                        }
+                    }
+                });
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
+
+        back_button = findViewById(R.id.create_event_back_button);
+        back_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+            }
+        });
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userReference = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid());
@@ -243,43 +282,47 @@ public class CreateEventActivity extends AppCompatActivity {
                         }
                     }
 
-
                     //Send notifications to invited users
                     DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
                     DatabaseReference events = FirebaseDatabase.getInstance().getReference("user_event");
 
-                    for(User user : selected) {
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("friendName").setValue(current_user.getUserName());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("imageURL").setValue(current_user.getImageURL());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("request_time").setValue(getRequestTime());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("request_type").setValue("invite_sent");
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("uid").setValue(firebaseUser.getUid());
+                    if(selected != null) {
+                        for(User user : selected) {
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("friendName").setValue(current_user.getUserName());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("imageURL").setValue(current_user.getImageURL());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("request_time").setValue(getRequestTime());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("request_type").setValue("invite_sent");
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("uid").setValue(firebaseUser.getUid());
 
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("name").setValue(event.getName());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("area").setValue(event.getArea());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("location_name").setValue(event.getLocation_name());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("date").setValue(event.getDate());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("time").setValue(event.getTime());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("description").setValue(event.getDescription());
-                        notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                .child("event_details").child("isOwner").setValue("false");
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("name").setValue(event.getName());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("area").setValue(event.getArea());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("location_name").setValue(event.getLocation_name());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("date").setValue(event.getDate());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("time").setValue(event.getTime());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("description").setValue(event.getDescription());
+                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                                    .child("event_details").child("isOwner").setValue("false");
                         }
+
+
+                    }
 
                     Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                     onActivityResult(1,1,intent);
                     setResult(1, intent);
                     finish();
+
                 }
             }
         });
@@ -287,20 +330,12 @@ public class CreateEventActivity extends AppCompatActivity {
         findViewById(R.id.event_detail_edit_guests).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ArrayList<User> intent_selected = new ArrayList<User>();
-//                for(int i = 0; i < lv.getCount(); i++) {
-//                    for(int j = 0; j < selected.size(); j++) {
-//                        if(lv.getItemAtPosition(i).toString().equals(selected.get(j).getUserName())) {
-//                            intent_selected.add(selected.get(j));
-//                        }
-//                    }
-//                }
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
                 Bundle args = new Bundle();
                 args.putSerializable("ARRAYLIST", selected);
                 intent.putExtra("BUNDLE", args);
-                //intent.putStringArrayListExtra("selectedUsers", selected);
                 startActivityForResult(intent, 18);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
     }
