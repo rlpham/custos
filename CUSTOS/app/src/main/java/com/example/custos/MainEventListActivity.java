@@ -129,8 +129,8 @@ public class MainEventListActivity extends Fragment {
                             intent.putExtra("event_desc", data.get(position).getDescription());
                             intent.putExtra("event_date", data.get(position).getDate());
                             Bundle args = new Bundle();
-                            args.putSerializable("BUNDLE", (Serializable)data.get(position).getInvited_users());
-                            intent.putExtra("ARRAYLIST", args);
+                            args.putSerializable("ARRAYLIST", (Serializable)data.get(position).getInvited_users());
+                            intent.putExtra("BUNDLE", args);
                             intent.putExtra("event_time", data.get(position).getTime());
                             intent.putExtra("location_name", data.get(position).getLocation_name());
                             startActivity(intent);

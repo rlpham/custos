@@ -50,9 +50,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
@@ -79,11 +82,18 @@ public class EventDetailsActivity extends AppCompatActivity {
     ArrayList<User> invited_users;
     TextView location_placeholder;
     ArrayList<User> updated;
+    ArrayList<String> old_list = new ArrayList<String>();
+    ArrayList<User> all_friends = new ArrayList<User>();
+    ArrayList<String> new_list = new ArrayList<String>();
+    int clickCounter;
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        clickCounter = 0;
         final Handler handler = new Handler();
         final View decorView = getWindow().getDecorView();
 
@@ -153,8 +163,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         if(args != null) {
             invited_users = (ArrayList<User>) args.getSerializable("ARRAYLIST");
             String[] invited_users_adapter = new String[invited_users.size()];
+            old_list = new ArrayList<String>();
             for(int i = 0; i < invited_users.size(); i++) {
                 invited_users_adapter[i] = invited_users.get(i).getUserName();
+                old_list.add(invited_users.get(i).getUID());
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     R.layout.invite_guest_list_item, R.id.aaaaaaaa, invited_users_adapter);
@@ -216,7 +228,32 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        //autocompleteFragment.setText(location_name);
+        DatabaseReference friends_db = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
+        friends_db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot element : dataSnapshot.getChildren()) {
+                    User user = new User();
+                    user.setUID(element.child("uid").getValue().toString());
+                    user.setUserName(element.child("friendName").getValue().toString());
+                    all_friends.add(user);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+
+        final DatabaseReference event_root = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id).child("invited_users");
+        event_root.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot element : dataSnapshot.getChildren()) {
+                    old_list.add(element.getKey());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
 
 
         edit_event_button.setOnClickListener(new View.OnClickListener() {
@@ -246,7 +283,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                     event_detail_time_input.setText(event_detail_time_input.getText().toString());
 
                     edit_event_guests_button.setVisibility(View.VISIBLE);
-
 
                     event_detail_title_input.requestFocus();
                 } else {
@@ -288,40 +324,73 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_root_map.put("location_name", location_name_input);
                         event_location_map.put("latitude", lat);
                         event_location_map.put("longitude", lon);
-
                         event_invited_users_map.put("invited_users", updated);
-                        //TODO: update invited users on modify event
-                        //How to do it
-                        //1. Create 1 ArrayList<String> containing ALL friend uids, then 2 ArrayList<User>
-                        //1a. First will be a list of ALL of current users friends.
-                        //1b. second will be the new updated list of friends invited to event (updated already created)
-                        //1c. third will be the old list of friends invited to event (
-                        //2. two for loops NOT NESTED. both using ArrayList.contains() to get to goal
-
-                        //English.
-                        // list x is list of ALL FRIENDS
-                        // list y is list of old guest list
-                        // list z is list of new guest list
-                        // n x.length AKA n is the size of the friends list
-                        // we know -> y.length <= n && z.length <=n
-                        // there are some guests in list z (new list) that are not in y (old list)-> those guests we must ADD to the guest list
-                        // there are some guests NOT in list z but are in y -> those guests we must REMOVE to the guest list
-
-                        
-
                         db_root.updateChildren(event_root_map);
                         db_root.child("location").updateChildren(event_location_map);
-                        if(updated != null) {
-                            db_root.updateChildren(event_invited_users_map);
+
+
+                        if(clickCounter > 0) {
+                            if (updated != null) {
+                                for (User user : updated) {
+                                    new_list.add(user.getUID());
+                                }
+                            }
+
+                            Set<String> set = new HashSet<>(old_list);
+                            old_list.clear();
+                            old_list.addAll(set);
+
+                            set = new HashSet<>(new_list);
+                            new_list.clear();
+                            new_list.addAll(set);
+
+
+                            ArrayList<User> users_to_add = new ArrayList<User>();
+                            ArrayList<User> users_to_remove = new ArrayList<User>();
+
+                            for (String uid : new_list) {
+                                if (!old_list.contains(uid)) {
+                                    //add `user`
+                                    for (User user : all_friends) {
+                                        if (user.getUID().equals(uid)) {
+                                            users_to_add.add(user);
+                                        }
+                                    }
+                                }
+                            }
+                            for (String uid : old_list) {
+                                if (!new_list.contains(uid)) {
+                                    //remove `user`
+                                    for (User user : all_friends) {
+                                        if (user.getUID().equals(uid)) {
+                                            users_to_remove.add(user);
+                                        }
+                                    }
+                                }
+                            }
+
+                            System.out.println(all_friends);
+                            System.out.println(old_list);
+
+                            //add new users to event
+                            for (User user : users_to_add) {
+                                event_root.child(user.getUID()).child("name").setValue(user.getUserName());
+                            }
+
+                            //remove old users from event
+                            for (User user : users_to_remove) {
+                                event_root.child(user.getUID()).removeValue();
+                            }
+
+                            event_detail_title.setText(event_detail_title_input.getText().toString());
+                            event_detail_description.setText(event_detail_description_input.getText().toString());
+                            event_detail_date.setText(event_detail_date_input.getText().toString());
+                            event_detail_time.setText(event_detail_time_input.getText().toString());
+                            location_placeholder.setText(location_name_input);
+                            edit_event_guests_button.setVisibility(View.INVISIBLE);
                         }
-
-                        event_detail_title.setText(event_detail_title_input.getText().toString());
-                        event_detail_description.setText(event_detail_description_input.getText().toString());
-                        event_detail_date.setText(event_detail_date_input.getText().toString());
-                        event_detail_time.setText(event_detail_time_input.getText().toString());
-                        location_placeholder.setText(location_name_input);
-
-                        edit_event_guests_button.setVisibility(View.INVISIBLE);
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
 
 
@@ -406,6 +475,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         edit_event_guests_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickCounter++;
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                 ArrayList<String> selected = new ArrayList<String>();
