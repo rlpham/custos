@@ -1184,6 +1184,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         int numberOfMarkers = 0;
+                        int displayedMarkers = 0;
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             numberOfMarkers++;
                             String zone_name = snapshot.child("zone_name").getValue().toString();
@@ -1195,12 +1196,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             String dangerZoneState = getCurrentState(Double.valueOf(lat),Double.valueOf(longitude));
                             System.out.println("DANGER ZONE STATE: " + dangerZoneState);
                             if(dangerZoneState.equals(usersCurrentState)) {
+                                displayedMarkers++;
                                 placeMarker(zone_name,risk_level,lat,longitude,description);
                             }
                             //placeMarker(zone_name,risk_level,lat,longitude,description);
                             System.out.println(lat);
                         }
-                        System.out.println("NUMBER OF MARKERS" + numberOfMarkers);
+                        System.out.println("NUMBER OF TOTAL MARKERS: " + numberOfMarkers);
+                        System.out.println("NUMBER OF DISPLAYED MARKERS: " + displayedMarkers);
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
