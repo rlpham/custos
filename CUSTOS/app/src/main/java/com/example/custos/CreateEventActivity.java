@@ -237,9 +237,12 @@ public class CreateEventActivity extends AppCompatActivity {
                     user_information.child("location").child("longitude").setValue(lon);
                     user_information.child("location_name").setValue(event.getLocation_name());
                     user_information.child("isOwner").setValue("true");
-                    for(User user : selected) {
-                        user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                    if(selected != null) {
+                        for(User user : selected) {
+                            user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                        }
                     }
+
 
                     //Send notifications to invited users
                     DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
