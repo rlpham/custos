@@ -482,7 +482,10 @@ public class OtherUserActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child("request_time").setValue(dateAccept + " at "+ timeAccept);
+                            notificationsRef.child(otherUserId).child("friend_request_notifications")
+                                    .child(currentUID).child("request_time").setValue(dateAccept + " at "+ timeAccept);
+                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
+                                    .child("eventId").setValue("notevent");
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
                             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -621,7 +624,11 @@ public class OtherUserActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child("request_time").setValue(dateSent + " at "+ timeSent);
+                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
+                                    .child("request_time").setValue(dateSent + " at "+ timeSent);
+                            notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
+                                    .child("eventId").setValue("notevent");
+
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
                             databaseReference.addValueEventListener(new ValueEventListener() {
