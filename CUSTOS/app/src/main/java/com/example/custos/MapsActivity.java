@@ -1,6 +1,7 @@
 package com.example.custos;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -83,6 +85,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import pl.droidsonroids.gif.GifImageView;
@@ -117,7 +120,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         transaction = getSupportFragmentManager().beginTransaction();
 
         transaction.addToBackStack(null);
-       transaction.replace(R.id.container, fragment);
+        transaction.replace(R.id.container, fragment);
         transaction.commit();
 
 
@@ -130,20 +133,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-    private DatabaseReference db,db2,db3,db4;
-    //tillhere
 
+    private DatabaseReference db, db2, db3, db4;
+    //tillhere
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 //rahul test
-       final View decorView = getWindow().getDecorView();
+        final View decorView = getWindow().getDecorView();
         // Hide both the navigation bar and the status bar.
         // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
         // a general rule, you should design your app to hide the status bar whenever you
         // hide the navigation bar.
-       final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+        final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);
@@ -175,8 +178,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //mMap.setOnMarkerClickListener(this);
         //
         userList = new ArrayList<>();
-     //   db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
-       // db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
+        //   db = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1234");
+        // db2 = FirebaseDatabase.getInstance().getReference("Users").child("rlpham18").child("event").child("e1213");
         db3 = FirebaseDatabase.getInstance().getReference("User Information");
         db4 = FirebaseDatabase.getInstance().getReference("userLocation");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -192,17 +195,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onQueryTextSubmit(String query) {
                 String location = searchView.getQuery().toString();
                 List<Address> addressList = null;
-                if(location != null || !location.equals("")){
+                if (location != null || !location.equals("")) {
                     Geocoder geocoder = new Geocoder(MapsActivity.this);
                     try {
-                        addressList = geocoder.getFromLocationName(location,1);
-                    }catch (IOException e){
+                        addressList = geocoder.getFromLocationName(location, 1);
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                 }
                 return false;
             }
@@ -226,29 +229,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Rahul TestCode below
 
 
-
-        final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+        final Button dangerzonebutton = findViewById(R.id.mapsDsngerZoneButton);
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(MapsActivity.this,DangerZoneActivity.class);
-                int requestCode = intent.getIntExtra("dangervalue",3);
+                Intent intent = new Intent(MapsActivity.this, DangerZoneActivity.class);
+                int requestCode = intent.getIntExtra("dangervalue", 3);
                 //startActivityForResult(intent,requestCode);
-                startActivityForResult(intent,requestCode);
+                startActivityForResult(intent, requestCode);
                 //startActivity(intent);
             }
         });
-        final Button friendmapbutton=findViewById(R.id.mapsfriendbutton);
-        final RelativeLayout mapsfriendlayoutbackgorund=findViewById(R.id.mapsBackground);
-        final RelativeLayout friendsbackground=findViewById(R.id.mapsfriendzone);
-        final RelativeLayout evntsbackground=findViewById(R.id.mapseventzone);
-       final Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
+        final Button friendmapbutton = findViewById(R.id.mapsfriendbutton);
+        final RelativeLayout mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
+        final RelativeLayout friendsbackground = findViewById(R.id.mapsfriendzone);
+        final RelativeLayout evntsbackground = findViewById(R.id.mapseventzone);
+        final Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
         //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
         mapsfriendlayoutbackgorund.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 friendsbackground.setVisibility(View.GONE);
                 mapsfriendlayoutbackgorund.setVisibility(View.GONE);
                 evntsbackground.setVisibility(View.GONE);
-                friendmapbutton.setVisibility(View.GONE); }
+                friendmapbutton.setVisibility(View.GONE);
+            }
         });
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_maps);
@@ -260,8 +263,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
-                      //  friendmapbutton.setVisibility(View.GONE);
-                  //      mapsback.setVisibility(View.GONE);
+                        //  friendmapbutton.setVisibility(View.GONE);
+                        //      mapsback.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
 
                         openFragment(MainEventListActivity.newInstance());
@@ -271,32 +274,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
-                    //    mapsback.setVisibility(View.GONE);
+                        //    mapsback.setVisibility(View.GONE);
                         openFragment(NotificationActivity.newInstance());
                         return true;
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
-                    searchView.setVisibility(View.GONE);
+                        searchView.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
-                    //    mapsback.setVisibility(View.GONE);
-                      openFragment(FriendsFragment.newInstance());
+                        //    mapsback.setVisibility(View.GONE);
+                        openFragment(FriendsFragment.newInstance());
                         return true;
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
-                     //   mapsback.setVisibility(View.GONE);
+                        //   mapsback.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
 //                        Intent intent = new Intent(MapsActivity.this,SecondSplashActivity.class);
 //                        startActivityForResult(intent,2);
                         return true;
                     case R.id.navigation_maps:
-                       // dangerzonebutton.setVisibility(View.VISIBLE);
-                      //  switchbutton.setVisibility(View.VISIBLE);
-                    //    searchView.setVisibility(View.VISIBLE);
-                        Intent intent = new Intent(MapsActivity.this,MapsActivity.class);
+                        // dangerzonebutton.setVisibility(View.VISIBLE);
+                        //  switchbutton.setVisibility(View.VISIBLE);
+                        //    searchView.setVisibility(View.VISIBLE);
+                        Intent intent = new Intent(MapsActivity.this, MapsActivity.class);
                         startActivity(intent);
                         finish();
 
@@ -310,41 +313,40 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //rahul end
 
 
-
-
     }
 
 
-private LatLng eventlocation;
-    public void setEventsLocation(LatLng ll,String mess){
-        eventlocation=ll;
-        if((mess.equals("Home Location")) && !(mess.equals(" "))){
-            mMap.addMarker( new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3))).setSnippet("All because of dale");
+    private LatLng eventlocation;
+
+    public void setEventsLocation(LatLng ll, String mess) {
+        eventlocation = ll;
+        if ((mess.equals("Home Location")) && !(mess.equals(" "))) {
+            mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess).icon(BitmapDescriptorFactory.fromResource(R.drawable.home3))).setSnippet("All because of dale");
 
 
+            //  moveToCurrentLocation(eventlocation);
 
-          //  moveToCurrentLocation(eventlocation);
-
-        }else
-        if(eventlocation!=null) {
+        } else if (eventlocation != null) {
             mMap.addMarker(new MarkerOptions().position(eventlocation).title(mess)).setSnippet("All because of dale");
-           // moveToCurrentLocation(eventlocation);
+            // moveToCurrentLocation(eventlocation);
         }
     }
 
 
-    public void setEventsLocationwithoutzooming(LatLng ll,String mess) {
+    public void setEventsLocationwithoutzooming(LatLng ll, String mess) {
 
 
         mMap.addMarker(new MarkerOptions().position(ll).snippet("Contacts").icon(BitmapDescriptorFactory.fromResource(R.drawable.face2))).setTag(mess);
 
     }
-    public void setEventsLocationwithoutzoomingwithdesc(LatLng ll,String mess) {
+
+    public void setEventsLocationwithoutzoomingwithdesc(LatLng ll, String mess) {
 
 
         mMap.addMarker(new MarkerOptions().position(ll).snippet("Events").icon(BitmapDescriptorFactory.fromResource(R.drawable.event3))).setTag(mess);
 
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -363,15 +365,15 @@ private LatLng eventlocation;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    userList.clear();
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        UserLocation user = snapshot.getValue(UserLocation.class);
-                        assert user != null;
-                        assert fUser != null;
-                        if(!user.getUID().equals(fUser.getUid())){
-                            userList.add(user);
-                        }
+                userList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserLocation user = snapshot.getValue(UserLocation.class);
+                    assert user != null;
+                    assert fUser != null;
+                    if (!user.getUID().equals(fUser.getUid())) {
+                        userList.add(user);
                     }
+                }
 
             }
 
@@ -382,63 +384,58 @@ private LatLng eventlocation;
         });
     }
 
-private void setcontactslocation()  {
-    final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+    private void setcontactslocation() {
+        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-    final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Friends");
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Friends");
 
 
-    databaseReference.orderByKey().equalTo(fUser.getUid()).addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            if(dataSnapshot.child(fUser.getUid()).exists()){
-                for (final UserLocation ul: userList) {
+        databaseReference.orderByKey().equalTo(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child(fUser.getUid()).exists()) {
+                    for (final UserLocation ul : userList) {
 
-                    databaseReference.child(fUser.getUid()).orderByKey()
-                            .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.child(ul.getUID()).exists()) {
-                                LatLng ll = new LatLng(ul.getLat(), ul.getLon());
-                                setEventsLocationwithoutzooming(ll, ul.getUID());
+                        databaseReference.child(fUser.getUid()).orderByKey()
+                                .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.child(ul.getUID()).exists()) {
+                                    LatLng ll = new LatLng(ul.getLat(), ul.getLon());
+                                    setEventsLocationwithoutzooming(ll, ul.getUID());
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                           }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-
+                    }
 
                 }
 
             }
 
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
 
     }
-});
 
 
-}
-
-
-
-
-
-
-
-    public void setHomeLoc(){
+    public void setHomeLoc() {
         db3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if((dataSnapshot.child(userID).child(Common.USER_ADDRESS).child(Common.HOME_LOC).exists())
+                if ((dataSnapshot.child(userID).child(Common.USER_ADDRESS).child(Common.HOME_LOC).exists())
                 ) {
                     double eventlonitude = Double.parseDouble(dataSnapshot.child(userID)
                             .child(Common.USER_ADDRESS)
@@ -450,7 +447,7 @@ private void setcontactslocation()  {
                             .getValue().toString());
                     LatLng eventloc = new LatLng(eventlatitude, eventlonitude);
                     setEventsLocation(eventloc, "Home Location");
-                }else{
+                } else {
 
                 }
             }
@@ -463,15 +460,16 @@ private void setcontactslocation()  {
 
     }
 
-    private void setmaptoretro(){
+    private void setmaptoretro() {
         boolean success = mMap.setMapStyle(null);
     }
-    private void setmaptonight(){
+
+    private void setmaptonight() {
         boolean success = mMap.setMapStyle(new MapStyleOptions(getResources()
                 .getString(R.string.style_json)));
     }
 
-    private String userID="nope";
+    private String userID = "nope";
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
     DatabaseReference user_information2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
@@ -519,126 +517,126 @@ private void setcontactslocation()  {
 //        });
 
         try {
-        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (checkPermissions()&&firebaseUser.getUid()!=null) {
-            googleMap.setMyLocationEnabled(true);
+            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (checkPermissions() && firebaseUser.getUid() != null) {
+                googleMap.setMyLocationEnabled(true);
 
 
-            mMap = googleMap;
-            fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(final Location location) {
+                mMap = googleMap;
+                fusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(final Location location) {
 
-                            LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
+                                LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
 //                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
 //                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE ))).setSnippet("All because of dale");
-                            moveToCurrentLocation(sydney);
+                                moveToCurrentLocation(sydney);
 
-                            user_information.orderByKey()
-                                    .equalTo(firebaseUser.getUid())
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.getValue() == null) {
-                                                //uid not exist
-                                                if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+                                user_information.orderByKey()
+                                        .equalTo(firebaseUser.getUid())
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.getValue() == null) {
+                                                    //uid not exist
+                                                    if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
 
-                                                    Common.currentUser = new UserLocation(firebaseUser.getUid(),location.getLatitude() ,location.getLongitude() );
-                                                    user_information.child(Common.currentUser.getUID())
-                                                            .setValue(Common.currentUser);
-                                                    userID=firebaseUser.getUid();
-                                                }
-                                            }
-                                            //if user available
-                                            else {
-                                                userID=firebaseUser.getUid();
-                                                Common.currentUser = dataSnapshot.child(firebaseUser.getUid()).getValue(UserLocation.class);
-                                            }
-
-
-                                        }
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                        }
-                                    });
-                            final String imgURL = "default";
-                            final String userName = "Custos";
-
-                            user_information2.orderByKey()
-                            .equalTo(firebaseUser.getUid())
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(dataSnapshot.getValue() == null){
-                                        //uid not exist
-                                        if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
-                                            displayDialog();
-                                            Common.loggedUser = new User(userName,
-                                                    firebaseUser.getUid(),
-                                                    firebaseUser.getEmail());
-                                            user_information2.child(Common.loggedUser.getUID())
-                                                    .setValue(Common.loggedUser);
-                                            FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
-                                                    .child(firebaseUser.getUid())
-                                                    .child(Common.IMAGE_URL)
-                                                    .setValue(imgURL).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful()){
-                                                        Toast.makeText(getApplicationContext(),"successfully saved imgurl",Toast.LENGTH_SHORT).show();
-                                                    }else{
-                                                        Toast.makeText(getApplicationContext(),"failed imgurl",Toast.LENGTH_SHORT).show();
+                                                        Common.currentUser = new UserLocation(firebaseUser.getUid(), location.getLatitude(), location.getLongitude());
+                                                        user_information.child(Common.currentUser.getUID())
+                                                                .setValue(Common.currentUser);
+                                                        userID = firebaseUser.getUid();
                                                     }
                                                 }
-                                            });
-                                            FirebaseInstanceId.getInstance().getInstanceId()
-                                                    .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-                                                        @Override
-                                                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                                                //if user available
+                                                else {
+                                                    userID = firebaseUser.getUid();
+                                                    Common.currentUser = dataSnapshot.child(firebaseUser.getUid()).getValue(UserLocation.class);
+                                                }
+
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                final String imgURL = "default";
+                                final String userName = "Custos";
+
+                                user_information2.orderByKey()
+                                        .equalTo(firebaseUser.getUid())
+                                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.getValue() == null) {
+                                                    //uid not exist
+                                                    if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+                                                        displayDialog();
+                                                        Common.loggedUser = new User(userName,
+                                                                firebaseUser.getUid(),
+                                                                firebaseUser.getEmail());
+                                                        user_information2.child(Common.loggedUser.getUID())
+                                                                .setValue(Common.loggedUser);
+                                                        FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                                                                .child(firebaseUser.getUid())
+                                                                .child(Common.IMAGE_URL)
+                                                                .setValue(imgURL).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    Toast.makeText(getApplicationContext(), "successfully saved imgurl", Toast.LENGTH_SHORT).show();
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(), "failed imgurl", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            }
+                                                        });
+                                                        FirebaseInstanceId.getInstance().getInstanceId()
+                                                                .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                                                                    @Override
+                                                                    public void onSuccess(InstanceIdResult instanceIdResult) {
 //                                    tokens.child(firebaseUser.getUid())
 //                                            .setValue(instanceIdResult.getToken());
-                                                            String deviceToken = instanceIdResult.getToken();
-                                                            user_information2.child(firebaseUser.getUid()).child("userToken").setValue(deviceToken)
-                                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        @Override
-                                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                                        }
-                                                                    });
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(MapsActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        String deviceToken = instanceIdResult.getToken();
+                                                                        user_information2.child(firebaseUser.getUid()).child("userToken").setValue(deviceToken)
+                                                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                }).addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Toast.makeText(MapsActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
                                                 }
-                                            });
-                                        }
-                                    }
-                                    updateTokens(firebaseUser);
+                                                updateTokens(firebaseUser);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
+                                if (location != null) {
+
                                 }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-
-
-
-                            if (location != null) {
-
                             }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d("MapDemoActivity", "Error trying to get last GPS location");
-                    e.printStackTrace();
-                }
-            });
-        }}
-        catch (Exception e){
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("MapDemoActivity", "Error trying to get last GPS location");
+                        e.printStackTrace();
+                    }
+                });
+            }
+        } catch (Exception e) {
 
         }
 
@@ -660,7 +658,7 @@ private void setcontactslocation()  {
 
     private void displayDialog() {
         FirstTimeLoginDialog firstTimeLoginDialog = new FirstTimeLoginDialog();
-        firstTimeLoginDialog.show(getSupportFragmentManager(),"first login");
+        firstTimeLoginDialog.show(getSupportFragmentManager(), "first login");
     }
 
     private void updateTokens(final FirebaseUser firebaseUser) {
@@ -676,21 +674,22 @@ private void setcontactslocation()  {
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MapsActivity.this,"" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapsActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-ArrayList<String> eventListSelection;
 
-    private void addEventsSpinner(){
+    ArrayList<String> eventListSelection;
+
+    private void addEventsSpinner() {
         Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.spinner_item, eventListSelection);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, eventListSelection);
         adapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(adapter);
 
     }
 
-    private void eventLocationAdder(){
+    private void eventLocationAdder() {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         final DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("user_event");
@@ -699,7 +698,7 @@ ArrayList<String> eventListSelection;
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        eventListSelection=new ArrayList<String>();
+                        eventListSelection = new ArrayList<String>();
                         if (dataSnapshot.getValue() == null) {
                             //uid not exist
                             if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
@@ -708,14 +707,14 @@ ArrayList<String> eventListSelection;
                         }
                         //if user available
                         else {
-                            for(DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()){
-                               eventListSelection.add(snapshot.child("name").getValue().toString());
-                                double lat=0,lon=0;
-                                if(snapshot.child("location").exists()&&snapshot.child("description").exists()&&snapshot.child("date").exists()&&snapshot.child("time").exists()&&snapshot.child("name").exists()) {
+                            for (DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()) {
+                                eventListSelection.add(snapshot.child("name").getValue().toString());
+                                double lat = 0, lon = 0;
+                                if (snapshot.child("location").exists() && snapshot.child("description").exists() && snapshot.child("date").exists() && snapshot.child("time").exists() && snapshot.child("name").exists()) {
 
-                                    lat=Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
-                                    lon=Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
-                                    setEventsLocationwithoutzoomingwithdesc(new LatLng(lat,lon),snapshot.getKey());
+                                    lat = Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
+                                    lon = Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
+                                    setEventsLocationwithoutzoomingwithdesc(new LatLng(lat, lon), snapshot.getKey());
                                 }
 
                             }
@@ -724,6 +723,7 @@ ArrayList<String> eventListSelection;
                         addEventsSpinner();
 
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -733,44 +733,46 @@ ArrayList<String> eventListSelection;
     }
 
 
-private void darkModeChecker(){
-    final DatabaseReference darkLight = FirebaseDatabase.getInstance().getReference("userSettings");
-    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    darkLight.orderByKey()
-            .equalTo(firebaseUser.getUid())
-            .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.getValue() == null) {
-                        //uid not exist
-                        if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
+    private void darkModeChecker() {
+        final DatabaseReference darkLight = FirebaseDatabase.getInstance().getReference("userSettings");
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        darkLight.orderByKey()
+                .equalTo(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null) {
+                            //uid not exist
+                            if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
 
-                            darkLight.child(firebaseUser.getUid()).child("darkmode").setValue("true");
-                            setmaptonight();
+                                darkLight.child(firebaseUser.getUid()).child("darkmode").setValue("true");
+                                setmaptonight();
 
+                            }
                         }
-                    }
-                    //if user available
-                    else {
-                        String darklightval=  dataSnapshot.child(firebaseUser.getUid()).child("darkmode").getValue().toString();
-                        if(darklightval.equals("true")){
-                            setmaptonight();
-                        }else {
-                            setmaptoretro();
+                        //if user available
+                        else {
+                            String darklightval = dataSnapshot.child(firebaseUser.getUid()).child("darkmode").getValue().toString();
+                            if (darklightval.equals("true")) {
+                                setmaptonight();
+                            } else {
+                                setmaptoretro();
+                            }
                         }
+
+
                     }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
 
-                }
-            });
+    }
 
-}
-    private void getcurrentlocation(GoogleMap googleMap){
-        if (checkPermissions()&&!userID.equals("nope")) {
+    private void getcurrentlocation(GoogleMap googleMap) {
+        if (checkPermissions() && !userID.equals("nope")) {
 
             mMap = googleMap;
             fusedLocationClient.getLastLocation()
@@ -793,14 +795,19 @@ private void darkModeChecker(){
             });
         }
     }
+
     final Handler handler = new Handler();
-    private void setlocationeveryfeesec(final GoogleMap googleMap){
+
+    private void setlocationeveryfeesec(final GoogleMap googleMap) {
         readUsers();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               getcurrentlocation(googleMap);
-             try{   setcontactslocation();}catch (Exception e){}
+                getcurrentlocation(googleMap);
+                try {
+                    setcontactslocation();
+                } catch (Exception e) {
+                }
                 handler.postDelayed(this, 10000);
             }
         }, 10000);
@@ -808,19 +815,22 @@ private void darkModeChecker(){
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-               setHomeLoc();
-               try{   setcontactslocation();}catch (Exception e){}
+                setHomeLoc();
+                try {
+                    setcontactslocation();
+                } catch (Exception e) {
+                }
             }
         }, 2000);
-      //  handler.postDelayed(new Runnable() {
-         //   @Override
+        //  handler.postDelayed(new Runnable() {
+        //   @Override
         //    public void run() {
-               // GifImageView gifimg=findViewById(R.id.gifinmaps);
-              //  gifimg.setVisibility(View.GONE);
-           //    final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
-            //    dangerzonebutton.setVisibility(View.VISIBLE);
+        // GifImageView gifimg=findViewById(R.id.gifinmaps);
+        //  gifimg.setVisibility(View.GONE);
+        //    final Button dangerzonebutton= findViewById(R.id.mapsDsngerZoneButton);
+        //    dangerzonebutton.setVisibility(View.VISIBLE);
         //    }
-      //  }, 2500);
+        //  }, 2500);
     }
 
     private void moveToCurrentLocation(LatLng currentLocation) {
@@ -905,16 +915,14 @@ private void darkModeChecker(){
      * @param data
      */
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO: Add in the lat and latitude coordinates as well as description into the database
 
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
 
         //High Danger Marker Code
-        if(requestCode==2)
-        {
+        if (requestCode == 2) {
 //            requestCode = data.getIntExtra("dangervalue",0);
 //            String criticallevel = data.getStringExtra("criticallevel");
 //            String description = data.getStringExtra("dangerdescription");
@@ -932,7 +940,7 @@ private void darkModeChecker(){
         }
 
         //Medium Danger Value
-        if (requestCode == 3){
+        if (requestCode == 3) {
 //            requestCode = data.getIntExtra("dangervalue",0);
 //            String criticallevel = data.getStringExtra("criticallevel");
 //            String description = data.getStringExtra("dangerdescription");
@@ -948,7 +956,7 @@ private void darkModeChecker(){
         }
 
         //Low Danger Value
-        if (requestCode == 4){
+        if (requestCode == 4) {
 //            requestCode = data.getIntExtra("dangervalue",0);
 //            String criticallevel = data.getStringExtra("criticallevel");
 //            String description = data.getStringExtra("dangerdescription");
@@ -965,14 +973,15 @@ private void darkModeChecker(){
 
 
     }
-    private String getInvitedUsers(String data)  {
+
+    private String getInvitedUsers(String data) {
         //I/System.out: {a={name=Madison Beer}, b={name=Blake Lively}, c={name=Alex Morgan}}
         String invited_users = "";
 
-        if(data == "none") {
+        if (data == "none") {
             return "none";
         } else {
-            for(int i = 0; i < data.length(); i++) {
+            for (int i = 0; i < data.length(); i++) {
                 if (i + 5 < data.length()) {
                     if (data.substring(i, i + 5).equals("name=")) {
                         int index = i + 5;
@@ -988,6 +997,7 @@ private void darkModeChecker(){
             return invited_users;
         }
     }
+
     /**
      * This is the actionlistener for all the markers!! Add to this method if you want marker
      * to do something when clicked.
@@ -995,45 +1005,47 @@ private void darkModeChecker(){
      * @return
      */
     JSONArray data2;
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        final RelativeLayout mapsfriendlayoutbackgorund=findViewById(R.id.mapsBackground);
-        if(marker.getSnippet().contains("Events")){
-            final TextView mapseventName=findViewById(R.id.mapseventName);
-            final Button mapeventbutton=findViewById(R.id.mapseventbutton);
-            final RelativeLayout mapseventlayout=findViewById(R.id.mapseventzone);
-            final String eventid=marker.getTag().toString();
-           FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final RelativeLayout mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
+        if (marker.getSnippet().contains("Events")) {
+            final TextView mapseventName = findViewById(R.id.mapseventName);
+            final Button mapeventbutton = findViewById(R.id.mapseventbutton);
+            final RelativeLayout mapseventlayout = findViewById(R.id.mapseventzone);
+            final String eventid = marker.getTag().toString();
+            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(eventid);
             db.addValueEventListener(new ValueEventListener() {
-                                         @Override
-                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                             data2 = new JSONArray();
-                                                 JSONObject obj = new JSONObject();
-                                                 try {
-                                                     obj.put("id", dataSnapshot.getKey());
-                                                     obj.put("name", dataSnapshot.child("name").getValue());
-                                                     obj.put("location", dataSnapshot.child("area").getValue());
-                                                     obj.put("date", dataSnapshot.child("date").getValue());
-                                                     obj.put("time", dataSnapshot.child("time").getValue());
-                                                     obj.put("description", dataSnapshot.child("description").getValue());
-                                                     obj.put("location_name", dataSnapshot.child("location_name").getValue());
-                                                     if(dataSnapshot.child("invited_users").getValue() == null) {
-                                                         obj.put("invited_users", "none");
-                                                     } else {
-                                                         obj.put("invited_users",  getInvitedUsers(dataSnapshot.child("invited_users").getValue().toString()));
-                                                     }
-                                                 } catch (JSONException e) {
-                                                     e.printStackTrace();
-                                                 }
-                                                 data2.put(obj);
-                                             try {
-                                                 mapseventName.setText(data2.getJSONObject(0).getString("name"));
-                                             }catch (Exception e){
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    data2 = new JSONArray();
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("id", dataSnapshot.getKey());
+                        obj.put("name", dataSnapshot.child("name").getValue());
+                        obj.put("location", dataSnapshot.child("area").getValue());
+                        obj.put("date", dataSnapshot.child("date").getValue());
+                        obj.put("time", dataSnapshot.child("time").getValue());
+                        obj.put("description", dataSnapshot.child("description").getValue());
+                        obj.put("location_name", dataSnapshot.child("location_name").getValue());
+                        if (dataSnapshot.child("invited_users").getValue() == null) {
+                            obj.put("invited_users", "none");
+                        } else {
+                            obj.put("invited_users", getInvitedUsers(dataSnapshot.child("invited_users").getValue().toString()));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    data2.put(obj);
+                    try {
+                        mapseventName.setText(data2.getJSONObject(0).getString("name"));
+                    } catch (Exception e) {
 
-                                             }
+                    }
 
-                                         }
+                }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -1061,7 +1073,7 @@ private void darkModeChecker(){
                         intent.putExtra("invited_users", data2.getJSONObject(0).getString("invited_users"));
                         intent.putExtra("location_name", data2.getJSONObject(0).getString("location_name"));
                         startActivity(intent);
-                    } catch(JSONException e) {
+                    } catch (JSONException e) {
                         System.out.println(e);
                     }
                 }
@@ -1069,26 +1081,26 @@ private void darkModeChecker(){
 
         }
 
-        if(marker.getSnippet().contains("Contacts")){
-            final TextView mapsfriendName=findViewById(R.id.mapsfriendName);
+        if (marker.getSnippet().contains("Contacts")) {
+            final TextView mapsfriendName = findViewById(R.id.mapsfriendName);
 
-            final Button friendmapbutton=findViewById(R.id.mapsfriendbutton);
-            final RelativeLayout mapsfriendlayout=findViewById(R.id.mapsfriendzone);
-           final CircleImageView mapsfriendicon=findViewById(R.id.mapsfriendimage);
+            final Button friendmapbutton = findViewById(R.id.mapsfriendbutton);
+            final RelativeLayout mapsfriendlayout = findViewById(R.id.mapsfriendzone);
+            final CircleImageView mapsfriendicon = findViewById(R.id.mapsfriendimage);
 
-       //    final FirebaseStorage storage = FirebaseStorage.getInstance();
-            final String uidtemp=marker.getTag().toString();
+            //    final FirebaseStorage storage = FirebaseStorage.getInstance();
+            final String uidtemp = marker.getTag().toString();
 
 
             user_information2.child(uidtemp).orderByKey().addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     mapsfriendName.setText(dataSnapshot.child("userName").getValue().toString());
-                    String imgurl=dataSnapshot.child("imageURL").getValue().toString();
+                    String imgurl = dataSnapshot.child("imageURL").getValue().toString();
                     if (imgurl.equals("default")) {
                         mapsfriendicon.setImageResource(R.mipmap.ic_launcher);
                     } else {
-                      //  StorageReference httpsReference = storage.getReferenceFromUrl(imgurl);
+                        //  StorageReference httpsReference = storage.getReferenceFromUrl(imgurl);
                         Glide.with(getApplicationContext()).load(imgurl).into(mapsfriendicon);
                     }
                 }
@@ -1113,7 +1125,7 @@ private void darkModeChecker(){
                     mapsfriendlayoutbackgorund.setVisibility(View.GONE);
                     friendmapbutton.setVisibility(View.GONE);
                     Intent intent = new Intent(MapsActivity.this, OtherUserActivity.class);
-                    intent.putExtra("userid",uidtemp);
+                    intent.putExtra("userid", uidtemp);
                     startActivity(intent);
                 }
             });
@@ -1125,7 +1137,7 @@ private void darkModeChecker(){
          * Dale's danger zone markers
          */
 
-        if(marker.getSnippet().contains("Danger")){
+        if (marker.getSnippet().contains("Danger")) {
             String criticalLevel = marker.getTitle();
             String description = marker.getSnippet();
             DangerZoneDialogue dangerZoneDialogue = new DangerZoneDialogue();
@@ -1145,6 +1157,27 @@ private void darkModeChecker(){
      * Getting all the markers in the DB and running the placeMarker method
      */
     public void generateMarkers(){
+        /**
+         * State verification
+         */
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        final double currentlongitude = location.getLongitude();
+        final double currentlatitude = location.getLatitude();
+
+        final String usersCurrentState = getCurrentState(currentlatitude,currentlongitude);
+        System.out.println("CURRENT STATE IS: " + usersCurrentState);
+
 
         FirebaseDatabase.getInstance().getReference().child("Danger Zone Markers")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -1158,7 +1191,13 @@ private void darkModeChecker(){
                             String lat = snapshot.child("lat").getValue().toString();
                             String longitude = snapshot.child("long").getValue().toString();
                             String description = snapshot.child("description").getValue().toString();
-                            placeMarker(zone_name,risk_level,lat,longitude,description);
+
+                            String dangerZoneState = getCurrentState(Double.valueOf(lat),Double.valueOf(longitude));
+                            System.out.println("DANGER ZONE STATE: " + dangerZoneState);
+                            if(dangerZoneState.equals(usersCurrentState)) {
+                                placeMarker(zone_name,risk_level,lat,longitude,description);
+                            }
+                            //placeMarker(zone_name,risk_level,lat,longitude,description);
                             System.out.println(lat);
                         }
                         System.out.println("NUMBER OF MARKERS" + numberOfMarkers);
@@ -1167,6 +1206,21 @@ private void darkModeChecker(){
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+    }
+
+    /**
+     * retrieve the current state based off coordinates
+     */
+    private String getCurrentState(double lat, double longitude) {
+        String currentState = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat,longitude,1);
+            currentState = addresses.get(0).getAdminArea();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return currentState;
     }
 
     /**
@@ -1181,7 +1235,7 @@ private void darkModeChecker(){
                 .equalTo(firebaseUser.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot){
                         if (dataSnapshot.getValue() == null) {
                             //uid not exist
                             if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
