@@ -280,6 +280,8 @@ public class CreateEventActivity extends AppCompatActivity {
                         for(User user : selected) {
                             user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
                         }
+                    } else {
+                        user_information.child("invited_users").setValue("NONE");
                     }
 
                     //Send notifications to invited users
@@ -288,31 +290,18 @@ public class CreateEventActivity extends AppCompatActivity {
 
                     if(selected != null) {
                         for(User user : selected) {
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(firebaseUser.getUid())
                                     .child("friendName").setValue(current_user.getUserName());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(firebaseUser.getUid())
                                     .child("imageURL").setValue(current_user.getImageURL());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(firebaseUser.getUid())
                                     .child("request_time").setValue(getRequestTime());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(firebaseUser.getUid())
                                     .child("request_type").setValue("invite_sent");
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(firebaseUser.getUid())
                                     .child("uid").setValue(firebaseUser.getUid());
-
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("name").setValue(event.getName());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("area").setValue(event.getArea());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("location_name").setValue(event.getLocation_name());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("date").setValue(event.getDate());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("time").setValue(event.getTime());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("description").setValue(event.getDescription());
-                            notifications.child(user.getUID()).child("event_invitation").child(firebaseUser.getUid())
-                                    .child("event_details").child("isOwner").setValue("false");
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(firebaseUser.getUid())
+                                    .child("eventId").setValue(event.getID());
                         }
 
 

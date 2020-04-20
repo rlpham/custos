@@ -74,29 +74,25 @@ public class InviteGuestsActivity extends AppCompatActivity {
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
 
-            //ArrayList<User> idk = intent2.getStringArrayListExtra("selectedUsers");
-            Bundle args = intent2.getBundleExtra("BUNDLE");
-            ArrayList<User> idk = (ArrayList<User>) args.getSerializable("BUNDLE");
-
             view = inflater.inflate(R.layout.invite_guest_item, null);
             final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
 
-            if(idk == null) {
-            //do nothing
-            } else {
-                //TODO: PERSIST CHECK MARK IF THE USER IS ALREADY INVITED
-//                for(User element : idk) {
-//                    if(element.getUserName().equals(users.get(position).getUserName())) {
-//                        ctv.setCheckMarkDrawable(R.drawable.checked);
-//                        ctv.setChecked(true);
-//                        selectedUsers.add(element);
-//                    }
-//                }
-            }
+            ArrayList<String> idk  = intent2.getStringArrayListExtra("selected");
 
             ctv.setTextColor(Color.parseColor("#FFFFFF"));
-            //ctv.setText(names[position]);
             ctv.setText(users.get(position).getUserName());
+            for(String element : idk) {
+                if(element.equals(ctv.getText().toString())) {
+                    value = "Checked";
+                    ctv.setCheckMarkDrawable(R.drawable.checked);
+                    ctv.setChecked(true);
+                    for(User user : users) {
+                        if(user.getUserName().equals(element)) {
+                            selectedUsers.add(user);
+                        }
+                    }
+                }
+            }
             ctv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -109,9 +105,6 @@ public class InviteGuestsActivity extends AppCompatActivity {
                                 selectedUsers.remove(i);
                             }
                         }
-//                        if(selectedNames.contains(ctv.getText().toString())) {
-//                            selectedNames.remove(ctv.getText().toString());
-//                        }
                     } else if (!ctv.isChecked()) {
                         value = "Checked";
                         ctv.setCheckMarkDrawable(R.drawable.checked);
@@ -125,25 +118,6 @@ public class InviteGuestsActivity extends AppCompatActivity {
                                 selectedUsers.add(user);
                             }
                         }
-
-                        //Selectedusers initial size is 0 therefore it skips over this. TODO
-
-//                        for(int i = 0; i < selectedUsers.size(); i++) {
-//                            if(selectedUsers.get(i).getUserName().equals(ctv.getText().toString())) {
-//                                for(int j = 0; j < users.size(); j++) {
-//                                    if(selectedUsers.get(i).getUserName().equals(users.get(j).getUserName())) {
-//                                        User user = new User();
-//                                        user.setUserName(ctv.getText().toString());
-//                                        user.setUID((users.get(j).getUID()));
-//                                        selectedUsers.add(user);
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                        }
-//                        if(!selectedNames.contains(ctv.getText().toString())) {
-//                            selectedNames.add(ctv.getText().toString());
-//                        }
                     }
                 }
             });
@@ -193,13 +167,8 @@ public class InviteGuestsActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String[] names = new String[(int)dataSnapshot.getChildrenCount()];
-//                String[] uids = new String[(int)dataSnapshot.getChildrenCount()];
                 int i = 0;
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
-                    //creates 2 parallel arrays (names, uid)
-//                    names[i] = element.child("friendName").getValue().toString();
-//                    uids[i] = element.getKey();
                     User user = new User();
                     user.setUserName(element.child("friendName").getValue().toString());
                     user.setUID(element.getKey());
@@ -223,7 +192,6 @@ public class InviteGuestsActivity extends AppCompatActivity {
                 Bundle args = new Bundle();
                 args.putSerializable("ARRAYLIST", (Serializable)selectedUsers);
                 intent.putExtra("BUNDLE", args);
-                //intent.putExtra("values", selectedUsers);
                 onActivityResult(18,18, intent);
                 setResult(18, intent);
                 finish();

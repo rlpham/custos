@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Slide;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -74,7 +77,10 @@ public class EventDetailsActivity extends AppCompatActivity {
     ToolKit toolKit;
     String location_name_input;
     ArrayList<User> invited_users;
+    TextView location_placeholder;
+    ArrayList<User> updated;
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         decorView.setSystemUiVisibility(uiOptions);
+
+
 
         decorView.setOnSystemUiVisibilityChangeListener
                 (new View.OnSystemUiVisibilityChangeListener() {
@@ -115,6 +123,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_invite_list = findViewById(R.id.event_detail_invite_list);
         final Button edit_event_button = findViewById(R.id.edit_event_button);
         edit_event_guests_button = findViewById(R.id.event_detail_invite_guests);
+        location_placeholder = findViewById(R.id.location_placeholder);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -133,14 +142,14 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        final Intent intent = getIntent();
+        final Intent reciever_intent = getIntent();
 
-        final String id = intent.getStringExtra("event_id");
-        String title = intent.getStringExtra("event_name");
-        String description = intent.getStringExtra("event_desc");
-        String date = intent.getStringExtra("event_date");
-        String time = intent.getStringExtra("event_time");
-        Bundle args = intent.getBundleExtra("BUNDLE");
+        final String id = reciever_intent.getStringExtra("event_id");
+        String title = reciever_intent.getStringExtra("event_name");
+        String description = reciever_intent.getStringExtra("event_desc");
+        String date = reciever_intent.getStringExtra("event_date");
+        String time = reciever_intent.getStringExtra("event_time");
+        Bundle args = reciever_intent.getBundleExtra("BUNDLE");
         if(args != null) {
             invited_users = (ArrayList<User>) args.getSerializable("ARRAYLIST");
             String[] invited_users_adapter = new String[invited_users.size()];
@@ -168,8 +177,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
-        //String[] invited_users = intent.getStringExtra("invited_users").split(",");
-        //String location_name = intent.getStringExtra("location_name");
+        String location_name = reciever_intent.getStringExtra("location_name");
 
         toolKit = new ToolKit();
 
@@ -184,12 +192,15 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_date_input.setText(event_detail_date.getText().toString());
         event_detail_time_input.setText(event_detail_time.getText().toString());
 
-
+        final LinearLayout linear_layout_details = findViewById(R.id.linear_layout_details);
+        linear_layout_details.setVisibility(View.INVISIBLE);
+        location_placeholder.setText(location_name);
+        location_placeholder.setVisibility(View.VISIBLE);
 
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.event_detail_location);
-
+        autocompleteFragment.setText(location_name);
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -214,10 +225,11 @@ public class EventDetailsActivity extends AppCompatActivity {
                 if(!isEditMode) {
                     isEditMode = true;
                     back_button.setVisibility(View.GONE);
+                    location_placeholder.setVisibility(View.INVISIBLE);
+                    linear_layout_details.setVisibility(View.VISIBLE);
 //                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                     edit_event_button.setText(R.string.invite_guests_done_button);
-
                     event_detail_title_input.setVisibility(View.VISIBLE);
                     event_detail_description_input.setVisibility(View.VISIBLE);
                     event_detail_date_input.setVisibility(View.VISIBLE);
@@ -247,10 +259,11 @@ public class EventDetailsActivity extends AppCompatActivity {
                     } else {
                         isEditMode = false;
                         back_button.setVisibility(View.VISIBLE);
+                        linear_layout_details.setVisibility(View.INVISIBLE);
+                        location_placeholder.setVisibility(View.VISIBLE);
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                         edit_event_button.setText(R.string.event_edit_button_label);
-
 
                         event_detail_title_input.setVisibility(View.INVISIBLE);
                         event_detail_description_input.setVisibility(View.INVISIBLE);
@@ -263,7 +276,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_detail_time.setVisibility(View.VISIBLE);
 
                         DatabaseReference db_root = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id);
-                        DatabaseReference db_location = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id).child("location");
 
                         Map<String, Object> event_root_map = new HashMap<String, Object>();
                         Map<String, Object> event_location_map = new HashMap<String, Object>();
@@ -277,16 +289,37 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_location_map.put("latitude", lat);
                         event_location_map.put("longitude", lon);
 
+                        event_invited_users_map.put("invited_users", updated);
                         //TODO: update invited users on modify event
-//                        db.child("invited_users");
+                        //How to do it
+                        //1. Create 1 ArrayList<String> containing ALL friend uids, then 2 ArrayList<User>
+                        //1a. First will be a list of ALL of current users friends.
+                        //1b. second will be the new updated list of friends invited to event (updated already created)
+                        //1c. third will be the old list of friends invited to event (
+                        //2. two for loops NOT NESTED. both using ArrayList.contains() to get to goal
+
+                        //English.
+                        // list x is list of ALL FRIENDS
+                        // list y is list of old guest list
+                        // list z is list of new guest list
+                        // n x.length AKA n is the size of the friends list
+                        // we know -> y.length <= n && z.length <=n
+                        // there are some guests in list z (new list) that are not in y (old list)-> those guests we must ADD to the guest list
+                        // there are some guests NOT in list z but are in y -> those guests we must REMOVE to the guest list
+
+                        
 
                         db_root.updateChildren(event_root_map);
-                        db_location.updateChildren(event_location_map);
+                        db_root.child("location").updateChildren(event_location_map);
+                        if(updated != null) {
+                            db_root.updateChildren(event_invited_users_map);
+                        }
 
                         event_detail_title.setText(event_detail_title_input.getText().toString());
                         event_detail_description.setText(event_detail_description_input.getText().toString());
                         event_detail_date.setText(event_detail_date_input.getText().toString());
                         event_detail_time.setText(event_detail_time_input.getText().toString());
+                        location_placeholder.setText(location_name_input);
 
                         edit_event_guests_button.setVisibility(View.INVISIBLE);
 
@@ -380,8 +413,12 @@ public class EventDetailsActivity extends AppCompatActivity {
                     selected.add(event_detail_invite_list.getItemAtPosition(i).toString());
                 }
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("BUNDLE", invited_users);
                 intent.putStringArrayListExtra("selected", selected);
+                intent.putExtra("ARRAYLIST", args);
                 startActivityForResult(intent, 18);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
     }
@@ -394,6 +431,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             if(data != null) {
                 Bundle args = data.getBundleExtra("BUNDLE");
                 ArrayList<User> selected = (ArrayList<User>) args.getSerializable("ARRAYLIST");
+                updated = (ArrayList<User>) args.getSerializable("ARRAYLIST");
                 String[] selected_adapter = new String[selected.size()];
                 for(int i = 0; i < selected.size(); i++) {
                     selected_adapter[i] = selected.get(i).getUserName();
