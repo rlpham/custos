@@ -1,27 +1,21 @@
 package com.example.custos;
 
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.custos.adapters.FriendsAdapter;
 import com.example.custos.adapters.NotificationsAdapter;
 import com.example.custos.utils.Common;
-import com.example.custos.utils.Friends;
 import com.example.custos.utils.Notifications;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.example.custos.utils.RecyclerViewDecorator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NotificationActivity extends Fragment {
     private RecyclerView recyclerView;
@@ -63,16 +55,16 @@ public class NotificationActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        RecyclerViewDecorator recyclerViewDecorator = new RecyclerViewDecorator(15);
         View view = inflater.inflate(R.layout.notificationfragment, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_notification);
+        recyclerView.addItemDecoration(recyclerViewDecorator);
         noNotifications = view.findViewById(R.id.no_notifications);
         noNotifications.setVisibility(View.INVISIBLE);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         notificationsList = new ArrayList<>();
         readUser();
-//        recyclerView.setLayoutManager(linearLayoutManager);
-//        recyclerView.setHasFixedSize(true);
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();

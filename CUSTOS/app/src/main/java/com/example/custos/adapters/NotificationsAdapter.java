@@ -71,7 +71,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.itemView.setLongClickable(true);
         final Notifications notification = notificationsList.get(position);
-        
+
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
