@@ -128,6 +128,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 .toString().equals("acceptedFriendRequest")) {
                             holder.friendName.setText(userName + " accepted your friend request");
                         }
+                        if(dataSnapshot.child(notification.getUID())
+                                .child("request_type")
+                                .getValue()
+                                .toString().equals("invite_sent")){
+                            holder.friendName.setText(userName + " has invited you to an event");
+                        }
                     }
 
 

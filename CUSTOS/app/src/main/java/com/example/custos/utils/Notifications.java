@@ -7,6 +7,7 @@ public class Notifications {
     private String UID;
     private String request_type;
     private String imageURL;
+    private String eventId;
 
     public Notifications(){
 
@@ -16,12 +17,21 @@ public class Notifications {
         this.request_time = request_time;
     }
 
-    public Notifications(String friendName, String request_time, String uid, String request_type,String imageURL) {
+    public Notifications(String friendName, String request_time, String uid, String request_type,String imageURL,String eventId) {
         this.friendName = friendName;
         this.request_time = request_time;
         this.UID = uid;
         this.request_type = request_type;
         this.imageURL = imageURL;
+        this.eventId = eventId;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 
     public String getImageURL() {
