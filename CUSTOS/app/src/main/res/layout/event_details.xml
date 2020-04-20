@@ -8,19 +8,19 @@
     <TextView
         android:id="@+id/event_detail_description"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_below="@+id/event_detail_title"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="45dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
-        android:ellipsize="end"
+        android:background="#212121"
         android:ems="10"
         android:hint="@string/event_description_placeholder"
-        android:inputType="textPersonName"
-        android:lines="4"
-        android:maxLines="4"
+        android:inputType="textMultiLine"
+        android:maxLength="180"
+        android:maxLines="5"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
         android:textSize="12sp" />
@@ -29,20 +29,22 @@
     <EditText
         android:id="@+id/event_detail_description_input"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_below="@+id/event_detail_title"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="45dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ems="10"
         android:hint="@string/event_description_placeholder"
         android:inputType="textMultiLine"
         android:maxLength="180"
+        android:maxLines="5"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="12sp"
+        android:textSize="20sp"
         android:visibility="invisible" />
 
     <TextView
@@ -63,12 +65,12 @@
         android:id="@+id/event_detail_title"
         android:layout_width="362dp"
         android:layout_height="50dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/edit_event_button"
+        android:layout_toEndOf="@+id/event_detail_back_button"
         android:background="#1D1D1D"
         android:ellipsize="end"
         android:maxLength="30"
@@ -81,12 +83,12 @@
         android:id="@+id/event_detail_title_input"
         android:layout_width="362dp"
         android:layout_height="50dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/edit_event_button"
+        android:layout_toEndOf="@+id/event_detail_back_button"
         android:background="#1D1D1D"
         android:inputType="text"
         android:maxLength="30"
@@ -117,12 +119,14 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/event_detail_time"
+        android:background="#212121"
         android:ems="10"
+        android:gravity="center"
         android:hint="@string/event_date_placeholder"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="28sp" />
 
     <EditText
         android:id="@+id/event_detail_date_input"
@@ -134,13 +138,16 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/event_detail_time"
+        android:background="#212121"
         android:ems="10"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
         android:hint="@string/event_date_placeholder"
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:visibility="invisible"
-        android:focusableInTouchMode="false" />
+        android:textSize="28sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/event_detail_time"
@@ -150,12 +157,14 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ems="10"
+        android:gravity="center"
         android:hint="@string/time_input_placeholder"
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="28sp" />
 
     <EditText
         android:id="@+id/event_detail_time_input"
@@ -165,25 +174,30 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ems="10"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
         android:hint="@string/time_input_placeholder"
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:visibility="invisible"
-        android:focusableInTouchMode="false"/>
+        android:textSize="28sp"
+        android:visibility="invisible" />
 
 
     <Button
         android:id="@+id/edit_event_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:background="#fece2f"
-        android:text="@string/ecedit" />
+        android:background="#1D1D1D"
+        android:text="@string/ecedit"
+        android:textColor="#fece2f"
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/event_detail_invite_guests"
@@ -219,5 +233,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/event_detail_back_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="#1D1D1D"
+        android:foreground="@drawable/ic_arrow_back_yellow_24dp" />
 
 </RelativeLayout>

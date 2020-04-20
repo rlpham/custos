@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,6 @@ import java.util.ArrayList;
 public class InviteGuestsActivity extends AppCompatActivity {
 
     ListView listView;
-    TextView invite_guests_back_button;
 
     ArrayList<User> users = new ArrayList<User>();
     //ArrayList<String> selectedNames = new ArrayList<String>();
@@ -153,13 +153,38 @@ public class InviteGuestsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Handler handler = new Handler();
+        final View decorView = getWindow().getDecorView();
+
+        final int uiOptions = View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener
+                (new View.OnSystemUiVisibilityChangeListener() {
+                    @Override
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        // Note that system bars will only be "visible" if none of the
+                        // LOW_PROFILE, HIDE_NAVIGATION, or FULLSCREEN flags are set.
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    decorView.setSystemUiVisibility(uiOptions);
+                                }
+                            }, 2000);
+                        } else {
+
+                        }
+                    }
+                });
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.invite_guests);
         // TODO: Set up checkable text views in list, then pass them into intent and test
         // https://abhiandroid.com/ui/checkedtextview
         listView = findViewById(R.id.listView);
-        invite_guests_back_button = findViewById(R.id.invite_guests_back_button);
-
         intent2 = getIntent();
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -202,17 +227,10 @@ public class InviteGuestsActivity extends AppCompatActivity {
                 onActivityResult(18,18, intent);
                 setResult(18, intent);
                 finish();
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
 
-        invite_guests_back_button.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        
     }
 
 

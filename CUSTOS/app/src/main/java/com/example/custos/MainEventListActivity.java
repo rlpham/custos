@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -131,6 +134,8 @@ public class MainEventListActivity extends Fragment {
                             intent.putExtra("event_time", data.get(position).getTime());
                             intent.putExtra("location_name", data.get(position).getLocation_name());
                             startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
 //                        } catch(JSONException e) {
 //                            System.out.println(e);
 //                        }
@@ -140,9 +145,23 @@ public class MainEventListActivity extends Fragment {
                 holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        //TODO: display modal, confirming deleting
-                        Toast toast = Toast.makeText(v.getContext(), "LONG HOLD", Toast.LENGTH_SHORT);
-                        toast.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setCancelable(true);
+                        builder.setTitle("Delete Event")
+                                .setMessage("Are you sure you want to delete this event?")
+                                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        System.out.println("DELETED");
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        System.out.println("CANCELED");
+                                    }
+                                });
+                        builder.show();
                         return true;
                     }
                 });
@@ -210,7 +229,7 @@ public class MainEventListActivity extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateEventActivity.class);
                 startActivityForResult(intent, 1);
-
+                getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 

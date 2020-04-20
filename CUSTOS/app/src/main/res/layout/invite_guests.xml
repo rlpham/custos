@@ -8,12 +8,12 @@
         android:id="@+id/textView7"
         android:layout_width="190dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/invite_guests_done"
-        android:layout_toEndOf="@+id/invite_guests_back_button"
         android:text="@string/invite_guests_label_placeholder"
         android:textColor="#FFFFFF"
         android:textSize="30sp" />
@@ -28,24 +28,15 @@
 
     <Button
         android:id="@+id/invite_guests_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:background="#fece2f"
+        android:background="#1D1D1D"
         android:text="@string/invite_guests_done_button"
-        android:textColor="@android:color/black" />
-
-    <TextView
-        android:id="@+id/invite_guests_back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/ic_arrow_back_yellow_24dp" />
+        android:textColor="#fece2f"
+        android:textSize="16sp" />
 
 </RelativeLayout>

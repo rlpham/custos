@@ -15,6 +15,7 @@
         android:layout_marginStart="45dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ellipsize="end"
         android:ems="10"
         android:hint="@string/event_name_placeholder"
@@ -22,7 +23,8 @@
         android:maxLength="30"
         android:maxLines="1"
         android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF" />
+        android:textColorHint="#FFFFFF"
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/event_detail_description"
@@ -34,13 +36,14 @@
         android:layout_marginStart="45dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ems="10"
         android:hint="@string/event_description_placeholder"
         android:inputType="textMultiLine"
         android:maxLength="180"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="12sp" />
+        android:textSize="16sp" />
 
     <Button
         android:id="@+id/event_detail_edit_guests"
@@ -73,10 +76,12 @@
         android:id="@+id/event_detail_title"
         android:layout_width="362dp"
         android:layout_height="50dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/create_event"
+        android:layout_toEndOf="@+id/create_event_back_button"
         android:background="#1D1D1D"
         android:text="@string/event_create_event_placeholder"
         android:textColor="#FFFFFF"
@@ -84,16 +89,17 @@
 
     <Button
         android:id="@+id/create_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="false"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:background="#fece2f"
+        android:background="#1D1D1D"
         android:text="@string/create_event_button"
-        android:textColor="@color/colorAccent"
+        android:textColor="#fece2f"
+        android:textSize="16sp"
         android:visibility="visible" />
 
     <ListView
@@ -117,12 +123,15 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/event_detail_time"
+        android:background="#212121"
         android:ems="10"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
         android:hint="@string/event_date_placeholder"
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:focusableInTouchMode="false"/>
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/event_detail_time"
@@ -132,12 +141,15 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ems="10"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
         android:hint="@string/time_input_placeholder"
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:focusableInTouchMode="false"/>
+        android:textSize="24sp" />
 
     <LinearLayout
         android:id="@+id/linear_layout_fragment"
@@ -158,5 +170,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/create_event_back_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:background="#1D1D1D"
+        android:foreground="@drawable/ic_arrow_back_yellow_24dp" />
 
 </RelativeLayout>
