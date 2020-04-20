@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.itemView.setLongClickable(true);
         final Notifications notification = notificationsList.get(position);
+        
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
         notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
@@ -128,7 +130,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 .toString().equals("acceptedFriendRequest")) {
                             holder.friendName.setText(userName + " accepted your friend request");
                         }
-                        if(dataSnapshot.child(notification.getUID())
+
+                    }if(dataSnapshot.child(notification.getEventId()).exists()){
+                        if(dataSnapshot.child(notification.getEventId())
                                 .child("request_type")
                                 .getValue()
                                 .toString().equals("invite_sent")){
