@@ -77,18 +77,21 @@ public class InviteGuestsActivity extends AppCompatActivity {
             view = inflater.inflate(R.layout.invite_guest_item, null);
             final CheckedTextView ctv = view.findViewById(R.id.checkedTextView);
 
+
             ArrayList<String> idk  = intent2.getStringArrayListExtra("selected");
 
             ctv.setTextColor(Color.parseColor("#FFFFFF"));
             ctv.setText(users.get(position).getUserName());
-            for(String element : idk) {
-                if(element.equals(ctv.getText().toString())) {
-                    value = "Checked";
-                    ctv.setCheckMarkDrawable(R.drawable.checked);
-                    ctv.setChecked(true);
-                    for(User user : users) {
-                        if(user.getUserName().equals(element)) {
-                            selectedUsers.add(user);
+            if(idk != null) {
+                for(String element : idk) {
+                    if(element.equals(ctv.getText().toString())) {
+                        value = "Checked";
+                        ctv.setCheckMarkDrawable(R.drawable.checked);
+                        ctv.setChecked(true);
+                        for(User user : users) {
+                            if(user.getUserName().equals(element)) {
+                                selectedUsers.add(user);
+                            }
                         }
                     }
                 }
