@@ -4,6 +4,7 @@
     <string name="empty"></string>
     <string name="event_add">+</string>
     <string name="view_event">View Event</string>
+    <string name="get_direction">Get Directions</string>
     <string name="title_activity_maps">Map</string>
     <string name="notification">Notifications</string>
     <string name="settings">Settings</string>

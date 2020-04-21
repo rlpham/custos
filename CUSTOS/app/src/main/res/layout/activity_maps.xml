@@ -206,12 +206,21 @@
         android:background="@drawable/sv_round"
         >
 
+
+        <Button
+            android:id="@+id/mapsgetdirectionbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/sv_round"
+            android:layout_marginBottom="40dp"
+            android:text="@string/get_direction" />
         <Button
             android:id="@+id/mapseventbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-
+            android:background="@drawable/sv_round"
             android:layout_marginBottom="0dp"
             android:text="@string/view_event" />
 
