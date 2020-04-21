@@ -155,6 +155,12 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .toString().equals("invite_sent")){
                                 holder.friendName.setText(userName + " has invited you to an event");
                             }
+                            if(dataSnapshot.child(notification.getEventId())
+                                    .child("request_type")
+                                    .getValue()
+                                    .toString().equals("declined_invite")){
+                                holder.friendName.setText(userName + " has declined your invitation");
+                            }
                         }
 
                     }
@@ -268,10 +274,33 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(task.isSuccessful()){
                                                             notificationRef3.child(notification.getEventId()).child("request_time").setValue(dateAccept + " at " + timeAccept);
+                                                            notificationRef3.child(notification.getEventId()).child("eventId").setValue(notification.getEventId());
+                                                            DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+
+                                                            databaseReference2.addValueEventListener(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                    String nameCurr = dataSnapshot.child(notification.getUID())
+                                                                            .child(Common.USER_NAME).getValue().toString();
+                                                                    notificationRef3.child(notification.getEventId()).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                                                    String uidCurr = dataSnapshot.child(notification.getUID())
+                                                                            .child(Common.UID).getValue().toString();
+                                                                    notificationRef3.child(notification.getEventId()).child(Common.UID).setValue(uidCurr);
+                                                                    String img = dataSnapshot.child(notification.getUID())
+                                                                            .child(Common.IMAGE_URL).getValue().toString();
+                                                                    notificationRef3.child(notification.getEventId()).child(Common.IMAGE_URL).setValue(img);
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
 
                                                         }
                                                     }
                                                 });
+                                        dialogInterface.dismiss();
                                     }
                                 });
                                 alertDialog.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
