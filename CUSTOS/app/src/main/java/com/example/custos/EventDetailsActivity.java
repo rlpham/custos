@@ -33,6 +33,8 @@ import android.widget.Toast;
 import com.example.custos.utils.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
@@ -46,6 +48,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -85,6 +88,10 @@ public class EventDetailsActivity extends AppCompatActivity {
     ArrayList<String> old_list = new ArrayList<String>();
     ArrayList<User> all_friends = new ArrayList<User>();
     ArrayList<String> new_list = new ArrayList<String>();
+    DatabaseReference notification_root;
+    DatabaseReference userReference;
+    DatabaseReference user_event;
+    User current_user;
     int clickCounter;
 
 
@@ -93,6 +100,22 @@ public class EventDetailsActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userReference = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid());
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                current_user = new User();
+                current_user.setUserName(dataSnapshot.child("userName").getValue().toString());
+                current_user.setImageURL(dataSnapshot.child("imageURL").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         clickCounter = 0;
         final Handler handler = new Handler();
         final View decorView = getWindow().getDecorView();
@@ -135,7 +158,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         edit_event_guests_button = findViewById(R.id.event_detail_invite_guests);
         location_placeholder = findViewById(R.id.location_placeholder);
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //EditText that is enabled when "EDIT" is clicked
         event_detail_title_input = findViewById(R.id.event_detail_title_input);
@@ -178,8 +200,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("isOwner").getValue().toString().equals("false")) {
-                    edit_event_button.setVisibility(View.INVISIBLE);
+                if(dataSnapshot.child("isOwner").exists()) {
+                    if(dataSnapshot.child("isOwner").getValue().toString().equals("false")) {
+                        edit_event_button.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
 
@@ -382,6 +406,38 @@ public class EventDetailsActivity extends AppCompatActivity {
                                 event_root.child(user.getUID()).removeValue();
                             }
 
+                            //Send notification to users recently added to event
+                            notification_root = FirebaseDatabase.getInstance().getReference("Notifications");
+                            for(User user : users_to_add) {
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("friendName").setValue(current_user.getUserName());
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("imageURL").setValue(current_user.getImageURL());
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("request_time").setValue(getRequestTime());
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("request_type").setValue("invite_sent");
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("uid").setValue(firebaseUser.getUid());
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("eventId").setValue(id);
+                            }
+
+                            //Remove event and notification from recently removed users.
+                            user_event = FirebaseDatabase.getInstance().getReference("user_event");
+                            for(final User user : users_to_remove) {
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            //Toast.makeText(getApplicationContext(), "sdlfkjsk", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                                user_event.child(user.getUID()).child(id).removeValue();
+                                System.out.println("DELETING EVENT FROM CURRENT ID " + id);
+                            }
+
                             event_detail_title.setText(event_detail_title_input.getText().toString());
                             event_detail_description.setText(event_detail_description_input.getText().toString());
                             event_detail_date.setText(event_detail_date_input.getText().toString());
@@ -391,9 +447,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                         }
                         finish();
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
-
-
                     }
 
                 }
@@ -539,5 +592,16 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
 
         return locationText;
+    }
+
+    private String getRequestTime() {
+        Calendar calendarAccept = Calendar.getInstance();
+        SimpleDateFormat acceptDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        String dateAccept = acceptDate.format(calendarAccept.getTime());
+        String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
+
+        return dateAccept + " at " + timeAccept;
     }
 }

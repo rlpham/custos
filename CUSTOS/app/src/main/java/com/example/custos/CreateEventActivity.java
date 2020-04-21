@@ -311,6 +311,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     onActivityResult(1,1,intent);
                     setResult(1, intent);
                     finish();
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
                 }
             }
@@ -335,9 +336,7 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 18) {
-
             if(data != null) {
-                //selected = data.getStringArrayListExtra("values");
                 Bundle args = data.getBundleExtra("BUNDLE");
                 selected = (ArrayList<User>) args.getSerializable("ARRAYLIST");
                 String[] selectedNames = new String[selected.size()];

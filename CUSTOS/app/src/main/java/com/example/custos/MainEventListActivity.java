@@ -54,6 +54,7 @@ public class MainEventListActivity extends Fragment {
     RecyclerView rv;
     View view;
     LinearLayoutManager llm;
+    DatabaseReference databaseReference;
 
     public interface DataCallback {
         void callback(ArrayList<String> event_ids);
@@ -72,6 +73,8 @@ public class MainEventListActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid());
     }
 
     class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
@@ -152,7 +155,7 @@ public class MainEventListActivity extends Fragment {
                                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        System.out.println("DELETED");
+                                        databaseReference.child(data.get(position).getID()).removeValue();
                                     }
                                 })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -251,23 +254,36 @@ public class MainEventListActivity extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             System.out.println("here");
-                            String name = dataSnapshot.child("name").getValue().toString();
-                            String area = dataSnapshot.child("area").getValue().toString();
-                            String date = dataSnapshot.child("date").getValue().toString();
-                            String time = dataSnapshot.child("time").getValue().toString();
-                            String description = dataSnapshot.child("description").getValue().toString();
-                            String location_name = dataSnapshot.child("location_name").getValue().toString();
-                            ArrayList<User> invited_users = getInvitedUsers(dataSnapshot);
-                            events.add(new Event(id, name, area, date, time, description, location_name, invited_users));
-                            System.out.println("Hello");
+                            if(dataSnapshot != null) {
+                                if(dataSnapshot.hasChildren()) {
+                                    String name = dataSnapshot.child("name").getValue().toString();
+                                    String area = dataSnapshot.child("area").getValue().toString();
+                                    String date = dataSnapshot.child("date").getValue().toString();
+                                    String time = dataSnapshot.child("time").getValue().toString();
+                                    String description = dataSnapshot.child("description").getValue().toString();
+                                    String location_name = dataSnapshot.child("location_name").getValue().toString();
+                                    ArrayList<User> invited_users = getInvitedUsers(dataSnapshot);
+                                    events.add(new Event(id, name, area, date, time, description, location_name, invited_users));
+                                    System.out.println("Hello");
+                                    System.out.println("array list size: " + events.size());
+                                    rv = view.findViewById(R.id.recycler);
+                                    llm = new LinearLayoutManager(getContext());
+                                    RecyclerView.Adapter adapter = new EventListAdapter(events);
+                                    rv.setHasFixedSize(true);
+                                    rv.setLayoutManager(llm);
+                                    rv.setAdapter(adapter);
+                                } else {
+                                    rv = view.findViewById(R.id.recycler);
+                                    llm = new LinearLayoutManager(getContext());
+                                    RecyclerView.Adapter adapter = new EventListAdapter(new ArrayList<Event>());
+                                    rv.setHasFixedSize(true);
+                                    rv.setLayoutManager(llm);
+                                    rv.setAdapter(adapter);
+                                }
+                            }
 
-                            System.out.println("array list size: " + events.size());
-                            rv = view.findViewById(R.id.recycler);
-                            llm = new LinearLayoutManager(getContext());
-                            RecyclerView.Adapter adapter = new EventListAdapter(events);
-                            rv.setHasFixedSize(true);
-                            rv.setLayoutManager(llm);
-                            rv.setAdapter(adapter);
+
+
                         }
 
                         @Override
