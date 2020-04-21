@@ -159,8 +159,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("declined_invite")){
-                                holder.friendName.setText(userName + " has declined your invitation");
+                                holder.friendName.setText(userName + " has declined your invitation for event "+ notification.getEventId());
 
+                            }
+                            if(dataSnapshot.child(notification.getEventId())
+                                    .child("request_type")
+                                    .getValue()
+                                    .toString().equals("accepted_invite")){
+                                holder.friendName.setText(userName + " has accepted your invitation for event "+ notification.getEventId());
                             }
                         }
 
@@ -306,10 +312,53 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 });
                                 alertDialog.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                    public void onClick(final DialogInterface dialogInterface, int i) {
+                                        notificationsRef.child(notification.getEventId()).removeValue()
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            Toast.makeText(context,"removed notification",Toast.LENGTH_SHORT).show();
+                                                        }else{
+                                                            Toast.makeText(context,"removed failed",Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
                                         eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                notificationRef3.child(notification.getEventId()).child("request_type").setValue("accepted_invite")
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    notificationRef3.child(notification.getEventId()).child("request_time").setValue(dateAccept + " at " + timeAccept);
+                                                                    notificationRef3.child(notification.getEventId()).child("eventId").setValue(notification.getEventId());
+                                                                    DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
+
+                                                                    databaseReference2.addValueEventListener(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                            String nameCurr = dataSnapshot.child(firebaseUser.getUid())
+                                                                                    .child(Common.USER_NAME).getValue().toString();
+                                                                            notificationRef3.child(notification.getEventId()).child(Common.FRIEND_NAME).setValue(nameCurr);
+                                                                            String uidCurr = dataSnapshot.child(firebaseUser.getUid())
+                                                                                    .child(Common.UID).getValue().toString();
+                                                                            notificationRef3.child(notification.getEventId()).child(Common.UID).setValue(uidCurr);
+                                                                            String img = dataSnapshot.child(firebaseUser.getUid())
+                                                                                    .child(Common.IMAGE_URL).getValue().toString();
+                                                                            notificationRef3.child(notification.getEventId()).child(Common.IMAGE_URL).setValue(img);
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
+
+                                                                }
+                                                            }
+                                                        });
                                                 if(notification.getUID() != null){
                                                     if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
                                                         area = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("area").getValue().toString();
