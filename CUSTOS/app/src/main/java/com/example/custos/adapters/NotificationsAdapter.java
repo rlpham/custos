@@ -160,6 +160,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .getValue()
                                     .toString().equals("declined_invite")){
                                 holder.friendName.setText(userName + " has declined your invitation");
+
                             }
                         }
 
@@ -280,13 +281,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                             databaseReference2.addValueEventListener(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                    String nameCurr = dataSnapshot.child(notification.getUID())
+                                                                    String nameCurr = dataSnapshot.child(firebaseUser.getUid())
                                                                             .child(Common.USER_NAME).getValue().toString();
                                                                     notificationRef3.child(notification.getEventId()).child(Common.FRIEND_NAME).setValue(nameCurr);
-                                                                    String uidCurr = dataSnapshot.child(notification.getUID())
+                                                                    String uidCurr = dataSnapshot.child(firebaseUser.getUid())
                                                                             .child(Common.UID).getValue().toString();
                                                                     notificationRef3.child(notification.getEventId()).child(Common.UID).setValue(uidCurr);
-                                                                    String img = dataSnapshot.child(notification.getUID())
+                                                                    String img = dataSnapshot.child(firebaseUser.getUid())
                                                                             .child(Common.IMAGE_URL).getValue().toString();
                                                                     notificationRef3.child(notification.getEventId()).child(Common.IMAGE_URL).setValue(img);
                                                                 }
