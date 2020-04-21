@@ -434,8 +434,12 @@ public class EventDetailsActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                user_event.child(user.getUID()).child(id).removeValue();
-                                System.out.println("DELETING EVENT FROM CURRENT ID " + id);
+                                user_event.child(user.getUID()).child(id).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        System.out.println("DELETING EVENT FROM CURRENT ID " + id + " FROM " + user.getUID());
+                                    }
+                                });
                             }
 
                             event_detail_title.setText(event_detail_title_input.getText().toString());

@@ -156,6 +156,8 @@ public class MainEventListActivity extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         databaseReference.child(data.get(position).getID()).removeValue();
+
+                                        
                                     }
                                 })
                                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
