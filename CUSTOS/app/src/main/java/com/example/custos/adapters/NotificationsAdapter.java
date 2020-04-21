@@ -22,6 +22,7 @@ import com.example.custos.NotificationActivity;
 import com.example.custos.OtherUserActivity;
 import com.example.custos.R;
 import com.example.custos.utils.Common;
+import com.example.custos.utils.Event;
 import com.example.custos.utils.Notifications;
 import com.example.custos.utils.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +35,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +46,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private DatabaseReference databaseReference;
     private String userName;
     private String imgURL;
-    private DatabaseReference notificationsRef;
+    private DatabaseReference notificationsRef, eventRef;
     private FirebaseUser firebaseUser;
     private Handler handler = new Handler();
     private static int ui_flags =
@@ -77,6 +79,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
                 .child(firebaseUser.getUid())
                 .child("friend_request_notifications");
+        eventRef = FirebaseDatabase.getInstance().getReference("user_event");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -93,28 +96,31 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
             }
         });
-        databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(notification.getUID());
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                if (user.getImageURL().equals("default")) {
-                    holder.friendImage.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    imgURL = dataSnapshot.child(Common.IMAGE_URL).getValue().toString();
-                    Glide.with(context).load(imgURL).into(holder.friendImage);
+        if(!notification.getUID().equals(null)){
+            databaseReference = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION).child(notification.getUID());
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user.getImageURL().equals("default")) {
+                        holder.friendImage.setImageResource(R.mipmap.ic_launcher);
+                    } else {
+                        imgURL = dataSnapshot.child(Common.IMAGE_URL).getValue().toString();
+                        Glide.with(context).load(imgURL).into(holder.friendImage);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
         notificationsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println(notification.getUID() + "-------------------------------");
+               // System.out.println(notification.getUID() + "-------------------------------");
                 if (dataSnapshot.exists()) {
                     if (dataSnapshot.child(notification.getUID()).exists()) {
                         if (dataSnapshot.child(notification.getUID())
@@ -151,7 +157,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             }
         });
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(firebaseUser.getUid());
+//        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(firebaseUser.getUid());
 //        notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
@@ -188,9 +194,134 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, OtherUserActivity.class);
-                intent.putExtra("userid", notification.getUID());
-                context.startActivity(intent);
+                notificationsRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(notification.getUID()).exists()) {
+                            if(dataSnapshot.child(notification.getUID())
+                                .child("request_type")
+                                .getValue()
+                                .toString().equals("receivedFriendRequest")
+                                || dataSnapshot.child(notification.getUID()).child("request_type")
+                                    .getValue().toString().equals("acceptedFriendRequest")){
+                            Intent intent = new Intent(context, OtherUserActivity.class);
+                            intent.putExtra("userid", notification.getUID());
+                            context.startActivity(intent);
+                             }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                notificationsRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.child(notification.getEventId()).exists()){
+                            if(dataSnapshot.child(notification.getEventId())
+                                    .child("request_type")
+                                    .getValue()
+                                    .toString().equals("invite_sent")){
+                                final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.Chill);
+                                alertDialog.setTitle("Event Invitation");
+                                alertDialog.setMessage("Do you want to attend this event?");
+                                alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
+                                alertDialog.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                });
+                                alertDialog.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                String area = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("area").getValue().toString();
+                                                String date = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("date").getValue().toString();
+                                                String description = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("description").getValue().toString();
+                                                String locationname = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location_name").getValue().toString();
+                                                String name = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("name").getValue().toString();
+                                                String  time = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("time").getValue().toString();
+
+                                                String lat = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location").child("latitude").getValue().toString();
+                                                String lng = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location").child("longitude").getValue().toString();
+                                                ArrayList<User> invitedUsers = new ArrayList<>();
+                                                if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").exists()){
+                                                    if(!dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").getValue().toString().equals("NONE")){
+                                                        for(DataSnapshot snapshot : dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").getChildren()){
+                                                            User user = new User();
+                                                            user.setUserName(snapshot.child("name").getValue().toString());
+                                                            user.setUID(snapshot.getKey());
+                                                            invitedUsers.add(user);
+                                                        }
+                                                    }
+
+                                                }
+                                                if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("name").setValue(name);
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("date").setValue(date);
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("description").setValue(description);
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("location_name").setValue(locationname);
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("area").setValue(area);
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("time").setValue(time);
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("isOwner").setValue("false");
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("location").child("latitude").setValue(Double.valueOf(lat));
+                                                    eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("location").child("longitude").setValue(Double.valueOf(lng));
+                                                    if(!invitedUsers.isEmpty()){
+                                                        for(User user : invitedUsers){
+                                                            eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                                                        }
+                                                    }else{
+                                                        eventRef.child(firebaseUser.getUid()).child(notification.getEventId()).child("invited_users").setValue("NONE");
+
+                                                    }
+
+                                                }
+
+
+
+
+                                             }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                });
+                                AlertDialog alertDialog2 = alertDialog.create();
+
+                                // Set alertDialog "not focusable" so nav bar still hiding:
+                                alertDialog2.getWindow().
+                                        setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                                // Set full-sreen mode (immersive sticky):
+                                alertDialog2.getWindow().getDecorView().setSystemUiVisibility(ui_flags);
+
+                                // Show the alertDialog:
+                                alertDialog2.show();
+
+                                // Set dialog focusable so we can avoid touching outside:
+                                alertDialog2.getWindow().
+                                        clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
             }
         });
         final DatabaseReference notificationRef2 = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS);

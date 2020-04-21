@@ -473,6 +473,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private DatabaseReference user_information = FirebaseDatabase.getInstance().getReference("userLocation");
     DatabaseReference user_information2 = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION);
 
+    private LatLng currentmostlocation=new LatLng(0,0);
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -529,6 +530,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             public void onSuccess(final Location location) {
 
                                 LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
+                                currentmostlocation=sydney;
 //                            mMap.addMarker(new MarkerOptions().position(sydney).title("My Location").icon(BitmapDescriptorFactory
 //                                    .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE ))).setSnippet("All because of dale");
                                 moveToCurrentLocation(sydney);
@@ -1007,21 +1009,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     JSONArray data2;
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public boolean onMarkerClick(final Marker marker) {
         final RelativeLayout mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
+      try{
         if (marker.getSnippet().contains("Events")) {
             final TextView mapseventName = findViewById(R.id.mapseventName);
             final Button mapeventbutton = findViewById(R.id.mapseventbutton);
+            final Button mapgetdirectionbutton = findViewById(R.id.mapsgetdirectionbutton);
             final RelativeLayout mapseventlayout = findViewById(R.id.mapseventzone);
             final String eventid = marker.getTag().toString();
+
+
+
+
+
+
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(eventid);
             db.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                     data2 = new JSONArray();
                     JSONObject obj = new JSONObject();
                     try {
+                        mapgetdirectionbutton.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                Uri gmmIntentUri = Uri.parse("google.navigation:q="+dataSnapshot.child("location").child("latitude").getValue().toString()+","+dataSnapshot.child("location").child("longitude").getValue().toString());
+                                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                                mapIntent.setPackage("com.google.android.apps.maps");
+                                startActivity(mapIntent);
+                            }
+                        });
                         obj.put("id", dataSnapshot.getKey());
                         obj.put("name", dataSnapshot.child("name").getValue());
                         obj.put("location", dataSnapshot.child("area").getValue());
@@ -1035,20 +1053,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             obj.put("invited_users", getInvitedUsers(dataSnapshot.child("invited_users").getValue().toString()));
                         }
                     } catch (JSONException e) {
+                        marker.remove();
                         e.printStackTrace();
                     }
                     data2.put(obj);
                     try {
                         mapseventName.setText(data2.getJSONObject(0).getString("name"));
                     } catch (Exception e) {
-
+                        marker.remove();
                     }
 
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                    marker.remove();
                 }
             });
 
@@ -1079,7 +1098,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             });
 
-        }
+        }}catch (Exception e){
+          marker.remove();
+      }
 
         if (marker.getSnippet().contains("Contacts")) {
             final TextView mapsfriendName = findViewById(R.id.mapsfriendName);
