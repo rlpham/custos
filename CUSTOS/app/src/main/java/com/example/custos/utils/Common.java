@@ -15,6 +15,7 @@ public class Common {
     public static final String UID                  = "uid";
     public static final String FRIEND_REQUEST       =  "FriendRequests";
     public static final String NOTIFICATIONS        =  "Notifications";
+    public static final String REQUEST_NOTIFICATION =  "friend_request_notifications";
     public static User loggedUser;
     public static final String USER_UID_SAVE_KEY    = "SaveUid";
     public static final String TOKENS               = "Tokens";

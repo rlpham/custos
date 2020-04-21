@@ -35,7 +35,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +47,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private Map<Integer, Object> deletedItems;
     private DatabaseReference databaseReference;
     private String userName,date,area,locationname,lat,lng,name,time,description;
-    private String imgURL;
-    private DatabaseReference notificationsRef, eventRef;
+    private String imgURL,dateAccept,timeAccept;
+    private DatabaseReference notificationsRef, eventRef, notificationRef3;
     private FirebaseUser firebaseUser;
     private Handler handler = new Handler();
     private ArrayList<User> invitedUsers;
@@ -226,6 +228,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 
                     }
                 });
+                notificationRef3 = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
+                        .child(notification.getUID()).child(Common.REQUEST_NOTIFICATION);
+                Calendar calendarAccept = Calendar.getInstance();
+                SimpleDateFormat acceptDate = new SimpleDateFormat("dd-MMMM-yyyy");
+                Calendar timeAcceptFriend = Calendar.getInstance();
+                SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+                dateAccept = acceptDate.format(calendarAccept.getTime());
+                timeAccept = acceptTime.format(timeAcceptFriend.getTime());
                 notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -241,7 +251,27 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 alertDialog.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
+                                        notificationsRef.child(notification.getEventId()).removeValue()
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            Toast.makeText(context,"removed notification",Toast.LENGTH_SHORT).show();
+                                                        }else{
+                                                            Toast.makeText(context,"removed failed",Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+                                        notificationRef3.child(notification.getEventId()).child("request_type").setValue("declined_invite")
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if(task.isSuccessful()){
+                                                            notificationRef3.child(notification.getEventId()).child("request_time").setValue(dateAccept + " at " + timeAccept);
+
+                                                        }
+                                                    }
+                                                });
                                     }
                                 });
                                 alertDialog.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
@@ -251,27 +281,30 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 if(notification.getUID() != null){
-                                                    area = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("area").getValue().toString();
-                                                    date = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("date").getValue().toString();
-                                                    description = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("description").getValue().toString();
-                                                    locationname = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location_name").getValue().toString();
-                                                    name = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("name").getValue().toString();
-                                                    time = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("time").getValue().toString();
+                                                    if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                                        area = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("area").getValue().toString();
+                                                        date = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("date").getValue().toString();
+                                                        description = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("description").getValue().toString();
+                                                        locationname = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location_name").getValue().toString();
+                                                        name = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("name").getValue().toString();
+                                                        time = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("time").getValue().toString();
 
-                                                    lat = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location").child("latitude").getValue().toString();
-                                                    lng = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location").child("longitude").getValue().toString();
-                                                    invitedUsers = new ArrayList<>();
-                                                    if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").exists()){
-                                                        if(!dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").getValue().toString().equals("NONE")){
-                                                            for(DataSnapshot snapshot : dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").getChildren()){
-                                                                User user = new User();
-                                                                user.setUserName(snapshot.child("name").getValue().toString());
-                                                                user.setUID(snapshot.getKey());
-                                                                invitedUsers.add(user);
+                                                        lat = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location").child("latitude").getValue().toString();
+                                                        lng = dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("location").child("longitude").getValue().toString();
+                                                        invitedUsers = new ArrayList<>();
+                                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").exists()){
+                                                            if(!dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").getValue().toString().equals("NONE")){
+                                                                for(DataSnapshot snapshot : dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("invited_users").getChildren()){
+                                                                    User user = new User();
+                                                                    user.setUserName(snapshot.child("name").getValue().toString());
+                                                                    user.setUID(snapshot.getKey());
+                                                                    invitedUsers.add(user);
+                                                                }
                                                             }
-                                                        }
 
+                                                        }
                                                     }
+
                                                 }
 
                                                 if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
