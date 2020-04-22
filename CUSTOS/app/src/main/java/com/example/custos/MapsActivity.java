@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -141,6 +142,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 //rahul test
+
         final View decorView = getWindow().getDecorView();
         // Hide both the navigation bar and the status bar.
         // SYSTEM_UI_FLAG_FULLSCREEN is only available on Android 4.1 and higher, but as
@@ -301,6 +303,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         //    searchView.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(MapsActivity.this, MapsActivity.class);
                         startActivity(intent);
+                        handler.removeCallbacksAndMessages(null);
                         finish();
 
                         return true;
@@ -332,18 +335,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-
+private ArrayList<Marker> friendsMarker;
+    private int friendsMarkerCounter=0;
     public void setEventsLocationwithoutzooming(LatLng ll, String mess) {
-
-
-        mMap.addMarker(new MarkerOptions().position(ll).snippet("Contacts").icon(BitmapDescriptorFactory.fromResource(R.drawable.face2))).setTag(mess);
-
+        friendsMarker.add(mMap.addMarker(new MarkerOptions().position(ll).snippet("Contacts").icon(BitmapDescriptorFactory.fromResource(R.drawable.face2))));
+        friendsMarker.get(friendsMarkerCounter).setTag(mess);
+        friendsMarkerCounter++;
     }
 
     public void setEventsLocationwithoutzoomingwithdesc(LatLng ll, String mess) {
 
-
-        mMap.addMarker(new MarkerOptions().position(ll).snippet("Events").icon(BitmapDescriptorFactory.fromResource(R.drawable.event3))).setTag(mess);
+     mMap.addMarker(new MarkerOptions().position(ll).snippet("Events").icon(BitmapDescriptorFactory.fromResource(R.drawable.event3))).setTag(mess);;
 
     }
 
@@ -385,46 +387,61 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void setcontactslocation() {
-        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(friendsMarkerCounter!=0||aretherenofriends==true) {
+            for (final Marker friendMarkers : friendsMarker) {
+                 friendMarkers.remove();
+            }
+        }
+        friendsMarker=new ArrayList<Marker>();
+        friendsMarkerCounter=0;
+//        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+//        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Friends");
 
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Friends");
+       for(final String fuid : eventFriends){
+           for (final UserLocation ul : userList) {
 
-
-        databaseReference.orderByKey().equalTo(fUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(fUser.getUid()).exists()) {
-                    for (final UserLocation ul : userList) {
-
-                        databaseReference.child(fUser.getUid()).orderByKey()
-                                .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.child(ul.getUID()).exists()) {
+                                if (fuid.equals(ul.getUID())) {
                                     LatLng ll = new LatLng(ul.getLat(), ul.getLon());
                                     setEventsLocationwithoutzooming(ll, ul.getUID());
-
                                 }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
-
                     }
+       }
 
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        databaseReference.orderByKey().equalTo(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.child(fUser.getUid()).exists()) {
+//                    for (final UserLocation ul : userList) {
+//
+//                        databaseReference.child(fUser.getUid()).orderByKey()
+//                                .equalTo(ul.getUID()).addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                if (dataSnapshot.child(ul.getUID()).exists()) {
+//                                    LatLng ll = new LatLng(ul.getLat(), ul.getLon());
+//                                    setEventsLocationwithoutzooming(ll, ul.getUID());
+//
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                            }
+//                        });
+//
+//
+//                    }
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
     }
@@ -682,15 +699,80 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     ArrayList<String> eventListSelection;
-
+private boolean aretherenofriends=false;
     private void addEventsSpinner() {
+
         Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, eventListSelection);
         adapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                eventFriends =new ArrayList<String>();
+                int index = arg0.getSelectedItemPosition();
+                Toast.makeText(getBaseContext(),
+                            "You have selected item : " + eventListSelection.get(index),
+                        Toast.LENGTH_SHORT).show();
+
+                if(noeventschecker==0){
+
+
+                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                final DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(eventListSelectionid.get(index));
+                eventRef
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.child("invited_users").getValue().toString().equals("NONE")){
+                                    aretherenofriends=true;
+                                }else
+
+                               if(dataSnapshot.child("isOwner").getValue().toString().equals("true")){
+aretherenofriends=false;
+                                   for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
+                                        if(snapshot.child("status").getValue().toString().equals("accepted")){
+                                            eventFriends.add(snapshot.getKey());
+                                        }
+
+                                   }
+
+
+                               }else{
+                                   aretherenofriends=false;
+                                   for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
+                                        eventFriends.add(snapshot.getKey());
+
+                                   }
+
+                               }
+                               setcontactslocation();
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
 
     }
-
+    private int noeventschecker=0;
+private ArrayList<String> eventFriends;
+    private ArrayList<String> eventListSelectionid;
     private void eventLocationAdder() {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -701,16 +783,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         eventListSelection = new ArrayList<String>();
+                        eventListSelectionid= new ArrayList<String>();
                         if (dataSnapshot.getValue() == null) {
                             //uid not exist
                             if (!dataSnapshot.child(firebaseUser.getUid()).exists()) {
                                 eventListSelection.add("NO EVENTS");
+                                eventListSelectionid.add("NOPE");
+                                noeventschecker=1;
                             }
                         }
                         //if user available
                         else {
                             for (DataSnapshot snapshot : dataSnapshot.child(firebaseUser.getUid()).getChildren()) {
                                 eventListSelection.add(snapshot.child("name").getValue().toString());
+                                eventListSelectionid.add(snapshot.getKey());
+                                noeventschecker=0;
                                 double lat = 0, lon = 0;
                                 if (snapshot.child("location").exists() && snapshot.child("description").exists() && snapshot.child("date").exists() && snapshot.child("time").exists() && snapshot.child("name").exists()) {
 
@@ -807,7 +894,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void run() {
                 getcurrentlocation(googleMap);
                 try {
-                    setcontactslocation();
+                    readUsers();
+                  //  setcontactslocation();
                 } catch (Exception e) {
                 }
                 handler.postDelayed(this, 10000);
@@ -819,7 +907,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void run() {
                 setHomeLoc();
                 try {
-                    setcontactslocation();
+                  //  setcontactslocation();
                 } catch (Exception e) {
                 }
             }
