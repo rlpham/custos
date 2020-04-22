@@ -48,7 +48,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private Map<Integer, Object> deletedItems;
     private DatabaseReference databaseReference;
     private String userName, date, area, locationname, lat, lng, name, time, description;
-    private String imgURL, dateAccept, timeAccept;
+    private String imgURL, dateAccept, timeAccept,eventName,currentToken;
     private DatabaseReference notificationsRef, eventRef, notificationRef3;
     private FirebaseUser firebaseUser;
     private Handler handler = new Handler();
@@ -155,6 +155,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                             }
                         }
                     }
+
+                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                eventName =  dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("name").getValue().toString();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                     if (notification.getEventId() != null) {
                         if (dataSnapshot.child(notification.getEventId()).exists()) {
                             if (dataSnapshot.child(notification.getEventId())
@@ -163,21 +177,25 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .toString().equals("invite_sent")) {
                                 holder.friendName.setText(userName + " has invited you to an event");
                             }
-                            if (dataSnapshot.child(notification.getEventId())
+                        }
+                    }
+                    if(notification.getUserToken() != null){
+                        if(dataSnapshot.child(notification.getUserToken()).exists()){
+                            if (dataSnapshot.child(notification.getUserToken())
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("declined_invite")) {
-                                holder.friendName.setText(userName + " has declined your invitation for event " + notification.getEventId());
+                                holder.friendName.setText(userName + " has declined your invitation for event " + eventName);
 
                             }
-                            if (dataSnapshot.child(notification.getEventId())
+                            if (dataSnapshot.child(notification.getUserToken())
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("accepted_invite")) {
-                                holder.friendName.setText(userName + " has accepted your invitation for event " + notification.getEventId());
+                                holder.friendName.setText(userName + " has accepted your invitation for event " + eventName);
                             }
-                        }
 
+                        }
                     }
                 }
 
@@ -217,6 +235,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //
 //            }
 //        });
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                .child(firebaseUser.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentToken = dataSnapshot.child("userToken").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         //holder.friendEmail.setText(friends.getFriendEmail());
@@ -270,7 +301,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 final AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.Chill);
                                 alertDialog.setTitle("Event Invitation");
                                 alertDialog.setMessage("Do you want to attend this event?");
-                                alertDialog.setIcon(R.drawable.ic_person_add_black_24dp);
+                                alertDialog.setIcon(R.drawable.ic_event_yellow_24dp);
                                 alertDialog.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(final DialogInterface dialogInterface, int i) {
@@ -303,15 +334,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                     eventRef.child(notification.getUID()).child(notification.getEventId())
                                                             .child("invited_users").child(firebaseUser.getUid())
                                                             .child("status").setValue("declined");
-                                                    notificationRef3.child(notification.getEventId())
+
+                                                    notificationRef3.child(currentToken)
                                                             .child("request_type").setValue("declined_invite")
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     if (task.isSuccessful()) {
-                                                                        notificationRef3.child(notification.getEventId())
+                                                                        notificationRef3.child(currentToken)
                                                                                 .child("request_time").setValue(dateAccept + " at " + timeAccept);
-                                                                        notificationRef3.child(notification.getEventId())
+                                                                        notificationRef3.child(currentToken)
                                                                                 .child("eventId").setValue(notification.getEventId());
                                                                         DatabaseReference databaseReference2 = FirebaseDatabase.getInstance()
                                                                                 .getReference(Common.USER_INFORMATION);
@@ -321,16 +353,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                                                 String nameCurr = dataSnapshot.child(firebaseUser.getUid())
                                                                                         .child(Common.USER_NAME).getValue().toString();
-                                                                                notificationRef3.child(notification.getEventId())
+                                                                                notificationRef3.child(currentToken)
                                                                                         .child(Common.FRIEND_NAME).setValue(nameCurr);
                                                                                 String uidCurr = dataSnapshot.child(firebaseUser.getUid())
                                                                                         .child(Common.UID).getValue().toString();
-                                                                                notificationRef3.child(notification.getEventId())
+                                                                                notificationRef3.child(currentToken)
                                                                                         .child(Common.UID).setValue(uidCurr);
                                                                                 String img = dataSnapshot.child(firebaseUser.getUid())
                                                                                         .child(Common.IMAGE_URL).getValue().toString();
-                                                                                notificationRef3.child(notification.getEventId())
+                                                                                notificationRef3.child(currentToken)
                                                                                         .child(Common.IMAGE_URL).setValue(img);
+                                                                                String token = dataSnapshot.child(firebaseUser.getUid())
+                                                                                        .child("userToken").getValue().toString();
+                                                                                notificationRef3.child(currentToken)
+                                                                                        .child("userToken").setValue(token);
                                                                             }
 
                                                                             @Override
@@ -368,6 +404,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                     eventRef.child(notification.getUID()).child(notification.getEventId())
                                                             .child("invited_users").child(firebaseUser.getUid())
                                                             .child("status").setValue("accepted");
+
                                                     notificationsRef.child(notification.getEventId()).removeValue()
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
@@ -380,15 +417,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                                 }
                                                             });
                                                     tempEventSerial = eventSerial;
-                                                    notificationRef3.child(notification.getEventId())
+                                                    notificationRef3.child(currentToken)
                                                             .child("request_type").setValue("accepted_invite")
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                     if (task.isSuccessful()) {
-                                                                        notificationRef3.child(notification.getEventId())
+                                                                        notificationRef3.child(currentToken)
                                                                                 .child("request_time").setValue(dateAccept + " at " + timeAccept);
-                                                                        notificationRef3.child(notification.getEventId())
+                                                                        notificationRef3.child(currentToken)
                                                                                 .child("eventId").setValue(notification.getEventId());
                                                                         DatabaseReference databaseReference2 = FirebaseDatabase.getInstance()
                                                                                 .getReference(Common.USER_INFORMATION);
@@ -398,16 +435,20 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                                             public void onDataChange(@NonNull DataSnapshot userSnapShot) {
                                                                                 String nameCurr = userSnapShot.child(firebaseUser.getUid())
                                                                                         .child(Common.USER_NAME).getValue().toString();
-                                                                                notificationRef3.child(notification.getEventId())
+                                                                                notificationRef3.child(currentToken)
                                                                                         .child(Common.FRIEND_NAME).setValue(nameCurr);
                                                                                 String uidCurr = userSnapShot.child(firebaseUser.getUid())
                                                                                         .child(Common.UID).getValue().toString();
-                                                                                notificationRef3.child(notification.getEventId())
+                                                                                notificationRef3.child(currentToken)
                                                                                         .child(Common.UID).setValue(uidCurr);
                                                                                 String img = userSnapShot.child(firebaseUser.getUid())
                                                                                         .child(Common.IMAGE_URL).getValue().toString();
-                                                                                notificationRef3.child(notification.getEventId())
+                                                                                notificationRef3.child(currentToken)
                                                                                         .child(Common.IMAGE_URL).setValue(img);
+                                                                                String token = userSnapShot.child(firebaseUser.getUid())
+                                                                                        .child("userToken").getValue().toString();
+                                                                                notificationRef3.child(currentToken)
+                                                                                        .child("userToken").setValue(token);
                                                                             }
 
                                                                             @Override
@@ -465,6 +506,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                     if (eventSnapShot.child(notification.getUID()).child(notification.getEventId()).exists()) {
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
                                                                 .child("name").setValue(name);
+                                                        eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
+                                                                .child("isSafetyEvent").setValue(false);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
                                                                 .child("date").setValue(date);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())

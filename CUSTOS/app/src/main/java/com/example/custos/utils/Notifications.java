@@ -8,6 +8,7 @@ public class Notifications {
     private String request_type;
     private String imageURL;
     private String eventId;
+    private String userToken;
 
     public Notifications(){
 
@@ -17,13 +18,24 @@ public class Notifications {
         this.request_time = request_time;
     }
 
-    public Notifications(String friendName, String request_time, String uid, String request_type,String imageURL,String eventId) {
+    public Notifications(String friendName, String request_time,
+                         String uid, String request_type,
+                         String imageURL,String eventId,String userToken) {
         this.friendName = friendName;
         this.request_time = request_time;
         this.UID = uid;
         this.request_type = request_type;
         this.imageURL = imageURL;
         this.eventId = eventId;
+        this.userToken = userToken;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public String getEventId() {
