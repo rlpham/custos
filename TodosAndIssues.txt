@@ -1,22 +1,27 @@
 ```
-April 14, 2020 Last gitpull 6:30ish pm
+April 22, 2020 Last gitpull 6:15ish pm
 _____________
+
+Bugs that will crash app:
 First time launching (I unistall it, clear cache, etc):
 1. mMap.setOnMarkerClickListener(this); //will crash first time installing it  and make phone vibrate nonstop
 
-Events:
-1. Need to link invite guest from Friends database now
-2. user can enter a new line in description which messes with layout\
-3. need safety event
-4. need reoccurring event
 
-Notification:
-1. in progress atm ~
+
+
+Bugs that will not crash app (DONT CRY IM JUST POINTING OUT INSIGNIFCANT THINGS):
+Events:
+user can enter a new line in description which messes with layout in description
+need reoccurring event
+need some way to delete events
+
 
 Maps:
-1. Need a way to find destination
+Spinner blocks the 2 buttons above
 
 DangerZone:
-1. Need to hide Datasnapshot output when clicking on marker ex: (Datasnapshot = { key = zone_name, value =....}
-2. Need to figure out how to delete old markers
+Need to figure out how to delete old markers
+
+Setting:
+get rid of 1 logout button
 ```
