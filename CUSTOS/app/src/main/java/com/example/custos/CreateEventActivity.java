@@ -125,6 +125,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 current_user = new User();
                 current_user.setUserName(dataSnapshot.child("userName").getValue().toString());
                 current_user.setImageURL(dataSnapshot.child("imageURL").getValue().toString());
+                current_user.setUserToken(dataSnapshot.child("userToken").getValue().toString());
             }
 
             @Override
@@ -292,6 +293,9 @@ public class CreateEventActivity extends AppCompatActivity {
 
                     if(selected != null) {
                         for(User user : selected) {
+
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                                    .child("user_token").setValue(current_user.getUserToken());
                             notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
                                     .child("friendName").setValue(current_user.getUserName());
                             notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
