@@ -300,6 +300,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                     Toast.makeText(context, "Event deleted", Toast.LENGTH_SHORT).show();
                                                     dialogInterface.cancel();
                                                 } else {
+                                                    eventRef.child(notification.getUID()).child(notification.getEventId())
+                                                            .child("invited_users").child(firebaseUser.getUid())
+                                                            .child("status").setValue("declined");
                                                     notificationRef3.child(notification.getEventId())
                                                             .child("request_type").setValue("declined_invite")
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -362,6 +365,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                     Toast.makeText(context, "Event deleted", Toast.LENGTH_SHORT).show();
                                                     dialogInterface.cancel();
                                                 } else {
+                                                    eventRef.child(notification.getUID()).child(notification.getEventId())
+                                                            .child("invited_users").child(firebaseUser.getUid())
+                                                            .child("status").setValue("accepted");
                                                     notificationsRef.child(notification.getEventId()).removeValue()
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
