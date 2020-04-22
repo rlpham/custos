@@ -48,7 +48,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private Map<Integer, Object> deletedItems;
     private DatabaseReference databaseReference;
     private String userName, date, area, locationname, lat, lng, name, time, description;
-    private String imgURL, dateAccept, timeAccept,eventName,currentToken;
+    private String imgURL, dateAccept, timeAccept, eventName, currentToken, uid, userName3, userName2;
     private DatabaseReference notificationsRef, eventRef, notificationRef3;
     private FirebaseUser firebaseUser;
     private Handler handler = new Handler();
@@ -165,8 +165,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .toString().equals("invite_sent")) {
                                 eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()) {
+
                                             name = dataSnapshot.child(notification.getUID())
                                                     .child(notification.getEventId()).child("name").getValue().toString();
                                             area = dataSnapshot.child(notification.getUID())
@@ -174,7 +175,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                             holder.friendName.setText(userName + " has invited you to " + name + " event in " + area.trim());
 
                                         }
+
+
                                     }
+
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -184,8 +188,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                             }
                         }
                     }
-                    if(notification.getUserToken() != null){
-                        if(dataSnapshot.child(notification.getUserToken()).exists()){
+                    if (notification.getUserToken() != null) {
+                        if (dataSnapshot.child(notification.getUserToken()).exists()) {
                             if (dataSnapshot.child(notification.getUserToken())
                                     .child("request_type")
                                     .getValue()
@@ -193,13 +197,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+
+                                        if (dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()) {
+                                            userName3 = dataSnapshot.child(firebaseUser.getUid())
+                                                    .child(notification.getEventId()).child("invited_users")
+                                                    .child(notification.getUID())
+                                                    .child("name").getValue().toString();
+
                                             name = dataSnapshot.child(notification.getUID())
                                                     .child(notification.getEventId()).child("name").getValue().toString();
                                             area = dataSnapshot.child(notification.getUID())
                                                     .child(notification.getEventId()).child("area").getValue().toString();
                                             holder.friendName.setText(userName + " has declined your invitation for event " + name
-                                                            + " in " + area.trim());
+                                                    + " in " + area.trim());
                                         }
                                     }
 
@@ -216,17 +226,23 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .toString().equals("accepted_invite")) {
                                 eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+
+                                        if (dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()) {
                                             name = dataSnapshot.child(notification.getUID())
                                                     .child(notification.getEventId()).child("name").getValue().toString();
                                             area = dataSnapshot.child(notification.getUID())
                                                     .child(notification.getEventId()).child("area").getValue().toString();
-                                            holder.friendName.setText(userName + " has accepted your invitation for event " + name
+                                            userName3 = dataSnapshot.child(firebaseUser.getUid())
+                                                    .child(notification.getEventId()).child("invited_users")
+                                                    .child(notification.getUID())
+                                                    .child("name").getValue().toString();
+                                            holder.friendName.setText(userName3 + " has accepted your invitation for event " + name
                                                     + " in " + area.trim());
 
                                         }
                                     }
+
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -247,7 +263,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             }
         });
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(firebaseUser.getUid());
+        //        notificationsRef = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS).child(firebaseUser.getUid());
 //        notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
@@ -277,17 +293,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //        });
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
                 .child(firebaseUser.getUid());
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currentToken = dataSnapshot.child("userToken").getValue().toString();
-            }
+        userRef.addListenerForSingleValueEvent(new
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                       ValueEventListener() {
+                                                           @Override
+                                                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                               currentToken = dataSnapshot.child("userToken").getValue().toString();
+                                                           }
 
-            }
-        });
+                                                           @Override
+                                                           public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                           }
+                                                       });
 
 
         //holder.friendEmail.setText(friends.getFriendEmail());
