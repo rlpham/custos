@@ -61,7 +61,7 @@
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/create_event_invited_label"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/safety_switch"
@@ -106,7 +106,7 @@
         android:id="@+id/event_detail_invite_list"
         android:layout_width="match_parent"
         android:layout_height="304dp"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/create_event_invited_label"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp"

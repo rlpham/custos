@@ -1,5 +1,6 @@
 package com.example.custos;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -18,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -29,8 +32,12 @@ import com.example.custos.utils.Event;
 import com.example.custos.utils.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.OpeningHours;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlusCode;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,6 +78,11 @@ public class CreateEventActivity extends AppCompatActivity {
     Button back_button;
     Switch safetySwitch;
     Button event_detail_edit_guests;
+    TextView create_event_invited_label;
+    LinearLayout linear_layout_fragment;
+    double homeLat;
+    double homeLong;
+    String homeAddress;
 
     //users that will be invited when creating event.
     ArrayList<User> selected;
@@ -129,6 +141,22 @@ public class CreateEventActivity extends AppCompatActivity {
                 current_user.setUserName(dataSnapshot.child("userName").getValue().toString());
                 current_user.setImageURL(dataSnapshot.child("imageURL").getValue().toString());
                 current_user.setUserToken(dataSnapshot.child("userToken").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        DatabaseReference user_info = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid());
+        user_info.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                homeAddress =  dataSnapshot.child("User Address").child("homeLocation").getValue().toString();
+                homeLat =  (double) dataSnapshot.child("User Address").child("userHomeLatitude").getValue();
+                homeLong =  (double) dataSnapshot.child("User Address").child("userHomeLongitude").getValue();
+
             }
 
             @Override
@@ -212,13 +240,10 @@ public class CreateEventActivity extends AppCompatActivity {
 
         Places.initialize(getApplicationContext(),"AIzaSyCjncU-Fe5pQKOc85zuGoR9XEs61joNajc");
         //PlacesClient placesClient = Places.createClient(this);
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+        final AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.event_location);
-
-
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
-        //autocompleteFragment.setLocationRestriction(RectangularBounds.newInstance(new LatLng(40.263680,-76.890739), new LatLng(40.285519,-76.650589)));
 
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -249,95 +274,165 @@ public class CreateEventActivity extends AppCompatActivity {
 
                 event_date_text_view = findViewById(R.id.event_detail_date);
                 event_time_text_view = findViewById(R.id.event_detail_time);
-
-                if(!isInputValid(event_name_text_view, event_date_text_view, event_time_text_view, place)) {
-                    Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-
-
-
-                    //Create event under root/user_event/uid/......
-                    final String id = createEventID();
-                    name = event_name_text_view.getText().toString();
-                    description = event_description_text_view.getText().toString();
-                    boolean isSafety = safetySwitch.isChecked();
-                    final Event event = new Event(id, name, getLocationText(lat, lon),
-                            event_date_text_view.getText().toString(),
-                            event_time_text_view.getText().toString(),
-                            description, location_name, selected);
-
-                    DatabaseReference user_information = FirebaseDatabase.getInstance()
-                            .getReference("user_event")
-                            .child(firebaseUser.getUid())
-                            .child(id);
-
-                    user_information.child("name").setValue(event.getName());
-                    user_information.child("date").setValue(event.getDate());
-                    user_information.child("time").setValue(event.getTime());
-                    user_information.child("description").setValue(event.getDescription());
-                    user_information.child("area").setValue(event.getArea());
-                    user_information.child("location").child("latitude").setValue(lat);
-                    user_information.child("location").child("longitude").setValue(lon);
-                    user_information.child("location_name").setValue(event.getLocation_name());
-                    user_information.child("isSafetyEvent").setValue(isSafety);
-                    user_information.child("isOwner").setValue("true");
-                    if(selected != null) {
-                        for(User user : selected) {
-                            user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
-                            user_information.child("invited_users").child(user.getUID()).child("status").setValue("invited");
-
-                        }
+                boolean isSafety = safetySwitch.isChecked();
+                if(!isSafety) {
+                    if(!isInputValidNoSafety(event_name_text_view, event_date_text_view, event_time_text_view, place)) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
+                        toast.show();
                     } else {
-                        user_information.child("invited_users").setValue("NONE");
-                    }
+                        //Create event under root/user_event/uid/......
+                        final String id = createEventID();
+                        name = event_name_text_view.getText().toString();
+                        description = event_description_text_view.getText().toString();
+                        boolean checkSafety = safetySwitch.isChecked();
+                        final Event event = new Event(id, name, getLocationText(lat, lon),
+                                event_date_text_view.getText().toString(),
+                                event_time_text_view.getText().toString(),
+                                description, location_name, selected);
 
-                    //Send notifications to invited users
-                    DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
-                    DatabaseReference events = FirebaseDatabase.getInstance().getReference("user_event");
+                        DatabaseReference user_information = FirebaseDatabase.getInstance()
+                                .getReference("user_event")
+                                .child(firebaseUser.getUid())
+                                .child(id);
 
-                    if(selected != null) {
-                        for(User user : selected) {
+                        user_information.child("name").setValue(event.getName());
+                        user_information.child("date").setValue(event.getDate());
+                        user_information.child("time").setValue(event.getTime());
+                        user_information.child("description").setValue(event.getDescription());
+                        user_information.child("area").setValue(event.getArea());
+                        user_information.child("location").child("latitude").setValue(lat);
+                        user_information.child("location").child("longitude").setValue(lon);
+                        user_information.child("location_name").setValue(event.getLocation_name());
+                        user_information.child("isSafetyEvent").setValue(checkSafety);
+                        user_information.child("isOwner").setValue("true");
+                        if(selected != null) {
+                            for(User user : selected) {
+                                user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                                user_information.child("invited_users").child(user.getUID()).child("status").setValue("invited");
 
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("friendName").setValue(current_user.getUserName());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("imageURL").setValue(current_user.getImageURL());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("request_time").setValue(getRequestTime());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("request_type").setValue("invite_sent");
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("uid").setValue(firebaseUser.getUid());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("eventId").setValue(event.getID());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
-                                    .child("userToken").setValue(current_user.getUserToken());
+                            }
+                        } else {
+                            user_information.child("invited_users").setValue("NONE");
                         }
 
+                        //Send notifications to invited users
+                        DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
+                        DatabaseReference events = FirebaseDatabase.getInstance().getReference("user_event");
 
+                        if(selected != null) {
+                            for(User user : selected) {
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("friendName").setValue(current_user.getUserName());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("imageURL").setValue(current_user.getImageURL());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("request_time").setValue(getRequestTime());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("request_type").setValue("invite_sent");
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("uid").setValue(firebaseUser.getUid());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("eventId").setValue(event.getID());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("userToken").setValue(current_user.getUserToken());
+                            }
+                        }
+                        Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
+                        onActivityResult(1,1,intent);
+                        setResult(1, intent);
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
+                } else {
+                    if(!isInputValidWithSafety(event_name_text_view, event_date_text_view, event_time_text_view)) {
+                        Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
+                        toast.show();
+                    } else {
+                        //Create event under root/user_event/uid/......
+                        final String id = createEventID();
+                        name = event_name_text_view.getText().toString();
+                        description = event_description_text_view.getText().toString();
+                        boolean checkSafety = safetySwitch.isChecked();
+                        final Event event = new Event(id, name, getLocationText(homeLat, homeLong),
+                                event_date_text_view.getText().toString(),
+                                event_time_text_view.getText().toString(),
+                                description, location_name, selected);
 
-                    Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
-                    onActivityResult(1,1,intent);
-                    setResult(1, intent);
-                    finish();
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                        DatabaseReference user_information = FirebaseDatabase.getInstance()
+                                .getReference("user_event")
+                                .child(firebaseUser.getUid())
+                                .child(id);
+
+                        user_information.child("name").setValue(event.getName());
+                        user_information.child("date").setValue(event.getDate());
+                        user_information.child("time").setValue(event.getTime());
+                        user_information.child("description").setValue(event.getDescription());
+                        user_information.child("area").setValue(event.getArea());
+                        user_information.child("location").child("latitude").setValue(homeLat);
+                        user_information.child("location").child("longitude").setValue(homeLong);
+                        user_information.child("location_name").setValue(homeAddress);
+                        user_information.child("isSafetyEvent").setValue(checkSafety);
+                        user_information.child("isOwner").setValue("true");
+                        if(selected != null) {
+                            for(User user : selected) {
+                                user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                                user_information.child("invited_users").child(user.getUID()).child("status").setValue("invited");
+
+                            }
+                        } else {
+                            user_information.child("invited_users").setValue("NONE");
+                        }
+
+                        //Send notifications to invited users
+                        DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
+                        DatabaseReference events = FirebaseDatabase.getInstance().getReference("user_event");
+
+                        if(selected != null) {
+                            for(User user : selected) {
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("friendName").setValue(current_user.getUserName());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("imageURL").setValue(current_user.getImageURL());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("request_time").setValue(getRequestTime());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("request_type").setValue("invite_sent");
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("uid").setValue(firebaseUser.getUid());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("eventId").setValue(event.getID());
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
+                                        .child("userToken").setValue(current_user.getUserToken());
+                            }
+                        }
+                        Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
+                        onActivityResult(1,1,intent);
+                        setResult(1, intent);
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
 
                 }
+
             }
         });
 
         safetySwitch = findViewById(R.id.safety_switch);
         event_detail_edit_guests = findViewById(R.id.event_detail_edit_guests);
-
+        linear_layout_fragment = findViewById(R.id.linear_layout_fragment);
+        create_event_invited_label = findViewById(R.id.create_event_invited_label);
         safetySwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(safetySwitch.isChecked()) {
                     event_detail_edit_guests.setVisibility(View.INVISIBLE);
+                    linear_layout_fragment.setVisibility(View.GONE);
+                    create_event_invited_label.setVisibility(View.INVISIBLE);
+                    lv.setVisibility(View.INVISIBLE);
                 } else {
                     event_detail_edit_guests.setVisibility(View.VISIBLE);
+                    linear_layout_fragment.setVisibility(View.VISIBLE);
+                    lv.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -409,7 +504,15 @@ public class CreateEventActivity extends AppCompatActivity {
         return locationText;
     }
 
-    private boolean isInputValid(TextView name, TextView date, TextView time, Place place) {
+    private boolean isInputValidWithSafety(TextView name, TextView date, TextView time) {
+        if(!name.getText().toString().equals("") && !date.getText().toString().equals("") && !time.getText().toString().equals("")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isInputValidNoSafety(TextView name, TextView date, TextView time, Place place) {
 
         if((!name.getText().toString().equals("")) &&  (!date.getText().toString().equals("")) && (!time.getText().toString().equals("")) && (place != null)) {
             return true;
@@ -440,6 +543,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         return dateAccept + " at " + timeAccept;
     }
+
 
 
 
