@@ -6,7 +6,8 @@
     android:background="#1D1D1D"
     android:orientation="vertical"
     android:padding="10dp"
-    android:id="@+id/fragment_id">
+    android:id="@+id/fragment_id"
+    android:fadeScrollbars="true">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -41,14 +42,14 @@
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="595dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_notification"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:id="@+id/no_notifications"
@@ -58,10 +59,10 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="54dp"
             android:layout_marginBottom="519dp"
-            android:textStyle="italic"
             android:text="You don't have any new notifications"
             android:textColor="#FFFFFF"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textStyle="italic" />
 
 
     </RelativeLayout>
