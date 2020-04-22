@@ -92,6 +92,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     DatabaseReference userReference;
     DatabaseReference user_event;
     User current_user;
+    boolean isSafety;
     int clickCounter;
 
 
@@ -177,6 +178,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         final Intent reciever_intent = getIntent();
 
         final String id = reciever_intent.getStringExtra("event_id");
+        //isSafety = reciever_intent.g
         String title = reciever_intent.getStringExtra("event_name");
         String description = reciever_intent.getStringExtra("event_desc");
         String date = reciever_intent.getStringExtra("event_date");
