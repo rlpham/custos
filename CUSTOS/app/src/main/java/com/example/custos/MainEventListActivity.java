@@ -144,6 +144,7 @@ public class MainEventListActivity extends Fragment {
                             intent.putExtra("BUNDLE", args);
                             intent.putExtra("event_time", data.get(position).getTime());
                             intent.putExtra("location_name", data.get(position).getLocation_name());
+                            intent.putExtra("isSafety", data.get(position).getIsSafety());
                             startActivity(intent);
                             getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -288,8 +289,11 @@ public class MainEventListActivity extends Fragment {
                                     String time = dataSnapshot.child("time").getValue().toString();
                                     String description = dataSnapshot.child("description").getValue().toString();
                                     String location_name = dataSnapshot.child("location_name").getValue().toString();
+                                    boolean isSafety = (boolean) dataSnapshot.child("isSafetyEvent").getValue();
                                     ArrayList<User> invited_users = getInvitedUsers(dataSnapshot);
-                                    events.add(new Event(id, name, area, date, time, description, location_name, invited_users));
+                                    Event event = new Event(id, name, area, date, time, description, location_name, invited_users);
+                                    event.setIsSafety(isSafety);
+                                    events.add(event);
                                     System.out.println("Hello");
                                     System.out.println("array list size: " + events.size());
                                     rv = view.findViewById(R.id.recycler);

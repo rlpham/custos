@@ -261,6 +261,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     final String id = createEventID();
                     name = event_name_text_view.getText().toString();
                     description = event_description_text_view.getText().toString();
+                    boolean isSafety = safetySwitch.isChecked();
                     final Event event = new Event(id, name, getLocationText(lat, lon),
                             event_date_text_view.getText().toString(),
                             event_time_text_view.getText().toString(),
@@ -279,6 +280,7 @@ public class CreateEventActivity extends AppCompatActivity {
                     user_information.child("location").child("latitude").setValue(lat);
                     user_information.child("location").child("longitude").setValue(lon);
                     user_information.child("location_name").setValue(event.getLocation_name());
+                    user_information.child("isSafetyEvent").setValue(isSafety);
                     user_information.child("isOwner").setValue("true");
                     if(selected != null) {
                         for(User user : selected) {
@@ -297,19 +299,17 @@ public class CreateEventActivity extends AppCompatActivity {
                     if(selected != null) {
                         for(User user : selected) {
 
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
-                                    .child("user_token").setValue(current_user.getUserToken());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                            notifications.child(current_user.getUserToken()).child("friend_request_notifications").child(event.getID())
                                     .child("friendName").setValue(current_user.getUserName());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                            notifications.child(current_user.getUserToken()).child("friend_request_notifications").child(event.getID())
                                     .child("imageURL").setValue(current_user.getImageURL());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                            notifications.child(current_user.getUserToken()).child("friend_request_notifications").child(event.getID())
                                     .child("request_time").setValue(getRequestTime());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                            notifications.child(current_user.getUserToken()).child("friend_request_notifications").child(event.getID())
                                     .child("request_type").setValue("invite_sent");
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                            notifications.child(current_user.getUserToken()).child("friend_request_notifications").child(event.getID())
                                     .child("uid").setValue(firebaseUser.getUid());
-                            notifications.child(user.getUID()).child("friend_request_notifications").child(event.getID())
+                            notifications.child(current_user.getUserToken()).child("friend_request_notifications").child(event.getID())
                                     .child("eventId").setValue(event.getID());
                         }
 

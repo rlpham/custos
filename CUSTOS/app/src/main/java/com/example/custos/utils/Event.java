@@ -13,6 +13,7 @@ public class Event {
     private String description;
     private String location_name;
     private ArrayList<User> invited_users;
+    private boolean isSafety;
 
     public Event(String ID, String name, String area, String date, String time, String description, String location_name, ArrayList<User> invited_users) {
         this.ID = ID;
@@ -56,4 +57,12 @@ public class Event {
     public String getTime() { return time;}
 
     public ArrayList<User> getInvited_users() { return invited_users; }
+
+    public void setIsSafety(boolean safety) {
+        this.isSafety = safety;
+    }
+
+    public boolean getIsSafety() {
+        return isSafety;
+    }
 }
