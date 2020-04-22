@@ -387,7 +387,7 @@ private ArrayList<Marker> friendsMarker;
     }
 
     private void setcontactslocation() {
-        if(friendsMarkerCounter!=0||aretherenofriends==true) {
+        if(friendsMarkerCounter!=0) {
             for (final Marker friendMarkers : friendsMarker) {
                  friendMarkers.remove();
             }
