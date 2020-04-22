@@ -321,19 +321,19 @@ public class CreateEventActivity extends AppCompatActivity {
 
                         if(selected != null) {
                             for(User user : selected) {
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("friendName").setValue(current_user.getUserName());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("imageURL").setValue(current_user.getImageURL());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("request_time").setValue(getRequestTime());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("request_type").setValue("invite_sent");
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("uid").setValue(firebaseUser.getUid());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("eventId").setValue(event.getID());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("userToken").setValue(current_user.getUserToken());
                             }
                         }
