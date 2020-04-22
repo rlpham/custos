@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,6 +56,13 @@ public class MainEventListActivity extends Fragment {
     View view;
     LinearLayoutManager llm;
     DatabaseReference databaseReference;
+    private static int ui_flags =
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
     public interface DataCallback {
         void callback(ArrayList<String> event_ids);
@@ -148,9 +156,10 @@ public class MainEventListActivity extends Fragment {
                 holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.Chill);
                         builder.setCancelable(true);
                         builder.setTitle("Delete Event")
+                                .setIcon(R.drawable.ic_delete_black_24dp)
                                 .setMessage("Are you sure you want to delete this event?")
                                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                     @Override
@@ -166,8 +175,23 @@ public class MainEventListActivity extends Fragment {
                                         System.out.println("CANCELED");
                                     }
                                 });
-                        builder.show();
-                        return true;
+
+                        // Set alertDialog "not focusable" so nav bar still hiding:
+                        AlertDialog dialog = builder.create();
+                        dialog.getWindow().
+                                setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        // Set full-sreen mode (immersive sticky):
+                        dialog.getWindow().getDecorView().setSystemUiVisibility(ui_flags);
+
+                        // Show the alertDialog:
+                        dialog.show();
+
+                        // Set dialog focusable so we can avoid touching outside:
+                        dialog.getWindow().
+                                clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                        return false;
                     }
                 });
 //            } catch (JSONException e) {

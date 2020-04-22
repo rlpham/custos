@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -68,6 +69,8 @@ public class CreateEventActivity extends AppCompatActivity {
     String location_name;
     ToolKit toolKit;
     Button back_button;
+    Switch safetySwitch;
+    Button event_detail_edit_guests;
 
     //users that will be invited when creating event.
     ArrayList<User> selected;
@@ -323,7 +326,22 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.event_detail_edit_guests).setOnClickListener(new View.OnClickListener() {
+        safetySwitch = findViewById(R.id.safety_switch);
+        event_detail_edit_guests = findViewById(R.id.event_detail_edit_guests);
+
+        safetySwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(safetySwitch.isChecked()) {
+                    event_detail_edit_guests.setVisibility(View.INVISIBLE);
+                } else {
+                    event_detail_edit_guests.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
+        event_detail_edit_guests.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), InviteGuestsActivity.class);

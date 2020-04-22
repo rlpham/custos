@@ -64,10 +64,10 @@
         android:id="@+id/textView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linear_layout_fragment"
+        android:layout_below="@+id/safety_switch"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:text="Invited"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
@@ -181,5 +181,19 @@
         android:layout_marginTop="20dp"
         android:background="#1D1D1D"
         android:foreground="@drawable/ic_arrow_back_yellow_24dp" />
+
+    <Switch
+        android:id="@+id/safety_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_layout_fragment"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="140dp"
+        android:text="Safety: "
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 </RelativeLayout>
