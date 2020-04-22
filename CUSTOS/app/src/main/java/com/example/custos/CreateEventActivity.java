@@ -4,13 +4,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -27,6 +32,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.custos.receivers.EventReceiver;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Event;
 import com.example.custos.utils.User;
@@ -50,6 +56,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,6 +90,7 @@ public class CreateEventActivity extends AppCompatActivity {
     double homeLat;
     double homeLong;
     String homeAddress;
+    final long notification_time = 900000;
 
     //users that will be invited when creating event.
     ArrayList<User> selected;
@@ -266,6 +274,8 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                createNotificationChannel();
+
                 //POST DATA HERE
                 event_name_text_view = findViewById(R.id.event_detail_name);
                 event_description_text_view = findViewById(R.id.event_detail_description);
@@ -284,10 +294,12 @@ public class CreateEventActivity extends AppCompatActivity {
                         final String id = createEventID();
                         name = event_name_text_view.getText().toString();
                         description = event_description_text_view.getText().toString();
+                        String date = event_date_text_view.getText().toString();
+                        String time =  event_time_text_view.getText().toString();
                         boolean checkSafety = safetySwitch.isChecked();
                         final Event event = new Event(id, name, getLocationText(lat, lon),
-                                event_date_text_view.getText().toString(),
-                                event_time_text_view.getText().toString(),
+                                date,
+                                time,
                                 description, location_name, selected);
 
                         DatabaseReference user_information = FirebaseDatabase.getInstance()
@@ -337,6 +349,12 @@ public class CreateEventActivity extends AppCompatActivity {
                                         .child("userToken").setValue(current_user.getUserToken());
                             }
                         }
+
+                        try {
+                            createBackgroundNotification(date + " " + time);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                         onActivityResult(1,1,intent);
                         setResult(1, intent);
@@ -352,10 +370,12 @@ public class CreateEventActivity extends AppCompatActivity {
                         final String id = createEventID();
                         name = event_name_text_view.getText().toString();
                         description = event_description_text_view.getText().toString();
+                        String date = event_date_text_view.getText().toString();
+                        String time =  event_time_text_view.getText().toString();
                         boolean checkSafety = safetySwitch.isChecked();
                         final Event event = new Event(id, name, getLocationText(homeLat, homeLong),
-                                event_date_text_view.getText().toString(),
-                                event_time_text_view.getText().toString(),
+                                date,
+                                time,
                                 description, location_name, selected);
 
                         DatabaseReference user_information = FirebaseDatabase.getInstance()
@@ -404,6 +424,11 @@ public class CreateEventActivity extends AppCompatActivity {
                                 notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("userToken").setValue(current_user.getUserToken());
                             }
+                        }
+                        try {
+                            createBackgroundNotification(date + " " + time);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
                         Intent intent = new Intent(v.getContext(), MainEventListActivity.class);
                         onActivityResult(1,1,intent);
@@ -542,6 +567,36 @@ public class CreateEventActivity extends AppCompatActivity {
         String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
 
         return dateAccept + " at " + timeAccept;
+    }
+
+    private void createBackgroundNotification(String time) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa", Locale.ENGLISH);
+        cal.setTime(sdf.parse(time));
+        Intent intent = new Intent(getApplicationContext(), EventReceiver.class);
+        intent.putExtra("test", "rahul smells");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long event_time = cal.getTimeInMillis();
+
+        if(System.currentTimeMillis() > event_time-notification_time) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP,event_time-notification_time, pendingIntent);
+        }
+    }
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Notification_Channel";
+            String descriptoin = "Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("hello", name, importance);
+            channel.setDescription(descriptoin);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 
