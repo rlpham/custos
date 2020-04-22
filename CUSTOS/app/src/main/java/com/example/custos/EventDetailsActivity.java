@@ -421,18 +421,21 @@ public class EventDetailsActivity extends AppCompatActivity {
                             //Send notification to users recently added to event
                             notification_root = FirebaseDatabase.getInstance().getReference("Notifications");
                             for(User user : users_to_add) {
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                         .child("friendName").setValue(current_user.getUserName());
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                         .child("imageURL").setValue(current_user.getImageURL());
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                         .child("request_time").setValue(getRequestTime());
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                         .child("request_type").setValue("invite_sent");
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                         .child("uid").setValue(firebaseUser.getUid());
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                         .child("eventId").setValue(id);
+                                notification_root.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                        .child("userToken").setValue(current_user.getUserToken());
+
                             }
 
                             //Remove event and notification from recently removed users.
