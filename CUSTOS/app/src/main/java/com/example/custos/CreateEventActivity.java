@@ -279,6 +279,8 @@ public class CreateEventActivity extends AppCompatActivity {
                     if(selected != null) {
                         for(User user : selected) {
                             user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
+                            user_information.child("invited_users").child(user.getUID()).child("status").setValue("invited");
+
                         }
                     } else {
                         user_information.child("invited_users").setValue("NONE");

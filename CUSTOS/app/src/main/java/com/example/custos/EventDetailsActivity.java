@@ -399,6 +399,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                             //add new users to event
                             for (User user : users_to_add) {
                                 event_root.child(user.getUID()).child("name").setValue(user.getUserName());
+                                event_root.child(user.getUID()).child("status").setValue("invited");
+
+
                             }
 
                             //remove old users from event
