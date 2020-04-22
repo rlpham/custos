@@ -163,28 +163,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("invite_sent")) {
-                                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()) {
-
-                                            name = dataSnapshot.child(notification.getUID())
-                                                    .child(notification.getEventId()).child("name").getValue().toString();
-                                            area = dataSnapshot.child(notification.getUID())
-                                                    .child(notification.getEventId()).child("area").getValue().toString();
-                                            holder.friendName.setText(userName + " has invited you to " + name + " event in " + area.trim());
-
-                                        }
-
-
-                                    }
-
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                holder.friendName.setText(userName + " has invited you to an event");
                             }
                         }
                     }
@@ -194,61 +173,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("declined_invite")) {
-                                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                        if (dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()) {
-                                            userName3 = dataSnapshot.child(firebaseUser.getUid())
-                                                    .child(notification.getEventId()).child("invited_users")
-                                                    .child(notification.getUID())
-                                                    .child("name").getValue().toString();
-
-                                            name = dataSnapshot.child(notification.getUID())
-                                                    .child(notification.getEventId()).child("name").getValue().toString();
-                                            area = dataSnapshot.child(notification.getUID())
-                                                    .child(notification.getEventId()).child("area").getValue().toString();
-                                            holder.friendName.setText(userName + " has declined your invitation for event " + name
-                                                    + " in " + area.trim());
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-
+                                holder.friendName.setText(userName + " has declined event "+ notification.getEventId());
                             }
                             if (dataSnapshot.child(notification.getUserToken())
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("accepted_invite")) {
-                                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
-                                        if (dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()) {
-                                            name = dataSnapshot.child(notification.getUID())
-                                                    .child(notification.getEventId()).child("name").getValue().toString();
-                                            area = dataSnapshot.child(notification.getUID())
-                                                    .child(notification.getEventId()).child("area").getValue().toString();
-                                            userName3 = dataSnapshot.child(firebaseUser.getUid())
-                                                    .child(notification.getEventId()).child("invited_users")
-                                                    .child(notification.getUID())
-                                                    .child("name").getValue().toString();
-                                            holder.friendName.setText(userName3 + " has accepted your invitation for event " + name
-                                                    + " in " + area.trim());
-
-                                        }
-                                    }
-
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                holder.friendName.setText(userName + " has accepted event " + notification.getEventId());
                             }
 
                         }

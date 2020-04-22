@@ -500,9 +500,6 @@ public class OtherUserActivity extends AppCompatActivity {
                                     String img = dataSnapshot.child(currentUID)
                                             .child(Common.IMAGE_URL).getValue().toString();
                                     notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.IMAGE_URL).setValue(img);
-                                    String token = dataSnapshot.child(currentUID)
-                                            .child("userToken").getValue().toString();
-                                    notificationsRef.child(otherUserId).child(Common.REQUEST_NOTIFICATION).child(currentUID).child("userToken").setValue(token);
                                 }
 
                                 @Override
@@ -646,9 +643,6 @@ public class OtherUserActivity extends AppCompatActivity {
                                     String img = dataSnapshot.child(currentUID)
                                             .child(Common.IMAGE_URL).getValue().toString();
                                     notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID).child(Common.IMAGE_URL).setValue(img);
-                                    String token = dataSnapshot.child(currentUID)
-                                            .child("userToken").getValue().toString();
-                                    notificationsRef.child(otherUserId).child(Common.REQUEST_NOTIFICATION).child(currentUID).child("userToken").setValue(token);
                                 }
 
                                 @Override
