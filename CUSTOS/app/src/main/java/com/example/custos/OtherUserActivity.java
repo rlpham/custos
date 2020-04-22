@@ -464,18 +464,18 @@ public class OtherUserActivity extends AppCompatActivity {
         dateAccept = acceptDate.format(calendarAccept.getTime());
         timeAccept = acceptTime.format(timeAcceptFriend.getTime());
 
-        notificationsRef.child(currentUID).child("friend_request_notifications").child(otherUserId)
-                .removeValue()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(),"removed notification",Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getApplicationContext(),"removed failed",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//        notificationsRef.child(currentUID).child("friend_request_notifications").child(otherUserId)
+//                .removeValue()
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if(task.isSuccessful()){
+//                            Toast.makeText(getApplicationContext(),"removed notification",Toast.LENGTH_SHORT).show();
+//                        }else{
+//                            Toast.makeText(getApplicationContext(),"removed failed",Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
         notificationsRef.child(otherUserId).child("friend_request_notifications").child(currentUID)
                 .child("request_type").setValue("acceptedFriendRequest")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
