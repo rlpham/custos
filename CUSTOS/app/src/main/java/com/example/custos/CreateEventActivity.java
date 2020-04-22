@@ -311,6 +311,8 @@ public class CreateEventActivity extends AppCompatActivity {
                                     .child("uid").setValue(firebaseUser.getUid());
                             notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
                                     .child("eventId").setValue(event.getID());
+                            notifications.child(user.getUID()).child("friend_request_notifications").child(current_user.getUserToken())
+                                    .child("userToken").setValue(current_user.getUserToken());
                         }
 
 

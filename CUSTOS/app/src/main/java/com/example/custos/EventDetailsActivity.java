@@ -178,7 +178,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         final Intent reciever_intent = getIntent();
 
         final String id = reciever_intent.getStringExtra("event_id");
-        //isSafety = reciever_intent.g
+        isSafety = reciever_intent.getBooleanExtra("isSafety", false);
         String title = reciever_intent.getStringExtra("event_name");
         String description = reciever_intent.getStringExtra("event_desc");
         String date = reciever_intent.getStringExtra("event_date");
@@ -254,6 +254,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             }
         });
 
+        if(isSafety) {
+            edit_event_guests_button.setVisibility(View.INVISIBLE);
+        }
+
         DatabaseReference friends_db = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
         friends_db.addValueEventListener(new ValueEventListener() {
             @Override
@@ -309,6 +313,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                     event_detail_time_input.setText(event_detail_time_input.getText().toString());
 
                     edit_event_guests_button.setVisibility(View.VISIBLE);
+                    if(isSafety) {
+                        edit_event_guests_button.setVisibility(View.INVISIBLE);
+                    }
 
                     event_detail_title_input.requestFocus();
                 } else {
@@ -453,6 +460,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                             event_detail_time.setText(event_detail_time_input.getText().toString());
                             location_placeholder.setText(location_name_input);
                             edit_event_guests_button.setVisibility(View.INVISIBLE);
+                            if(isSafety) {
+                                edit_event_guests_button.setVisibility(View.INVISIBLE);
+                            }
                         }
                         finish();
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
