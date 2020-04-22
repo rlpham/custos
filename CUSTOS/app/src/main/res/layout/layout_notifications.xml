@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/imageNotification"
         android:layout_toEndOf="@+id/imageNotification"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:layout_marginLeft="10dp"
         android:textColor="#FFFFFF"
         android:text="my email here"

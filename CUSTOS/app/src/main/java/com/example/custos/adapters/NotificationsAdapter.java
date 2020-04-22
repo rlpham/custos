@@ -156,26 +156,31 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                         }
                     }
 
-                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
-                                eventName =  dataSnapshot.child(notification.getUID()).child(notification.getEventId()).child("name").getValue().toString();
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
                     if (notification.getEventId() != null) {
                         if (dataSnapshot.child(notification.getEventId()).exists()) {
                             if (dataSnapshot.child(notification.getEventId())
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("invite_sent")) {
-                                holder.friendName.setText(userName + " has invited you to an event");
+                                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                            name = dataSnapshot.child(notification.getUID())
+                                                    .child(notification.getEventId()).child("name").getValue().toString();
+                                            area = dataSnapshot.child(notification.getUID())
+                                                    .child(notification.getEventId()).child("area").getValue().toString();
+                                            holder.friendName.setText(userName + " has invited you to " + name + " event in " + area.trim());
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
                         }
                     }
@@ -185,14 +190,49 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("declined_invite")) {
-                                holder.friendName.setText(userName + " has declined your invitation for event " + eventName);
+                                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                            name = dataSnapshot.child(notification.getUID())
+                                                    .child(notification.getEventId()).child("name").getValue().toString();
+                                            area = dataSnapshot.child(notification.getUID())
+                                                    .child(notification.getEventId()).child("area").getValue().toString();
+                                            holder.friendName.setText(userName + " has declined your invitation for event " + name
+                                                            + " in " + area.trim());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
 
                             }
                             if (dataSnapshot.child(notification.getUserToken())
                                     .child("request_type")
                                     .getValue()
                                     .toString().equals("accepted_invite")) {
-                                holder.friendName.setText(userName + " has accepted your invitation for event " + eventName);
+                                eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.child(notification.getUID()).child(notification.getEventId()).exists()){
+                                            name = dataSnapshot.child(notification.getUID())
+                                                    .child(notification.getEventId()).child("name").getValue().toString();
+                                            area = dataSnapshot.child(notification.getUID())
+                                                    .child(notification.getEventId()).child("area").getValue().toString();
+                                            holder.friendName.setText(userName + " has accepted your invitation for event " + name
+                                                    + " in " + area.trim());
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
 
                         }
