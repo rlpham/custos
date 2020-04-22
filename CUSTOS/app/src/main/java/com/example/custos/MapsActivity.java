@@ -712,9 +712,9 @@ private boolean aretherenofriends=false;
                                        int arg2, long arg3) {
                 eventFriends =new ArrayList<String>();
                 int index = arg0.getSelectedItemPosition();
-                Toast.makeText(getBaseContext(),
-                            "You have selected item : " + eventListSelection.get(index),
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getBaseContext(),
+//                            "You have selected item : " + eventListSelection.get(index),
+//                        Toast.LENGTH_SHORT).show();
 
                 if(noeventschecker==0){
 
