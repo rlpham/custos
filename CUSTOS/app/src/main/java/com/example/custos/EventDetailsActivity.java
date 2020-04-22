@@ -315,6 +315,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                     edit_event_guests_button.setVisibility(View.VISIBLE);
                     if(isSafety) {
                         edit_event_guests_button.setVisibility(View.INVISIBLE);
+                        linear_layout_details.setVisibility(View.INVISIBLE);
                     }
 
                     event_detail_title_input.requestFocus();
@@ -433,8 +434,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                                         .child("uid").setValue(firebaseUser.getUid());
                                 notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("eventId").setValue(id);
-                                notification_root.child(user.getUID()).child("friend_request_notifications").child(id)
-                                        .child("userToken").setValue(current_user.getUserToken());
 
                             }
 
@@ -465,6 +464,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                             edit_event_guests_button.setVisibility(View.INVISIBLE);
                             if(isSafety) {
                                 edit_event_guests_button.setVisibility(View.INVISIBLE);
+                                linear_layout_details.setVisibility(View.INVISIBLE);
                             }
                         }
                         finish();

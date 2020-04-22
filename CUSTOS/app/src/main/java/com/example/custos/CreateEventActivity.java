@@ -345,13 +345,11 @@ public class CreateEventActivity extends AppCompatActivity {
                                         .child("uid").setValue(firebaseUser.getUid());
                                 notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("eventId").setValue(event.getID());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
-                                        .child("userToken").setValue(current_user.getUserToken());
                             }
                         }
 
                         try {
-                            createBackgroundNotification(date + " " + time);
+                            createBackgroundNotification(date + " " + time, name);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -421,12 +419,10 @@ public class CreateEventActivity extends AppCompatActivity {
                                         .child("uid").setValue(firebaseUser.getUid());
                                 notifications.child(user.getUID()).child("friend_request_notifications").child(id)
                                         .child("eventId").setValue(event.getID());
-                                notifications.child(user.getUID()).child("friend_request_notifications").child(id)
-                                        .child("userToken").setValue(current_user.getUserToken());
                             }
                         }
                         try {
-                            createBackgroundNotification(date + " " + time);
+                            createBackgroundNotification(date + " " + time, name);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -569,12 +565,12 @@ public class CreateEventActivity extends AppCompatActivity {
         return dateAccept + " at " + timeAccept;
     }
 
-    private void createBackgroundNotification(String time) throws ParseException {
+    private void createBackgroundNotification(String time, String event_name) throws ParseException {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm aa", Locale.ENGLISH);
         cal.setTime(sdf.parse(time));
         Intent intent = new Intent(getApplicationContext(), EventReceiver.class);
-        intent.putExtra("test", "rahul smells");
+        intent.putExtra("name", event_name);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         long event_time = cal.getTimeInMillis();

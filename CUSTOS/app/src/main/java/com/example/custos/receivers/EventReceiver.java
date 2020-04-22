@@ -13,11 +13,11 @@ public class EventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String message = intent.getStringExtra("test");
+        String name = intent.getStringExtra("name");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "hello")
                 .setSmallIcon(R.drawable.ic_notifications_yellow_60dp)
-                .setContentTitle("Rahul smells")
-                .setContentText("Your event begins in 15 minutes")
+                .setContentTitle(name)
+                .setContentText("Event begins in 15 minutes")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
