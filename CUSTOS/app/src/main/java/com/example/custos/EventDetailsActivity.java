@@ -92,6 +92,10 @@ public class EventDetailsActivity extends AppCompatActivity {
     DatabaseReference userReference;
     DatabaseReference user_event;
     User current_user;
+    TextView event_details_end_date;
+    TextView event_details_end_time;
+    EditText event_details_end_date_input;
+    EditText event_details_end_time_input;
     boolean isSafety;
     int clickCounter;
 
@@ -158,6 +162,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         final Button edit_event_button = findViewById(R.id.edit_event_button);
         edit_event_guests_button = findViewById(R.id.event_detail_invite_guests);
         location_placeholder = findViewById(R.id.location_placeholder);
+        event_details_end_date = findViewById(R.id.event_details_end_date);
+        event_details_end_time = findViewById(R.id.event_details_end_time);
+        event_details_end_date_input = findViewById(R.id.event_details_end_date_input);
+        event_details_end_time_input = findViewById(R.id.event_details_end_time_input);
 
 
         //EditText that is enabled when "EDIT" is clicked
@@ -183,6 +191,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         String description = reciever_intent.getStringExtra("event_desc");
         String date = reciever_intent.getStringExtra("event_date");
         String time = reciever_intent.getStringExtra("event_time");
+        String end_date = reciever_intent.getStringExtra("event_end_date");
+        String end_time = reciever_intent.getStringExtra("event_end_time");
         Bundle args = reciever_intent.getBundleExtra("BUNDLE");
         if(args != null) {
             invited_users = (ArrayList<User>) args.getSerializable("ARRAYLIST");
@@ -223,12 +233,15 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_description.setText(description);
         event_detail_date.setText(date);
         event_detail_time.setText(time);
+        event_details_end_date.setText(end_date);
+        event_details_end_time.setText(end_time);
 
         //Initial filling in data
         event_detail_title_input.setText(event_detail_title.getText().toString());
         event_detail_description_input.setText(event_detail_description.getText().toString());
         event_detail_date_input.setText(event_detail_date.getText().toString());
-        event_detail_time_input.setText(event_detail_time.getText().toString());
+        event_details_end_time_input.setText(end_time);
+        event_details_end_date_input.setText(end_date);
 
         final LinearLayout linear_layout_details = findViewById(R.id.linear_layout_details);
         linear_layout_details.setVisibility(View.INVISIBLE);
@@ -301,16 +314,22 @@ public class EventDetailsActivity extends AppCompatActivity {
                     event_detail_description_input.setVisibility(View.VISIBLE);
                     event_detail_date_input.setVisibility(View.VISIBLE);
                     event_detail_time_input.setVisibility(View.VISIBLE);
+                    event_details_end_date_input.setVisibility(View.VISIBLE);
+                    event_details_end_time_input.setVisibility(View.VISIBLE);
 
                     event_detail_title.setVisibility(View.INVISIBLE);
                     event_detail_description.setVisibility(View.INVISIBLE);
                     event_detail_date.setVisibility(View.INVISIBLE);
                     event_detail_time.setVisibility(View.INVISIBLE);
+                    event_details_end_date.setVisibility(View.INVISIBLE);
+                    event_details_end_time.setVisibility(View.INVISIBLE);
 
                     event_detail_title_input.setText(event_detail_title_input.getText().toString());
                     event_detail_description_input.setText(event_detail_description_input.getText().toString());
                     event_detail_date_input.setText(event_detail_date_input.getText().toString());
                     event_detail_time_input.setText(event_detail_time_input.getText().toString());
+                    event_details_end_date_input.setText(event_details_end_date_input.getText().toString());
+                    event_details_end_time_input.setText(event_details_end_time_input.getText().toString());
 
                     edit_event_guests_button.setVisibility(View.VISIBLE);
                     if(isSafety) {
@@ -321,7 +340,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                     event_detail_title_input.requestFocus();
                 } else {
 
-                    if(!isInputValid(event_detail_title_input, event_detail_date_input, event_detail_time_input, place)) {
+                    if(!isInputValid(event_detail_title_input, event_detail_date_input, event_detail_time_input, event_details_end_date_input, event_details_end_time_input, place)) {
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
                         Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
@@ -339,11 +358,15 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_detail_description_input.setVisibility(View.INVISIBLE);
                         event_detail_date_input.setVisibility(View.INVISIBLE);
                         event_detail_time_input.setVisibility(View.INVISIBLE);
+                        event_details_end_date_input.setVisibility(View.INVISIBLE);
+                        event_details_end_time_input.setVisibility(View.INVISIBLE);
 
                         event_detail_title.setVisibility(View.VISIBLE);
                         event_detail_description.setVisibility(View.VISIBLE);
                         event_detail_date.setVisibility(View.VISIBLE);
                         event_detail_time.setVisibility(View.VISIBLE);
+                        event_details_end_time.setVisibility(View.VISIBLE);
+                        event_details_end_date.setVisibility(View.VISIBLE);
 
                         DatabaseReference db_root = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(id);
 
@@ -361,7 +384,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                         event_invited_users_map.put("invited_users", updated);
                         db_root.updateChildren(event_root_map);
                         db_root.child("location").updateChildren(event_location_map);
-
 
                         if(clickCounter > 0) {
                             if (updated != null) {
@@ -461,6 +483,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                             event_detail_date.setText(event_detail_date_input.getText().toString());
                             event_detail_time.setText(event_detail_time_input.getText().toString());
                             location_placeholder.setText(location_name_input);
+                            event_details_end_time.setText(event_details_end_time_input.getText().toString());
+                            event_details_end_date.setText(event_details_end_date_input.getText().toString());
+
                             edit_event_guests_button.setVisibility(View.INVISIBLE);
                             if(isSafety) {
                                 edit_event_guests_button.setVisibility(View.INVISIBLE);
@@ -504,6 +529,75 @@ public class EventDetailsActivity extends AppCompatActivity {
         });
 
         event_detail_time_input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(EventDetailsActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String am_pm = "";
+                        if(selectedHour > 11) {
+                            if(selectedHour == 12) {
+                                selectedHour = 12;
+                            } else {
+                                selectedHour = selectedHour - 12;
+                            }
+                            am_pm = "PM";
+                        } else {
+                            if(selectedHour == 0) {
+                                selectedHour = 12;
+                            }
+                            am_pm = "AM";
+                        }
+
+                        if(selectedMinute < 10) {
+                            event_detail_time_input.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                            event_detail_time.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                        } else {
+                            event_detail_time_input.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                            event_detail_time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                        }
+
+                    }
+                }, hour, minute, false);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
+
+        event_details_end_date_input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(EventDetailsActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                event_detail_date_input.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                event_detail_date.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                datePickerDialog.show();
+            }
+        });
+
+        event_details_end_time_input.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -592,8 +686,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isInputValid(TextView name, TextView date, TextView time, Place place) {
-        if((!name.getText().toString().equals("")) &&  (!date.getText().toString().equals("")) && (!time.getText().toString().equals("")) && (place != null)) {
+    private boolean isInputValid(TextView name, TextView date, TextView time, TextView end_date,
+                                 TextView end_time, Place place) {
+        if((!name.getText().toString().equals("")) &&  (!date.getText().toString().equals("")) &&
+                (!time.getText().toString().equals("")) && (place != null) &&
+                (!end_date.getText().toString().equals("")) &&
+                (!end_time.getText().toString().equals(""))) {
             return true;
         } else {
             return false;

@@ -124,7 +124,7 @@
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="28sp" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/event_detail_date_input"
@@ -144,7 +144,7 @@
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="28sp"
+        android:textSize="18sp"
         android:visibility="invisible" />
 
     <TextView
@@ -162,7 +162,7 @@
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="28sp" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/event_detail_time_input"
@@ -180,7 +180,7 @@
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="28sp"
+        android:textSize="18sp"
         android:visibility="invisible" />
 
 
@@ -216,11 +216,11 @@
         android:id="@+id/linear_layout_details"
         android:layout_width="359dp"
         android:layout_height="53dp"
-        android:layout_below="@+id/event_detail_date_input"
+        android:layout_below="@+id/event_details_end_date"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
         android:background="#FFFFFF"
         android:orientation="horizontal">
@@ -247,15 +247,73 @@
         android:id="@+id/location_placeholder"
         android:layout_width="match_parent"
         android:layout_height="53dp"
-        android:layout_below="@+id/event_detail_date"
+        android:layout_below="@+id/event_details_end_date"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
         android:background="#FFFFFF"
         android:gravity="center"
         android:textColor="#000000"
         android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/event_details_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_date"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/event_details_end_time"
+        android:gravity="center"
+        android:text="End Date"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/event_details_end_time"
+        android:layout_width="158dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_time"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="45dp"
+        android:gravity="center"
+        android:text="End Time"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/event_details_end_date_input"
+        android:layout_width="147dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/event_detail_date"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/event_details_end_time_input"
+        android:ems="10"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
+        android:inputType="none"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/event_details_end_time_input"
+        android:layout_width="158dp"
+        android:layout_height="24dp"
+        android:layout_below="@+id/event_detail_time"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="45dp"
+        android:ems="10"
+        android:focusableInTouchMode="false"
+        android:inputType="none"
+        android:visibility="invisible" />
 
 </RelativeLayout>

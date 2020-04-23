@@ -126,8 +126,8 @@ public class MainEventListActivity extends Fragment {
 
                 holder.eventTitle.setText(data.get(position).getName());
                 holder.eventLocation.setText(data.get(position).getArea());
-                holder.eventDate.setText(data.get(position).getDate());
-                holder.eventTime.setText(data.get(position).getTime());
+                holder.eventDate.setText(data.get(position).getStartDate());
+                holder.eventTime.setText(data.get(position).getStartTime());
 
                 holder.cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -138,11 +138,13 @@ public class MainEventListActivity extends Fragment {
                             intent.putExtra("event_id", data.get(position).getID());
                             intent.putExtra("event_name", data.get(position).getName());
                             intent.putExtra("event_desc", data.get(position).getDescription());
-                            intent.putExtra("event_date", data.get(position).getDate());
+                            intent.putExtra("event_date", data.get(position).getStartTime());
+                            intent.putExtra("event_end_date", data.get(position).getEndDate());
+                            intent.putExtra("event_end_time", data.get(position).getEndTime());
                             Bundle args = new Bundle();
                             args.putSerializable("ARRAYLIST", (Serializable)data.get(position).getInvited_users());
                             intent.putExtra("BUNDLE", args);
-                            intent.putExtra("event_time", data.get(position).getTime());
+                            intent.putExtra("event_time", data.get(position).getStartTime());
                             intent.putExtra("location_name", data.get(position).getLocation_name());
                             intent.putExtra("isSafety", data.get(position).getIsSafety());
                             startActivity(intent);
@@ -285,13 +287,15 @@ public class MainEventListActivity extends Fragment {
                                 if(dataSnapshot.hasChildren()) {
                                     String name = dataSnapshot.child("name").getValue().toString();
                                     String area = dataSnapshot.child("area").getValue().toString();
-                                    String date = dataSnapshot.child("date").getValue().toString();
-                                    String time = dataSnapshot.child("time").getValue().toString();
+                                    String start_date = dataSnapshot.child("start_time").getValue().toString();
+                                    String start_time = dataSnapshot.child("start_time").getValue().toString();
+                                    String end_date = dataSnapshot.child("end_date").getValue().toString();
+                                    String end_time = dataSnapshot.child("end_date").getValue().toString();
                                     String description = dataSnapshot.child("description").getValue().toString();
                                     String location_name = dataSnapshot.child("location_name").getValue().toString();
                                     boolean isSafety = (boolean) dataSnapshot.child("isSafetyEvent").getValue();
                                     ArrayList<User> invited_users = getInvitedUsers(dataSnapshot);
-                                    Event event = new Event(id, name, area, date, time, description, location_name, invited_users);
+                                    Event event = new Event(id, name, area, start_date, start_time, end_date, end_time, description, location_name, invited_users);
                                     event.setIsSafety(isSafety);
                                     events.add(event);
                                     System.out.println("Hello");

@@ -67,7 +67,7 @@
         android:layout_below="@+id/safety_switch"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:text="Invited"
         android:textColor="#FFFFFF"
         android:textSize="20sp" />
@@ -131,7 +131,7 @@
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/event_detail_time"
@@ -149,17 +149,17 @@
         android:inputType="none"
         android:textColor="#FFFFFF"
         android:textColorHint="#FFFFFF"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
     <LinearLayout
         android:id="@+id/linear_layout_fragment"
         android:layout_width="359dp"
         android:layout_height="53dp"
-        android:layout_below="@+id/event_detail_date"
+        android:layout_below="@+id/event_detail_end_date"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
         android:background="#FFFFFF"
         android:orientation="horizontal">
@@ -190,10 +190,46 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:layout_marginEnd="140dp"
         android:text="Safety: "
         android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/event_detail_end_date"
+        android:layout_width="153dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_date"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="10dp"
+        android:background="#212121"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
+        android:hint="End Date"
+        android:inputType="none"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/event_detail_end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_detail_time"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="45dp"
+        android:layout_toEndOf="@+id/event_detail_end_date"
+        android:background="#212121"
+        android:focusableInTouchMode="false"
+        android:gravity="center"
+        android:hint="End Time"
+        android:inputType="none"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         android:textSize="18sp" />
 
 </RelativeLayout>

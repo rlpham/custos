@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -90,7 +91,10 @@ public class CreateEventActivity extends AppCompatActivity {
     double homeLat;
     double homeLong;
     String homeAddress;
-    final long notification_time = 900000;
+    EditText event_detail_end_date;
+    EditText event_detail_end_time;
+    String min_event_date;
+    final long notification_time = 900000; //15 minutes
 
     //users that will be invited when creating event.
     ArrayList<User> selected;
@@ -131,6 +135,9 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_event);
 
+        event_detail_end_date = findViewById(R.id.event_detail_end_date);
+        event_detail_end_time = findViewById(R.id.event_detail_end_time);
+
         back_button = findViewById(R.id.create_event_back_button);
         back_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +164,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference user_info = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid());
+        final DatabaseReference user_info = FirebaseDatabase.getInstance().getReference("User Information").child(firebaseUser.getUid());
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -179,6 +186,83 @@ public class CreateEventActivity extends AppCompatActivity {
 
         event_date_text_view = findViewById(R.id.event_detail_date);
         event_date_text_view.setInputType(InputType.TYPE_NULL);
+        event_detail_end_time.setInputType(InputType.TYPE_NULL);
+
+        event_detail_end_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+                // date picker dialogx
+                datePickerDialog = new DatePickerDialog(CreateEventActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                // set day of month , month and year value in the edit text
+                                event_detail_end_date.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                            }
+                        }, mYear, mMonth, mDay);
+                long minEventDate = 0;
+                try {
+                    minEventDate = getMinEventDate(min_event_date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(min_event_date == null) {
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                } else {
+                    datePickerDialog.getDatePicker().setMinDate(minEventDate+1000);
+
+                }
+                datePickerDialog.show();
+            }
+        });
+
+        event_detail_end_time.setInputType(InputType.TYPE_NULL);
+
+        event_detail_end_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(CreateEventActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        String am_pm = "";
+                        if(selectedHour > 11) {
+                            if(selectedHour == 12) {
+                                selectedHour = 12;
+                            } else {
+                                selectedHour = selectedHour - 12;
+                            }
+                            am_pm = "PM";
+                        } else {
+                            if(selectedHour == 0) {
+                                selectedHour = 12;
+                            }
+                            am_pm = "AM";
+                        }
+
+                        if(selectedMinute < 10) {
+                            event_detail_end_time.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                        } else {
+                            event_detail_end_time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                        }
+
+                    }
+                }, hour, minute, false);
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
 
         event_date_text_view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,7 +281,9 @@ public class CreateEventActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                event_date_text_view.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                String date = (monthOfYear+1) + "/" + dayOfMonth + "/" + year;
+                                event_date_text_view.setText(date);
+                                min_event_date = date;
 
                             }
                         }, mYear, mMonth, mDay);
@@ -287,7 +373,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 event_time_text_view = findViewById(R.id.event_detail_time);
                 boolean isSafety = safetySwitch.isChecked();
                 if(!isSafety) {
-                    if(!isInputValidNoSafety(event_name_text_view, event_date_text_view, event_time_text_view, place)) {
+                    if(!isInputValidNoSafety(event_name_text_view, event_date_text_view,
+                            event_time_text_view, event_detail_end_date, event_detail_end_time, place)) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
                         toast.show();
                     } else {
@@ -295,12 +382,16 @@ public class CreateEventActivity extends AppCompatActivity {
                         final String id = createEventID();
                         name = event_name_text_view.getText().toString();
                         description = event_description_text_view.getText().toString();
-                        String date = event_date_text_view.getText().toString();
-                        String time =  event_time_text_view.getText().toString();
+                        String start_date = event_date_text_view.getText().toString();
+                        String start_time =  event_time_text_view.getText().toString();
+                        String end_date = event_detail_end_date.getText().toString();
+                        String end_time = event_detail_end_time.getText().toString();
                         boolean checkSafety = safetySwitch.isChecked();
                         final Event event = new Event(id, name, getLocationText(lat, lon),
-                                date,
-                                time,
+                                start_date,
+                                start_time,
+                                end_date,
+                                end_time,
                                 description, location_name, selected);
 
                         DatabaseReference user_information = FirebaseDatabase.getInstance()
@@ -309,8 +400,10 @@ public class CreateEventActivity extends AppCompatActivity {
                                 .child(id);
 
                         user_information.child("name").setValue(event.getName());
-                        user_information.child("date").setValue(event.getDate());
-                        user_information.child("time").setValue(event.getTime());
+                        user_information.child("start_date").setValue(event.getStartDate());
+                        user_information.child("start_time").setValue(event.getStartTime());
+                        user_information.child("end_date").setValue(event.getEndDate());
+                        user_information.child("end_time").setValue(event.getEndTime());
                         user_information.child("description").setValue(event.getDescription());
                         user_information.child("area").setValue(event.getArea());
                         user_information.child("location").child("latitude").setValue(lat);
@@ -350,7 +443,7 @@ public class CreateEventActivity extends AppCompatActivity {
                         }
 
                         try {
-                            createBackgroundNotification(date + " " + time, name);
+                            createBackgroundNotification(start_date + " " + start_time, name);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -361,7 +454,8 @@ public class CreateEventActivity extends AppCompatActivity {
                         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                     }
                 } else {
-                    if(!isInputValidWithSafety(event_name_text_view, event_date_text_view, event_time_text_view)) {
+                    if(!isInputValidWithSafety(event_name_text_view, event_date_text_view,
+                            event_time_text_view, event_detail_end_date, event_detail_end_time)) {
                         Toast toast = Toast.makeText(getApplicationContext(), "Invalid form", Toast.LENGTH_SHORT);
                         toast.show();
                     } else {
@@ -369,13 +463,18 @@ public class CreateEventActivity extends AppCompatActivity {
                         final String id = createEventID();
                         name = event_name_text_view.getText().toString();
                         description = event_description_text_view.getText().toString();
-                        String date = event_date_text_view.getText().toString();
-                        String time =  event_time_text_view.getText().toString();
+                        String start_date = event_date_text_view.getText().toString();
+                        String start_time =  event_time_text_view.getText().toString();
+                        String end_date = event_detail_end_date.getText().toString();
+                        String end_time = event_detail_end_time.getText().toString();
                         boolean checkSafety = safetySwitch.isChecked();
                         final Event event = new Event(id, name, homeAddress,
-                                date,
-                                time,
+                                start_date,
+                                start_time,
+                                end_date,
+                                end_time,
                                 description, location_name, selected);
+
 
                         DatabaseReference user_information = FirebaseDatabase.getInstance()
                                 .getReference("user_event")
@@ -383,8 +482,10 @@ public class CreateEventActivity extends AppCompatActivity {
                                 .child(id);
 
                         user_information.child("name").setValue(event.getName());
-                        user_information.child("date").setValue(event.getDate());
-                        user_information.child("time").setValue(event.getTime());
+                        user_information.child("start_date").setValue(event.getStartDate());
+                        user_information.child("start_time").setValue(event.getStartTime());
+                        user_information.child("end_date").setValue(event.getEndDate());
+                        user_information.child("end_time").setValue(event.getEndTime());
                         user_information.child("description").setValue(event.getDescription());
                         user_information.child("area").setValue(event.getArea());
                         user_information.child("location").child("latitude").setValue(homeLat);
@@ -423,7 +524,7 @@ public class CreateEventActivity extends AppCompatActivity {
                             }
                         }
                         try {
-                            createBackgroundNotification(date + " " + time, name);
+                            createBackgroundNotification(start_date + " " + start_time, name);
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -526,17 +627,27 @@ public class CreateEventActivity extends AppCompatActivity {
         return locationText;
     }
 
-    private boolean isInputValidWithSafety(TextView name, TextView date, TextView time) {
-        if(!name.getText().toString().equals("") && !date.getText().toString().equals("") && !time.getText().toString().equals("")) {
+    private boolean isInputValidWithSafety(TextView name, TextView date, TextView time,
+                                           TextView end_date, TextView end_time) {
+        if(!name.getText().toString().equals("") &&
+                !date.getText().toString().equals("") &&
+                !time.getText().toString().equals("") &&
+                !end_date.getText().toString().equals("") &&
+                !end_time.getText().toString().equals("")) {
             return true;
         } else {
             return false;
         }
     }
 
-    private boolean isInputValidNoSafety(TextView name, TextView date, TextView time, Place place) {
+    private boolean isInputValidNoSafety(TextView name, TextView date, TextView time,
+                                         TextView end_date, TextView end_time, Place place) {
 
-        if((!name.getText().toString().equals("")) &&  (!date.getText().toString().equals("")) && (!time.getText().toString().equals("")) && (place != null)) {
+        if((!name.getText().toString().equals("")) &&
+                (!date.getText().toString().equals("")) &&
+                (!time.getText().toString().equals("")) &&
+                (place != null) && (!end_date.getText().toString().equals("")) &&
+                (!end_time.getText().toString().equals(""))) {
             return true;
         } else {
             return false;
@@ -594,6 +705,12 @@ public class CreateEventActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private long getMinEventDate(String date) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        Date d = sdf.parse(date);
+        return d.getTime();
     }
 
 
