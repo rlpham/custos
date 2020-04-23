@@ -161,7 +161,7 @@ public class CreateEventActivity extends AppCompatActivity {
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child("UserAddress").exists()) {
+                if(dataSnapshot.child("User Address").exists()) {
                     homeAddress =  dataSnapshot.child("User Address").child("homeLocation").getValue().toString();
                     homeLat =  (double) dataSnapshot.child("User Address").child("userHomeLatitude").getValue();
                     homeLong =  (double) dataSnapshot.child("User Address").child("userHomeLongitude").getValue();
@@ -372,7 +372,7 @@ public class CreateEventActivity extends AppCompatActivity {
                         String date = event_date_text_view.getText().toString();
                         String time =  event_time_text_view.getText().toString();
                         boolean checkSafety = safetySwitch.isChecked();
-                        final Event event = new Event(id, name, getLocationText(homeLat, homeLong),
+                        final Event event = new Event(id, name, homeAddress,
                                 date,
                                 time,
                                 description, location_name, selected);
