@@ -161,10 +161,11 @@ public class CreateEventActivity extends AppCompatActivity {
         user_info.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                homeAddress =  dataSnapshot.child("User Address").child("homeLocation").getValue().toString();
-                homeLat =  (double) dataSnapshot.child("User Address").child("userHomeLatitude").getValue();
-                homeLong =  (double) dataSnapshot.child("User Address").child("userHomeLongitude").getValue();
-
+                if(dataSnapshot.child("UserAddress").exists()) {
+                    homeAddress =  dataSnapshot.child("User Address").child("homeLocation").getValue().toString();
+                    homeLat =  (double) dataSnapshot.child("User Address").child("userHomeLatitude").getValue();
+                    homeLong =  (double) dataSnapshot.child("User Address").child("userHomeLongitude").getValue();
+                }
             }
 
             @Override
