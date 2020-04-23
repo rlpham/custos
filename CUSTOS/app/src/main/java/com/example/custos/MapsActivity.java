@@ -239,7 +239,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Rahul TestCode below
 
 
-        final Button dangerzonebutton = findViewById(R.id.mapsDsngerZoneButton);
+        final TextView dangerzonebutton = findViewById(R.id.mapsDsngerZoneButton);
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MapsActivity.this, DangerZoneActivity.class);
