@@ -271,7 +271,8 @@
         android:gravity="center"
         android:text="End Date"
         android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/event_details_end_time"
@@ -284,7 +285,8 @@
         android:gravity="center"
         android:text="End Time"
         android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="invisible" />
 
     <EditText
         android:id="@+id/event_details_end_date_input"
@@ -296,12 +298,15 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/event_details_end_time_input"
+        android:background="#212121"
         android:ems="10"
         android:focusableInTouchMode="false"
         android:gravity="center"
+        android:hint="End Date"
         android:inputType="none"
         android:textColor="#FFFFFF"
-        android:visibility="invisible" />
+        android:textColorHint="#FFFFFF"
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/event_details_end_time_input"
@@ -311,9 +316,14 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="45dp"
+        android:background="#212121"
         android:ems="10"
         android:focusableInTouchMode="false"
+        android:gravity="center"
+        android:hint="End Time"
         android:inputType="none"
-        android:visibility="invisible" />
+        android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
+        android:visibility="visible" />
 
 </RelativeLayout>

@@ -216,6 +216,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 }
                 if(min_event_date == null) {
                     datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                } else if(minEventDate == 0){
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                 } else {
                     datePickerDialog.getDatePicker().setMinDate(minEventDate+1000);
 
@@ -708,9 +710,14 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private long getMinEventDate(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-        Date d = sdf.parse(date);
-        return d.getTime();
+        if(date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+            Date d = sdf.parse(date);
+            return d.getTime();
+        } else {
+            return 0;
+        }
+
     }
 
 

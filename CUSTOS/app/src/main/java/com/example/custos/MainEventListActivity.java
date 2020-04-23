@@ -138,7 +138,7 @@ public class MainEventListActivity extends Fragment {
                             intent.putExtra("event_id", data.get(position).getID());
                             intent.putExtra("event_name", data.get(position).getName());
                             intent.putExtra("event_desc", data.get(position).getDescription());
-                            intent.putExtra("event_date", data.get(position).getStartTime());
+                            intent.putExtra("event_date", data.get(position).getStartDate());
                             intent.putExtra("event_end_date", data.get(position).getEndDate());
                             intent.putExtra("event_end_time", data.get(position).getEndTime());
                             Bundle args = new Bundle();
@@ -287,10 +287,10 @@ public class MainEventListActivity extends Fragment {
                                 if(dataSnapshot.hasChildren()) {
                                     String name = dataSnapshot.child("name").getValue().toString();
                                     String area = dataSnapshot.child("area").getValue().toString();
-                                    String start_date = dataSnapshot.child("start_time").getValue().toString();
+                                    String start_date = dataSnapshot.child("start_date").getValue().toString();
                                     String start_time = dataSnapshot.child("start_time").getValue().toString();
                                     String end_date = dataSnapshot.child("end_date").getValue().toString();
-                                    String end_time = dataSnapshot.child("end_date").getValue().toString();
+                                    String end_time = dataSnapshot.child("end_time").getValue().toString();
                                     String description = dataSnapshot.child("description").getValue().toString();
                                     String location_name = dataSnapshot.child("location_name").getValue().toString();
                                     boolean isSafety = (boolean) dataSnapshot.child("isSafetyEvent").getValue();

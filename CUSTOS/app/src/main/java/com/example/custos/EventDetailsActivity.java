@@ -48,10 +48,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -94,8 +96,10 @@ public class EventDetailsActivity extends AppCompatActivity {
     User current_user;
     TextView event_details_end_date;
     TextView event_details_end_time;
-    EditText event_details_end_date_input;
-    EditText event_details_end_time_input;
+    TextView event_details_end_date_input;
+    TextView event_details_end_time_input;
+    String min_event_date;
+    long minEventDate;
     boolean isSafety;
     int clickCounter;
 
@@ -166,6 +170,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_details_end_time = findViewById(R.id.event_details_end_time);
         event_details_end_date_input = findViewById(R.id.event_details_end_date_input);
         event_details_end_time_input = findViewById(R.id.event_details_end_time_input);
+
 
 
         //EditText that is enabled when "EDIT" is clicked
@@ -240,6 +245,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         event_detail_title_input.setText(event_detail_title.getText().toString());
         event_detail_description_input.setText(event_detail_description.getText().toString());
         event_detail_date_input.setText(event_detail_date.getText().toString());
+        event_detail_time_input.setText(event_detail_time.getText().toString());
         event_details_end_time_input.setText(end_time);
         event_details_end_date_input.setText(end_date);
 
@@ -326,12 +332,11 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                     event_detail_title_input.setText(event_detail_title_input.getText().toString());
                     event_detail_description_input.setText(event_detail_description_input.getText().toString());
-                    event_detail_date_input.setText(event_detail_date_input.getText().toString());
-                    event_detail_time_input.setText(event_detail_time_input.getText().toString());
-                    event_details_end_date_input.setText(event_details_end_date_input.getText().toString());
                     event_details_end_time_input.setText(event_details_end_time_input.getText().toString());
+                    event_details_end_date_input.setText(event_details_end_date_input.getText().toString());
 
                     edit_event_guests_button.setVisibility(View.VISIBLE);
+
                     if(isSafety) {
                         edit_event_guests_button.setVisibility(View.INVISIBLE);
                         linear_layout_details.setVisibility(View.INVISIBLE);
@@ -375,8 +380,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                         Map<String, Object> event_invited_users_map = new HashMap<String, Object>();
                         event_root_map.put("name", (event_detail_title_input.getText().toString()));
                         event_root_map.put("description", (event_detail_description_input.getText().toString()));
-                        event_root_map.put("date", (event_detail_date_input.getText().toString()));
-                        event_root_map.put("time", (event_detail_time_input.getText().toString()));
+                        event_root_map.put("start_date", (event_detail_date_input.getText().toString()));
+                        event_root_map.put("start_time", (event_detail_time_input.getText().toString()));
+                        event_root_map.put("end_date", (event_details_end_date_input.getText().toString()));
+                        event_root_map.put("end_time", (event_details_end_time_input.getText().toString()));
                         event_root_map.put("area", toolKit.getLocationText(lat, lon, EventDetailsActivity.this));
                         event_root_map.put("location_name", location_name_input);
                         event_location_map.put("latitude", lat);
@@ -518,8 +525,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                event_detail_date_input.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
-                                event_detail_date.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                String date = (monthOfYear+1) + "/" + dayOfMonth + "/" + year;
+                                event_detail_date_input.setText(date);
+                                event_detail_date.setText(date);
+                                min_event_date = date;
 
                             }
                         }, mYear, mMonth, mDay);
@@ -587,12 +596,26 @@ public class EventDetailsActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
                                 // set day of month , month and year value in the edit text
-                                event_detail_date_input.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
-                                event_detail_date.setText((monthOfYear+1) + "/" + dayOfMonth + "/" + year);
+                                String date = (monthOfYear+1) + "/" + dayOfMonth + "/" + year;
+                                min_event_date = date;
+                                event_details_end_date_input.setText(date);
+                                event_details_end_date.setText(date);
 
                             }
                         }, mYear, mMonth, mDay);
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                long minEventDate = 0;
+                try {
+                    minEventDate = getMinEventDate(min_event_date);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(min_event_date == null) {
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                } else if(minEventDate == 0){
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+                } else {
+                    datePickerDialog.getDatePicker().setMinDate(minEventDate+1000);
+                }
                 datePickerDialog.show();
             }
         });
@@ -625,11 +648,11 @@ public class EventDetailsActivity extends AppCompatActivity {
                         }
 
                         if(selectedMinute < 10) {
-                            event_detail_time_input.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
-                            event_detail_time.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                            event_details_end_time_input.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
+                            event_details_end_time.setText(selectedHour + ":0" + selectedMinute + " " + am_pm);
                         } else {
-                            event_detail_time_input.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
-                            event_detail_time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                            event_details_end_time_input.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
+                            event_details_end_time.setText(selectedHour + ":" + selectedMinute + " " + am_pm);
                         }
 
                     }
@@ -725,4 +748,16 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         return dateAccept + " at " + timeAccept;
     }
+
+    private long getMinEventDate(String date) throws ParseException {
+        if(date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+            Date d = sdf.parse(date);
+            return d.getTime();
+        } else {
+            return 0;
+        }
+
+    }
+
 }
