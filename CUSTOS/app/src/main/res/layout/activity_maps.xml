@@ -242,8 +242,14 @@
 
     <Spinner
         android:id="@+id/mapsEventSelection"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:background="@drawable/sv_round"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="25dp"

@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,6 +57,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -137,6 +143,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private DatabaseReference db, db2, db3, db4;
     //tillhere
+
+
 
 
     @Override
@@ -314,6 +322,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
         //rahul end
+
+
+        decorView.setFocusableInTouchMode(true);
+        decorView.requestFocus();
+        decorView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            final public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+
+                    return true;
+                }
+                return false;
+            }
+        });
 
 
     }
@@ -711,7 +733,7 @@ private boolean aretherenofriends=false;
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 eventFriends =new ArrayList<String>();
-                int index = arg0.getSelectedItemPosition();
+                final int index = arg0.getSelectedItemPosition();
 //                Toast.makeText(getBaseContext(),
 //                            "You have selected item : " + eventListSelection.get(index),
 //                        Toast.LENGTH_SHORT).show();
@@ -730,10 +752,13 @@ private boolean aretherenofriends=false;
                                 }else
 
                                if(dataSnapshot.child("isOwner").getValue().toString().equals("true")){
-aretherenofriends=false;
+                                   aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
                                         if(snapshot.child("status").getValue().toString().equals("accepted")){
                                             eventFriends.add(snapshot.getKey());
+                                            FirebaseDatabase.getInstance().getReference("eventMessage").child(eventListSelectionid.get(index)).child(snapshot.getKey())
+                                                    .setValue("No Status");
+
                                         }
 
                                    }
@@ -743,6 +768,8 @@ aretherenofriends=false;
                                    aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
                                         eventFriends.add(snapshot.getKey());
+                                       FirebaseDatabase.getInstance().getReference("eventMessage").child(eventListSelectionid.get(index)).child(snapshot.getKey())
+                                               .setValue("No Status");
 
                                    }
 
@@ -1306,7 +1333,10 @@ private ArrayList<String> eventFriends;
                             System.out.println("DANGER ZONE STATE: " + dangerZoneState);
                             if(dangerZoneState.equals(usersCurrentState)) {
                                 displayedMarkers++;
+
                                 placeMarker(zone_name,risk_level,lat,longitude,description);
+
+
                             }
                             //placeMarker(zone_name,risk_level,lat,longitude,description);
                             System.out.println(lat);
@@ -1391,25 +1421,112 @@ private ArrayList<String> eventFriends;
         LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
         System.out.println("RISK LEVELS ARE: " + risk_level);
         if(risk_level.contains("Low")){
-            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowtriangle));
+
+
+            // Instantiating CircleOptions to draw a circle around the marker
+            CircleOptions circleOptions = new CircleOptions();
+
+            // Specifying the center of the circle
+            circleOptions.center(coordinates);
+
+            // Radius of the circle
+            circleOptions.radius(250);
+
+            // Border color of the circle
+            circleOptions.strokeColor(Color.parseColor("#e0ee20"));
+
+            // Fill color of the circle
+            circleOptions.fillColor(Color.parseColor("#20e0ee20"));
+
+
+
+            // Border width of the circle
+            circleOptions.strokeWidth(3f);
+
+
+           // circleOptions.clickable(true);
+
+            // Adding the circle to the GoogleMap
+            mMap.addCircle(circleOptions);
+
+
+
+            final MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name);
+
+            //    MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowradius));
+
             dangerMarker.snippet("Low Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
+
         }
 
         if (risk_level.contains("Medium")) {
-            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.orangetriangle));
-            dangerMarker.snippet("Medium Danger:\n" + description);
 
+
+            CircleOptions circleOptions = new CircleOptions();
+
+            // Specifying the center of the circle
+            circleOptions.center(coordinates);
+
+            // Radius of the circle
+            circleOptions.radius(500);
+
+            // Border color of the circle
+            circleOptions.strokeColor(Color.parseColor("#FF9700"));
+
+            // Fill color of the circle
+            circleOptions.fillColor(Color.parseColor("#20FF9700"));
+
+            // Border width of the circle
+            circleOptions.strokeWidth(3f);
+
+
+            // Adding the circle to the GoogleMap
+            mMap.addCircle(circleOptions);
+
+
+
+
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates);
+
+            dangerMarker.snippet("Medium Danger:\n" + description);
+           // dangerMarker.visible(false);
             mMap.addMarker(dangerMarker);
         }
 
         if(risk_level.contains("High")) {
-            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.redtriangle));
+            CircleOptions circleOptions = new CircleOptions();
+
+            // Specifying the center of the circle
+            circleOptions.center(coordinates);
+
+            // Radius of the circle
+            circleOptions.radius(750);
+
+            // Border color of the circle
+            circleOptions.strokeColor(Color.parseColor("#cc0000"));
+
+            // Fill color of the circle
+            circleOptions.fillColor(Color.parseColor("#20cc0000"));
+
+            // Border width of the circle
+            circleOptions.strokeWidth(3f);
+
+
+            // Adding the circle to the GoogleMap
+            mMap.addCircle(circleOptions);
+
+
+
+
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates);
+
             dangerMarker.snippet("High Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
         }
 
     }
+
 }

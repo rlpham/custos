@@ -80,10 +80,20 @@ public class DangerZoneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(nameFillIn.getText().toString().trim().length() == 0)
+                if(nameFillIn.getText().toString().trim().length() == 0 && descriptionFillIn.getText().toString().trim().length() == 0)
+                {
+                    bothRequired();
+
+                }
+               else if(nameFillIn.getText().toString().trim().length() == 0)
                 {
                     nameRequired();
                 }
+                else if(descriptionFillIn.getText().toString().trim().length() == 0)
+                {
+                    descRequired();
+                }
+
                 else
                 {
 
@@ -180,7 +190,17 @@ public class DangerZoneActivity extends AppCompatActivity {
 
     public void nameRequired()
     {
-        Toast.makeText(this, "Name is required", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Name Required", Toast.LENGTH_SHORT).show();
+    }
+
+    public void descRequired()
+    {
+        Toast.makeText(this, "Description Required", Toast.LENGTH_SHORT).show();
+    }
+
+    public void bothRequired()
+    {
+        Toast.makeText(this, "Invalid Form", Toast.LENGTH_SHORT).show();
     }
 
 }
