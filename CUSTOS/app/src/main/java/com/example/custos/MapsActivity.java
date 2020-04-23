@@ -1431,7 +1431,7 @@ private ArrayList<String> eventFriends;
             circleOptions.strokeColor(Color.parseColor("#e0ee20"));
 
             // Fill color of the circle
-            circleOptions.fillColor(Color.parseColor("#50e0ee20"));
+            circleOptions.fillColor(Color.parseColor("#20e0ee20"));
 
 
 
@@ -1471,7 +1471,7 @@ private ArrayList<String> eventFriends;
             circleOptions.strokeColor(Color.parseColor("#FF9700"));
 
             // Fill color of the circle
-            circleOptions.fillColor(Color.parseColor("#50FF9700"));
+            circleOptions.fillColor(Color.parseColor("#20FF9700"));
 
             // Border width of the circle
             circleOptions.strokeWidth(3f);
@@ -1503,7 +1503,7 @@ private ArrayList<String> eventFriends;
             circleOptions.strokeColor(Color.parseColor("#cc0000"));
 
             // Fill color of the circle
-            circleOptions.fillColor(Color.parseColor("#50cc0000"));
+            circleOptions.fillColor(Color.parseColor("#20cc0000"));
 
             // Border width of the circle
             circleOptions.strokeWidth(3f);
