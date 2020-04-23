@@ -733,7 +733,7 @@ private boolean aretherenofriends=false;
             public void onItemSelected(AdapterView<?> arg0, View arg1,
                                        int arg2, long arg3) {
                 eventFriends =new ArrayList<String>();
-                int index = arg0.getSelectedItemPosition();
+                final int index = arg0.getSelectedItemPosition();
 //                Toast.makeText(getBaseContext(),
 //                            "You have selected item : " + eventListSelection.get(index),
 //                        Toast.LENGTH_SHORT).show();
@@ -752,10 +752,13 @@ private boolean aretherenofriends=false;
                                 }else
 
                                if(dataSnapshot.child("isOwner").getValue().toString().equals("true")){
-aretherenofriends=false;
+                                   aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
                                         if(snapshot.child("status").getValue().toString().equals("accepted")){
                                             eventFriends.add(snapshot.getKey());
+                                            FirebaseDatabase.getInstance().getReference("eventMessage").child(eventListSelectionid.get(index)).child(snapshot.getKey())
+                                                    .setValue("No Status");
+
                                         }
 
                                    }
@@ -765,6 +768,8 @@ aretherenofriends=false;
                                    aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
                                         eventFriends.add(snapshot.getKey());
+                                       FirebaseDatabase.getInstance().getReference("eventMessage").child(eventListSelectionid.get(index)).child(snapshot.getKey())
+                                               .setValue("No Status");
 
                                    }
 
