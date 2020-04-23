@@ -47,8 +47,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private List<Notifications> notificationsList;
     private Map<Integer, Object> deletedItems;
     private DatabaseReference databaseReference;
-    private String userName, date, area, locationname, lat, lng, name, time, description;
-    private String imgURL, dateAccept, timeAccept, eventName, currentToken, uid, userName3, userName2;
+    private String userName, start_date, area, locationname, lat, lng, name, time, description;
+    private String imgURL, dateAccept, timeAccept, end_date, currentToken, start_time, end_time, userName2;
     private DatabaseReference notificationsRef, eventRef, notificationRef3;
     private FirebaseUser firebaseUser;
     private Handler handler = new Handler();
@@ -453,8 +453,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                         if (eventSnapShot.child(notification.getUID()).child(notification.getEventId()).exists()) {
                                                             area = eventSnapShot.child(notification.getUID())
                                                                     .child(notification.getEventId()).child("area").getValue().toString();
-                                                            date = eventSnapShot.child(notification.getUID())
-                                                                    .child(notification.getEventId()).child("date").getValue().toString();
+                                                            start_date = eventSnapShot.child(notification.getUID())
+                                                                    .child(notification.getEventId()).child("start_date").getValue().toString();
+                                                            start_time = eventSnapShot.child(notification.getUID())
+                                                                    .child(notification.getEventId()).child("start_time").getValue().toString();
+                                                            end_date = eventSnapShot.child(notification.getUID())
+                                                                    .child(notification.getEventId()).child("end_date").getValue().toString();
+                                                            end_time = eventSnapShot.child(notification.getUID())
+                                                                    .child(notification.getEventId()).child("end_time").getValue().toString();
                                                             description = eventSnapShot.child(notification.getUID())
                                                                     .child(notification.getEventId()).child("description").getValue().toString();
                                                             locationname = eventSnapShot.child(notification.getUID())
@@ -498,7 +504,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
                                                                 .child("isSafetyEvent").setValue(false);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
-                                                                .child("date").setValue(date);
+                                                                .child("start_date").setValue(start_date);
+                                                        eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
+                                                                .child("start_time").setValue(start_time);
+                                                        eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
+                                                                .child("end_date").setValue(end_date);
+                                                        eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
+                                                                .child("end_time").setValue(end_time);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
                                                                 .child("description").setValue(description);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
