@@ -1425,31 +1425,22 @@ private ArrayList<String> eventFriends;
 
             // Instantiating CircleOptions to draw a circle around the marker
             CircleOptions circleOptions = new CircleOptions();
-
             // Specifying the center of the circle
             circleOptions.center(coordinates);
-
             // Radius of the circle
             circleOptions.radius(250);
-
             // Border color of the circle
             circleOptions.strokeColor(Color.parseColor("#e0ee20"));
-
             // Fill color of the circle
             circleOptions.fillColor(Color.parseColor("#20e0ee20"));
 
-
-
             // Border width of the circle
             circleOptions.strokeWidth(3f);
-
 
            // circleOptions.clickable(true);
 
             // Adding the circle to the GoogleMap
             mMap.addCircle(circleOptions);
-
-
 
             final MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name);
 
