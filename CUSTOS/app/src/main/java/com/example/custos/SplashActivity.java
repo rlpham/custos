@@ -48,6 +48,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import afu.org.checkerframework.checker.igj.qual.I;
 
 public class SplashActivity extends AppCompatActivity {
@@ -65,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        if (firebaseUser != null) {
+        if (firebaseUser != null && checkPermissions() == true) {
             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
             startActivity(intent);
         }
@@ -243,7 +246,7 @@ public class SplashActivity extends AppCompatActivity {
                     builder.setTitle("Allow Access");
                     builder.setIcon(R.drawable.ic_error_yellow_24dp);
                     builder.setCancelable(false);
-                    builder.setMessage("Please allow Custos to have location access")
+                    builder.setMessage("Please allow Custos to have your location access next time")
                             .setPositiveButton("Close", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     finish();
@@ -452,7 +455,10 @@ public class SplashActivity extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+
                             Toast.makeText(SplashActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+
                         }
                     });
 
@@ -462,8 +468,11 @@ public class SplashActivity extends AppCompatActivity {
                     updateUI(null);
                     signInDialog.dismissDialog();
                 }
+
             }
         });
+
+
     }
 
     private void updateUI(FirebaseUser firebaseUser) {
