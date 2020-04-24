@@ -772,9 +772,11 @@ private boolean aretherenofriends=false;
                                if(dataSnapshot.child("isOwner").getValue().toString().equals("true")){
                                    aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
+                                       if(snapshot.child("status").exists()){
                                         if(snapshot.child("status").getValue().toString().equals("accepted")){
                                             eventFriends.add(snapshot.getKey());
                                         }
+                                       }
 
                                    }
 
