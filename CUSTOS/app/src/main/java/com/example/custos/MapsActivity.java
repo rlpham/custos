@@ -91,7 +91,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -1424,13 +1426,14 @@ private ArrayList<String> eventFriends;
                             String lat = snapshot.child("lat").getValue().toString();
                             String longitude = snapshot.child("long").getValue().toString();
                             String description = snapshot.child("description").getValue().toString();
+                            String time = snapshot.child("time").getValue().toString();
 
                             String dangerZoneState = getCurrentState(Double.valueOf(lat),Double.valueOf(longitude));
                             System.out.println("DANGER ZONE STATE: " + dangerZoneState);
                             if(dangerZoneState.equals(usersCurrentState)) {
                                 displayedMarkers++;
 
-                                placeMarker(zone_name,risk_level,lat,longitude,description);
+                                placeMarker(zone_name,risk_level,lat,longitude,description,time);
 
 
                             }
@@ -1510,9 +1513,12 @@ private ArrayList<String> eventFriends;
      * @param longitude
      * @param description
      */
-    public void placeMarker(String zone_name,String risk_level, String latitude, String longitude,String description){
+    public void placeMarker(String zone_name,String risk_level, String latitude, String longitude,String description,String markertime){
         double latitudeNumericVal = Double.valueOf(latitude);
         double longitudeNumericVal = Double.valueOf(longitude);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = format.format(new Date());
 
         LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
         System.out.println("RISK LEVELS ARE: " + risk_level);
@@ -1612,6 +1618,7 @@ private ArrayList<String> eventFriends;
             dangerMarker.snippet("High Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
+            Toast.makeText(MapsActivity.this, "High Danger Zone Added!", Toast.LENGTH_LONG).show();
         }
 
     }
