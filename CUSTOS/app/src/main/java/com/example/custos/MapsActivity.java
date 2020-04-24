@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -239,7 +240,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Rahul TestCode below
 
 
-        final Button dangerzonebutton = findViewById(R.id.mapsDsngerZoneButton);
+        final TextView dangerzonebutton = findViewById(R.id.mapsDsngerZoneButton);
         dangerzonebutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(MapsActivity.this, DangerZoneActivity.class);
@@ -254,6 +255,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final RelativeLayout friendsbackground = findViewById(R.id.mapsfriendzone);
         final RelativeLayout evntsbackground = findViewById(R.id.mapseventzone);
         final Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
+        final RelativeLayout mapseventlayout = findViewById(R.id.mapseventzone);
+        final RelativeLayout mapsstatuslayout = findViewById(R.id.mapseventmessagezone);
+        final RelativeLayout mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
         //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
         mapsfriendlayoutbackgorund.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -273,6 +277,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
+                        mapseventlayout.setVisibility(View.GONE);
+                        mapsstatuslayout.setVisibility(View.GONE);
+                        mapseventmessagebackgorund.setVisibility(View.GONE);
                         //  friendmapbutton.setVisibility(View.GONE);
                         //      mapsback.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
@@ -282,6 +289,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_notifications:
                         dangerzonebutton.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
+                        mapseventlayout.setVisibility(View.GONE);
+                        mapsstatuslayout.setVisibility(View.GONE);
+                        mapseventmessagebackgorund.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                         //    mapsback.setVisibility(View.GONE);
@@ -290,7 +300,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_friends:
                         dangerzonebutton.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
+                        mapseventlayout.setVisibility(View.GONE);
+                        mapsstatuslayout.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
+                        mapseventmessagebackgorund.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                         //    mapsback.setVisibility(View.GONE);
                         openFragment(FriendsFragment.newInstance());
@@ -298,7 +311,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     case R.id.navigation_settings:
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
+                        mapseventlayout.setVisibility(View.GONE);
+                        mapsstatuslayout.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
+                        mapseventmessagebackgorund.setVisibility(View.GONE);
                         dangerzonebutton.setVisibility(View.GONE);
                         //   mapsback.setVisibility(View.GONE);
                         openFragment(SettingsActivity.newInstance());
@@ -737,11 +753,11 @@ private boolean aretherenofriends=false;
 //                Toast.makeText(getBaseContext(),
 //                            "You have selected item : " + eventListSelection.get(index),
 //                        Toast.LENGTH_SHORT).show();
-
+                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(noeventschecker==0){
 
 
-                final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
                 final DatabaseReference eventRef = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(eventListSelectionid.get(index));
                 eventRef
                         .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -756,9 +772,6 @@ private boolean aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
                                         if(snapshot.child("status").getValue().toString().equals("accepted")){
                                             eventFriends.add(snapshot.getKey());
-                                            FirebaseDatabase.getInstance().getReference("eventMessage").child(eventListSelectionid.get(index)).child(snapshot.getKey())
-                                                    .setValue("No Status");
-
                                         }
 
                                    }
@@ -768,8 +781,6 @@ private boolean aretherenofriends=false;
                                    aretherenofriends=false;
                                    for (DataSnapshot snapshot :  dataSnapshot.child("invited_users").getChildren()) {
                                         eventFriends.add(snapshot.getKey());
-                                       FirebaseDatabase.getInstance().getReference("eventMessage").child(eventListSelectionid.get(index)).child(snapshot.getKey())
-                                               .setValue("No Status");
 
                                    }
 
@@ -785,6 +796,7 @@ private boolean aretherenofriends=false;
                             }
                         });
                 }
+
 
 
 
@@ -826,12 +838,28 @@ private ArrayList<String> eventFriends;
                                 eventListSelectionid.add(snapshot.getKey());
                                 noeventschecker=0;
                                 double lat = 0, lon = 0;
-                                if (snapshot.child("location").exists() && snapshot.child("description").exists() && snapshot.child("date").exists() && snapshot.child("time").exists() && snapshot.child("name").exists()) {
+                                if (snapshot.child("location").exists() && snapshot.child("description").exists()  && snapshot.child("name").exists()) {
 
                                     lat = Double.parseDouble(snapshot.child("location").child("latitude").getValue().toString());
                                     lon = Double.parseDouble(snapshot.child("location").child("longitude").getValue().toString());
                                     setEventsLocationwithoutzoomingwithdesc(new LatLng(lat, lon), snapshot.getKey());
                                 }
+                                final DatabaseReference dbmessage = FirebaseDatabase.getInstance().getReference("eventMessage").child(snapshot.getKey());
+                                dbmessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        if(!dataSnapshot.child(firebaseUser.getUid()).exists()){
+                                            dbmessage.child(firebaseUser.getUid())
+                                                    .setValue("No Status");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
 
                             }
 
@@ -1129,17 +1157,60 @@ private ArrayList<String> eventFriends;
       try{
         if (marker.getSnippet().contains("Events")) {
             final TextView mapseventName = findViewById(R.id.mapseventName);
+            final TextView mapsmessageName = findViewById(R.id.mapseventStatus);
             final Button mapeventbutton = findViewById(R.id.mapseventbutton);
             final Button mapgetdirectionbutton = findViewById(R.id.mapsgetdirectionbutton);
             final RelativeLayout mapseventlayout = findViewById(R.id.mapseventzone);
+            final RelativeLayout mapsstatuslayout = findViewById(R.id.mapseventmessagezone);
             final String eventid = marker.getTag().toString();
+            final Button mapsetstatusbutton = findViewById(R.id.mapssetmessagebutton);
+            final Button mapsetstatussavebutton = findViewById(R.id.mapssetmessagesavebutton);
+            final RelativeLayout mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
+            final EditText mapgetstatustextfield=findViewById(R.id.mapchangestatustext);
+            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            final DatabaseReference dbmessage = FirebaseDatabase.getInstance().getReference("eventMessage").child(eventid);
+            dbmessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                    if(dataSnapshot.child(firebaseUser.getUid()).exists()){
+                       mapsmessageName.setText(dataSnapshot.child(firebaseUser.getUid()).getValue().toString());
+                    }
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                }
+            });
+            mapsetstatusbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mapgetstatustextfield.setHint(mapsmessageName.getText());
+                    mapseventmessagebackgorund.setVisibility(View.VISIBLE);
+                    mapsstatuslayout.setVisibility(View.VISIBLE);
+                }
+            });
+            mapsetstatussavebutton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                 String eventStatus=mapgetstatustextfield.getText().toString();
+                    FirebaseDatabase.getInstance().getReference("eventMessage").child(eventid).child(firebaseUser.getUid())
+                            .setValue(eventStatus);
+                    mapsstatuslayout.setVisibility(View.GONE);
+                    mapseventmessagebackgorund.setVisibility(View.GONE);
+                    mapsmessageName.setText(eventStatus);
+                }
+            });
+        mapseventmessagebackgorund.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        mapseventmessagebackgorund.setVisibility(View.GONE);
+        mapsstatuslayout.setVisibility(View.GONE);
+        mapgetstatustextfield.getText().clear();
+        }
+        });
 
-
-
-            FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             db = FirebaseDatabase.getInstance().getReference("user_event").child(firebaseUser.getUid()).child(eventid);
             db.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -1219,14 +1290,34 @@ private ArrayList<String> eventFriends;
 
         if (marker.getSnippet().contains("Contacts")) {
             final TextView mapsfriendName = findViewById(R.id.mapsfriendName);
-
+            final TextView mapsfriendStatus=findViewById(R.id.mapsfriendStatus);
             final Button friendmapbutton = findViewById(R.id.mapsfriendbutton);
             final RelativeLayout mapsfriendlayout = findViewById(R.id.mapsfriendzone);
             final CircleImageView mapsfriendicon = findViewById(R.id.mapsfriendimage);
+            Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
+
+
+            String eventid=eventListSelectionid.get( spinner.getSelectedItemPosition());
+
+
 
             //    final FirebaseStorage storage = FirebaseStorage.getInstance();
             final String uidtemp = marker.getTag().toString();
+            final DatabaseReference dbmessage = FirebaseDatabase.getInstance().getReference("eventMessage").child(eventid);
+            dbmessage.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                    if(dataSnapshot.child(uidtemp).exists()){
+                        mapsfriendStatus.setText(dataSnapshot.child(uidtemp).getValue().toString());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
 
             user_information2.child(uidtemp).orderByKey().addValueEventListener(new ValueEventListener() {
                 @Override
@@ -1239,6 +1330,11 @@ private ArrayList<String> eventFriends;
                         //  StorageReference httpsReference = storage.getReferenceFromUrl(imgurl);
                         Glide.with(getApplicationContext()).load(imgurl).into(mapsfriendicon);
                     }
+
+
+
+
+
                 }
 
                 @Override

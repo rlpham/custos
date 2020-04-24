@@ -417,11 +417,14 @@ public class CreateEventActivity extends AppCompatActivity {
                             for(User user : selected) {
                                 user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
                                 user_information.child("invited_users").child(user.getUID()).child("status").setValue("invited");
-
                             }
+                            user_information.child("invited_users").child(firebaseUser.getUid()).child("name").setValue(current_user.getUserName());
+
                         } else {
                             user_information.child("invited_users").setValue("NONE");
                         }
+
+
 
                         //Send notifications to invited users
                         DatabaseReference notifications = FirebaseDatabase.getInstance().getReference("Notifications");
@@ -499,8 +502,8 @@ public class CreateEventActivity extends AppCompatActivity {
                             for(User user : selected) {
                                 user_information.child("invited_users").child(user.getUID()).child("name").setValue(user.getUserName());
                                 user_information.child("invited_users").child(user.getUID()).child("status").setValue("invited");
-
                             }
+                            user_information.child("invited_users").child(firebaseUser.getUid()).child("name").setValue(current_user.getUserName());
                         } else {
                             user_information.child("invited_users").setValue("NONE");
                         }

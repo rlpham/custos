@@ -467,9 +467,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                                     .child(notification.getEventId()).child("location_name").getValue().toString();
                                                             name = eventSnapShot.child(notification.getUID())
                                                                     .child(notification.getEventId()).child("name").getValue().toString();
-                                                            time = eventSnapShot.child(notification.getUID())
-                                                                    .child(notification.getEventId()).child("time").getValue().toString();
-
                                                             lat = eventSnapShot.child(notification.getUID())
                                                                     .child(notification.getEventId()).child("location").child("latitude")
                                                                     .getValue().toString();
@@ -517,8 +514,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                                                 .child("location_name").setValue(locationname);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
                                                                 .child("area").setValue(area);
-                                                        eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
-                                                                .child("time").setValue(time);
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())
                                                                 .child("isOwner").setValue("false");
                                                         eventRef.child(firebaseUser.getUid()).child(notification.getEventId())

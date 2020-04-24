@@ -2,10 +2,14 @@ package com.example.custos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,6 +48,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import afu.org.checkerframework.checker.igj.qual.I;
 
 public class SplashActivity extends AppCompatActivity {
@@ -61,10 +68,49 @@ public class SplashActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        if (firebaseUser != null) {
+        if (firebaseUser != null && checkPermissions() == true) {
             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
             startActivity(intent);
         }
+    }
+
+
+    private boolean checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            // Here, thisActivity is the current activity
+            requestPermissions();
+            return false;
+        }
+
+
+    }
+
+    private void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0
+                );
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+
     }
 
     @Override
@@ -120,8 +166,8 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             setSecond();
-                            if(first && second)
-                            {
+                            if (first && second) {
+
                                 sharedPreferenceObj.setApp_runFirst("NO");
                                 System.out.println("no longer first time");
                             }
@@ -152,8 +198,8 @@ public class SplashActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //sharedPreferenceObj.setApp_runFirst("NO");
                             setFirst();
-                            if(first && second)
-                            {
+                            if (first && second) {
+
                                 sharedPreferenceObj.setApp_runFirst("NO");
                                 System.out.println("no longer first time");
                             }
@@ -162,7 +208,7 @@ public class SplashActivity extends AppCompatActivity {
                     .setNegativeButton("Decline", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                              finish();
+                            finish();
                         }
                     })
                     .setIcon(R.drawable.ic_error_yellow_24dp)
@@ -175,16 +221,44 @@ public class SplashActivity extends AppCompatActivity {
 
         } else {
 
-
-            // App is not First Time Launch
         }
+
+
+        if (checkPermissions() != true) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+
+
+        }
+
+
         signInButton = findViewById(R.id.google_login);
         mAuth = FirebaseAuth.getInstance();
         createRequest();
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+
+                if (checkPermissions() != true) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this, R.style.Chill);
+
+                    builder.setTitle("Allow Access");
+                    builder.setIcon(R.drawable.ic_error_yellow_24dp);
+                    builder.setCancelable(false);
+                    builder.setMessage("Please allow Custos to have your location access next time")
+                            .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    finish();
+                                }
+                            });
+                    builder.create();
+                    builder.show();
+                } else {
+                    signIn();
+                }
+
+
             }
         });
         //.check() not working
@@ -210,6 +284,8 @@ public class SplashActivity extends AppCompatActivity {
     final Handler handler = new Handler();
 
     private void signIn() {
+
+
         final SignInDialog signInDialog = new SignInDialog(SplashActivity.this);
         signInDialog.startDialog();
         handler.postDelayed(new Runnable() {
@@ -366,20 +442,23 @@ public class SplashActivity extends AppCompatActivity {
 //                                            .setValue(instanceIdResult.getToken());
                                     String deviceToken = instanceIdResult.getToken();
                                     userRef.child(user.getUid()).child("userToken").setValue(deviceToken)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                                                startActivity(intent);
-                                                updateUI(user);
-                                                signInDialog.dismissDialog();
-                                            }
-                                        });
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                                                    startActivity(intent);
+                                                    updateUI(user);
+                                                    signInDialog.dismissDialog();
+                                                }
+                                            });
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+
                             Toast.makeText(SplashActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+
                         }
                     });
 
@@ -389,8 +468,11 @@ public class SplashActivity extends AppCompatActivity {
                     updateUI(null);
                     signInDialog.dismissDialog();
                 }
+
             }
         });
+
+
     }
 
     private void updateUI(FirebaseUser firebaseUser) {
@@ -403,13 +485,11 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    public void setFirst()
-    {
+    public void setFirst() {
         first = true;
     }
 
-    public void setSecond()
-    {
+    public void setSecond() {
         second = true;
     }
 

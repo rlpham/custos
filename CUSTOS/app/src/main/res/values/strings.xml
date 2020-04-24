@@ -5,11 +5,14 @@
     <string name="event_add">+</string>
     <string name="view_event">View Event</string>
     <string name="get_direction">Get Directions</string>
+    <string name="set_message">change status</string>
+    <string name="set_status">set status</string>
     <string name="title_activity_maps">Map</string>
     <string name="notification">Notifications</string>
     <string name="settings">Settings</string>
     <string name="search_placeholder">Search</string>
     <string name="Report">Report</string>
+    <string name="Status">No Status</string>
     <string name="userinfo">User Account</string>
     <string name="login_button_label">Log In</string>
     <string name="signup_button_label">Sign Up</string>

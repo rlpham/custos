@@ -112,16 +112,16 @@
           android:src="@drawable/splash2"
           >
       </pl.droidsonroids.gif.GifImageView>/>-->
-      <Button
+      <TextView
           android:id="@+id/mapsDsngerZoneButton"
-          android:layout_width="60dp"
-          android:layout_height="70dp"
+          android:layout_width="55dp"
+          android:layout_height="55dp"
           android:layout_alignParentEnd="true"
 
           android:layout_alignParentBottom="true"
-          android:layout_marginEnd="36dp"
+          android:layout_marginEnd="30dp"
           android:layout_marginBottom="106dp"
-          android:background="@drawable/dangercautionimg"
+          android:background="@drawable/ic_error_yellow_30dp"
           android:text="@string/empty" />
 
     <RelativeLayout
@@ -172,6 +172,17 @@
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
+                android:id="@+id/mapsfriendStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:textSize="17sp"
+                android:layout_marginTop="125dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/Status" />
+
+            <TextView
                 android:id="@+id/mapsfriendName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -206,6 +217,15 @@
         android:background="@drawable/sv_round"
         >
 
+        <Button
+            android:id="@+id/mapssetmessagebutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/sv_round"
+            android:layout_marginBottom="80dp"
+            android:text="@string/set_message" />
+
 
         <Button
             android:id="@+id/mapsgetdirectionbutton"
@@ -226,6 +246,16 @@
 
 
         <TextView
+            android:id="@+id/mapseventStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="17sp"
+            android:layout_marginTop="75dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/Status" />
+        <TextView
             android:id="@+id/mapseventName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -239,6 +269,59 @@
 
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mapsmessageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:visibility="gone"
+
+        >
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/mapseventmessagezone"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="250dp"
+        android:visibility="gone"
+        android:background="@drawable/sv_round"
+        >
+        <Button
+            android:id="@+id/mapssetmessagesavebutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/sv_round"
+            android:layout_marginBottom="50dp"
+            android:text="@string/set_status" />
+        <EditText
+            android:id="@+id/mapchangestatustext"
+            android:hint="@string/set_message"
+            android:autofillHints="@string/set_message"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:fontFamily="sans-serif-light"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:textAlignment="center"
+            />
+    </RelativeLayout>
+
+
 
     <Spinner
         android:id="@+id/mapsEventSelection"

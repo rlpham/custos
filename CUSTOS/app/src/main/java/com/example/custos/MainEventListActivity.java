@@ -369,10 +369,12 @@ public class MainEventListActivity extends Fragment {
         ArrayList<User> invited_users = new ArrayList<User>();
         DataSnapshot data = dataSnapshot.child("invited_users");
         for(DataSnapshot element : data.getChildren()) {
-            User user = new User();
-            user.setUserName(element.child("name").getValue().toString());
-            user.setUID(element.getKey());
-            invited_users.add(user);
+            if(element.getKey() != firebaseUser.getUid()) {
+                User user = new User();
+                user.setUserName(element.child("name").getValue().toString());
+                user.setUID(element.getKey());
+                invited_users.add(user);
+            }
         }
         return invited_users;
     }
