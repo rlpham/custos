@@ -765,9 +765,9 @@ private boolean aretherenofriends=false;
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if(dataSnapshot.child("invited_users").getValue().toString().equals("NONE")){
-                                    aretherenofriends=true;
-                                }else
+//                                if(dataSnapshot.child("invited_users").getValue().toString().equals("NONE")){
+//                                    aretherenofriends=true;
+//                                }else
 
                                if(dataSnapshot.child("isOwner").getValue().toString().equals("true")){
                                    aretherenofriends=false;
