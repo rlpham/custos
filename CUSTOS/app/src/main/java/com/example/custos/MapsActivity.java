@@ -408,15 +408,9 @@ private ArrayList<Marker> friendsMarker;
     private void readpickup() {
 
         final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-        final RelativeLayout pickupzone=findViewById(R.id.mapspickupzone);
-        final TextView onclicknothing=findViewById(R.id.mapsonclicknothing);
-        final Button pickupaccept=findViewById(R.id.mapspickupaccepctbutton);
-        final Button pickupreject=findViewById(R.id.mapspickuprejectbutton);
-        final TextView pickuptext=findViewById(R.id.mappickuptext);
-
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("pickUpNotifications");
-       final  DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference("User Information");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 uidlidy =new ArrayList<String>();
@@ -427,46 +421,11 @@ private ArrayList<Marker> friendsMarker;
                         if(snapshot.child("requestType").getValue().toString().equals("request")){
                             uidlidy.add(snapshot.child("uid").getValue().toString());
                             eventname.add(snapshot.child("eventname").getValue().toString());
-                            counter++;
+                                counter++;
                         }
                 }
-                    if(counter!=0){
-                        onclicknothing.setVisibility(View.VISIBLE);
-                        pickupzone.setVisibility(View.VISIBLE);
-                        count=0;
-                        for(final String uid: uidlidy){
-                            pickupaccept.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    onclicknothing.setVisibility(View.GONE);
-                                    pickupzone.setVisibility(View.GONE);
-                                }
-                            });
-                            pickupreject.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    onclicknothing.setVisibility(View.GONE);
-                                    pickupzone.setVisibility(View.GONE);
-                                }
-                            });
+                pickupnotifications(0);
 
-                            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String fname = dataSnapshot.child(uid).child("userName").getValue().toString();
-                                    pickuptext.setText(fname+" Requests a pick up for "+ eventname.get(count));
-                                    count++;
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-
-
-                        }
-                    }
             }
             }
 
@@ -478,7 +437,62 @@ private ArrayList<Marker> friendsMarker;
 
     }
 
+private void pickupnotifications(final int val){
+    final  DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference("User Information");
+    final RelativeLayout pickupzone=findViewById(R.id.mapspickupzone);
+    final TextView onclicknothing=findViewById(R.id.mapsonclicknothing);
+    final Button pickupaccept=findViewById(R.id.mapspickupaccepctbutton);
+    final Button pickupreject=findViewById(R.id.mapspickuprejectbutton);
+    final TextView pickuptext=findViewById(R.id.mappickuptext);
+    pickupaccept.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(counter==0){
+                onclicknothing.setVisibility(View.GONE);
+                pickupzone.setVisibility(View.GONE);
+            }else {
+                pickupnotifications(val+1);
+            }
+        }
+    });
+    pickupreject.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
 
+
+            if(counter==0){
+                onclicknothing.setVisibility(View.GONE);
+                pickupzone.setVisibility(View.GONE);
+            }else {
+                pickupnotifications(val+1);
+            }
+        }
+    });
+    count=val;
+    if(counter!=0){
+        onclicknothing.setVisibility(View.VISIBLE);
+        pickupzone.setVisibility(View.VISIBLE);
+        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(counter!=0){
+                String fname = dataSnapshot.child(uidlidy.get(count)).child("userName").getValue().toString();
+                pickuptext.setText(fname+" Requests a pick up for "+ eventname.get(count));
+                counter--;
+                count++;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+    }else {count =0;}
+}
 
     private void readUsers() {
 
