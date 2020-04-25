@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EventPopupActivity"
+    android:background="@drawable/sv_round_event">
+
+    <RelativeLayout
+        android:layout_width="408dp"
+        android:layout_height="724dp"
+        tools:ignore="MissingConstraints">
+
+
+        <TextView
+            android:id="@+id/deleted_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Event has been deleted"
+            android:textColor="@android:color/black"
+            android:textSize="18dp"
+            android:textStyle="italic"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="170dp"
+            android:layout_marginLeft="70dp"/>
+
+        <TextView
+            android:id="@+id/event_title_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="70dp"
+            android:drawableLeft="@drawable/ic_event_note_yellow_32dp"
+            android:drawablePadding="10dp"
+            android:paddingTop="50dp"
+            android:text="Event Invitation"
+
+            android:textColor="@android:color/black"
+            android:textColorHighlight="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/event_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="105dp"
+            android:layout_marginTop="440dp"
+            android:layout_marginRight="205dp"
+            android:background="#FECE2F"
+            android:text="Close"
+            android:textColor="@android:color/black"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/event_accept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="170dp"
+            android:layout_marginTop="440dp"
+            android:layout_marginRight="140dp"
+            android:background="#FECE2F"
+            android:text="Accept"
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/event_decline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="440dp"
+            android:layout_marginRight="260dp"
+            android:layout_marginBottom="20dp"
+            android:background="#FECE2F"
+            android:text="Decline"
+            android:textColor="#9e0202"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/event_name_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="59dp"
+            android:layout_marginTop="140dp"
+            android:drawableLeft="@drawable/ic_event_black_24dp"
+            android:drawablePadding="10dp"
+            android:paddingRight="10dp"
+            android:text="eventName"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/event_locationname_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="59dp"
+            android:layout_marginTop="180dp"
+            android:drawableLeft="@drawable/ic_local_cafe_yellow_24dp"
+            android:drawablePadding="10dp"
+            android:paddingRight="10dp"
+            android:text="eventLocationName"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/event_area_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="59dp"
+            android:layout_marginTop="220dp"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+            android:drawablePadding="10dp"
+            android:paddingRight="10dp"
+            android:text="eventArea"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/event_date_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="59dp"
+            android:layout_marginTop="265dp"
+            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+            android:drawablePadding="10dp"
+            android:paddingRight="10dp"
+            android:text="eventDate"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/event_time_notification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="59dp"
+            android:layout_marginTop="310dp"
+            android:drawableLeft="@drawable/ic_access_time_yellow_24dp"
+            android:drawablePadding="10dp"
+            android:paddingRight="10dp"
+            android:text="eventTime"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

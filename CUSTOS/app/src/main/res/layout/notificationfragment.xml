@@ -43,7 +43,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="595dp">
+        android:layout_height="630dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_notification"
