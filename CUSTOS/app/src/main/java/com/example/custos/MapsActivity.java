@@ -44,6 +44,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.custos.utils.Common;
+import com.example.custos.utils.Event;
 import com.example.custos.utils.FirstTimeLoginDialog;
 import com.example.custos.utils.User;
 import com.example.custos.utils.UserLocation;
@@ -93,6 +94,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -341,7 +343,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
         //rahul end
 
-
+        readpickup();
         decorView.setFocusableInTouchMode(true);
         decorView.requestFocus();
         decorView.setOnKeyListener(new View.OnKeyListener() {
@@ -399,6 +401,84 @@ private ArrayList<Marker> friendsMarker;
      * installed Google Play services and returned to the app.
      */
     private List<UserLocation> userList;
+    private ArrayList<String> uidlidy;
+    private ArrayList<String> eventname;
+    private int counter=0;
+    private int count=0;
+    private void readpickup() {
+
+        final FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+        final RelativeLayout pickupzone=findViewById(R.id.mapspickupzone);
+        final TextView onclicknothing=findViewById(R.id.mapsonclicknothing);
+        final Button pickupaccept=findViewById(R.id.mapspickupaccepctbutton);
+        final Button pickupreject=findViewById(R.id.mapspickuprejectbutton);
+        final TextView pickuptext=findViewById(R.id.mappickuptext);
+
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("pickUpNotifications");
+       final  DatabaseReference databaseReference2 = FirebaseDatabase.getInstance().getReference("User Information");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                uidlidy =new ArrayList<String>();
+                eventname=new ArrayList<String>();
+                counter=0;
+                if(dataSnapshot.child(fUser.getUid()).exists()){
+                for (DataSnapshot snapshot : dataSnapshot.child(fUser.getUid()).getChildren()) {
+                        if(snapshot.child("requestType").getValue().toString().equals("request")){
+                            uidlidy.add(snapshot.child("uid").getValue().toString());
+                            eventname.add(snapshot.child("eventname").getValue().toString());
+                            counter++;
+                        }
+                }
+                    if(counter!=0){
+                        onclicknothing.setVisibility(View.VISIBLE);
+                        pickupzone.setVisibility(View.VISIBLE);
+                        count=0;
+                        for(final String uid: uidlidy){
+                            pickupaccept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    onclicknothing.setVisibility(View.GONE);
+                                    pickupzone.setVisibility(View.GONE);
+                                }
+                            });
+                            pickupreject.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    onclicknothing.setVisibility(View.GONE);
+                                    pickupzone.setVisibility(View.GONE);
+                                }
+                            });
+
+                            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String fname = dataSnapshot.child(uid).child("userName").getValue().toString();
+                                    pickuptext.setText(fname+" Requests a pick up for "+ eventname.get(count));
+                                    count++;
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                        }
+                    }
+            }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
 
     private void readUsers() {
 
@@ -1146,7 +1226,30 @@ private ArrayList<String> eventFriends;
             return invited_users;
         }
     }
+    final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private ArrayList<User> getInvitedUsers2(DataSnapshot dataSnapshot) {
+        ArrayList<User> invited_users = new ArrayList<User>();
+        DataSnapshot data = dataSnapshot.child("invited_users");
+        for(DataSnapshot element : data.getChildren()) {
+            if(element.getKey() != firebaseUser.getUid()) {
+                User user = new User();
+                user.setUserName(element.child("name").getValue().toString());
+                user.setUID(element.getKey());
+                invited_users.add(user);
+            }
+        }
+        return invited_users;
+    }
+    private String getRequestTime() {
+        Calendar calendarAccept = Calendar.getInstance();
+        SimpleDateFormat acceptDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        String dateAccept = acceptDate.format(calendarAccept.getTime());
+        String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
 
+        return dateAccept + " at " + timeAccept;
+    }
     /**
      * This is the actionlistener for all the markers!! Add to this method if you want marker
      * to do something when clicked.
@@ -1240,7 +1343,7 @@ private ArrayList<String> eventFriends;
                         if (dataSnapshot.child("invited_users").getValue() == null) {
                             obj.put("invited_users", "none");
                         } else {
-                            obj.put("invited_users", getInvitedUsers(dataSnapshot.child("invited_users").getValue().toString()));
+                            obj.put("invited_users", getInvitedUsers2(dataSnapshot));
                         }
                     } catch (JSONException e) {
                         marker.remove();
@@ -1293,6 +1396,8 @@ private ArrayList<String> eventFriends;
       }
 
         if (marker.getSnippet().contains("Contacts")) {
+            final DatabaseReference pickup = FirebaseDatabase.getInstance().getReference("pickUpNotifications");
+            final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             final TextView mapsfriendName = findViewById(R.id.mapsfriendName);
             final TextView mapsfriendStatus=findViewById(R.id.mapsfriendStatus);
             final Button friendmapbutton = findViewById(R.id.mapsfriendbutton);
@@ -1301,13 +1406,87 @@ private ArrayList<String> eventFriends;
             Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
 
 
-            String eventid=eventListSelectionid.get( spinner.getSelectedItemPosition());
-
-
-
+            final String eventid=eventListSelectionid.get( spinner.getSelectedItemPosition());
+            final String eventname=eventListSelection.get(spinner.getSelectedItemPosition());
             //    final FirebaseStorage storage = FirebaseStorage.getInstance();
             final String uidtemp = marker.getTag().toString();
             final DatabaseReference dbmessage = FirebaseDatabase.getInstance().getReference("eventMessage").child(eventid);
+
+            final Button mapspickupbutton=findViewById(R.id.mapspickupbutton);
+
+            mapspickupbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                pickup.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        if(!dataSnapshot.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).exists()){
+//                            final DatabaseReference myinfo = FirebaseDatabase.getInstance().getReference("User Information");
+//                            myinfo.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                    if(snapshot.child(firebaseUser.getUid()).exists()){
+//
+//                                        pickup.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).child("requestID").setValue(eventid+firebaseUser.getUid());
+//                                        pickup.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).child("uid").setValue(firebaseUser.getUid());
+//                                        pickup.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).child("request_time").setValue(getRequestTime());
+//                                        pickup.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).child("request_type").setValue("requesting_pickup");
+//                                        pickup.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).child("friendName").setValue(snapshot.child(firebaseUser.getUid()).child("userName").getValue().toString());
+//                                        pickup.child(uidtemp).child("friend_request_notifications").child(eventid+firebaseUser.getUid()).child("imageURL").setValue(snapshot.child(firebaseUser.getUid()).child("imageURL").getValue().toString());
+//
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//
+//
+//
+//
+//
+//
+//
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
+                    pickup.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.child("checker").child(firebaseUser.getUid()).child(eventid).exists()){
+                                pickup.child("checker").child(firebaseUser.getUid()).child(eventid).setValue("request");
+                                if(!dataSnapshot.child(uidtemp).child(eventid+firebaseUser.getUid()).exists()){
+                                    pickup.child(uidtemp).child(eventid+firebaseUser.getUid()).child("message").setValue("nothing");
+                                    pickup.child(uidtemp).child(eventid+firebaseUser.getUid()).child("eventname").setValue(eventname);
+                                    pickup.child(uidtemp).child(eventid+firebaseUser.getUid()).child("uid").setValue(firebaseUser.getUid());
+                                    pickup.child(uidtemp).child(eventid+firebaseUser.getUid()).child("requestType").setValue("request");
+                                }else {
+
+                                }
+                            }else{
+
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+            });
+
+
             dbmessage.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -124,6 +124,20 @@
           android:background="@drawable/ic_error_yellow_30dp"
           android:text="@string/empty" />
 
+    <Spinner
+        android:id="@+id/mapsEventSelection"
+        android:layout_width="match_parent"
+        android:background="@drawable/sv_round"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        />
     <RelativeLayout
         android:id="@+id/mapsBackground"
         android:layout_width="match_parent"
@@ -151,13 +165,21 @@
             android:visibility="gone"
             android:background="@drawable/sv_round"
            >
+            <Button
+                android:id="@+id/mapspickupbutton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/sv_round"
+                android:layout_marginBottom="40dp"
+                android:text="@string/pick_up" />
 
             <Button
                 android:id="@+id/mapsfriendbutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-
+                android:background="@drawable/sv_round"
                 android:layout_marginBottom="0dp"
                 android:text="@string/userinfo" />
 
@@ -175,10 +197,10 @@
                 android:id="@+id/mapsfriendStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:textSize="17sp"
-                android:layout_marginTop="125dp"
+                android:layout_marginBottom="120dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/Status" />
 
@@ -321,22 +343,69 @@
             />
     </RelativeLayout>
 
-
-
-    <Spinner
-        android:id="@+id/mapsEventSelection"
+    <TextView
+        android:id="@+id/mapsonclicknothing"
         android:layout_width="match_parent"
-        android:background="@drawable/sv_round"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:visibility="gone"
 
+        >
+
+    </TextView>
+    <RelativeLayout
+        android:id="@+id/mapspickupzone"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="50dp"
+        android:layout_marginTop="250dp"
         android:layout_marginEnd="50dp"
+        android:layout_marginBottom="250dp"
+        android:visibility="gone"
+        android:background="@drawable/sv_round"
+        >
+        <Button
+            android:id="@+id/mapspickupaccepctbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/sv_round"
+            android:layout_marginBottom="45dp"
+            android:textColor="@color/quantum_googgreen400"
+            android:text="Accept" />
+        <Button
+            android:id="@+id/mapspickuprejectbutton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/quantum_googred400"
+            android:background="@drawable/sv_round"
+            android:layout_marginBottom="5dp"
+            android:text="Reject" />
+        <TextView
+            android:id="@+id/mappickuptext"
+            android:hint="@string/set_message"
+            android:autofillHints="@string/set_message"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:fontFamily="sans-serif-light"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textAlignment="center"
+            />
+    </RelativeLayout>
 
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="25dp"
-        />
+
+
+
 
 </RelativeLayout>
 
