@@ -1,6 +1,10 @@
 package com.example.custos.utils;
 
-public class Notifications {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+public class Notifications implements Comparable<Notifications> {
 
     private String friendName;
     private String request_time;
@@ -84,5 +88,18 @@ public class Notifications {
 
     public void setRequest_time(String request_time) {
         this.request_time = request_time;
+    }
+
+    @Override
+    public int compareTo(Notifications notifications) {
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
+        timeAccept = getRequest_time();
+        Calendar timeAcceptFriend2 = Calendar.getInstance();
+        SimpleDateFormat acceptTime2= new SimpleDateFormat("hh:mm a");
+        String timeAccept2 = acceptTime.format(timeAcceptFriend.getTime());
+        timeAccept2 = notifications.getRequest_time();
+        return timeAccept2.compareTo(timeAccept);
     }
 }
