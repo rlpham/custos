@@ -1720,8 +1720,7 @@ private ArrayList<String> eventFriends;
         double latitudeNumericVal = Double.valueOf(latitude);
         double longitudeNumericVal = Double.valueOf(longitude);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String currentDate = format.format(new Date());
+        String timePosted = markertime.substring(0,16);
 
         LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
         System.out.println("RISK LEVELS ARE: " + risk_level);
@@ -1751,7 +1750,7 @@ private ArrayList<String> eventFriends;
 
             //    MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowradius));
 
-            dangerMarker.snippet("Low Danger:\n" + description);
+            dangerMarker.snippet("Low Danger:\n" + description + "\n" + timePosted);
 
             mMap.addMarker(dangerMarker);
 
@@ -1786,7 +1785,7 @@ private ArrayList<String> eventFriends;
 
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates);
 
-            dangerMarker.snippet("Medium Danger:\n" + description);
+            dangerMarker.snippet("Medium Danger:\n" + description + "\n" + timePosted);
            // dangerMarker.visible(false);
             mMap.addMarker(dangerMarker);
         }
@@ -1818,7 +1817,7 @@ private ArrayList<String> eventFriends;
 
             MarkerOptions dangerMarker = new MarkerOptions().position(coordinates);
 
-            dangerMarker.snippet("High Danger:\n" + description);
+            dangerMarker.snippet("High Danger:\n" + description + "\n" + timePosted);
 
             mMap.addMarker(dangerMarker);
             //Toast.makeText(MapsActivity.this, "High Danger Zone Added!", Toast.LENGTH_LONG).show();
@@ -1826,6 +1825,9 @@ private ArrayList<String> eventFriends;
 
     }
 
+    /**
+     * Code to filter out DB for danger zones added today
+     */
     private void refreshDBDangerZone(){
         FirebaseDatabase.getInstance().getReference().child("Danger Zone Markers")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
