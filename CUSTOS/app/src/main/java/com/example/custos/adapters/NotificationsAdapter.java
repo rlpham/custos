@@ -283,6 +283,34 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if(notification.getUserToken()!=null){
+                            if(dataSnapshot.child(notification.getUserToken()).exists()){
+                                if(dataSnapshot.child(notification.getUserToken())
+                                        .child("request_type")
+                                        .getValue()
+                                        .toString().equals("accepted_invite")
+                                        || dataSnapshot.child(notification.getUserToken())
+                                        .child("request_type")
+                                        .getValue()
+                                        .toString().equals("declined_invite")){
+                                    Intent intent = new Intent(context, EventPopupActivity.class);
+                                    intent.putExtra("eventId", notification.getEventId());
+                                    intent.putExtra("userId",notification.getUID());
+                                    context.startActivity(intent);
+                                }
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+                notificationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.child(notification.getEventId()).exists()) {
                             if (dataSnapshot.child(notification.getEventId())
                                     .child("request_type")

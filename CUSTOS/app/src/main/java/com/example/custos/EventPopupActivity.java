@@ -37,7 +37,7 @@ public class EventPopupActivity extends Activity {
     private Intent intent;
     private Button accept, decline,close;
     private TextView eventName, eventLocationName, eventArea, eventDate, eventTime,deletedEvent;
-    private String otherEventId, otherUID, currentToken, dateAccept, timeAccept;
+    private String otherEventId, otherUID, currentToken, otherToken,dateAccept, timeAccept;
     private String start_date, area, locationname, lat, lng, name, description, end_date, end_time, start_time;
     private ArrayList<User> invitedUsers;
     private FirebaseUser firebaseUser;
@@ -121,7 +121,8 @@ public class EventPopupActivity extends Activity {
                 .child(firebaseUser.getUid())
                 .child(Common.REQUEST_NOTIFICATION);
         notificationRef3 = FirebaseDatabase.getInstance().getReference(Common.NOTIFICATIONS)
-                .child(otherUID).child(Common.REQUEST_NOTIFICATION);
+                .child(otherUID)
+                .child(Common.REQUEST_NOTIFICATION);
         eventRef = FirebaseDatabase.getInstance().getReference("user_event");
         eventRefData = FirebaseDatabase.getInstance().getReference("user_event").child(otherUID);
 
@@ -410,12 +411,41 @@ public class EventPopupActivity extends Activity {
             }
         });
 
-        eventRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference otherUserTokenRef = FirebaseDatabase.getInstance().getReference(Common.USER_INFORMATION)
+                .child(otherUID);
+        otherUserTokenRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                otherToken = dataSnapshot.child("userToken").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        eventRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).exists()) {
-                    Toast.makeText(getApplicationContext(),"Already Accepted",Toast.LENGTH_SHORT).show();
                     accept.setEnabled(false);
+                    accept.setText("accepted");
+                }
+                if(dataSnapshot.child(otherUID).child(otherEventId).exists()
+                        && dataSnapshot.child(otherUID).child(otherEventId).child("isOwner").getValue().toString().equals("false")){
+                    decline.setEnabled(false);
+                    decline.setVisibility(View.INVISIBLE);
+                    accept.setVisibility(View.INVISIBLE);
+                    close.setVisibility(View.VISIBLE);
+                }
+                if(!dataSnapshot.child(otherUID).child(otherEventId).exists()
+                        && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).exists()){
+                    decline.setEnabled(false);
+                    decline.setVisibility(View.INVISIBLE);
+                    accept.setVisibility(View.INVISIBLE);
+                    close.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -425,6 +455,8 @@ public class EventPopupActivity extends Activity {
             }
         });
 
+
+
         eventRefData.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -433,7 +465,7 @@ public class EventPopupActivity extends Activity {
                         && !dataSnapshot.child(otherEventId).child("name").getValue().toString().equals("")) {
                     String eventNamedata = dataSnapshot.child(otherEventId).child("name").getValue().toString();
                     eventName.setText(eventNamedata);
-                } else {
+                } else if(!dataSnapshot.child(otherEventId).exists()){
                     accept.setVisibility(View.INVISIBLE);
                     decline.setVisibility(View.INVISIBLE);
                     eventName.setVisibility(View.INVISIBLE);

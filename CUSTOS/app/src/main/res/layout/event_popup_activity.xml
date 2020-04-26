@@ -135,11 +135,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="59dp"
+            android:layout_marginLeft="35dp"
             android:layout_marginTop="220dp"
             android:drawableLeft="@drawable/ic_location_on_black_24dp"
-            android:drawablePadding="10dp"
-            android:paddingRight="10dp"
             android:text="eventArea"
             android:textColor="@android:color/black"
             android:textSize="15sp" />
