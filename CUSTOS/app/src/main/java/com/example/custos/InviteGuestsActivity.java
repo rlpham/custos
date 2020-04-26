@@ -166,20 +166,30 @@ public class InviteGuestsActivity extends AppCompatActivity {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Friends").child(firebaseUser.getUid());
-        db.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference user_info = FirebaseDatabase.getInstance().getReference("User Information");
 
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int i = 0;
                 for(DataSnapshot element : dataSnapshot.getChildren()) {
-                    User user = new User();
-                    user.setUserName(element.child("friendName").getValue().toString());
-                    user.setUID(element.getKey());
-                    i++;
-                    users.add(user);
+                    user_info.child(element.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = new User();
+                            user.setUserName(dataSnapshot.child("userName").getValue().toString());
+                            user.setUID(dataSnapshot.child("uid").getValue().toString());
+                            users.add(user);
+                            InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), users);
+                            listView.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                 }
-                InviteGuestsAdapter adapter = new InviteGuestsAdapter(getApplicationContext(), users);
-                listView.setAdapter(adapter);
+
             }
 
             @Override
