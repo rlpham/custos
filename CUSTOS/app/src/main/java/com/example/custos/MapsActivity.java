@@ -1423,6 +1423,7 @@ private ArrayList<String> eventFriends;
                         int displayedMarkers = 0;
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             numberOfMarkers++;
+
                             String zone_name = snapshot.child("zone_name").getValue().toString();
                             String risk_level = snapshot.child("risk_level").getValue().toString();
                             String lat = snapshot.child("lat").getValue().toString();
