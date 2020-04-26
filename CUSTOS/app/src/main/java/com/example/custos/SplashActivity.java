@@ -48,11 +48,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import afu.org.checkerframework.checker.igj.qual.I;
-
 public class SplashActivity extends AppCompatActivity {
     Button signInButton;
     GoogleSignInClient googleSignInClient;
@@ -154,7 +149,7 @@ public class SplashActivity extends AppCompatActivity {
         termsNService.setVisibility(View.INVISIBLE);
         termsNService.setText(Html.fromHtml("Do you agree to the \n<a href=\'https://github.com/rlpham/Custos/blob/master/END%20USER%20LICENSE%20AGREEMENT.pdf\'>Terms and Service</a>?"));
         termsNService.setMovementMethod(LinkMovementMethod.getInstance());
-        ////////////////////https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf
+
 
         sharedPreferenceObj = new SharedPreference(SplashActivity.this);
         if (sharedPreferenceObj.getApp_runFirst().equals("FIRST")) {
@@ -188,9 +183,6 @@ public class SplashActivity extends AppCompatActivity {
             d.show();
             ((TextView) d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 
-
-//            final SpannableString st = new SpannableString("https://github.com/rlpham/Custos/blob/master/PrivacyPolicy.pdf"); // msg should have url to enable clicking
-//            Linkify.addLinks(st, Linkify.ALL);
 
             final AlertDialog dd = new AlertDialog.Builder(SplashActivity.this, R.style.Chill)
                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -322,7 +314,8 @@ public class SplashActivity extends AppCompatActivity {
                     fireBaseGoogleAuth(account);
                 }
             } catch (ApiException e) {
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                signInDialog.dismissDialog();
+                // Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
             //handleSignInResult(task);
         }
@@ -456,9 +449,7 @@ public class SplashActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
 
-                            Toast.makeText(SplashActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-
-
+                            //  Toast.makeText(SplashActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
 
