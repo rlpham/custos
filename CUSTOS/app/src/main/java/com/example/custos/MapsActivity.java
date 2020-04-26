@@ -255,13 +255,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
         final Button friendmapbutton = findViewById(R.id.mapsfriendbutton);
-        final RelativeLayout mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
+        final TextView mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
         final RelativeLayout friendsbackground = findViewById(R.id.mapsfriendzone);
         final RelativeLayout evntsbackground = findViewById(R.id.mapseventzone);
         final Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
         final RelativeLayout mapseventlayout = findViewById(R.id.mapseventzone);
         final RelativeLayout mapsstatuslayout = findViewById(R.id.mapseventmessagezone);
-        final RelativeLayout mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
+        final TextView mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
         //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
         mapsfriendlayoutbackgorund.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -444,6 +444,12 @@ private void pickupnotifications(final int val){
     final Button pickupaccept=findViewById(R.id.mapspickupaccepctbutton);
     final Button pickupreject=findViewById(R.id.mapspickuprejectbutton);
     final TextView pickuptext=findViewById(R.id.mappickuptext);
+    onclicknothing.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    });
     pickupaccept.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -1274,7 +1280,7 @@ private ArrayList<String> eventFriends;
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        final RelativeLayout mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
+        final TextView mapsfriendlayoutbackgorund = findViewById(R.id.mapsBackground);
       try{
         if (marker.getSnippet().contains("Events")) {
             final TextView mapseventName = findViewById(R.id.mapseventName);
@@ -1286,7 +1292,7 @@ private ArrayList<String> eventFriends;
             final String eventid = marker.getTag().toString();
             final Button mapsetstatusbutton = findViewById(R.id.mapssetmessagebutton);
             final Button mapsetstatussavebutton = findViewById(R.id.mapssetmessagesavebutton);
-            final RelativeLayout mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
+            final TextView mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
             final EditText mapgetstatustextfield=findViewById(R.id.mapchangestatustext);
             final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             final DatabaseReference dbmessage = FirebaseDatabase.getInstance().getReference("eventMessage").child(eventid);

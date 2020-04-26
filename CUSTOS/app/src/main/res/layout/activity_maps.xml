@@ -138,16 +138,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="25dp"
         />
-    <RelativeLayout
+    <TextView
         android:id="@+id/mapsBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:visibility="gone"
-
+        android:background="@color/quantum_black_hint_text"
         >
-    </RelativeLayout>
+    </TextView>
         <RelativeLayout
             android:id="@+id/mapsfriendzone"
             android:clickable="false"
@@ -292,17 +292,17 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <TextView
         android:id="@+id/mapsmessageBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
         android:visibility="gone"
-
+        android:background="@color/quantum_black_hint_text"
         >
 
-    </RelativeLayout>
+    </TextView>
     <RelativeLayout
         android:id="@+id/mapseventmessagezone"
         android:clickable="false"
@@ -347,9 +347,11 @@
         android:id="@+id/mapsonclicknothing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:visibility="gone"
+        android:layout_marginBottom="0dp"
+        android:visibility="visible"
+        android:background="@color/quantum_black_hint_text"
 
         >
 
