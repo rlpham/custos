@@ -350,7 +350,7 @@
 
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:background="@color/quantum_black_hint_text"
 
         >

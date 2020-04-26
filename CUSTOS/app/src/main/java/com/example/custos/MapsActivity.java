@@ -260,6 +260,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         final RelativeLayout evntsbackground = findViewById(R.id.mapseventzone);
         final Spinner spinner = (Spinner) findViewById(R.id.mapsEventSelection);
         final RelativeLayout mapseventlayout = findViewById(R.id.mapseventzone);
+        final TextView onclicknothing=findViewById(R.id.mapsonclicknothing);
         final RelativeLayout mapsstatuslayout = findViewById(R.id.mapseventmessagezone);
         final TextView mapseventmessagebackgorund = findViewById(R.id.mapsmessageBackground);
         //mapsfriendlayoutbackgorund.setVisibility(View.VISIBLE);
@@ -282,6 +283,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         mapseventlayout.setVisibility(View.GONE);
+                        onclicknothing.setVisibility(View.GONE);
                         mapsstatuslayout.setVisibility(View.GONE);
                         mapseventmessagebackgorund.setVisibility(View.GONE);
                         //  friendmapbutton.setVisibility(View.GONE);
@@ -295,6 +297,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         searchView.setVisibility(View.GONE);
                         mapseventlayout.setVisibility(View.GONE);
                         mapsstatuslayout.setVisibility(View.GONE);
+                        onclicknothing.setVisibility(View.GONE);
                         mapseventmessagebackgorund.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
@@ -305,6 +308,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         dangerzonebutton.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         mapseventlayout.setVisibility(View.GONE);
+                        onclicknothing.setVisibility(View.GONE);
                         mapsstatuslayout.setVisibility(View.GONE);
                         searchView.setVisibility(View.GONE);
                         mapseventmessagebackgorund.setVisibility(View.GONE);
@@ -316,6 +320,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         searchView.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         mapseventlayout.setVisibility(View.GONE);
+                        onclicknothing.setVisibility(View.GONE);
                         mapsstatuslayout.setVisibility(View.GONE);
                         friendsbackground.setVisibility(View.GONE);
                         mapseventmessagebackgorund.setVisibility(View.GONE);
