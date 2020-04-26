@@ -1,8 +1,10 @@
 package com.example.custos.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
-public class Friends {
+public class Friends implements Comparable<Friends>{
 
     private String friendName;
     private String friendEmail;
@@ -63,5 +65,18 @@ public class Friends {
 
     public void setUID(String UID) {
         this.UID = UID;
+    }
+
+    @Override
+    public int compareTo(Friends friends) {
+        Calendar timeAcceptFriend = Calendar.getInstance();
+        SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
+        String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
+        timeAccept = getDate();
+        Calendar timeAcceptFriend2 = Calendar.getInstance();
+        SimpleDateFormat acceptTime2= new SimpleDateFormat("hh:mm a");
+        String timeAccept2 = acceptTime.format(timeAcceptFriend.getTime());
+        timeAccept2 = friends.getDate();
+        return timeAccept2.compareTo(timeAccept);
     }
 }

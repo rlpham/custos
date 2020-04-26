@@ -34,6 +34,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FriendsFragment extends Fragment {
@@ -138,6 +139,7 @@ public class FriendsFragment extends Fragment {
 
                     if(!friends.getUID().equals(fUser.getUid())){
                         friendsList.add(friends);
+                        Collections.sort(friendsList);
                     }
                 }
                 userAdapter = new FriendsAdapter(getContext(), friendsList);
@@ -167,6 +169,7 @@ public class FriendsFragment extends Fragment {
                         assert friends != null;
                         assert fUser != null;
                         friendsList.add(friends);
+                        Collections.sort(friendsList);
 
                     }
                     userAdapter = new FriendsAdapter(getContext(), friendsList);

@@ -3,6 +3,7 @@
     <string name="app_name">Custos</string>
     <string name="empty"></string>
     <string name="event_add">+</string>
+    <string name="pick_up">request pickup</string>
     <string name="view_event">View Event</string>
     <string name="get_direction">Get Directions</string>
     <string name="set_message">change status</string>

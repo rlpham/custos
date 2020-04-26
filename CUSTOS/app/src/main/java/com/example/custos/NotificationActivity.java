@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class NotificationActivity extends Fragment {
@@ -55,7 +56,7 @@ public class NotificationActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RecyclerViewDecorator recyclerViewDecorator = new RecyclerViewDecorator(15);
+        RecyclerViewDecorator recyclerViewDecorator = new RecyclerViewDecorator(40);
         View view = inflater.inflate(R.layout.notificationfragment, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_notification);
         recyclerView.addItemDecoration(recyclerViewDecorator);
@@ -96,6 +97,7 @@ public class NotificationActivity extends Fragment {
                         assert notifications != null;
                         assert fUser != null;
                         notificationsList.add(notifications);
+                        Collections.sort(notificationsList);
 
 
                     adapter = new NotificationsAdapter(getContext(), notificationsList);
