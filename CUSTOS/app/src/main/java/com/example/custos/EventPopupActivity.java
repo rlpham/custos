@@ -36,7 +36,8 @@ public class EventPopupActivity extends Activity {
     private Handler handler = new Handler();
     private Intent intent;
     private Button accept, decline,close;
-    private TextView eventName, eventLocationName, eventArea, eventDate, eventTime,deletedEvent;
+    private TextView eventName, eventLocationName, eventArea, eventDate,
+            eventTime,deletedEvent,myEventDetail,eventDetail,eventAcceptedTitle,eventDeletedTitle;
     private String otherEventId, otherUID, currentToken, otherToken,dateAccept, timeAccept;
     private String start_date, area, locationname, lat, lng, name, description, end_date, end_time, start_time;
     private ArrayList<User> invitedUsers;
@@ -47,7 +48,11 @@ public class EventPopupActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_popup_activity);
+        eventDetail = findViewById(R.id.event_title_notification);
+        eventDeletedTitle = findViewById(R.id.event_delete_title_notification);
+        eventAcceptedTitle = findViewById(R.id.event_accepttitle_notification);
         deletedEvent = findViewById(R.id.deleted_event);
+        myEventDetail = findViewById(R.id.event_mytitle_notification);
         close = findViewById(R.id.event_close);
         accept = findViewById(R.id.event_accept);
         decline = findViewById(R.id.event_decline);
@@ -56,7 +61,11 @@ public class EventPopupActivity extends Activity {
         eventArea = findViewById(R.id.event_area_notification);
         eventDate = findViewById(R.id.event_date_notification);
         eventTime = findViewById(R.id.event_time_notification);
+        myEventDetail.setVisibility(View.INVISIBLE);
         deletedEvent.setVisibility(View.INVISIBLE);
+        eventDeletedTitle.setVisibility(View.INVISIBLE);
+        eventAcceptedTitle.setVisibility(View.INVISIBLE);
+        eventDetail.setVisibility(View.VISIBLE);
         close.setVisibility(View.INVISIBLE);
         accept.setVisibility(View.VISIBLE);
         decline.setVisibility(View.VISIBLE);
@@ -432,6 +441,8 @@ public class EventPopupActivity extends Activity {
                 if (dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).exists()) {
                     accept.setEnabled(false);
                     accept.setText("accepted");
+                    eventAcceptedTitle.setVisibility(View.VISIBLE);
+                    eventDetail.setVisibility(View.INVISIBLE);
                 }
                 if(dataSnapshot.child(otherUID).child(otherEventId).exists()
                         && dataSnapshot.child(otherUID).child(otherEventId).child("isOwner").getValue().toString().equals("false")){
@@ -443,8 +454,11 @@ public class EventPopupActivity extends Activity {
                 if(!dataSnapshot.child(otherUID).child(otherEventId).exists()
                         && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).exists()){
                     decline.setEnabled(false);
+                    myEventDetail.setVisibility(View.VISIBLE);
                     decline.setVisibility(View.INVISIBLE);
                     accept.setVisibility(View.INVISIBLE);
+                    eventDetail.setVisibility(View.INVISIBLE);
+                    eventAcceptedTitle.setVisibility(View.INVISIBLE);
                     close.setVisibility(View.VISIBLE);
                 }
             }
@@ -456,16 +470,21 @@ public class EventPopupActivity extends Activity {
         });
 
 
-
-        eventRefData.addValueEventListener(new ValueEventListener() {
+        eventRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.child(otherEventId).child("name").exists()
-                        && !dataSnapshot.child(otherEventId).child("name").getValue().toString().equals("")) {
-                    String eventNamedata = dataSnapshot.child(otherEventId).child("name").getValue().toString();
+                if (dataSnapshot.child(otherUID).child(otherEventId).child("name").exists()
+                        && !dataSnapshot.child(otherUID).child(otherEventId).child("name").getValue().toString().equals("")) {
+                    String eventNamedata = dataSnapshot.child(otherUID).child(otherEventId).child("name").getValue().toString();
                     eventName.setText(eventNamedata);
-                } else if(!dataSnapshot.child(otherEventId).exists()){
+                }
+                else if(!dataSnapshot.child(otherUID).child(otherEventId).child("name").exists()
+                    && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("name").exists()){
+                    String curName = dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("name").getValue().toString();
+                    eventName.setText(curName);
+                }
+                else{
                     accept.setVisibility(View.INVISIBLE);
                     decline.setVisibility(View.INVISIBLE);
                     eventName.setVisibility(View.INVISIBLE);
@@ -473,28 +492,46 @@ public class EventPopupActivity extends Activity {
                     eventLocationName.setVisibility(View.INVISIBLE);
                     eventTime.setVisibility(View.INVISIBLE);
                     eventDate.setVisibility(View.INVISIBLE);
+                    eventDetail.setVisibility(View.INVISIBLE);
+                    eventDeletedTitle.setVisibility(View.VISIBLE);
                     deletedEvent.setVisibility(View.VISIBLE);
                     close.setVisibility(View.VISIBLE);
                 }
-                if (dataSnapshot.child(otherEventId).child("area").exists()
-                        && !dataSnapshot.child(otherEventId).child("area").getValue().toString().equals("")) {
-                    String eventAreadata = dataSnapshot.child(otherEventId).child("area").getValue().toString();
+                if (dataSnapshot.child(otherUID).child(otherEventId).child("area").exists()
+                        && !dataSnapshot.child(otherUID).child(otherEventId).child("area").getValue().toString().equals("")) {
+                    String eventAreadata = dataSnapshot.child(otherUID).child(otherEventId).child("area").getValue().toString();
                     eventArea.setText(eventAreadata);
+                }else if(!dataSnapshot.child(otherUID).child(otherEventId).child("area").exists()
+                        && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("area").exists()){
+                    String curArea = dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("area").getValue().toString();
+                    eventArea.setText(curArea);
                 }
-                if (dataSnapshot.child(otherEventId).child("location_name").exists()
-                        && !dataSnapshot.child(otherEventId).child("location_name").getValue().toString().equals("")) {
-                    String location_name = dataSnapshot.child(otherEventId).child("location_name").getValue().toString();
+                if (dataSnapshot.child(otherUID).child(otherEventId).child("location_name").exists()
+                        && !dataSnapshot.child(otherUID).child(otherEventId).child("location_name").getValue().toString().equals("")) {
+                    String location_name = dataSnapshot.child(otherUID).child(otherEventId).child("location_name").getValue().toString();
                     eventLocationName.setText(location_name);
+                }else if(!dataSnapshot.child(otherUID).child(otherEventId).child("location_name").exists()
+                        && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("location_name").exists()){
+                    String curLocName = dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("location_name").getValue().toString();
+                    eventLocationName.setText(curLocName);
                 }
-                if (dataSnapshot.child(otherEventId).child("start_time").exists()
-                        && !dataSnapshot.child(otherEventId).child("start_time").getValue().toString().equals("")) {
-                    String start_timeData = dataSnapshot.child(otherEventId).child("start_time").getValue().toString();
+                if (dataSnapshot.child(otherUID).child(otherEventId).child("start_time").exists()
+                        && !dataSnapshot.child(otherUID).child(otherEventId).child("start_time").getValue().toString().equals("")) {
+                    String start_timeData = dataSnapshot.child(otherUID).child(otherEventId).child("start_time").getValue().toString();
                     eventTime.setText(start_timeData);
+                }else if(!dataSnapshot.child(otherUID).child(otherEventId).child("start_time").exists()
+                        && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("start_time").exists()){
+                    String curStartTime = dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("start_time").getValue().toString();
+                    eventTime.setText(curStartTime);
                 }
-                if (dataSnapshot.child(otherEventId).child("start_date").exists()
-                        && !dataSnapshot.child(otherEventId).child("start_date").getValue().toString().equals("")) {
-                    String eventStartDate = dataSnapshot.child(otherEventId).child("start_date").getValue().toString();
+                if (dataSnapshot.child(otherUID).child(otherEventId).child("start_date").exists()
+                        && !dataSnapshot.child(otherUID).child(otherEventId).child("start_date").getValue().toString().equals("")) {
+                    String eventStartDate = dataSnapshot.child(otherUID).child(otherEventId).child("start_date").getValue().toString();
                     eventDate.setText(eventStartDate);
+                }else if(!dataSnapshot.child(otherUID).child(otherEventId).child("start_date").exists()
+                        && dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("start_date").exists()){
+                    String curStartDate = dataSnapshot.child(firebaseUser.getUid()).child(otherEventId).child("start_date").getValue().toString();
+                    eventDate.setText(curStartDate);
                 }
             }
 

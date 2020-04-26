@@ -807,6 +807,7 @@ private void pickupnotifications(final int val){
         /**
          * Generate markers
          */
+        refreshDBDangerZone();
         dangerZoneFacilitator();
         //generateMarkers();
 
@@ -1622,6 +1623,7 @@ private ArrayList<String> eventFriends;
                         int displayedMarkers = 0;
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             numberOfMarkers++;
+
                             String zone_name = snapshot.child("zone_name").getValue().toString();
                             String risk_level = snapshot.child("risk_level").getValue().toString();
                             String lat = snapshot.child("lat").getValue().toString();
@@ -1819,9 +1821,40 @@ private ArrayList<String> eventFriends;
             dangerMarker.snippet("High Danger:\n" + description);
 
             mMap.addMarker(dangerMarker);
-            Toast.makeText(MapsActivity.this, "High Danger Zone Added!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(MapsActivity.this, "High Danger Zone Added!", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private void refreshDBDangerZone(){
+        FirebaseDatabase.getInstance().getReference().child("Danger Zone Markers")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    Date currentDate = new Date();
+                    String currentDateString = currentDate.toString();
+                    String getCurrentDateSubString = currentDateString.substring(0,10);
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int numberOfMarkers = 0;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            numberOfMarkers++;
+                            String markerDate = snapshot.child("time").getValue().toString();
+                            System.out.println("MARKER DATE: " + markerDate);
+                            System.out.println("CURRENT DATE: " + getCurrentDateSubString);
+                            if(numberOfMarkers>1){
+                                if(!(markerDate.contains(getCurrentDateSubString))) {
+                                    snapshot.getRef().removeValue();
+                                }
+                            }
+
+
+                        }
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
     }
 
 }
