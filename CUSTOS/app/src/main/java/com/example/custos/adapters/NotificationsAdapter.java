@@ -492,26 +492,32 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                             }
                         });
 
-                        notificationsRef.child(notification.getEventId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
+                        if(notification.getEventId() != null){
+                            notificationsRef.child(notification.getEventId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
-                        notificationRef2.child(notification.getUserToken()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
+                            });
+
+                        }
+                        if(notification.getUserToken()!=null){
+                            notificationsRef.child(notification.getUserToken()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+
+                        }
                         // dialogInterface.dismiss();
                     }
                 });
