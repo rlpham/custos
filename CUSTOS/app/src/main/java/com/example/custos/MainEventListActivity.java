@@ -167,6 +167,23 @@ public class MainEventListActivity extends Fragment {
                                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+                                        final DatabaseReference events = FirebaseDatabase.getInstance().getReference("user_event");
+                                        ArrayList<User> users = data.get(position).getInvited_users();
+                                        for(final User user : users) {
+                                            events.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    if(dataSnapshot.child(user.getUID()).exists()) {
+                                                        events.child(user.getUID()).child(data.get(position).getID()).removeValue();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
                                         databaseReference.child(data.get(position).getID()).removeValue();
 
                                         
