@@ -46,6 +46,7 @@ import com.bumptech.glide.Glide;
 import com.example.custos.utils.Common;
 import com.example.custos.utils.Event;
 import com.example.custos.utils.FirstTimeLoginDialog;
+import com.example.custos.utils.HighDangerZoneDialog;
 import com.example.custos.utils.User;
 import com.example.custos.utils.UserLocation;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -1730,65 +1731,32 @@ private ArrayList<String> eventFriends;
         LatLng coordinates = new LatLng(latitudeNumericVal,longitudeNumericVal);
         System.out.println("RISK LEVELS ARE: " + risk_level);
         if(risk_level.contains("Low")){
-
-
-            // Instantiating CircleOptions to draw a circle around the marker
             CircleOptions circleOptions = new CircleOptions();
-            // Specifying the center of the circle
             circleOptions.center(coordinates);
-            // Radius of the circle
             circleOptions.radius(250);
-            // Border color of the circle
             circleOptions.strokeColor(Color.parseColor("#e0ee20"));
-            // Fill color of the circle
             circleOptions.fillColor(Color.parseColor("#20e0ee20"));
-
-            // Border width of the circle
             circleOptions.strokeWidth(3f);
-
-           // circleOptions.clickable(true);
-
             // Adding the circle to the GoogleMap
             mMap.addCircle(circleOptions);
-
             final MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name);
-
             //    MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name).icon(BitmapDescriptorFactory.fromResource(R.drawable.yellowradius));
-
             dangerMarker.snippet("Low Danger:\n" + description + "\n" + timePosted);
-
             mMap.addMarker(dangerMarker);
-
         }
 
         if (risk_level.contains("Medium")) {
-
-
             CircleOptions circleOptions = new CircleOptions();
-
-            // Specifying the center of the circle
             circleOptions.center(coordinates);
-
-            // Radius of the circle
             circleOptions.radius(500);
-
-            // Border color of the circle
             circleOptions.strokeColor(Color.parseColor("#FF9700"));
-
-            // Fill color of the circle
             circleOptions.fillColor(Color.parseColor("#20FF9700"));
-
-            // Border width of the circle
             circleOptions.strokeWidth(3f);
-
 
             // Adding the circle to the GoogleMap
             mMap.addCircle(circleOptions);
 
-
-
-
-            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates);
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name);
 
             dangerMarker.snippet("Medium Danger:\n" + description + "\n" + timePosted);
            // dangerMarker.visible(false);
@@ -1797,34 +1765,32 @@ private ArrayList<String> eventFriends;
 
         if(risk_level.contains("High")) {
             CircleOptions circleOptions = new CircleOptions();
-
-            // Specifying the center of the circle
             circleOptions.center(coordinates);
-
-            // Radius of the circle
             circleOptions.radius(750);
-
-            // Border color of the circle
             circleOptions.strokeColor(Color.parseColor("#cc0000"));
-
-            // Fill color of the circle
             circleOptions.fillColor(Color.parseColor("#20cc0000"));
-
-            // Border width of the circle
             circleOptions.strokeWidth(3f);
 
-
-            // Adding the circle to the GoogleMap
             mMap.addCircle(circleOptions);
 
-
-
-
-            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates);
+            MarkerOptions dangerMarker = new MarkerOptions().position(coordinates).title(zone_name);
 
             dangerMarker.snippet("High Danger:\n" + description + "\n" + timePosted);
 
             mMap.addMarker(dangerMarker);
+
+            /**
+             * Check current Date and see if any of the high danger zones were posted within the hour
+             */
+            Date currentDate = new Date();
+            String currentDateString = currentDate.toString();
+
+            String markerHourComparator = markertime.substring(11,14);
+            if(currentDateString.contains(markerHourComparator)) {
+                displayHighDZDialog(markertime,latitudeNumericVal,longitudeNumericVal);
+            }
+
+            System.out.println(markerHourComparator);
             //Toast.makeText(MapsActivity.this, "High Danger Zone Added!", Toast.LENGTH_LONG).show();
         }
 
@@ -1863,5 +1829,39 @@ private ArrayList<String> eventFriends;
                     }
                 });
     }
+
+    /**
+     * Retrieve current city given lat and long
+     * @param lat
+     * @param longitude
+     * @return
+     */
+    private String getCurrentCity(double lat, double longitude) {
+        String currentCity = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat,longitude,1);
+            currentCity = addresses.get(0).getLocality();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+        return currentCity;
+    }
+
+    private void displayHighDZDialog(String markerTime, double latitude, double longitude){
+        String highDZCity = getCurrentCity(latitude,longitude);
+        String timePosted = markerTime.substring(11,16);
+
+        HighDangerZoneDialog highDangerZoneDialog = new HighDangerZoneDialog();
+
+
+        Bundle args = new Bundle();
+        //Set arguments in the bundle
+        args.putString("highDZCity", highDZCity);
+        args.putString("timemarkerposted",timePosted);
+        highDangerZoneDialog.setArguments(args);
+        highDangerZoneDialog.show(getSupportFragmentManager(), "danger zone dialogue");
+    }
+
 
 }
