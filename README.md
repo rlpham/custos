@@ -16,7 +16,7 @@ A mobile application that uses user locations to make sure they are where they n
 * Quang Tran
 
 
-Installation Process:
+# Installation Process:
 
 1. Download apk file from https://psucustos.github.io/custos/
 2. Before you can install it on your phone you will need to make sure that third-party apps are allowed on your device.
