@@ -149,7 +149,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="33dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="150dp"
         android:drawableLeft="@drawable/ic_directions_run_yellow_50dp"
         android:text="Logout"
         android:textColor="#FFFFFF"

@@ -480,7 +480,7 @@ public class SecondSplashActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         logoutDialog.startDialog();
-                        Toast.makeText(SecondSplashActivity.this,"Logging out...", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(SecondSplashActivity.this,"Logging out...", Toast.LENGTH_LONG).show();
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {

@@ -477,7 +477,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
+                                                    //Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
                                                 }
@@ -497,7 +497,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
                                     }
@@ -510,7 +510,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(context, "removed notification", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(context, "removed failed", Toast.LENGTH_SHORT).show();
                                     }

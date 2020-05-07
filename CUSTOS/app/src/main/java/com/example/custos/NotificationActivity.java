@@ -34,6 +34,7 @@ public class NotificationActivity extends Fragment {
     private NotificationsAdapter adapter;
     private List<Notifications> notificationsList;
     private TextView noNotifications;
+
     public NotificationActivity() {
         // Required empty public constructor
     }
@@ -91,15 +92,13 @@ public class NotificationActivity extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    notificationsList.clear();
-                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        Notifications notifications = snapshot.getValue(Notifications.class);
-                        assert notifications != null;
-                        assert fUser != null;
-                        notificationsList.add(notifications);
-                        Collections.sort(notificationsList);
-
-
+                notificationsList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Notifications notifications = snapshot.getValue(Notifications.class);
+                    assert notifications != null;
+                    assert fUser != null;
+                    notificationsList.add(notifications);
+                    Collections.sort(notificationsList);
                     adapter = new NotificationsAdapter(getContext(), notificationsList);
                     recyclerView.setAdapter(adapter);
                 }

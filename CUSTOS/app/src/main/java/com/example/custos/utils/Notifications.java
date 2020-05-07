@@ -95,11 +95,16 @@ public class Notifications implements Comparable<Notifications> {
         Calendar timeAcceptFriend = Calendar.getInstance();
         SimpleDateFormat acceptTime = new SimpleDateFormat("hh:mm a");
         String timeAccept = acceptTime.format(timeAcceptFriend.getTime());
-        timeAccept = getRequest_time();
+        if(timeAccept!=null){
+            timeAccept = getRequest_time();
+
+        }
         Calendar timeAcceptFriend2 = Calendar.getInstance();
         SimpleDateFormat acceptTime2= new SimpleDateFormat("hh:mm a");
-        String timeAccept2 = acceptTime.format(timeAcceptFriend.getTime());
-        timeAccept2 = notifications.getRequest_time();
+        String timeAccept2 = acceptTime2.format(timeAcceptFriend2.getTime());
+        if(timeAccept2!=null){
+            timeAccept2 = notifications.getRequest_time();
+        }
         return timeAccept2.compareTo(timeAccept);
     }
 }
