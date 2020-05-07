@@ -46,6 +46,8 @@ import org.json.JSONException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.view.View.GONE;
+
 public class SettingsActivity extends Fragment {
     public SettingsActivity() {
         // Required empty public constructor
@@ -272,7 +274,8 @@ public class SettingsActivity extends Fragment {
 
 
         //location switch
-        final Switch loc = view.findViewById(R.id.locationSwitch);
+         Switch loc = view.findViewById(R.id.locationSwitch);
+        loc.setVisibility(GONE);
 
 
 
