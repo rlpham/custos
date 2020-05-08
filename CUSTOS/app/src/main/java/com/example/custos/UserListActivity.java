@@ -171,8 +171,11 @@ public class UserListActivity extends AppCompatActivity {
                         final User user = snapshot.getValue(User.class);
                         assert user != null;
                         assert fUser != null;
-                        if(!user.getUID().equals(fUser.getUid())){
-                            userList.add(user);
+                        if(user.getUID()!=null){
+                            if(!user.getUID().equals(fUser.getUid())){
+                                userList.add(user);
+                            }
+
                         }
                     }
                     userAdapter = new UserAdapter(getApplicationContext(),userList);
