@@ -139,7 +139,7 @@ public class FriendsFragment extends Fragment {
 
                     if(!friends.getUID().equals(fUser.getUid())){
                         friendsList.add(friends);
-                        Collections.sort(friendsList);
+                        //Collections.sort(friendsList);
                     }
                 }
                 userAdapter = new FriendsAdapter(getContext(), friendsList);
