@@ -91,8 +91,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.ViewHold
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                 System.out.println(friends.getUID()+"_------------------------------------------------------------");
                 if(dataSnapshot.child(friends.getUID()).exists()){
-                    if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
-                        friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+                    if(dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).exists()){
+                        if(!dataSnapshot.child(friends.getUID()).child(Common.FRIEND_NAME).getValue().toString().equals(userName)){
+                            friendReference.child(friends.getUID()).child(Common.FRIEND_NAME).setValue(userName);
+                        }
+
                     }
                 }
                 databaseReference.addValueEventListener(new ValueEventListener() {
